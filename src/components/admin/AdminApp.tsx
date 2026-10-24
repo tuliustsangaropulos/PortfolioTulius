@@ -328,28 +328,18 @@ function SectionsEditor({
   }
   async function create() {
     if (!supabase || !sections[0]) return
-    const nextOrder =
-      Math.max(...sections.map((section) => section.sort_order)) + 1
-    const { data, error } = await supabase
-      .from("sections")
-      .insert({
-        page_id: sections[0].page_id,
-        slug: `nova-secao-${Date.now().toString().slice(-6)}`,
-        title: "Nova seção",
-        sort_order: nextOrder,
-        layout_variant: "editorial",
-        theme: "paper",
-        status: "draft",
-        is_visible: false,
-      })
-      .select("id")
-      .single()
-    setMessage(error?.message ?? "Nova seção criada como rascunho.")
-    if (data) {
+    setMessage("Criando seção e painéis…")
+    const { data, error } = await supabase.rpc(
+      "create_section_with_panels",
+      { p_page_id: sections[0].page_id },
+    )
+    setMessage(error?.message ?? "Seção e painéis criados como rascunho.")
+    if (!error && data) {
       reload()
-      setSelectedId(data.id)
+      setSelectedId(data)
     }
   }
+
   async function publish() {
     if (!selected || !supabase) return
     const allowPlaceholders = confirm(
