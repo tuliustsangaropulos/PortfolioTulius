@@ -4,6 +4,7 @@ import {
   sections as fallbackSections,
 } from "../content/fallback"
 import { supabase } from "../lib/supabase"
+import { buildPublicNavigation, type PublicNavigationItem, type NavigationRow } from "../lib/navigation"
 import {
   composeSectionPlacements,
   type BlockPlacementRow,
@@ -60,6 +61,7 @@ export function usePortfolio(includeDrafts = false) {
     supabase ? [] : fallbackSections,
   )
   const [tokens, setTokens] = useState(defaultTokens)
+  const [navigation, setNavigation] = useState<PublicNavigationItem[]>([])
   const [source, setSource] = useState<"supabase" | "fallback">(
     supabase ? "supabase" : "fallback",
   )
@@ -86,7 +88,7 @@ export function usePortfolio(includeDrafts = false) {
       supabase.from("design_tokens")
         .select("token_key,token_value").eq("status", "published"),
       supabase.from("navigation_items")
-        .select("label,target_slug,sort_order")
+        .select("label,target_slug,group_name,sort_order,is_visible,status")
         .eq("status", "published").eq("is_visible", true).order("sort_order"),
       supabase.from("pages")
         .select("seo_title,seo_description")
@@ -105,23 +107,39 @@ export function usePortfolio(includeDrafts = false) {
         // Fail closed: never substitute stale fallback content when
         // an explicitly configured publication database is unavailable.
         setData([])
+        setNavigation([])
         setSource("supabase")
         setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
       } else {
-        const labels = new Map(
-          (navigationResult.data ?? []).map((item) => [
-            item.target_slug, item.label,
-          ]),
+        const mappedSections = (sectionsResult.data as SectionResult[]).map(
+          (section) => toSection(
+            section,
+            (panelsResult.data ?? []) as SectionPanelRow[],
+            (placementsResult.data ?? []) as BlockPlacementRow[],
+            includeDrafts,
+          ),
+        )
+        const navRecords = (navigationResult.data ?? []) as NavigationRow[]
+        const linked = buildPublicNavigation(mappedSections, navRecords)
+        setNavigation(
+          navigationResult.error
+            ? mappedSections
+                .filter((section) => section.status === "published" && section.visible)
+                .map((section) => ({
+                  slug: section.slug,
+                  label: section.title,
+                  group: "Principal",
+                  number: section.number,
+                }))
+            : linked,
         )
         setData(
-          (sectionsResult.data as SectionResult[]).map((section) => ({
-            ...toSection(
-              section,
-              (panelsResult.data ?? []) as SectionPanelRow[],
-              (placementsResult.data ?? []) as BlockPlacementRow[],
-              includeDrafts,
-            ),
-            navLabel: labels.get(section.slug) ?? section.title,
+          mappedSections.map((section) => ({
+            ...section,
+            navLabel: navRecords.find((record) =>
+              record.target_slug === section.slug && record.is_visible &&
+              record.status === "published"
+            )?.label ?? section.title,
           })),
         )
         setSource("supabase")
@@ -185,6 +203,7 @@ export function usePortfolio(includeDrafts = false) {
     }).catch(() => {
       if (cancelled) return
       setData([])
+      setNavigation([])
       setSource("supabase")
       setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
       setLoading(false)
@@ -192,7 +211,7 @@ export function usePortfolio(includeDrafts = false) {
     return () => { cancelled = true }
   }, [includeDrafts])
 
-  return { sections: data, tokens, source, loading, error }
+  return { sections: data, navigation, tokens, source, loading, error }
 }
 
 function setMeta(name: string, content: string, attribute = "name") {
