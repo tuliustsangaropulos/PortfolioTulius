@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - name: Node.js 24
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -101,3 +105,19 @@ jobs:
           }
           if (missing) process.exitCode = 1
           NODE
+      - name: Browser routes and responsive viewports
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/p3-browser"
+          cd "$RUNNER_TEMP/p3-browser"
+          npm install --no-audit --no-fund --no-save puppeteer-core@25.16.0
+          cp "$GITHUB_WORKSPACE/scripts/p3-browser-smoke.mjs" audit.mjs
+          node audit.mjs
+      - name: Upload viewport screenshots
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: p3-viewport-screenshots
+          path: ${{ runner.temp }}/p3-screenshots/*.png
+          if-no-files-found: warn
+          retention-days: 7
