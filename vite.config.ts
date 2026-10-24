@@ -6,6 +6,22 @@ import { defineConfig } from "vite"
 export default defineConfig({
   base: "/",
   plugins: [react(), tailwindcss()],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Keep framework dependencies cacheable across editorial releases.
+        // Vite 8 / Rolldown: do not use deprecated Rollup manualChunks.
+        codeSplitting: {
+          groups: [
+            {
+              name: "vendor",
+              test: /[\\/]node_modules[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
