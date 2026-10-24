@@ -19,12 +19,12 @@ function secureHttps(value) {
 function replaceMeta(html, name, content, attribute = "name") {
   const match = new RegExp(`<meta\\b[^>]*\\b${attribute}=["']${name}["'][^>]*>`, "i")
   const tag = `<meta ${attribute}="${name}" content="${escapeHtml(content)}" />`
-  return match.test(html) ? html.replace(match, tag) : html.replace("</head>", `  ${tag}\\n  </head>`)
+  return match.test(html) ? html.replace(match, tag) : html.replace("</head>", `  ${tag}\n  </head>`)
 }
 function replaceCanonical(html, href) {
   const tag = `<link rel="canonical" href="${escapeHtml(href)}" />`
   const match = /<link\s+rel=["']canonical["'][^>]*>/i
-  return match.test(html) ? html.replace(match, tag) : html.replace("</head>", `  ${tag}\\n  </head>`)
+  return match.test(html) ? html.replace(match, tag) : html.replace("</head>", `  ${tag}\n  </head>`)
 }
 async function getPublished(table, columns, filters) {
   const base = process.env.VITE_SUPABASE_URL
@@ -87,9 +87,9 @@ async function run() {
   const siteRoot = new URL("../dist/", import.meta.url)
   const domain = new URL(canonical).origin
   await writeFile(new URL("robots.txt", siteRoot),
-    `User-agent: *\\nDisallow: /admin/\\nSitemap: ${domain}/sitemap.xml\\n`)
+    `User-agent: *\nDisallow: /admin/\nSitemap: ${domain}/sitemap.xml\n`)
   await writeFile(new URL("sitemap.xml", siteRoot),
-    `<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapeHtml(domain + "/")}</loc></url></urlset>\\n`)
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapeHtml(domain + "/")}</loc></url></urlset>\n`)
   console.log("SEO: título, descrição, Open Graph, canonical, robots e sitemap gerados.")
 }
 
