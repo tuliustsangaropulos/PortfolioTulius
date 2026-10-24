@@ -17,8 +17,8 @@ function Badge360({ config }: { config?: HeroVisualConfig }) {
   const pathId = `badge-path-${useId().replace(/:/g, "")}`
   if (config?.badgeVisible === false) return null
   return (
-    <div className="badge-360" aria-label="Visão 360 graus da comunicação">
-      <svg viewBox="0 0 160 160" role="img">
+    <div className="badge-360">
+      <svg viewBox="0 0 160 160" role="img" aria-label="Visão 360 graus da comunicação">
         <defs>
           <path id={pathId} d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0" />
         </defs>
@@ -163,6 +163,7 @@ function ProfileDesktop({ section }: { section: PortfolioSection }) {
         <div className="profile-sidebar-content">
           <p className="profile-intro">{section.intro}</p>
           <div className="profile-highlights">
+            <h2 className="sr-only">Destaques</h2>
             {panelA.slice(1).map((item, i) => (
               <ItemCard key={item.title} item={item} index={i} layout="hero" showArrow />
             ))}

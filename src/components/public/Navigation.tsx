@@ -97,6 +97,7 @@ export function Navigation({
           onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-controls="site-menu"
+          aria-label="Abrir menu"
         >
           <span>MENU</span>
           <Icon name="menu" />

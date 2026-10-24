@@ -77,6 +77,10 @@
 .item-copy { min-width: 0; }
 .item-label { display: block; color: var(--orange-dark); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
 .theme-ink .item-label { color: var(--orange); }
+.theme-orange .section-heading > span, .theme-orange .panel-heading > span, .theme-orange .item-label { color: var(--ink); }
+.theme-orange .section-intro { color: var(--ink); }
+.theme-orange .content-item p { color: var(--item-text-color, var(--ink)); }
+.area-grid .item-label, .profile-b-items .content-item:nth-child(-n+5) .item-label { color: var(--orange); }
 .item-value { display: block; color: var(--orange-dark); font-family: var(--font-display); font-size: clamp(2rem, 3vw, 4rem); line-height: 1; }
 .theme-ink .item-value { color: var(--orange); }
 .item-meta { color: var(--orange-dark) !important; font-weight: 700; }
