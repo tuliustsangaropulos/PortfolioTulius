@@ -1601,32 +1601,25 @@ export function SeoStudio() {
   }, [])
   async function save() {
     if (!supabase || !page || !settings) return
-    const pageResult = await supabase
-      .from("pages")
-      .update({
-        seo_title: page.seo_title,
-        seo_description: page.seo_description,
-      })
-      .eq("id", page.id)
-    const settingsPayload = {
-      site_title: settings.site_title,
-      locale: settings.locale,
-      description: settings.description,
-      seo_json: settings.seo_json,
-      status: settings.status,
-    }
-    const settingsResult = settings.id
-      ? await supabase
-          .from("site_settings")
-          .update(settingsPayload)
-          .eq("id", settings.id)
-      : await supabase.from("site_settings").insert(settingsPayload)
+    if (!page.id || !settings.id)
+      return setMessage("Página ou configurações de SEO ausentes. Nada foi alterado.")
+    const { error } = await supabase.rpc("save_home_seo_atomic", {
+      p_page_id: page.id,
+      p_settings_id: settings.id,
+      p_page_seo_title: page.seo_title,
+      p_page_seo_description: page.seo_description,
+      p_site_title: settings.site_title,
+      p_site_description: settings.description,
+      p_locale: settings.locale,
+      p_seo_json: settings.seo_json ?? {},
+      p_status: settings.status,
+    })
     setMessage(
-      pageResult.error?.message ??
-        settingsResult.error?.message ??
-        "SEO salvo. Metadados do shell serão refletidos após integração de prerender/deploy.",
+      error?.message ??
+        "SEO salvo atomicamente. Metadados para robôs serão regenerados no próximo deploy.",
     )
   }
+
   return (
     <>
       <header className="admin-header">
