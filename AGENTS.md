@@ -6,6 +6,8 @@ Portfólio editorial com CMS, desenvolvido em React 19, TypeScript, Vite, Tailwi
 
 - Preserve integralmente o design, textos, fotografias, cores, fontes, responsividade e componentes existentes, salvo solicitação explícita.
 - Faça alterações pequenas e localizadas. Preserve a acessibilidade, os metadados SEO e os fluxos público e administrativo.
+- Trabalhe e registre commits exclusivamente na branch `main`; não crie branches de trabalho nem pull requests. Antes de modificar, confira `git status -sb` e sincronize com `git pull --ff-only origin main` quando seguro.
+- Atenção: pushes para `main` podem disparar publicação automática na Vercel. Valide as alterações e revise o diff antes do push; não use force-push, reset destrutivo ou operações de infraestrutura para corrigir problemas de código.
 - Não altere schema, migrations, dados, políticas ou configuração do projeto Supabase sem solicitação explícita.
 - Não altere configurações da Vercel nem faça deploy sem solicitação explícita.
 - Nunca leia, exiba, copie ou versione valores reais de `.env.local`, `.env.*` ou tokens. Use `.env.example` apenas para documentar nomes e placeholders.
