@@ -1,86 +1,63 @@
 # Portfólio editorial — Tulius Tsangaropulos
 
-Site pessoal, currículo e CMS editorial em React + TypeScript, com Supabase Auth, Postgres, RLS e Storage. A composição foi reconstruída em HTML/CSS a partir dos PDFs fornecidos; as páginas dos PDFs não são usadas como imagens.
+Site pessoal, currículo e CMS editorial em React, TypeScript, Vite e Tailwind CSS v4. O conteúdo pode ser exibido pelo fallback local ou sincronizado com o projeto Supabase existente (`zfnrhzplwpjpdljraypt`). O projeto roda localmente no VS Code e pode ser publicado na Vercel.
 
-## Estado verificável
+## Requisitos
 
-- Site público: 14 seções desktop, 28 painéis mobile e 14 âncoras estáveis.
-- Navegação: menu acessível, hash/back, indicador de seção/painel, Escape e foco visível.
-- Conteúdo: textos do PDF, três depoimentos sem duplicação e placeholders preservados.
-- Admin: login, role guard, dashboard, edição/ordenação/duplicação/arquivo de seções, design tokens, mídia, navegação e prévia de rascunho.
-- CMS modular: editor de blocos e itens, distribuição mobile A/B, placements, motion, coleções estruturadas, SEO, pendências e revisões.
-- Supabase: cliente configurado para o projeto existente; schema, seed, RLS, Storage e testes foram gerados.
-- Engenharia: formato, TypeScript, 6 testes unitários/estruturais e build validados por `pnpm check`.
+- Node.js compatível com Vite 8
+- pnpm
 
-**A migration e o seed não foram aplicados automaticamente:** uma chave pública nunca deve possuir DDL. Até a aplicação, o site mostra o seed editorial local e o admin informa que o schema está pendente.
-
-## Execução
+## Desenvolvimento local
 
 ```bash
-pnpm install
-cp .env.example .env.local
-# preencha somente as variáveis públicas
+pnpm install --frozen-lockfile
+```
+
+Copie `.env.example` para `.env.local` e use os valores públicos já fornecidos para o projeto Supabase. O arquivo de exemplo contém somente um placeholder para a chave publishable; não coloque credenciais reais nele.
+
+```bash
 pnpm dev
 ```
 
-No Figma Make, o servidor de desenvolvimento é iniciado automaticamente; não execute `pnpm dev` ali.
+O Vite inicia o site localmente e atualiza a página quando os arquivos mudam. Para gerar e servir uma versão de produção local:
 
 ```bash
-pnpm check        # formato + TypeScript + testes + build
-pnpm test         # Vitest
-pnpm build        # produção
+pnpm build
+pnpm preview
 ```
 
-## Aplicar o Supabase existente
+## Verificações
 
-1. Confirme que o projeto selecionado é `zfnrhzplwpjpdljraypt`.
-2. Faça backup e revise objetos já existentes; a migration é aditiva.
-3. No Supabase Dashboard → SQL Editor, execute `supabase/migrations/202610220001_portfolio_cms.sql`.
-4. Execute `supabase/seed.sql`.
-5. Em Authentication, crie ou convide a primeira conta. Copie seu UUID.
-6. Ainda no SQL Editor, como operador privilegiado, execute:
-
-```sql
-insert into public.admin_users (user_id, role)
-values ('UUID-DA-CONTA', 'owner');
+```bash
+pnpm format:check  # verifica formatação
+pnpm typecheck     # verifica TypeScript
+pnpm test          # testes Vitest
+pnpm build         # build de produção
+pnpm check         # executa tudo acima
 ```
 
-Não exponha esse comando como cadastro público e não use `service_role` no frontend.
-
-7. Entre em `/admin/login`, faça uma alteração em rascunho e valide a prévia.
-8. Execute o roteiro de `supabase/tests/rls.sql`, incluindo os testes negativos com usuário comum.
-
-A migration inclui RPCs transacionais para reorder, duplicação e publicação, além de revisões/auditoria automáticas. O seed popula os painéis desktop/mobile, placements e as coleções editoriais.
-
-## Variáveis
-
-| Nome | Uso |
-|---|---|
-| `VITE_SUPABASE_URL` | URL pública do projeto existente |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | chave publishable/anon pública; protegida por RLS |
-
-## Rotas
+## Aplicação
 
 - `/`: portfólio público
-- `/admin/login`: autenticação
+- `/admin/login`: autenticação administrativa
 - `/admin`: CMS protegido
-- `/admin/preview`: prévia protegida de drafts
-- `*`: página 404 editorial
+- `/admin/preview`: prévia protegida de rascunhos
+- demais rotas: página 404
 
-## Conteúdo e GitHub
+A aplicação mantém o conteúdo editorial local como fallback enquanto o CMS Supabase não estiver disponível. A integração usa `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`; não use uma chave `service_role` no frontend.
 
-O seed local existe para bootstrap e indisponibilidade antes da migration; após a aplicação, o frontend prioriza os registros publicados no Supabase. Assets iniciais extraídos do material fornecido ficam em `public/media` e podem ser promovidos ao Storage pelo fluxo editorial.
+## Supabase
 
-O push do Figma Make para GitHub é unidirecional. Defina uma fonte de verdade por ciclo de trabalho, revise o diff antes do push e nunca versione `.env.local`, tokens ou chaves privadas.
+O cliente segue ligado ao projeto existente `zfnrhzplwpjpdljraypt`. A migration e o seed em `supabase/` não são aplicados automaticamente. Consulte `docs/ARCHITECTURE.md`, `docs/SECURITY_RLS.md` e `docs/ADMIN_CMS.md` antes de operações no banco. Este repositório não altera o banco durante o desenvolvimento ou build.
 
-## Checklist pendente externo
+## Vercel
 
-- [ ] Aplicar migration e seed ao projeto Supabase.
-- [ ] Cadastrar primeiro administrador por operador privilegiado.
-- [ ] Executar testes RLS com sessões anon, usuário comum e admin.
-- [ ] Promover mídias aprovadas ao bucket público e cadastrar alt/créditos.
-- [ ] Resolver as nove pendências editoriais antes de publicar como definitivo.
-- [ ] Configurar domínio e variáveis na Vercel; validar Open Graph no domínio final.
-- [ ] Executar homologação visual/E2E nos viewports de aceite; o servidor supervisionado não estava acessível nesta execução.
+Configure as duas variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` nos ambientes Vercel necessários. O build é `pnpm build`; a saída estática é `dist/`. Domínio, canonical e metadados sociais devem ser revisados para o domínio final conforme `docs/DEPLOYMENT.md`. Este projeto não faz deploy automaticamente a partir das instruções deste README.
 
-Leia `docs/` para arquitetura, CMS, segurança, layout e deploy.
+## Segurança e colaboração
+
+`.gitignore` protege `.env.local`, `.env.*`, `.vercel/`, `node_modules/` e `dist/`, mantendo `.env.example` disponível para versionamento. Nunca versione tokens ou chaves privadas. Revise `git status` e o diff antes de qualquer commit; este README não autoriza commits, push, alterações na Vercel ou deploy.
+
+## Documentação adicional
+
+Consulte `docs/` para arquitetura, modelo de conteúdo, CMS, segurança, layout responsivo, sistema visual, motion e publicação.
