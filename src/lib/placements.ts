@@ -17,7 +17,7 @@ export type ContentBlockRow = {
   sort_order: number
   mobile_panel: "a" | "b"
   status: string
-  content_json: { items?: ContentItem[] } | null
+  content_json: { items?: ContentItem[]; source_collection?: string | null } | null
 }
 
 export type SectionPanelRow = {
