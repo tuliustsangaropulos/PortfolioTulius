@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/generate-seo.mjs",
+    "build": "vite build && node scripts/generate-seo.mjs && node scripts/report-bundle.mjs",
     "preview": "vite preview",
     "format": "oxfmt",
     "format:check": "oxfmt --check src package.json tsconfig.json vite.config.ts",
