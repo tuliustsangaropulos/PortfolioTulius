@@ -301,6 +301,8 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
   >({})
   const [loadedPanelKeys, setLoadedPanelKeys] = useState<PanelKey[]>([])
   const [editedPanelKeys, setEditedPanelKeys] = useState<PanelKey[]>([])
+  const [placementsLoading, setPlacementsLoading] = useState(true)
+  const [placementsReadError, setPlacementsReadError] = useState(false)
   const placement = placementsByPanel[placementPanel] ?? initialPlacement
   const setPlacement = (next: PlacementForm) => {
     setPlacementsByPanel((current) => ({ ...current, [placementPanel]: next }))
@@ -338,37 +340,60 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
     setPlacementsByPanel({})
     setLoadedPanelKeys([])
     setEditedPanelKeys([])
-    if (!selectedId || !supabase) return
+    setPlacementsLoading(true)
+    setPlacementsReadError(false)
+    if (!selectedId || !supabase || !selected) {
+      setPlacementsLoading(false)
+      return
+    }
 
-    void supabase
-      .from("block_placements")
-      .select("layout_variant,is_visible,motion_config,section_panels!inner(panel_key)")
-      .eq("block_id", selectedId)
-      .then(({ data, error }) => {
-        if (cancelled) return
-        if (error) return setMessage(error.message)
-        const byPanel: Partial<Record<PanelKey, PlacementForm>> = {}
-        const keys: PanelKey[] = []
-        for (const row of data ?? []) {
-          const relation = row.section_panels as { panel_key?: string } | null
-          const key = relation?.panel_key as PanelKey | undefined
-          if (key !== "desktop" && key !== "mobile-a" && key !== "mobile-b")
-            continue
-          const motion = row.motion_config as Record<string, unknown> | null
-          byPanel[key] = {
-            layout_variant: row.layout_variant ?? "default",
-            is_visible: row.is_visible ?? true,
-            preset: typeof motion?.preset === "string" ? motion.preset : "fade-up",
-            duration: typeof motion?.duration === "number" ? motion.duration : 520,
-            delay: typeof motion?.delay === "number" ? motion.delay : 0,
-            distance: typeof motion?.distance === "number" ? motion.distance : 18,
-            once: typeof motion?.once === "boolean" ? motion.once : true,
-          }
-          keys.push(key)
+    // Resolve panels independently to avoid relying on an ambiguous join shape.
+    void Promise.all([
+      supabase
+        .from("section_panels")
+        .select("id,panel_key")
+        .eq("section_id", selected.section_id),
+      supabase
+        .from("block_placements")
+        .select("panel_id,layout_variant,is_visible,motion_config")
+        .eq("block_id", selectedId),
+    ]).then(([panelResult, placementResult]) => {
+      if (cancelled) return
+      if (panelResult.error || placementResult.error) {
+        setMessage(
+          panelResult.error?.message ??
+            placementResult.error?.message ??
+            "Falha ao carregar placements.",
+        )
+        setPlacementsReadError(true)
+        setPlacementsLoading(false)
+        return
+      }
+      const panelNames = new Map(
+        (panelResult.data ?? []).map((panel) => [panel.id, panel.panel_key]),
+      )
+      const byPanel: Partial<Record<PanelKey, PlacementForm>> = {}
+      const keys: PanelKey[] = []
+      for (const row of placementResult.data ?? []) {
+        const key = panelNames.get(row.panel_id) as PanelKey | undefined
+        if (key !== "desktop" && key !== "mobile-a" && key !== "mobile-b")
+          continue
+        const motion = row.motion_config as Record<string, unknown> | null
+        byPanel[key] = {
+          layout_variant: row.layout_variant ?? "default",
+          is_visible: row.is_visible ?? true,
+          preset: typeof motion?.preset === "string" ? motion.preset : "fade-up",
+          duration: typeof motion?.duration === "number" ? motion.duration : 520,
+          delay: typeof motion?.delay === "number" ? motion.delay : 0,
+          distance: typeof motion?.distance === "number" ? motion.distance : 18,
+          once: typeof motion?.once === "boolean" ? motion.once : true,
         }
-        setPlacementsByPanel(byPanel)
-        setLoadedPanelKeys(keys)
-      })
+        keys.push(key)
+      }
+      setPlacementsByPanel(byPanel)
+      setLoadedPanelKeys(keys)
+      setPlacementsLoading(false)
+    })
 
     return () => {
       cancelled = true
@@ -397,6 +422,8 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
 
   async function saveBlock() {
     if (!supabase || !draft) return
+    if (placementsLoading || placementsReadError)
+      return setMessage("Carregue os placements antes de salvar.")
     const validationErrors = validateContentItems(
       draft.content_json.items ?? [],
     )
@@ -1016,7 +1043,11 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
               <button className="danger-button" onClick={archiveBlock}>
                 Arquivar bloco
               </button>
-              <button className="primary-button" onClick={saveBlock}>
+              <button
+                className="primary-button"
+                onClick={saveBlock}
+                disabled={placementsLoading || placementsReadError}
+              >
                 Salvar bloco
               </button>
             </div>
