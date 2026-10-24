@@ -7,6 +7,7 @@ import type {
 } from "../../types/content"
 import { Icon } from "../ui/Icons"
 import { Navigation } from "./Navigation"
+import { placementMotionVariables } from "../../lib/placement-motion"
 
 const heroDefaults = {
   badgeText: "VISÃO 360° DA COMUNICAÇÃO ·",
@@ -310,16 +311,8 @@ function itemStyle(item: ContentItem) {
   }
   const align = ["left", "center", "right"].includes(String(config.textAlign))
     ? String(config.textAlign) : undefined
-  const motion = placement?.motionConfig ?? {}
-  const motionNumber = (key: string, max: number) => {
-    const value = motion[key]
-    return typeof value === "number" && Number.isFinite(value)
-      ? Math.max(0, Math.min(max, value)) : undefined
-  }
   return {
-    "--placement-duration": toPixels(motionNumber("duration", 1200)),
-    "--placement-delay": toPixels(motionNumber("delay", 600)),
-    "--placement-distance": toPixels(motionNumber("distance", 48)),
+    ...placementMotionVariables(placement?.motionConfig),
     "--placement-width": toPercent(number("width", 10, 100)),
     "--placement-spacing": toPixels(number("spacing", 0, 120)),
     "--placement-title-size": toPixels(number("titleSize", 8, 120)),
