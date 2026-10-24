@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/audit-p3-lighthouse.yml
       - scripts/p3-browser-smoke.mjs
+      - src/index.css
+      - src/components/public/**
   workflow_dispatch:
 
 permissions:
