@@ -81,7 +81,7 @@ export function usePortfolio(includeDrafts = false) {
     setLoading(true)
     let query = supabase
       .from("sections")
-      .select("*, content_blocks(*)")
+      .select("id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json)")
       .order("sort_order")
     if (!includeDrafts)
       query = query.eq("status", "published").eq("is_visible", true)
