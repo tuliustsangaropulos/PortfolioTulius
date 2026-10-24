@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { validateContentItems } from "../../lib/validation"
+import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
 import type {
   ContentItem,
   DeviceItemStyle,
@@ -18,7 +19,7 @@ type BlockRow = {
   id: string
   section_id: string
   block_type: string
-  content_json: { items?: ContentItem[] }
+  content_json: { items?: ContentItem[]; source_collection?: string | null }
   mobile_panel: "a" | "b"
   sort_order: number
   status: string
@@ -424,9 +425,8 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
     if (!supabase || !draft) return
     if (placementsLoading || placementsReadError)
       return setMessage("Carregue os placements antes de salvar.")
-    const validationErrors = validateContentItems(
-      draft.content_json.items ?? [],
-    )
+    const validationErrors = isCollectionSource(draft.content_json.source_collection)
+      ? [] : validateContentItems(draft.content_json.items ?? [])
     if (validationErrors.length) return setMessage(validationErrors.join(" "))
 
     // Preserve existing independent placements: send only edited panels
@@ -642,6 +642,41 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                   }
                 />
               </label>
+              {sections.find((section) => section.id === draft.section_id)?.slug !== "perfil" && (
+                <label className="field-wide">
+                  Fonte do conteúdo exibido
+                  <select
+                    value={draft.content_json.source_collection ?? ""}
+                    onChange={(event) => {
+                      const next = event.target.value
+                      if (next && !confirm(
+                        "Vincular esta coleção fará o site exibir os registros publicados da coleção no lugar dos cards manuais deste bloco. O conteúdo manual será preservado. Continuar?",
+                      )) return
+                      setDraft({
+                        ...draft,
+                        content_json: {
+                          ...draft.content_json,
+                          source_collection: next || null,
+                        },
+                      })
+                    }}
+                  >
+                    <option value="">Cards manuais (atual)</option>
+                    {COLLECTION_SOURCES.map((source) => (
+                      <option key={source} value={source}>
+                        {collectionConfigs.find((config) => config.table === source)?.label ?? source}
+                      </option>
+                    ))}
+                  </select>
+                  {draft.content_json.source_collection && (
+                    <small>
+                      Fonte vinculada: edite e publique registros na aba Coleções.
+                      Os cards manuais abaixo continuam armazenados e voltam a
+                      aparecer quando o vínculo for removido.
+                    </small>
+                  )}
+                </label>
+              )}
               <label>
                 Status
                 <select
