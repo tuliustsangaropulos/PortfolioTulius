@@ -64,6 +64,10 @@ function ItemCard({
     "reveal",
     variant !== "default" ? `placement-${variant}` : "",
     motionPreset ? `placement-motion-${motionPreset}` : "",
+    motionPreset === "fade-up" &&
+    typeof presentation?.motionConfig?.distance === "number" &&
+    presentation.motionConfig.distance !== 18
+      ? "placement-motion-distance-custom" : "",
     item.image ? "has-image" : "",
     item.desktop?.visible === false ? "item-hidden-desktop" : "",
     item.mobile?.visible === false ? "item-hidden-mobile" : "",
@@ -440,6 +444,13 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        for (const item of entries) {
+          if (!item.isIntersecting) {
+            item.target
+              .querySelectorAll('.reveal[data-motion-once="false"]')
+              .forEach((element) => element.classList.remove("is-visible"))
+          }
+        }
         const entry = entries
           .filter((item) => item.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
