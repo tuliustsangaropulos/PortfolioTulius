@@ -45,3 +45,26 @@ A linha `P2 bundle:` informará o maior JS efetivo. Compare esse valor com 533,0
 Este P2 é otimização técnica inicial. Não houve auditoria visual automatizada nem medição de Core Web Vitals neste ambiente. O smoke HTTP não executa React no navegador e não valida login, RLS, editor, mídia ou responsividade. A publicação pode ocorrer pelo GitHub/Vercel antes da homologação manual.
 
 Próximos candidatos: audit de imagem/formatos modernos, divisão mais fina se relatório indicar, auditoria Lighthouse e teste end-to-end autenticado em ambiente seguro.
+
+## Resultado da primeira medição local (2026-10-24)
+
+- TypeScript: passou.
+- Vitest: **17/17** testes passaram.
+- Build: passou, SEO gerado.
+- Maior chunk: **490,56 kB minificado**, `vendor`; **42,45 kB / 8,0%** menor que a referência de 533,01 kB.
+- JS total dos quatro chunks: **586,96 kB** minificados. Atenção: soma dos chunks gerados não é o tamanho necessariamente transferido na primeira visita.
+- `smoke:prod`: falhou inicialmente com `UND_ERR_CONNECT_TIMEOUT` ao conectar a `tulius.work:443`. Isso não foi um erro de status HTTP, conteúdo, build ou regressão do CSS; a conexão nem foi estabelecida.
+
+## Diagnóstico do smoke remoto
+
+Depois de `pnpm.cmd build`, execute `pnpm.cmd smoke:build` para verificar os arquivos gerados *offline*. Esse comando não prova que o domínio público está acessível.
+
+O `smoke:prod` agora inicia Node 24 com `--use-env-proxy` para suportar `HTTP_PROXY`/`HTTPS_PROXY` caso o ambiente use proxy. Se ainda houver timeout, no PowerShell:
+
+```powershell
+curl.exe -I --max-time 20 https://tulius.work/
+Test-NetConnection tulius.work -Port 443
+pnpm.cmd smoke:prod
+```
+
+Não cole no chat valores de `HTTPS_PROXY` ou outras variáveis que possam conter credenciais. Se o `curl.exe` funcionar mas o Node não, investigue proxy, VPN, firewall, IPv4/IPv6 e certificados locais; se ambos falharem, inspecione DNS e conectividade e compare com o endereço do deployment Vercel. Falhas de conectividade não devem ser classificadas como testes positivos.
