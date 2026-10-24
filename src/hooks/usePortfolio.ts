@@ -110,7 +110,7 @@ export function usePortfolio(includeDrafts = false) {
         .select("seo_title,seo_description")
         .eq("slug", "home").eq("status", "published").maybeSingle(),
       supabase.from("site_settings")
-        .select("site_title,description,seo_json")
+        .select("site_title,description,seo_json,locale")
         .eq("status", "published").limit(1).maybeSingle(),
     ]).then(async ([
       sectionsResult, panelsResult, placementsResult,
@@ -235,15 +235,34 @@ export function usePortfolio(includeDrafts = false) {
           pageResult.data?.seo_title ?? settingsResult.data?.site_title
         const description =
           pageResult.data?.seo_description ?? settingsResult.data?.description
-        if (title) document.title = title
-        if (description) setMeta("description", description)
+        if (title) {
+          document.title = title
+          setMeta("og:title", title, "property")
+        }
+        if (description) {
+          setMeta("description", description)
+          setMeta("og:description", description, "property")
+          setMeta("twitter:description", description)
+        }
         const seo = settingsResult.data?.seo_json as {
           ogImage?: string
           canonical?: string
+          robots?: string
         } | undefined
-        if (seo?.ogImage?.startsWith("https://"))
+        if (seo?.ogImage?.startsWith("https://")) {
           setMeta("og:image", seo.ogImage, "property")
-        if (seo?.canonical?.startsWith("https://")) setCanonical(seo.canonical)
+          setMeta("twitter:image", seo.ogImage)
+          setMeta("twitter:card", "summary_large_image")
+        }
+        if (/^(index|noindex),(follow|nofollow)$/.test(seo?.robots ?? ""))
+          setMeta("robots", seo!.robots!)
+        if (settingsResult.data?.locale?.match(/^[a-z]{2}-[A-Z]{2}$/))
+          setMeta("og:locale", settingsResult.data.locale.replace("-", "_"), "property")
+        setCanonical(
+          seo?.canonical?.startsWith("https://")
+            ? seo.canonical
+            : "https://tulius.work/",
+        )
       setLoading(false)
     }).catch(() => {
       if (cancelled) return
