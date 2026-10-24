@@ -93,7 +93,7 @@ export function Navigation({
           <span>TSANGAROPULOS</span>
         </button>
         <div className="section-count" aria-live="polite">
-          {String(currentIndex + 1).padStart(2, "0")}/14{" "}
+          {String(currentIndex + 1).padStart(2, "0")}/{String(sections.length).padStart(2, "0")}{" "}
           <span className="mobile-panel-count">
             · {panel === "a" ? "1" : "2"}/2
           </span>
@@ -125,7 +125,7 @@ export function Navigation({
           role="dialog"
         >
           <div className="drawer-head">
-            <p>Índice / 14 seções</p>
+            <p>Índice / {sections.length} seções</p>
             <button
               className="icon-button"
               onClick={closeMenu}
