@@ -1,0 +1,69 @@
+name: Audit P3 Lighthouse
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/audit-p3-lighthouse.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Node.js 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24.16.0"
+      - name: Lighthouse mobile and desktop
+        shell: bash
+        run: |
+          set +e
+          npx --yes lighthouse@13.5.0 https://tulius.work/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$RUNNER_TEMP/lighthouse-mobile.json"
+          mobile_status=$?
+          npx --yes lighthouse@13.5.0 https://tulius.work/ --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$RUNNER_TEMP/lighthouse-desktop.json"
+          desktop_status=$?
+          set -e
+          echo "Lighthouse CLI status: mobile=$mobile_status desktop=$desktop_status"
+          node <<'NODE'
+          const fs = require("node:fs")
+          const path = require("node:path")
+          let missing = 0
+          for (const device of ["mobile", "desktop"]) {
+            const filename = path.join(process.env.RUNNER_TEMP, `lighthouse-${device}.json`)
+            if (!fs.existsSync(filename)) {
+              console.log(`${device}: NO_REPORT`)
+              missing++
+              continue
+            }
+            const report = JSON.parse(fs.readFileSync(filename, "utf8"))
+            const categories = Object.fromEntries(
+              ["performance", "accessibility", "best-practices", "seo"].map((id) => [
+                id,
+                report.categories?.[id]?.score == null ? null : Math.round(report.categories[id].score * 100),
+              ]),
+            )
+            const metrics = Object.fromEntries(
+              Object.entries({
+                FCP: "first-contentful-paint",
+                LCP: "largest-contentful-paint",
+                TBT: "total-blocking-time",
+                CLS: "cumulative-layout-shift",
+                SI: "speed-index",
+              }).map(([key, id]) => [key, report.audits?.[id]?.numericValue ?? null]),
+            )
+            console.log(`P3_LIGHTHOUSE_${device.toUpperCase()} ${JSON.stringify({
+              fetchTime: report.fetchTime,
+              finalDisplayedUrl: report.finalDisplayedUrl,
+              lighthouseVersion: report.lighthouseVersion,
+              categories,
+              metrics,
+              runtimeError: report.runtimeError ?? null,
+            })}`)
+          }
+          if (missing) process.exitCode = 1
+          NODE
