@@ -391,6 +391,12 @@
 .content-item.placement-wide { width: 100%; }
 .content-item.placement-motion-none { opacity: 1; transform: none; transition: none; }
 .content-item.placement-motion-fade-in { transform: none; }
+.content-item.reveal.placement-motion-distance-custom:not(.is-visible) {
+  transform: translateY(var(--placement-distance, 18px));
+}
+.desktop-panel .content-item.reveal.placement-motion-distance-custom {
+  transform: none;
+}
 .content-item.placement-motion-image-reveal.has-image img {
   clip-path: inset(0 0 100% 0);
   transition: clip-path var(--placement-duration, var(--motion-duration)) ease;
