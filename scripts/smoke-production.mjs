@@ -6,11 +6,25 @@ if (base.protocol !== "https:") {
 
 async function request(path) {
   const url = new URL(path, base)
-  const response = await fetch(url, {
-    redirect: "follow",
-    signal: AbortSignal.timeout(12000),
-    headers: { accept: "text/html,application/xml,text/plain,*/*" },
-  })
+  let response
+  try {
+    response = await fetch(url, {
+      redirect: "follow",
+      signal: AbortSignal.timeout(12000),
+      headers: { accept: "text/html,application/xml,text/plain,*/*" },
+    })
+  } catch (error) {
+    const cause = error?.cause
+    const code = cause?.code ?? error?.code ?? error?.name ?? "NETWORK_ERROR"
+    throw new Error(
+      `Conexão com ${url.origin} falhou (${code}). ` +
+      "Isso não comprova indisponibilidade do site. Verifique DNS, porta 443, " +
+      "VPN, firewall e proxy. Compare com: curl.exe -I --max-time 20 " +
+      url.href + ". Caso curl funcione e Node não, execute o teste com " +
+      "Node 24 e --use-env-proxy (requer HTTP_PROXY/HTTPS_PROXY configurados).",
+      { cause: error },
+    )
+  }
   if (!response.ok) {
     throw new Error(`${path}: HTTP ${response.status} (${url.href})`)
   }
