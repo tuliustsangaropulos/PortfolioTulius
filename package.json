@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "check": "pnpm format:check && pnpm typecheck && pnpm test && pnpm build",
-    "smoke:prod": "node scripts/smoke-production.mjs"
+    "smoke:prod": "node --use-env-proxy scripts/smoke-production.mjs",
+    "smoke:build": "node scripts/smoke-build.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
