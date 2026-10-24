@@ -380,3 +380,48 @@
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* P0-02: optional placement overrides; defaults retain the approved layout. */
+.content-item {
+  width: var(--placement-width, var(--item-desktop-width, 100%));
+  padding-block: var(--placement-spacing, var(--item-desktop-spacing, 1rem));
+  text-align: var(--placement-align, var(--item-desktop-align, inherit));
+  transition-duration: var(--placement-duration, var(--motion-duration));
+  transition-delay: var(--placement-delay, 0ms);
+}
+.content-item h3 {
+  font-size: var(--placement-title-size, var(--item-desktop-title-size, clamp(1.25rem, 1.6vw, 1.75rem)));
+}
+.content-item p {
+  font-size: var(--placement-text-size, var(--item-desktop-text-size, inherit));
+}
+.content-item.placement-compact { padding-block: .45rem; }
+.content-item.placement-featured { border: 1px solid var(--line); padding: 1rem; }
+.content-item.placement-wide { width: 100%; }
+.content-item.placement-motion-none { opacity: 1; transform: none; transition: none; }
+.content-item.placement-motion-fade-in { transform: none; }
+.content-item.placement-motion-image-reveal.has-image img {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--placement-duration, var(--motion-duration)) ease;
+  transition-delay: var(--placement-delay, 0ms);
+}
+.content-item.placement-motion-image-reveal.is-visible.has-image img,
+.desktop-panel .content-item.placement-motion-image-reveal.has-image img {
+  clip-path: inset(0);
+}
+@media (max-width: 767px) {
+  .content-item {
+    width: var(--placement-width, var(--item-mobile-width, 100%));
+    padding-block: var(--placement-spacing, var(--item-mobile-spacing, .85rem));
+    text-align: var(--placement-align, var(--item-mobile-align, left));
+  }
+  .content-item h3 {
+    font-size: var(--placement-title-size, var(--item-mobile-title-size, clamp(1.25rem, 6vw, 1.7rem)));
+  }
+  .content-item p {
+    font-size: var(--placement-text-size, var(--item-mobile-text-size, clamp(.9rem, 4vw, 1rem)));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .content-item.placement-motion-image-reveal.has-image img { clip-path: inset(0); }
+}
