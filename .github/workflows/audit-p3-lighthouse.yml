@@ -64,6 +64,26 @@ jobs:
               metrics,
               runtimeError: report.runtimeError ?? null,
             })}`)
+            for (const category of ["performance", "accessibility"]) {
+              const failures = (report.categories?.[category]?.auditRefs ?? [])
+                .filter((entry) => entry.weight > 0)
+                .map((entry) => ({
+                  id: entry.id,
+                  weight: entry.weight,
+                  audit: report.audits?.[entry.id],
+                }))
+                .filter(({ audit }) => audit && typeof audit.score === "number" && audit.score < 1)
+                .sort((a, b) => a.audit.score - b.audit.score || b.weight - a.weight)
+                .slice(0, 20)
+                .map(({ id, audit }) => ({
+                  id,
+                  title: audit.title,
+                  score: audit.score,
+                  displayValue: audit.displayValue ?? null,
+                  numericValue: audit.numericValue ?? null,
+                }))
+              console.log(`P3_AUDITS_${device.toUpperCase()}_${category.toUpperCase()} ${JSON.stringify(failures)}`)
+            }
           }
           if (missing) process.exitCode = 1
           NODE
