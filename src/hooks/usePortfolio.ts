@@ -6,6 +6,10 @@ import {
 import { supabase } from "../lib/supabase"
 import { buildPublicNavigation, type PublicNavigationItem, type NavigationRow } from "../lib/navigation"
 import {
+  collectionToItems, isCollectionSource,
+  type CollectionSource,
+} from "../lib/collections"
+import {
   composeSectionPlacements,
   type BlockPlacementRow,
   type ContentBlockRow,
@@ -33,9 +37,21 @@ function toSection(
   panels: SectionPanelRow[],
   placements: BlockPlacementRow[],
   includeDrafts: boolean,
+  collectionItems: Map<CollectionSource, import("../types/content").ContentItem[]>,
 ): PortfolioSection {
+  const blocks = (row.content_blocks ?? []).map((block) => {
+    const source = block.content_json?.source_collection
+    if (!isCollectionSource(source)) return block
+    return {
+      ...block,
+      content_json: {
+        ...block.content_json,
+        items: collectionItems.get(source) ?? [],
+      },
+    }
+  })
   const composition = composeSectionPlacements(
-    row.id, row.content_blocks ?? [], panels, placements, includeDrafts,
+    row.id, blocks, panels, placements, includeDrafts,
   )
   return {
     id: row.id,
@@ -96,7 +112,7 @@ export function usePortfolio(includeDrafts = false) {
       supabase.from("site_settings")
         .select("site_title,description,seo_json")
         .eq("status", "published").limit(1).maybeSingle(),
-    ]).then(([
+    ]).then(async ([
       sectionsResult, panelsResult, placementsResult,
       tokenResult, navigationResult, pageResult, settingsResult,
     ]) => {
@@ -111,12 +127,41 @@ export function usePortfolio(includeDrafts = false) {
         setSource("supabase")
         setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
       } else {
-        const mappedSections = (sectionsResult.data as SectionResult[]).map(
+        const sectionRows = sectionsResult.data as SectionResult[]
+        const activeSources = new Set<CollectionSource>()
+        for (const section of sectionRows) {
+          for (const block of section.content_blocks ?? []) {
+            if (isCollectionSource(block.content_json?.source_collection)) {
+              activeSources.add(block.content_json.source_collection)
+            }
+          }
+        }
+        // Fetch only explicitly bound collections; existing manual blocks
+        // require no extra queries and retain their exact visual content.
+        const collectionItems = new Map<
+          CollectionSource, import("../types/content").ContentItem[]
+        >()
+        if (activeSources.size) {
+          const results = await Promise.all(
+            Array.from(activeSources).map(async (source) => {
+              const query = supabase.from(source).select("*").order("sort_order")
+              const response = includeDrafts
+                ? await query.neq("status", "archived")
+                : await query.eq("status", "published")
+              if (response.error) throw response.error
+              return [source, collectionToItems(source, response.data ?? [], includeDrafts)] as const
+            }),
+          )
+          if (cancelled) return
+          for (const [source, items] of results) collectionItems.set(source, items)
+        }
+        const mappedSections = sectionRows.map(
           (section) => toSection(
             section,
             (panelsResult.data ?? []) as SectionPanelRow[],
             (placementsResult.data ?? []) as BlockPlacementRow[],
             includeDrafts,
+            collectionItems,
           ),
         )
         const navRecords = (navigationResult.data ?? []) as NavigationRow[]
