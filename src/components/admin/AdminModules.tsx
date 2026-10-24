@@ -284,7 +284,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
   const [selectedId, setSelectedId] = useState("")
   const [draft, setDraft] = useState<BlockRow | null>(null)
   const [message, setMessage] = useState("")
-  const [placement, setPlacement] = useState({
+  const initialPlacement = {
     layout_variant: "default",
     is_visible: true,
     preset: "fade-up",
@@ -292,7 +292,22 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
     delay: 0,
     distance: 18,
     once: true,
-  })
+  }
+  type PanelKey = "desktop" | "mobile-a" | "mobile-b"
+  type PlacementForm = typeof initialPlacement
+  const [placementPanel, setPlacementPanel] = useState<PanelKey>("desktop")
+  const [placementsByPanel, setPlacementsByPanel] = useState<
+    Partial<Record<PanelKey, PlacementForm>>
+  >({})
+  const [loadedPanelKeys, setLoadedPanelKeys] = useState<PanelKey[]>([])
+  const [editedPanelKeys, setEditedPanelKeys] = useState<PanelKey[]>([])
+  const placement = placementsByPanel[placementPanel] ?? initialPlacement
+  const setPlacement = (next: PlacementForm) => {
+    setPlacementsByPanel((current) => ({ ...current, [placementPanel]: next }))
+    setEditedPanelKeys((current) =>
+      current.includes(placementPanel) ? current : [...current, placementPanel],
+    )
+  }
 
   useEffect(() => {
     if (!sectionId && sections[0]) setSectionId(sections[0].id)
@@ -316,27 +331,48 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
   }, [sectionId])
 
   useEffect(() => {
+    let cancelled = false
     const selected = blocks.find((block) => block.id === selectedId)
     setDraft(selected ? structuredClone(selected) : null)
+    setPlacementPanel("desktop")
+    setPlacementsByPanel({})
+    setLoadedPanelKeys([])
+    setEditedPanelKeys([])
     if (!selectedId || !supabase) return
+
     void supabase
       .from("block_placements")
-      .select("layout_variant,is_visible,motion_config")
+      .select("layout_variant,is_visible,motion_config,section_panels!inner(panel_key)")
       .eq("block_id", selectedId)
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!data) return
-        setPlacement({
-          layout_variant: data.layout_variant ?? "default",
-          is_visible: data.is_visible ?? true,
-          preset: data.motion_config?.preset ?? "fade-up",
-          duration: data.motion_config?.duration ?? 520,
-          delay: data.motion_config?.delay ?? 0,
-          distance: data.motion_config?.distance ?? 18,
-          once: data.motion_config?.once ?? true,
-        })
+      .then(({ data, error }) => {
+        if (cancelled) return
+        if (error) return setMessage(error.message)
+        const byPanel: Partial<Record<PanelKey, PlacementForm>> = {}
+        const keys: PanelKey[] = []
+        for (const row of data ?? []) {
+          const relation = row.section_panels as { panel_key?: string } | null
+          const key = relation?.panel_key as PanelKey | undefined
+          if (key !== "desktop" && key !== "mobile-a" && key !== "mobile-b")
+            continue
+          const motion = row.motion_config as Record<string, unknown> | null
+          byPanel[key] = {
+            layout_variant: row.layout_variant ?? "default",
+            is_visible: row.is_visible ?? true,
+            preset: typeof motion?.preset === "string" ? motion.preset : "fade-up",
+            duration: typeof motion?.duration === "number" ? motion.duration : 520,
+            delay: typeof motion?.delay === "number" ? motion.delay : 0,
+            distance: typeof motion?.distance === "number" ? motion.distance : 18,
+            once: typeof motion?.once === "boolean" ? motion.once : true,
+          }
+          keys.push(key)
+        }
+        setPlacementsByPanel(byPanel)
+        setLoadedPanelKeys(keys)
       })
+
+    return () => {
+      cancelled = true
+    }
   }, [blocks, selectedId])
 
   async function createBlock() {
@@ -365,50 +401,50 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
       draft.content_json.items ?? [],
     )
     if (validationErrors.length) return setMessage(validationErrors.join(" "))
-    const { error } = await supabase
-      .from("content_blocks")
-      .update({
-        block_type: draft.block_type,
-        content_json: draft.content_json,
-        mobile_panel: draft.mobile_panel,
-        sort_order: draft.sort_order,
-        status: draft.status,
-        is_placeholder: draft.is_placeholder,
-        editorial_note: draft.editorial_note,
-      })
-      .eq("id", draft.id)
-    if (error) return setMessage(error.message)
-    const { data: panels, error: panelError } = await supabase
-      .from("section_panels")
-      .select("id,panel_key")
-      .eq("section_id", draft.section_id)
-    if (panelError) return setMessage(panelError.message)
-    const destinationKeys = new Set([
+
+    // Preserve existing independent placements: send only edited panels
+    // and create the required desktop/mobile placements if they are missing.
+    const requiredKeys: PanelKey[] = [
       "desktop",
       draft.mobile_panel === "a" ? "mobile-a" : "mobile-b",
-    ])
-    const destinationPanels = (panels ?? []).filter((panel) =>
-      destinationKeys.has(panel.panel_key),
+    ]
+    const changedKeys = Array.from(
+      new Set([
+        ...editedPanelKeys,
+        ...requiredKeys.filter((key) => !loadedPanelKeys.includes(key)),
+      ]),
     )
-    await supabase.from("block_placements").delete().eq("block_id", draft.id)
-    const placementResult = await supabase.from("block_placements").insert(
-      destinationPanels.map((panel) => ({
-        block_id: draft.id,
-        panel_id: panel.id,
+    const placementUpdates = changedKeys.map((key) => {
+      const form = placementsByPanel[key] ?? initialPlacement
+      return {
+        panel_key: key,
         sort_order: draft.sort_order,
-        layout_variant: placement.layout_variant,
-        is_visible: placement.is_visible,
+        layout_variant: form.layout_variant,
+        is_visible: form.is_visible,
         motion_config: {
-          preset: placement.preset,
-          duration: Math.min(1200, Math.max(0, placement.duration)),
-          delay: Math.min(600, Math.max(0, placement.delay)),
-          distance: Math.min(48, Math.max(0, placement.distance)),
-          once: placement.once,
+          preset: form.preset,
+          duration: Math.min(1200, Math.max(0, form.duration)),
+          delay: Math.min(600, Math.max(0, form.delay)),
+          distance: Math.min(48, Math.max(0, form.distance)),
+          once: form.once,
         },
-      })),
-    )
-    setMessage(placementResult.error?.message ?? "Bloco e placements salvos.")
-    if (!placementResult.error) await load()
+      }
+    })
+
+    const { error } = await supabase.rpc("save_content_block_atomic", {
+      p_block_id: draft.id,
+      p_block_type: draft.block_type,
+      p_content_json: draft.content_json,
+      p_mobile_panel: draft.mobile_panel,
+      p_sort_order: draft.sort_order,
+      p_status: draft.status,
+      p_is_placeholder: draft.is_placeholder,
+      p_editorial_note: draft.editorial_note,
+      p_placements: placementUpdates,
+    })
+    if (error) return setMessage(error.message)
+    setMessage("Bloco e placements salvos em uma transação.")
+    await load()
   }
 
   async function archiveBlock() {
@@ -618,6 +654,19 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
             </div>
             <fieldset className="motion-editor">
               <legend>Placement e animação</legend>
+              <label>
+                Painel a editar (demais painéis são preservados)
+                <select
+                  value={placementPanel}
+                  onChange={(event) =>
+                    setPlacementPanel(event.target.value as PanelKey)
+                  }
+                >
+                  <option value="desktop">Desktop</option>
+                  <option value="mobile-a">Mobile A</option>
+                  <option value="mobile-b">Mobile B</option>
+                </select>
+              </label>
               <div className="field-grid compact-grid">
                 <label>
                   Variante de layout
