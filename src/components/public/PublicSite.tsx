@@ -81,7 +81,9 @@ function ItemCard({
         <img
           src={item.image}
           alt={item.alt ?? ""}
-          loading={index > 0 ? "lazy" : "eager"}
+          loading="lazy"
+          decoding="async"
+          fetchPriority={index === 0 ? "auto" : "low"}
         />
       )}
       <div className="item-copy">
@@ -150,7 +152,13 @@ function ProfileDesktop({ section }: { section: PortfolioSection }) {
         style={{ ...itemStyle(profile), ...heroStyle(hero) }}
       >
         <div className="profile-portrait">
-          <img src={profile.image} alt={profile.alt} />
+          <img
+              src={profile.image}
+              alt={profile.alt}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
           <div className="years">
             <strong>{profile.title}</strong>
             <span>{profile.text}</span>
@@ -223,7 +231,13 @@ function MobilePanel({
             className="mobile-profile-hero"
             style={{ ...itemStyle(profile), ...heroStyle(hero) }}
           >
-            <img src={profile.image} alt={profile.alt} />
+            <img
+              src={profile.image}
+              alt={profile.alt}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
             <div>
               <strong>{profile.title}</strong>
               <p>{profile.text}</p>
