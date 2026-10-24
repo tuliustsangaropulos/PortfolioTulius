@@ -51,9 +51,7 @@ export function Navigation({
     const main = document.querySelector<HTMLElement>(".public-site main")
     if (open) {
       main?.setAttribute("inert", "")
-      requestAnimationFrame(() =>
-        drawerRef.current?.querySelector<HTMLElement>("button")?.focus(),
-      )
+      requestAnimationFrame(() => drawerRef.current?.querySelector<HTMLElement>("button")?.focus())
     } else {
       main?.removeAttribute("inert")
     }
@@ -74,9 +72,7 @@ export function Navigation({
     const element = document.getElementById(slug)
     history.pushState(null, "", `#${slug}`)
     element?.scrollIntoView({
-      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth",
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     })
     if (element) {
       element.tabIndex = -1
@@ -87,19 +83,13 @@ export function Navigation({
   return (
     <>
       <header className="site-header">
-        <button
-          className="brand-button"
-          onClick={() => go("perfil")}
-          aria-label="Voltar ao perfil"
-        >
+        <button className="brand-button" onClick={() => go("perfil")} aria-label="Voltar ao perfil">
           <span>TULIUS</span>
           <span>TSANGAROPULOS</span>
         </button>
         <div className="section-count" aria-live="polite">
           {String(currentIndex + 1).padStart(2, "0")}/{String(sections.length).padStart(2, "0")}{" "}
-          <span className="mobile-panel-count">
-            · {panel === "a" ? "1" : "2"}/2
-          </span>
+          <span className="mobile-panel-count">· {panel === "a" ? "1" : "2"}/2</span>
         </div>
         <button
           ref={triggerRef}
@@ -114,9 +104,7 @@ export function Navigation({
       </header>
       <div
         className={`nav-backdrop ${open ? "is-open" : ""}`}
-        onMouseDown={(event) =>
-          event.target === event.currentTarget && closeMenu()
-        }
+        onMouseDown={(event) => event.target === event.currentTarget && closeMenu()}
       >
         <nav
           ref={drawerRef}
@@ -129,11 +117,7 @@ export function Navigation({
         >
           <div className="drawer-head">
             <p>Índice / {sections.length} seções</p>
-            <button
-              className="icon-button"
-              onClick={closeMenu}
-              aria-label="Fechar menu"
-            >
+            <button className="icon-button" onClick={closeMenu} aria-label="Fechar menu">
               <Icon name="close" />
             </button>
           </div>
@@ -154,9 +138,7 @@ export function Navigation({
               </li>
             ))}
           </ol>
-          {navigation.length === 0 && (
-            <p className="drawer-foot">Nenhum item de menu publicado.</p>
-          )}
+          {navigation.length === 0 && <p className="drawer-foot">Nenhum item de menu publicado.</p>}
           <p className="drawer-foot">Comunicação · Estratégia · Reputação</p>
         </nav>
       </div>

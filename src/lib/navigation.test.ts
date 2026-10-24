@@ -2,11 +2,14 @@ import { describe, expect, it } from "vitest"
 import { sections } from "../content/fallback"
 import { buildPublicNavigation, type NavigationRow } from "./navigation"
 
-const row = (
-  slug: string, order: number, extra: Partial<NavigationRow> = {},
-): NavigationRow => ({
-  target_slug: slug, label: slug, group_name: "Principal",
-  sort_order: order, status: "published", is_visible: true, ...extra,
+const row = (slug: string, order: number, extra: Partial<NavigationRow> = {}): NavigationRow => ({
+  target_slug: slug,
+  label: slug,
+  group_name: "Principal",
+  sort_order: order,
+  status: "published",
+  is_visible: true,
+  ...extra,
 })
 
 describe("navegação editorial", () => {

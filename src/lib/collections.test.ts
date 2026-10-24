@@ -12,7 +12,13 @@ describe("fontes de coleção editoriais", () => {
 
   it("somente registros publicados, ordenados e sem notas privadas", () => {
     const items = collectionToItems("metrics", [
-      { label: "Segundo", value_text: "2", sort_order: 2, status: "published", editorial_note: "interno" },
+      {
+        label: "Segundo",
+        value_text: "2",
+        sort_order: 2,
+        status: "published",
+        editorial_note: "interno",
+      },
       { label: "Rascunho", value_text: "9", sort_order: 0, status: "draft" },
       { label: "Primeiro", value_text: "1", sort_order: 1, status: "published" },
     ])
@@ -39,12 +45,16 @@ describe("fontes de coleção editoriais", () => {
   })
   it("preserva cards manuais sem vínculo e nunca os altera ao resolver coleção", () => {
     const manual: ContentBlockRow = {
-      id: "block", section_id: "section", sort_order: 1,
-      mobile_panel: "a", status: "published",
+      id: "block",
+      section_id: "section",
+      sort_order: 1,
+      mobile_panel: "a",
+      status: "published",
       content_json: { items: [{ title: "Manual" }] },
     }
     const linked: ContentBlockRow = {
-      ...manual, id: "linked",
+      ...manual,
+      id: "linked",
       content_json: {
         items: [{ title: "Versão editorial original" }],
         source_collection: "metrics",
@@ -52,15 +62,14 @@ describe("fontes de coleção editoriais", () => {
     }
     const resolved = resolveCollectionBlocks(
       [manual, linked],
-      new Map<CollectionSource, ContentItem[]>([
-        ["metrics", [{ title: "Coleção atualizada" }]],
-      ]),
+      new Map<CollectionSource, ContentItem[]>([["metrics", [{ title: "Coleção atualizada" }]]]),
     )
     expect(resolved[0]).toEqual(manual)
     expect(resolved[1].content_json?.items?.[0].title).toBe("Coleção atualizada")
     expect(linked.content_json?.items?.[0].title).toBe("Versão editorial original")
-    expect(resolveCollectionBlocks([linked], new Map<CollectionSource, ContentItem[]>())[0].content_json?.items)
-      .toEqual([])
+    expect(
+      resolveCollectionBlocks([linked], new Map<CollectionSource, ContentItem[]>())[0].content_json
+        ?.items,
+    ).toEqual([])
   })
-
 })

@@ -16,8 +16,7 @@ export const COLLECTION_SOURCES = [
 export type CollectionSource = (typeof COLLECTION_SOURCES)[number]
 
 export function isCollectionSource(value: unknown): value is CollectionSource {
-  return typeof value === "string" &&
-    (COLLECTION_SOURCES as readonly string[]).includes(value)
+  return typeof value === "string" && (COLLECTION_SOURCES as readonly string[]).includes(value)
 }
 
 type RecordRow = Record<string, unknown>
@@ -48,7 +47,7 @@ export function collectionToItems(
   includeDrafts = false,
 ): ContentItem[] {
   return records
-    .filter((row) => includeDrafts ? row.status !== "archived" : row.status === "published")
+    .filter((row) => (includeDrafts ? row.status !== "archived" : row.status === "published"))
     .slice()
     .sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0))
     .map((row): ContentItem => {
@@ -83,8 +82,7 @@ export function collectionToItems(
             title: field(row, "course"),
             label: field(row, "degree_type"),
             text: field(row, "institution"),
-            meta: [field(row, "start_date"), field(row, "end_date")]
-              .filter(Boolean).join(" — "),
+            meta: [field(row, "start_date"), field(row, "end_date")].filter(Boolean).join(" — "),
           }
         case "language_levels":
           return {
@@ -96,10 +94,14 @@ export function collectionToItems(
           return {
             title: field(row, "title"),
             text: Array.isArray(row.tools)
-              ? row.tools.map((tool) =>
-                typeof tool === "object" && tool !== null && "name" in tool
-                  ? String(tool.name ?? "") : "",
-              ).filter(Boolean).join(" · ")
+              ? row.tools
+                  .map((tool) =>
+                    typeof tool === "object" && tool !== null && "name" in tool
+                      ? String(tool.name ?? "")
+                      : "",
+                  )
+                  .filter(Boolean)
+                  .join(" · ")
               : "",
           }
         case "testimonials":

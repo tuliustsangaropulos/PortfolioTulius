@@ -21,7 +21,8 @@ export function buildPublicNavigation(
   records: NavigationRow[],
 ): PublicNavigationItem[] {
   const published = new Map(
-    sections.filter((section) => section.status === "published" && section.visible)
+    sections
+      .filter((section) => section.status === "published" && section.visible)
       .map((section) => [section.slug, section]),
   )
   const targets = new Set<string>()
@@ -33,11 +34,13 @@ export function buildPublicNavigation(
       const section = published.get(record.target_slug)
       if (!section || targets.has(record.target_slug)) return []
       targets.add(record.target_slug)
-      return [{
-        slug: section.slug,
-        label: record.label.trim() || section.title,
-        group: record.group_name.trim() || "Principal",
-        number: section.number,
-      }]
+      return [
+        {
+          slug: section.slug,
+          label: record.label.trim() || section.title,
+          group: record.group_name.trim() || "Principal",
+          number: section.number,
+        },
+      ]
     })
 }

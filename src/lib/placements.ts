@@ -51,19 +51,23 @@ export function composeSectionPlacements(
   includeDrafts = false,
 ): DeviceComposition {
   const panelById = new Map(
-    panels.filter((panel) => panel.section_id === sectionId)
+    panels
+      .filter((panel) => panel.section_id === sectionId)
       .map((panel) => [panel.id, panel.panel_key]),
   )
   const blockById = new Map(
     blocks
       .filter((block) => block.section_id === sectionId)
-      .filter((block) => includeDrafts
-        ? block.status !== "archived"
-        : block.status === "published")
+      .filter((block) =>
+        includeDrafts ? block.status !== "archived" : block.status === "published",
+      )
       .map((block) => [block.id, block]),
   )
   const composition: DeviceComposition = {
-    desktopA: [], desktopB: [], mobileA: [], mobileB: [],
+    desktopA: [],
+    desktopB: [],
+    mobileA: [],
+    mobileB: [],
   }
   const matches = placements
     .filter((placement) => placement.is_visible)
@@ -73,17 +77,25 @@ export function composeSectionPlacements(
       key: panelById.get(placement.panel_id),
     }))
     .filter((entry) => entry.block && entry.key)
-    .sort((a, b) =>
-      a.placement.sort_order - b.placement.sort_order ||
-      (a.block?.sort_order ?? 0) - (b.block?.sort_order ?? 0) ||
-      a.placement.block_id.localeCompare(b.placement.block_id),
+    .sort(
+      (a, b) =>
+        a.placement.sort_order - b.placement.sort_order ||
+        (a.block?.sort_order ?? 0) - (b.block?.sort_order ?? 0) ||
+        a.placement.block_id.localeCompare(b.placement.block_id),
     )
 
   for (const { block, key, placement } of matches) {
     if (!block) continue
-    const destination = key === "desktop"
-      ? (block.mobile_panel === "a" ? "desktopA" : "desktopB")
-      : key === "mobile-a" ? "mobileA" : key === "mobile-b" ? "mobileB" : null
+    const destination =
+      key === "desktop"
+        ? block.mobile_panel === "a"
+          ? "desktopA"
+          : "desktopB"
+        : key === "mobile-a"
+          ? "mobileA"
+          : key === "mobile-b"
+            ? "mobileB"
+            : null
     if (!destination) continue
     const presentation: PlacementPresentation = {
       layoutVariant: placement.layout_variant || "default",

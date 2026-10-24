@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest"
-import {
-  clampNumber,
-  isSafePublicUrl,
-  validateContentItems,
-} from "./validation"
+import { clampNumber, isSafePublicUrl, validateContentItems } from "./validation"
 
 describe("clampNumber", () => {
   it("limita valores configuráveis", () => {

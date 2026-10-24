@@ -1,10 +1,6 @@
 import { useEffect, useId, useMemo, useState } from "react"
 import { usePortfolio } from "../../hooks/usePortfolio"
-import type {
-  ContentItem,
-  HeroVisualConfig,
-  PortfolioSection,
-} from "../../types/content"
+import type { ContentItem, HeroVisualConfig, PortfolioSection } from "../../types/content"
 import { Icon } from "../ui/Icons"
 import { Navigation } from "./Navigation"
 import { placementMotionVariables } from "../../lib/placement-motion"
@@ -24,15 +20,10 @@ function Badge360({ config }: { config?: HeroVisualConfig }) {
     <div className="badge-360" aria-label="Visão 360 graus da comunicação">
       <svg viewBox="0 0 160 160" role="img">
         <defs>
-          <path
-            id={pathId}
-            d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"
-          />
+          <path id={pathId} d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0" />
         </defs>
         <text>
-          <textPath href={`#${pathId}`}>
-            {config?.badgeText || heroDefaults.badgeText}
-          </textPath>
+          <textPath href={`#${pathId}`}>{config?.badgeText || heroDefaults.badgeText}</textPath>
         </text>
         <path d="M55 100 102 53M70 53h32v32" />
       </svg>
@@ -53,13 +44,19 @@ function ItemCard({
 }) {
   const contact = layout === "contact" && item.meta?.match(/^(https|mailto)/)
   const presentation = item.placement
-  const variant = ["compact", "featured", "wide"].includes(
-    presentation?.layoutVariant ?? "",
-  ) ? presentation?.layoutVariant : "default"
+  const variant = ["compact", "featured", "wide"].includes(presentation?.layoutVariant ?? "")
+    ? presentation?.layoutVariant
+    : "default"
   const motionPreset = [
-    "none", "fade-in", "fade-up", "stagger", "image-reveal", "metric-count",
+    "none",
+    "fade-in",
+    "fade-up",
+    "stagger",
+    "image-reveal",
+    "metric-count",
   ].includes(String(presentation?.motionConfig?.preset ?? ""))
-    ? String(presentation?.motionConfig?.preset) : undefined
+    ? String(presentation?.motionConfig?.preset)
+    : undefined
   const className = [
     "content-item",
     "reveal",
@@ -68,7 +65,8 @@ function ItemCard({
     motionPreset === "fade-up" &&
     typeof presentation?.motionConfig?.distance === "number" &&
     presentation.motionConfig.distance !== 18
-      ? "placement-motion-distance-custom" : "",
+      ? "placement-motion-distance-custom"
+      : "",
     item.image ? "has-image" : "",
     item.desktop?.visible === false ? "item-hidden-desktop" : "",
     item.mobile?.visible === false ? "item-hidden-mobile" : "",
@@ -100,9 +98,7 @@ function ItemCard({
             ))}
           </ul>
         )}
-        {item.placeholder && (
-          <span className="draft-chip">Rascunho editorial</span>
-        )}
+        {item.placeholder && <span className="draft-chip">Rascunho editorial</span>}
       </div>
       {(contact || (showArrow && item.icon !== "none")) && (
         <span className="item-arrow">
@@ -140,26 +136,24 @@ function ProfileDesktop({ section }: { section: PortfolioSection }) {
   const careers = panelB.slice(5)
   const profile = panelA[0]
   const hero = profile?.hero
-  if (!profile) return (
-    <div className="desktop-editorial">
-      <h2>{section.title}</h2>
-      <p>Nenhum conteúdo publicado para este painel.</p>
-    </div>
-  )
+  if (!profile)
+    return (
+      <div className="desktop-editorial">
+        <h2>{section.title}</h2>
+        <p>Nenhum conteúdo publicado para este painel.</p>
+      </div>
+    )
   return (
     <div className="profile-desktop">
-      <aside
-        className="profile-sidebar"
-        style={{ ...itemStyle(profile), ...heroStyle(hero) }}
-      >
+      <aside className="profile-sidebar" style={{ ...itemStyle(profile), ...heroStyle(hero) }}>
         <div className="profile-portrait">
           <img
-              src={profile.image}
-              alt={profile.alt}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-            />
+            src={profile.image}
+            alt={profile.alt}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
           <div className="years">
             <strong>{profile.title}</strong>
             <span>{profile.text}</span>
@@ -170,13 +164,7 @@ function ProfileDesktop({ section }: { section: PortfolioSection }) {
           <p className="profile-intro">{section.intro}</p>
           <div className="profile-highlights">
             {panelA.slice(1).map((item, i) => (
-              <ItemCard
-                key={item.title}
-                item={item}
-                index={i}
-                layout="hero"
-                showArrow
-              />
+              <ItemCard key={item.title} item={item} index={i} layout="hero" showArrow />
             ))}
           </div>
         </div>
@@ -277,22 +265,11 @@ function MobilePanel({
             </span>
             <h2>{isProfile ? "Experiência e atuação" : section.title}</h2>
             {panel === "a" && section.eyebrow && <p>{section.eyebrow}</p>}
-            {panel === "a" && section.intro && (
-              <p className="section-intro">{section.intro}</p>
-            )}
+            {panel === "a" && section.intro && <p className="section-intro">{section.intro}</p>}
           </header>
-          <div
-            className={`mobile-items ${
-              isProfile && panel === "b" ? "profile-b-items" : ""
-            }`}
-          >
+          <div className={`mobile-items ${isProfile && panel === "b" ? "profile-b-items" : ""}`}>
             {items.map((item, i) => (
-              <ItemCard
-                key={`${item.title}-${i}`}
-                item={item}
-                index={i}
-                layout={section.layout}
-              />
+              <ItemCard key={`${item.title}-${i}`} item={item} index={i} layout={section.layout} />
             ))}
           </div>
         </>
@@ -307,10 +284,12 @@ function itemStyle(item: ContentItem) {
   const number = (key: string, min: number, max: number): number | undefined => {
     const value = config[key]
     return typeof value === "number" && Number.isFinite(value)
-      ? Math.max(min, Math.min(max, value)) : undefined
+      ? Math.max(min, Math.min(max, value))
+      : undefined
   }
   const align = ["left", "center", "right"].includes(String(config.textAlign))
-    ? String(config.textAlign) : undefined
+    ? String(config.textAlign)
+    : undefined
   return {
     ...placementMotionVariables(placement?.motionConfig),
     "--placement-width": toPercent(number("width", 10, 100)),
@@ -340,10 +319,8 @@ function heroStyle(config?: HeroVisualConfig) {
   const desktop = config?.desktop
   const mobile = config?.mobile
   return {
-    "--hero-panel-background":
-      config?.panelBackground || heroDefaults.panelBackground,
-    "--hero-badge-background":
-      config?.badgeBackground || heroDefaults.badgeBackground,
+    "--hero-panel-background": config?.panelBackground || heroDefaults.panelBackground,
+    "--hero-badge-background": config?.badgeBackground || heroDefaults.badgeBackground,
     "--hero-badge-color": config?.badgeColor || heroDefaults.badgeColor,
     "--hero-intro-color": config?.introColor || heroDefaults.introColor,
     "--hero-desktop-visual-height": toDvh(desktop?.visualHeight),
@@ -399,12 +376,12 @@ function Section({ section, total }: { section: PortfolioSection; total: number 
         ) : (
           <div className="desktop-editorial">
             <header className="section-heading">
-              <span>{String(section.number).padStart(2, "0")} / {total}</span>
+              <span>
+                {String(section.number).padStart(2, "0")} / {total}
+              </span>
               <h2>{section.title}</h2>
               {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
-              {section.intro && (
-                <p className="section-intro">{section.intro}</p>
-              )}
+              {section.intro && <p className="section-intro">{section.intro}</p>}
             </header>
             <div className="desktop-content">
               <div>
@@ -466,9 +443,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
           "[data-section]",
         ) as HTMLElement | null
         if (section) setCurrent(section.dataset.section ?? "perfil")
-        setPanel(
-          (entry.target as HTMLElement).dataset.panel as "a" | "b" ?? "a",
-        )
+        setPanel(((entry.target as HTMLElement).dataset.panel as "a" | "b") ?? "a")
         entry.target
           .querySelectorAll(".reveal")
           .forEach((element) => element.classList.add("is-visible"))
@@ -486,13 +461,10 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       const slug = decodeURIComponent(location.hash.slice(1)).replace(/-b$/, "")
       if (!slug) return
       const target =
-        document.getElementById(location.hash.slice(1)) ??
-        document.getElementById(slug)
+        document.getElementById(location.hash.slice(1)) ?? document.getElementById(slug)
       if (!target) return
       target.scrollIntoView({
-        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
       })
       target.tabIndex = -1
       target.focus({ preventScroll: true })
@@ -526,9 +498,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
         Pular para o conteúdo
       </a>
       {preview && (
-        <div className="preview-banner">
-          Pré-visualização protegida · conteúdo em rascunho
-        </div>
+        <div className="preview-banner">Pré-visualização protegida · conteúdo em rascunho</div>
       )}
       <Navigation sections={visible} navigation={navigation} current={current} panel={panel} />
       {loading && <div className="data-status">Sincronizando conteúdo…</div>}
@@ -539,8 +509,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       )}
       {source === "fallback" && (
         <div className="sr-only" role="status">
-          Conteúdo editorial local exibido enquanto a base Supabase aguarda as
-          migrations.
+          Conteúdo editorial local exibido enquanto a base Supabase aguarda as migrations.
         </div>
       )}
       <main>
@@ -549,9 +518,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
             Nenhuma seção publicada no momento.
           </div>
         )}
-        <h1 className="sr-only">
-          Tulius Tsangaropulos — Comunicação e Estratégia
-        </h1>
+        <h1 className="sr-only">Tulius Tsangaropulos — Comunicação e Estratégia</h1>
         {visible.map((section) => (
           <Section key={section.id} section={section} total={visible.length} />
         ))}

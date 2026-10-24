@@ -20,11 +20,7 @@ const AdminPreview = lazy(() =>
 )
 
 function Deferred({ children }: { children: React.ReactNode }) {
-  return (
-    <Suspense fallback={<div className="admin-loading">Carregando…</div>}>
-      {children}
-    </Suspense>
-  )
+  return <Suspense fallback={<div className="admin-loading">Carregando…</div>}>{children}</Suspense>
 }
 
 export const router = createBrowserRouter([

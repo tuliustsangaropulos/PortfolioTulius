@@ -29,9 +29,7 @@ type SectionRow = {
 }
 
 function useAdminGuard() {
-  const [state, setState] = useState<"loading" | "allowed" | "denied">(
-    "loading",
-  )
+  const [state, setState] = useState<"loading" | "allowed" | "denied">("loading")
   useEffect(() => {
     isAdmin().then((allowed) => setState(allowed ? "allowed" : "denied"))
   }, [])
@@ -47,8 +45,7 @@ export function AdminLogin() {
 
   async function submit(event: FormEvent) {
     event.preventDefault()
-    if (!supabase)
-      return setMessage("Configure as variáveis públicas do Supabase.")
+    if (!supabase) return setMessage("Configure as variáveis públicas do Supabase.")
     setBusy(true)
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -102,15 +99,11 @@ export function AdminLogin() {
             {message}
           </div>
         )}
-        <button
-          className="primary-button"
-          disabled={busy || !isSupabaseConfigured}
-        >
+        <button className="primary-button" disabled={busy || !isSupabaseConfigured}>
           {busy ? "Entrando…" : "Entrar com segurança"}
         </button>
         <small>
-          O acesso exige uma conta no Supabase Auth vinculada à tabela protegida
-          de administradores.
+          O acesso exige uma conta no Supabase Auth vinculada à tabela protegida de administradores.
         </small>
       </form>
     </main>
@@ -200,10 +193,7 @@ function Dashboard({ sections }: { sections: SectionRow[] }) {
   const published = sections.filter((s) => s.status === "published").length
   return (
     <>
-      <AdminHeader
-        title="Visão geral"
-        subtitle="Status editorial e atalhos de publicação"
-      />
+      <AdminHeader title="Visão geral" subtitle="Status editorial e atalhos de publicação" />
       <div className="admin-stats">
         <article>
           <span>Seções publicadas</span>
@@ -264,16 +254,8 @@ function Dashboard({ sections }: { sections: SectionRow[] }) {
   )
 }
 
-function SectionsEditor({
-  sections,
-  reload,
-}: {
-  sections: SectionRow[]
-  reload: () => void
-}) {
-  const [selectedId, setSelectedId] = useState<string | null>(
-    sections[0]?.id ?? null,
-  )
+function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: () => void }) {
+  const [selectedId, setSelectedId] = useState<string | null>(sections[0]?.id ?? null)
   const selected = sections.find((s) => s.id === selectedId)
   const [draft, setDraft] = useState<SectionRow | null>(selected ?? null)
   const [message, setMessage] = useState("")
@@ -303,9 +285,7 @@ function SectionsEditor({
   }
   async function move(direction: -1 | 1) {
     if (!selected || !supabase) return
-    const target = sections.find(
-      (s) => s.sort_order === selected.sort_order + direction,
-    )
+    const target = sections.find((s) => s.sort_order === selected.sort_order + direction)
     if (!target) return
     setMessage("Reordenando…")
     const { error } = await supabase.rpc("swap_section_order", {
@@ -329,10 +309,9 @@ function SectionsEditor({
   async function create() {
     if (!supabase || !sections[0]) return
     setMessage("Criando seção e painéis…")
-    const { data, error } = await supabase.rpc(
-      "create_section_with_panels",
-      { p_page_id: sections[0].page_id },
-    )
+    const { data, error } = await supabase.rpc("create_section_with_panels", {
+      p_page_id: sections[0].page_id,
+    })
     setMessage(error?.message ?? "Seção e painéis criados como rascunho.")
     if (!error && data) {
       reload()
@@ -353,8 +332,7 @@ function SectionsEditor({
     if (!error) reload()
   }
   async function remove() {
-    if (!selected || !supabase || !confirm(`Arquivar “${selected.title}”?`))
-      return
+    if (!selected || !supabase || !confirm(`Arquivar “${selected.title}”?`)) return
     const { error } = await supabase
       .from("sections")
       .update({ status: "archived", is_visible: false })
@@ -415,26 +393,18 @@ function SectionsEditor({
                 Título
                 <input
                   value={draft.title}
-                  onChange={(e) =>
-                    setDraft({ ...draft, title: e.target.value })
-                  }
+                  onChange={(e) => setDraft({ ...draft, title: e.target.value })}
                 />
               </label>
               <label>
                 Âncora
-                <input
-                  value={draft.slug}
-                  disabled
-                  title="Âncoras publicadas são estáveis"
-                />
+                <input value={draft.slug} disabled title="Âncoras publicadas são estáveis" />
               </label>
               <label className="field-wide">
                 Linha editorial
                 <input
                   value={draft.eyebrow ?? ""}
-                  onChange={(e) =>
-                    setDraft({ ...draft, eyebrow: e.target.value })
-                  }
+                  onChange={(e) => setDraft({ ...draft, eyebrow: e.target.value })}
                 />
               </label>
               <label className="field-wide">
@@ -442,18 +412,14 @@ function SectionsEditor({
                 <textarea
                   rows={4}
                   value={draft.intro ?? ""}
-                  onChange={(e) =>
-                    setDraft({ ...draft, intro: e.target.value })
-                  }
+                  onChange={(e) => setDraft({ ...draft, intro: e.target.value })}
                 />
               </label>
               <label>
                 Status
                 <select
                   value={draft.status}
-                  onChange={(e) =>
-                    setDraft({ ...draft, status: e.target.value })
-                  }
+                  onChange={(e) => setDraft({ ...draft, status: e.target.value })}
                 >
                   <option value="draft">Rascunho</option>
                   <option value="in_review">Em revisão</option>
@@ -465,9 +431,7 @@ function SectionsEditor({
                 Tema
                 <select
                   value={draft.theme}
-                  onChange={(e) =>
-                    setDraft({ ...draft, theme: e.target.value })
-                  }
+                  onChange={(e) => setDraft({ ...draft, theme: e.target.value })}
                 >
                   <option value="paper">Papel</option>
                   <option value="cream">Creme</option>
@@ -479,9 +443,7 @@ function SectionsEditor({
                 Layout
                 <select
                   value={draft.layout_variant}
-                  onChange={(e) =>
-                    setDraft({ ...draft, layout_variant: e.target.value })
-                  }
+                  onChange={(e) => setDraft({ ...draft, layout_variant: e.target.value })}
                 >
                   <option value="editorial">Editorial</option>
                   <option value="metrics">Métricas</option>
@@ -494,9 +456,7 @@ function SectionsEditor({
                 Animação
                 <select
                   value={draft.animation_preset}
-                  onChange={(e) =>
-                    setDraft({ ...draft, animation_preset: e.target.value })
-                  }
+                  onChange={(e) => setDraft({ ...draft, animation_preset: e.target.value })}
                 >
                   <option value="none">Sem animação</option>
                   <option value="fade-in">Fade</option>
@@ -510,9 +470,7 @@ function SectionsEditor({
                 <input
                   type="checkbox"
                   checked={draft.is_visible}
-                  onChange={(e) =>
-                    setDraft({ ...draft, is_visible: e.target.checked })
-                  }
+                  onChange={(e) => setDraft({ ...draft, is_visible: e.target.checked })}
                 />{" "}
                 Exibir no site
               </label>
@@ -607,9 +565,7 @@ function DesignEditor() {
         status: "published",
       })),
     )
-    const { error } = await supabase
-      .from("design_tokens")
-      .upsert(rows, { onConflict: "token_key" })
+    const { error } = await supabase.from("design_tokens").upsert(rows, { onConflict: "token_key" })
     setMessage(error ? error.message : "Tokens publicados.")
   }
   return (
@@ -638,15 +594,11 @@ function DesignEditor() {
               <input
                 type="color"
                 value={value}
-                onChange={(e) =>
-                  setTokens({ ...tokens, [key]: e.target.value })
-                }
+                onChange={(e) => setTokens({ ...tokens, [key]: e.target.value })}
               />
               <input
                 value={value}
-                onChange={(e) =>
-                  setTokens({ ...tokens, [key]: e.target.value })
-                }
+                onChange={(e) => setTokens({ ...tokens, [key]: e.target.value })}
               />
             </label>
           ))}
@@ -703,8 +655,8 @@ function DesignEditor() {
           <span>Google Fonts · textos e interface</span>
         </div>
         <small>
-          Neue Montreal permanece em fallback Inter até confirmação da licença
-          web. Heading Now Trial não é distribuída.
+          Neue Montreal permanece em fallback Inter até confirmação da licença web. Heading Now
+          Trial não é distribuída.
         </small>
       </section>
     </>
@@ -728,17 +680,13 @@ function MediaLibrary() {
     const file = event.target.files?.[0]
     if (!file || !supabase) return
     if (
-      !["image/jpeg", "image/png", "image/webp", "image/svg+xml"].includes(
-        file.type,
-      ) ||
+      !["image/jpeg", "image/png", "image/webp", "image/svg+xml"].includes(file.type) ||
       file.size > 8_000_000
     )
       return setMessage("Use JPG, PNG, WebP ou SVG de até 8 MB.")
     const path = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`
     setMessage("Enviando para a biblioteca privada…")
-    const { error } = await supabase.storage
-      .from("portfolio-private")
-      .upload(path, file)
+    const { error } = await supabase.storage.from("portfolio-private").upload(path, file)
     if (error) return setMessage(error.message)
     const result = await supabase.from("media_assets").insert({
       storage_bucket: "portfolio-private",
@@ -791,8 +739,8 @@ function MediaLibrary() {
             <Icon name="image" size={40} />
             <h2>Biblioteca pronta</h2>
             <p>
-              Nenhuma mídia cadastrada no banco. Os ativos iniciais permanecem
-              no pacote até serem promovidos para o Storage.
+              Nenhuma mídia cadastrada no banco. Os ativos iniciais permanecem no pacote até serem
+              promovidos para o Storage.
             </p>
           </div>
         )}
@@ -804,10 +752,7 @@ function MediaLibrary() {
 function NavigationEditor({ sections }: { sections: SectionRow[] }) {
   return (
     <>
-      <AdminHeader
-        title="Navegação"
-        subtitle="14 âncoras estáveis e ordenação acessível"
-      />
+      <AdminHeader title="Navegação" subtitle="14 âncoras estáveis e ordenação acessível" />
       <section className="admin-card">
         <div className="card-heading">
           <div>
@@ -827,8 +772,8 @@ function NavigationEditor({ sections }: { sections: SectionRow[] }) {
           ))}
         </div>
         <p className="admin-note">
-          A ordem acompanha as seções. Para preservar links externos e
-          histórico, slugs publicados não são alterados neste editor.
+          A ordem acompanha as seções. Para preservar links externos e histórico, slugs publicados
+          não são alterados neste editor.
         </p>
       </section>
     </>
@@ -853,8 +798,7 @@ export function AdminApp() {
   useEffect(() => {
     load()
   }, [])
-  if (guard === "loading")
-    return <div className="admin-loading">Verificando autorização…</div>
+  if (guard === "loading") return <div className="admin-loading">Verificando autorização…</div>
   if (guard === "denied") return <Navigate to="/admin/login" replace />
   const screens: Record<string, React.ReactNode> = {
     dashboard: <Dashboard sections={sections} />,
@@ -880,9 +824,8 @@ export function AdminApp() {
     <AdminShell active={active} setActive={setActive}>
       {loadError && (
         <div className="admin-warning">
-          <strong>Schema ainda não aplicado.</strong> {loadError}. Execute as
-          migrations documentadas; a interface pública permanece com o seed
-          editorial local.
+          <strong>Schema ainda não aplicado.</strong> {loadError}. Execute as migrations
+          documentadas; a interface pública permanece com o seed editorial local.
         </div>
       )}
       {screens[active]}
@@ -892,8 +835,7 @@ export function AdminApp() {
 
 export function AdminPreview() {
   const guard = useAdminGuard()
-  if (guard === "loading")
-    return <div className="admin-loading">Abrindo prévia…</div>
+  if (guard === "loading") return <div className="admin-loading">Abrindo prévia…</div>
   if (guard === "denied") return <Navigate to="/admin/login" replace />
   return <PublicSite preview />
 }

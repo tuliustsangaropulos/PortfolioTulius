@@ -241,9 +241,7 @@ function HeroDeviceEditor({
   ]
   return (
     <fieldset>
-      <legend>
-        Fotografia e selo · {device === "desktop" ? "Desktop" : "Mobile"}
-      </legend>
+      <legend>Fotografia e selo · {device === "desktop" ? "Desktop" : "Mobile"}</legend>
       <div className="field-grid compact-grid">
         {fields
           .filter((field) => device === "desktop" || !field.desktopOnly)
@@ -260,9 +258,7 @@ function HeroDeviceEditor({
         <label>
           Frase: alinhamento
           <select
-            value={
-              value?.introAlign ?? (device === "desktop" ? "center" : "right")
-            }
+            value={value?.introAlign ?? (device === "desktop" ? "center" : "right")}
             onChange={(event) =>
               onChange({
                 introAlign: event.target.value as HeroDeviceStyle["introAlign"],
@@ -323,10 +319,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
       .select("*")
       .eq("section_id", sectionId)
       .order("sort_order")
-    setBlocks(data as BlockRow[] ?? [])
+    setBlocks((data as BlockRow[]) ?? [])
     setMessage(error?.message ?? "")
-    if (data?.length && !data.some((block) => block.id === selectedId))
-      setSelectedId(data[0].id)
+    if (data?.length && !data.some((block) => block.id === selectedId)) setSelectedId(data[0].id)
   }
 
   useEffect(() => {
@@ -350,10 +345,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
 
     // Resolve panels independently to avoid relying on an ambiguous join shape.
     void Promise.all([
-      supabase
-        .from("section_panels")
-        .select("id,panel_key")
-        .eq("section_id", selected.section_id),
+      supabase.from("section_panels").select("id,panel_key").eq("section_id", selected.section_id),
       supabase
         .from("block_placements")
         .select("panel_id,layout_variant,is_visible,motion_config")
@@ -377,8 +369,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
       const keys: PanelKey[] = []
       for (const row of placementResult.data ?? []) {
         const key = panelNames.get(row.panel_id) as PanelKey | undefined
-        if (key !== "desktop" && key !== "mobile-a" && key !== "mobile-b")
-          continue
+        if (key !== "desktop" && key !== "mobile-a" && key !== "mobile-b") continue
         const motion = row.motion_config as Record<string, unknown> | null
         byPanel[key] = {
           layout_variant: row.layout_variant ?? "default",
@@ -426,7 +417,8 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
     if (placementsLoading || placementsReadError)
       return setMessage("Carregue os placements antes de salvar.")
     const validationErrors = isCollectionSource(draft.content_json.source_collection)
-      ? [] : validateContentItems(draft.content_json.items ?? [])
+      ? []
+      : validateContentItems(draft.content_json.items ?? [])
     if (validationErrors.length) return setMessage(validationErrors.join(" "))
 
     // Preserve existing independent placements: send only edited panels
@@ -554,10 +546,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
       <div className="studio-toolbar">
         <label>
           Seção
-          <select
-            value={sectionId}
-            onChange={(event) => setSectionId(event.target.value)}
-          >
+          <select value={sectionId} onChange={(event) => setSectionId(event.target.value)}>
             {sections.map((section) => (
               <option key={section.id} value={section.id}>
                 {section.title}
@@ -576,9 +565,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
             >
               <span>{block.mobile_panel.toUpperCase()}</span>
               <div>
-                <strong>
-                  {block.content_json.items?.[0]?.title ?? block.block_type}
-                </strong>
+                <strong>{block.content_json.items?.[0]?.title ?? block.block_type}</strong>
                 <small>
                   {block.status} · {block.content_json.items?.length ?? 0} itens
                 </small>
@@ -593,9 +580,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                 Tipo
                 <select
                   value={draft.block_type}
-                  onChange={(event) =>
-                    setDraft({ ...draft, block_type: event.target.value })
-                  }
+                  onChange={(event) => setDraft({ ...draft, block_type: event.target.value })}
                 >
                   {[
                     "hero",
@@ -649,9 +634,13 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     value={draft.content_json.source_collection ?? ""}
                     onChange={(event) => {
                       const next = event.target.value
-                      if (next && !confirm(
-                        "Vincular esta coleção fará o site exibir os registros publicados da coleção no lugar dos cards manuais deste bloco. O conteúdo manual será preservado. Continuar?",
-                      )) return
+                      if (
+                        next &&
+                        !confirm(
+                          "Vincular esta coleção fará o site exibir os registros publicados da coleção no lugar dos cards manuais deste bloco. O conteúdo manual será preservado. Continuar?",
+                        )
+                      )
+                        return
                       setDraft({
                         ...draft,
                         content_json: {
@@ -664,15 +653,16 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     <option value="">Cards manuais (atual)</option>
                     {COLLECTION_SOURCES.map((source) => (
                       <option key={source} value={source}>
-                        {collectionConfigs.find((config) => config.table === source)?.label ?? source}
+                        {collectionConfigs.find((config) => config.table === source)?.label ??
+                          source}
                       </option>
                     ))}
                   </select>
                   {draft.content_json.source_collection && (
                     <small>
-                      Fonte vinculada: edite e publique registros na aba Coleções.
-                      Os cards manuais abaixo continuam armazenados e voltam a
-                      aparecer quando o vínculo for removido.
+                      Fonte vinculada: edite e publique registros na aba Coleções. Os cards manuais
+                      abaixo continuam armazenados e voltam a aparecer quando o vínculo for
+                      removido.
                     </small>
                   )}
                 </label>
@@ -681,9 +671,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                 Status
                 <select
                   value={draft.status}
-                  onChange={(event) =>
-                    setDraft({ ...draft, status: event.target.value })
-                  }
+                  onChange={(event) => setDraft({ ...draft, status: event.target.value })}
                 >
                   <option value="draft">Rascunho</option>
                   <option value="in_review">Em revisão</option>
@@ -708,9 +696,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                 Nota editorial
                 <textarea
                   value={draft.editorial_note ?? ""}
-                  onChange={(event) =>
-                    setDraft({ ...draft, editorial_note: event.target.value })
-                  }
+                  onChange={(event) => setDraft({ ...draft, editorial_note: event.target.value })}
                 />
               </label>
             </div>
@@ -720,9 +706,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                 Painel a editar (demais painéis são preservados)
                 <select
                   value={placementPanel}
-                  onChange={(event) =>
-                    setPlacementPanel(event.target.value as PanelKey)
-                  }
+                  onChange={(event) => setPlacementPanel(event.target.value as PanelKey)}
                 >
                   <option value="desktop">Desktop</option>
                   <option value="mobile-a">Mobile A</option>
@@ -751,9 +735,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                   Preset
                   <select
                     value={placement.preset}
-                    onChange={(event) =>
-                      setPlacement({ ...placement, preset: event.target.value })
-                    }
+                    onChange={(event) => setPlacement({ ...placement, preset: event.target.value })}
                   >
                     <option value="none">Nenhum</option>
                     <option value="fade-in">Fade</option>
@@ -829,22 +811,13 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                   <div className="block-item-head">
                     <strong>Item {String(index + 1).padStart(2, "0")}</strong>
                     <div className="order-buttons">
-                      <button
-                        onClick={() => moveItem(index, -1)}
-                        aria-label="Mover item para cima"
-                      >
+                      <button onClick={() => moveItem(index, -1)} aria-label="Mover item para cima">
                         <Icon name="up" size={17} />
                       </button>
-                      <button
-                        onClick={() => moveItem(index, 1)}
-                        aria-label="Mover item para baixo"
-                      >
+                      <button onClick={() => moveItem(index, 1)} aria-label="Mover item para baixo">
                         <Icon name="down" size={17} />
                       </button>
-                      <button
-                        onClick={() => removeItem(index)}
-                        aria-label="Remover item"
-                      >
+                      <button onClick={() => removeItem(index)} aria-label="Remover item">
                         <Icon name="close" size={17} />
                       </button>
                     </div>
@@ -854,63 +827,49 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                       Título
                       <input
                         value={item.title}
-                        onChange={(event) =>
-                          updateItem(index, { title: event.target.value })
-                        }
+                        onChange={(event) => updateItem(index, { title: event.target.value })}
                       />
                     </label>
                     <label>
                       Rótulo / número
                       <input
                         value={item.label ?? ""}
-                        onChange={(event) =>
-                          updateItem(index, { label: event.target.value })
-                        }
+                        onChange={(event) => updateItem(index, { label: event.target.value })}
                       />
                     </label>
                     <label className="field-wide">
                       Texto
                       <textarea
                         value={item.text ?? ""}
-                        onChange={(event) =>
-                          updateItem(index, { text: event.target.value })
-                        }
+                        onChange={(event) => updateItem(index, { text: event.target.value })}
                       />
                     </label>
                     <label>
                       Valor/métrica
                       <input
                         value={item.value ?? ""}
-                        onChange={(event) =>
-                          updateItem(index, { value: event.target.value })
-                        }
+                        onChange={(event) => updateItem(index, { value: event.target.value })}
                       />
                     </label>
                     <label>
                       Metadado/URL
                       <input
                         value={item.meta ?? ""}
-                        onChange={(event) =>
-                          updateItem(index, { meta: event.target.value })
-                        }
+                        onChange={(event) => updateItem(index, { meta: event.target.value })}
                       />
                     </label>
                     <label>
                       Imagem
                       <input
                         value={item.image ?? ""}
-                        onChange={(event) =>
-                          updateItem(index, { image: event.target.value })
-                        }
+                        onChange={(event) => updateItem(index, { image: event.target.value })}
                       />
                     </label>
                     <label>
                       Texto alternativo
                       <input
                         value={item.alt ?? ""}
-                        onChange={(event) =>
-                          updateItem(index, { alt: event.target.value })
-                        }
+                        onChange={(event) => updateItem(index, { alt: event.target.value })}
                       />
                     </label>
                   </div>
@@ -937,25 +896,19 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           label="Cor do título"
                           value={item.titleColor}
                           fallback="#FF5414"
-                          onChange={(titleColor) =>
-                            updateItem(index, { titleColor })
-                          }
+                          onChange={(titleColor) => updateItem(index, { titleColor })}
                         />
                         <ColorField
                           label="Cor da descrição"
                           value={item.textColor}
                           fallback="#FFFFFF"
-                          onChange={(textColor) =>
-                            updateItem(index, { textColor })
-                          }
+                          onChange={(textColor) => updateItem(index, { textColor })}
                         />
                         <ColorField
                           label="Cor de fundo"
                           value={item.backgroundColor}
                           fallback="#171617"
-                          onChange={(backgroundColor) =>
-                            updateItem(index, { backgroundColor })
-                          }
+                          onChange={(backgroundColor) => updateItem(index, { backgroundColor })}
                         />
                       </div>
                     </fieldset>
@@ -965,9 +918,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           key={device}
                           device={device}
                           value={item[device]}
-                          onChange={(patch) =>
-                            updateDeviceStyle(index, device, patch)
-                          }
+                          onChange={(patch) => updateDeviceStyle(index, device, patch)}
                         />
                       ))}
                     </div>
@@ -978,10 +929,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           <label className="field-wide">
                             Texto do selo circular
                             <input
-                              value={
-                                item.hero?.badgeText ??
-                                "VISÃO 360° DA COMUNICAÇÃO ·"
-                              }
+                              value={item.hero?.badgeText ?? "VISÃO 360° DA COMUNICAÇÃO ·"}
                               onChange={(event) =>
                                 updateHero(index, {
                                   badgeText: event.target.value,
@@ -1005,49 +953,37 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             label="Fundo da coluna"
                             value={item.hero?.panelBackground}
                             fallback="#171617"
-                            onChange={(panelBackground) =>
-                              updateHero(index, { panelBackground })
-                            }
+                            onChange={(panelBackground) => updateHero(index, { panelBackground })}
                           />
                           <ColorField
                             label="Fundo do selo"
                             value={item.hero?.badgeBackground}
                             fallback="#FF5414"
-                            onChange={(badgeBackground) =>
-                              updateHero(index, { badgeBackground })
-                            }
+                            onChange={(badgeBackground) => updateHero(index, { badgeBackground })}
                           />
                           <ColorField
                             label="Traço do selo"
                             value={item.hero?.badgeColor}
                             fallback="#171617"
-                            onChange={(badgeColor) =>
-                              updateHero(index, { badgeColor })
-                            }
+                            onChange={(badgeColor) => updateHero(index, { badgeColor })}
                           />
                           <ColorField
                             label="Cor da frase"
                             value={item.hero?.introColor}
                             fallback="#FFFFFF"
-                            onChange={(introColor) =>
-                              updateHero(index, { introColor })
-                            }
+                            onChange={(introColor) => updateHero(index, { introColor })}
                           />
                         </div>
                         <div className="responsive-style-grid">
                           <HeroDeviceEditor
                             device="desktop"
                             value={item.hero?.desktop}
-                            onChange={(patch) =>
-                              updateHeroDevice(index, "desktop", patch)
-                            }
+                            onChange={(patch) => updateHeroDevice(index, "desktop", patch)}
                           />
                           <HeroDeviceEditor
                             device="mobile"
                             value={item.hero?.mobile}
-                            onChange={(patch) =>
-                              updateHeroDevice(index, "mobile", patch)
-                            }
+                            onChange={(patch) => updateHeroDevice(index, "mobile", patch)}
                           />
                         </div>
                       </fieldset>
@@ -1062,10 +998,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     ...draft,
                     content_json: {
                       ...draft.content_json,
-                      items: [
-                        ...(draft.content_json.items ?? []),
-                        { ...emptyItem },
-                      ],
+                      items: [...(draft.content_json.items ?? []), { ...emptyItem }],
                     },
                   })
                 }
@@ -1225,10 +1158,7 @@ export function CollectionsStudio() {
 
   const load = async () => {
     if (!supabase) return
-    const { data, error } = await supabase
-      .from(config.table)
-      .select("*")
-      .order("sort_order")
+    const { data, error } = await supabase.from(config.table).select("*").order("sort_order")
     const normalized = (data ?? []).map((record) => ({
       ...record,
       tools_text: Array.isArray(record.tools)
@@ -1252,9 +1182,7 @@ export function CollectionsStudio() {
   }, [records, selectedId])
 
   function newRecord() {
-    const base = Object.fromEntries(
-      config.fields.map((field) => [field.key, ""]),
-    )
+    const base = Object.fromEntries(config.fields.map((field) => [field.key, ""]))
     setSelectedId("")
     setDraft({
       ...base,
@@ -1337,10 +1265,7 @@ export function CollectionsStudio() {
           <section className="admin-card editor-form">
             <div className="field-grid">
               {config.fields.map((field) => (
-                <label
-                  key={field.key}
-                  className={field.multiline ? "field-wide" : ""}
-                >
+                <label key={field.key} className={field.multiline ? "field-wide" : ""}>
                   {field.label}
                   {field.multiline ? (
                     <textarea
@@ -1385,28 +1310,22 @@ export function CollectionsStudio() {
                 Status
                 <select
                   value={draft.status ?? "draft"}
-                  onChange={(event) =>
-                    setDraft({ ...draft, status: event.target.value })
-                  }
+                  onChange={(event) => setDraft({ ...draft, status: event.target.value })}
                 >
                   <option value="draft">Rascunho</option>
-                  {!["skills", "tool_categories", "contact_channels"].includes(
-                    config.table,
-                  ) && <option value="in_review">Em revisão</option>}
+                  {!["skills", "tool_categories", "contact_channels"].includes(config.table) && (
+                    <option value="in_review">Em revisão</option>
+                  )}
                   <option value="published">Publicado</option>
-                  {!["skills", "tool_categories", "contact_channels"].includes(
-                    config.table,
-                  ) && <option value="archived">Arquivado</option>}
+                  {!["skills", "tool_categories", "contact_channels"].includes(config.table) && (
+                    <option value="archived">Arquivado</option>
+                  )}
                 </select>
               </label>
             </div>
             <StatusMessage>{message}</StatusMessage>
             <div className="form-actions">
-              <button
-                className="danger-button"
-                onClick={archive}
-                disabled={!draft.id}
-              >
+              <button className="danger-button" onClick={archive} disabled={!draft.id}>
                 Arquivar
               </button>
               <button className="primary-button" onClick={save}>
@@ -1456,15 +1375,7 @@ export function NavigationStudio() {
   async function save() {
     if (!supabase) return
     const rows = items.map(
-      ({
-        id,
-        label,
-        target_slug,
-        group_name,
-        sort_order,
-        is_visible,
-        status,
-      }) => ({
+      ({ id, label, target_slug, group_name, sort_order, is_visible, status }) => ({
         id,
         label,
         target_slug,
@@ -1474,9 +1385,7 @@ export function NavigationStudio() {
         status,
       }),
     )
-    const { error } = await supabase
-      .from("navigation_items")
-      .upsert(rows, { onConflict: "id" })
+    const { error } = await supabase.from("navigation_items").upsert(rows, { onConflict: "id" })
     setMessage(error?.message ?? "Navegação salva.")
     if (!error) await load()
   }
@@ -1508,16 +1417,10 @@ export function NavigationStudio() {
         {items.map((item, index) => (
           <div key={item.id}>
             <div className="order-buttons">
-              <button
-                onClick={() => move(index, -1)}
-                aria-label="Mover item para cima"
-              >
+              <button onClick={() => move(index, -1)} aria-label="Mover item para cima">
                 <Icon name="up" size={17} />
               </button>
-              <button
-                onClick={() => move(index, 1)}
-                aria-label="Mover item para baixo"
-              >
+              <button onClick={() => move(index, 1)} aria-label="Mover item para baixo">
                 <Icon name="down" size={17} />
               </button>
             </div>
@@ -1525,36 +1428,28 @@ export function NavigationStudio() {
               Rótulo
               <input
                 value={item.label}
-                onChange={(event) =>
-                  patch(index, { label: event.target.value })
-                }
+                onChange={(event) => patch(index, { label: event.target.value })}
               />
             </label>
             <label>
               Grupo
               <input
                 value={item.group_name}
-                onChange={(event) =>
-                  patch(index, { group_name: event.target.value })
-                }
+                onChange={(event) => patch(index, { group_name: event.target.value })}
               />
             </label>
             <label>
               Âncora
               <input
                 value={item.target_slug}
-                onChange={(event) =>
-                  patch(index, { target_slug: event.target.value })
-                }
+                onChange={(event) => patch(index, { target_slug: event.target.value })}
               />
             </label>
             <label className="toggle-field">
               <input
                 type="checkbox"
                 checked={item.is_visible}
-                onChange={(event) =>
-                  patch(index, { is_visible: event.target.checked })
-                }
+                onChange={(event) => patch(index, { is_visible: event.target.checked })}
               />
               Visível
             </label>
@@ -1562,9 +1457,7 @@ export function NavigationStudio() {
               Status
               <select
                 value={item.status}
-                onChange={(event) =>
-                  patch(index, { status: event.target.value })
-                }
+                onChange={(event) => patch(index, { status: event.target.value })}
               >
                 <option value="draft">Rascunho</option>
                 <option value="published">Publicado</option>
@@ -1651,9 +1544,7 @@ export function SeoStudio() {
               Idioma
               <input
                 value={settings.locale}
-                onChange={(event) =>
-                  setSettings({ ...settings, locale: event.target.value })
-                }
+                onChange={(event) => setSettings({ ...settings, locale: event.target.value })}
               />
             </label>
             <label className="field-wide">
@@ -1672,18 +1563,14 @@ export function SeoStudio() {
               Título SEO
               <input
                 value={page.seo_title ?? ""}
-                onChange={(event) =>
-                  setPage({ ...page, seo_title: event.target.value })
-                }
+                onChange={(event) => setPage({ ...page, seo_title: event.target.value })}
               />
             </label>
             <label className="field-wide">
               Descrição SEO
               <textarea
                 value={page.seo_description ?? ""}
-                onChange={(event) =>
-                  setPage({ ...page, seo_description: event.target.value })
-                }
+                onChange={(event) => setPage({ ...page, seo_description: event.target.value })}
               />
             </label>
             <label className="field-wide">
@@ -1722,9 +1609,7 @@ export function SeoStudio() {
               Status
               <select
                 value={settings.status}
-                onChange={(event) =>
-                  setSettings({ ...settings, status: event.target.value })
-                }
+                onChange={(event) => setSettings({ ...settings, status: event.target.value })}
               >
                 <option value="draft">Rascunho</option>
                 <option value="published">Publicado</option>
@@ -1744,10 +1629,7 @@ export function EditorialStudio() {
   const [message, setMessage] = useState("")
   const load = async () => {
     const [issueResult, revisionResult] = await Promise.all([
-      supabase
-        ?.from("editorial_issues")
-        .select("*, sections(title)")
-        .order("created_at"),
+      supabase?.from("editorial_issues").select("*, sections(title)").order("created_at"),
       supabase
         ?.from("content_revisions")
         .select("*")
@@ -1761,8 +1643,7 @@ export function EditorialStudio() {
     void load()
   }, [])
   async function resolve(id: string, resolution: string) {
-    if (!supabase || !resolution.trim())
-      return setMessage("Informe a resolução editorial.")
+    if (!supabase || !resolution.trim()) return setMessage("Informe a resolução editorial.")
     const { error } = await supabase
       .from("editorial_issues")
       .update({ status: "resolved", resolution, reviewed_at: new Date() })
@@ -1806,9 +1687,7 @@ export function EditorialStudio() {
             {revisions.map((revision) => (
               <div key={revision.id}>
                 <strong>{revision.entity_type}</strong>
-                <span>
-                  {new Date(revision.created_at).toLocaleString("pt-BR")}
-                </span>
+                <span>{new Date(revision.created_at).toLocaleString("pt-BR")}</span>
                 <code>{revision.entity_id}</code>
               </div>
             ))}
@@ -1844,10 +1723,7 @@ function IssueRow({
             onChange={(event) => setResolution(event.target.value)}
             placeholder="Decisão editorial"
           />
-          <button
-            className="secondary-button"
-            onClick={() => onResolve(issue.id, resolution)}
-          >
+          <button className="secondary-button" onClick={() => onResolve(issue.id, resolution)}>
             Resolver
           </button>
         </div>
@@ -1879,13 +1755,11 @@ export function EnhancedMediaLibrary() {
   }
   async function save(asset: Record<string, any>) {
     if (!supabase) return
-    if (asset.storage_bucket === "portfolio-public" &&
-      asset.status !== "published")
+    if (asset.storage_bucket === "portfolio-public" && asset.status !== "published")
       return setMessage(
         "Arquivos públicos não podem virar rascunho apenas alterando o status. Faça um novo upload privado.",
       )
-    if (asset.storage_bucket === "portfolio-private" &&
-      asset.status === "published")
+    if (asset.storage_bucket === "portfolio-private" && asset.status === "published")
       return setMessage("Use o botão Publicar para mover a mídia para o bucket público.")
     if (asset.status === "published" && !asset.alt_text.trim())
       return setMessage("Alt text é obrigatório para publicar uma mídia.")
@@ -1905,16 +1779,12 @@ export function EnhancedMediaLibrary() {
     const file = event.target.files?.[0]
     if (!file || !supabase) return
     if (
-      !["image/jpeg", "image/png", "image/webp", "image/svg+xml"].includes(
-        file.type,
-      ) ||
+      !["image/jpeg", "image/png", "image/webp", "image/svg+xml"].includes(file.type) ||
       file.size > 8_000_000
     )
       return setMessage("Use JPG, PNG, WebP ou SVG de até 8 MB.")
     const path = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`
-    const { error } = await supabase.storage
-      .from("portfolio-private")
-      .upload(path, file)
+    const { error } = await supabase.storage.from("portfolio-private").upload(path, file)
     if (error) return setMessage(error.message)
     const result = await supabase.from("media_assets").insert({
       storage_bucket: "portfolio-private",
@@ -1924,9 +1794,7 @@ export function EnhancedMediaLibrary() {
       alt_text: "",
       status: "draft",
     })
-    setMessage(
-      result.error?.message ?? "Upload concluído como rascunho privado.",
-    )
+    setMessage(result.error?.message ?? "Upload concluído como rascunho privado.")
     if (!result.error) await load()
   }
   async function promote(asset: Record<string, any>) {
@@ -1936,8 +1804,7 @@ export function EnhancedMediaLibrary() {
     const { data, error } = await supabase.storage
       .from("portfolio-private")
       .download(asset.storage_path)
-    if (error || !data)
-      return setMessage(error?.message ?? "Arquivo não encontrado.")
+    if (error || !data) return setMessage(error?.message ?? "Arquivo não encontrado.")
     const upload = await supabase.storage
       .from("portfolio-public")
       .upload(asset.storage_path, data, {
@@ -1950,27 +1817,22 @@ export function EnhancedMediaLibrary() {
       .update({ storage_bucket: "portfolio-public", status: "published" })
       .eq("id", asset.id)
     if (update.error) {
-      const cleanup = await supabase.storage
-        .from("portfolio-public")
-        .remove([asset.storage_path])
+      const cleanup = await supabase.storage.from("portfolio-public").remove([asset.storage_path])
       return setMessage(
         update.error.message +
-          (cleanup.error ? " Atenção: a cópia pública precisa de remoção manual." : " Cópia pública revertida."),
+          (cleanup.error
+            ? " Atenção: a cópia pública precisa de remoção manual."
+            : " Cópia pública revertida."),
       )
     }
     setMessage("Mídia promovida ao bucket público.")
     await load()
   }
-  async function replace(
-    event: React.ChangeEvent<HTMLInputElement>,
-    asset: Record<string, any>,
-  ) {
+  async function replace(event: React.ChangeEvent<HTMLInputElement>, asset: Record<string, any>) {
     const file = event.target.files?.[0]
     if (!file || !supabase) return
     if (
-      !["image/jpeg", "image/png", "image/webp", "image/svg+xml"].includes(
-        file.type,
-      ) ||
+      !["image/jpeg", "image/png", "image/webp", "image/svg+xml"].includes(file.type) ||
       file.size > 8_000_000
     )
       return setMessage("Use JPG, PNG, WebP ou SVG de até 8 MB.")
@@ -1993,9 +1855,7 @@ export function EnhancedMediaLibrary() {
         status: "draft",
       })
       .eq("id", asset.id)
-    setMessage(
-      update.error?.message ?? "Arquivo substituído; revise e publique.",
-    )
+    setMessage(update.error?.message ?? "Arquivo substituído; revise e publique.")
     if (!update.error) await load()
   }
   return (
@@ -2030,36 +1890,28 @@ export function EnhancedMediaLibrary() {
               Título
               <input
                 value={asset.title ?? ""}
-                onChange={(event) =>
-                  patch(index, { title: event.target.value })
-                }
+                onChange={(event) => patch(index, { title: event.target.value })}
               />
             </label>
             <label>
               Alt text
               <textarea
                 value={asset.alt_text ?? ""}
-                onChange={(event) =>
-                  patch(index, { alt_text: event.target.value })
-                }
+                onChange={(event) => patch(index, { alt_text: event.target.value })}
               />
             </label>
             <label>
               Crédito/licença
               <input
                 value={asset.credit ?? ""}
-                onChange={(event) =>
-                  patch(index, { credit: event.target.value })
-                }
+                onChange={(event) => patch(index, { credit: event.target.value })}
               />
             </label>
             <label>
               Status
               <select
                 value={asset.status}
-                onChange={(event) =>
-                  patch(index, { status: event.target.value })
-                }
+                onChange={(event) => patch(index, { status: event.target.value })}
               >
                 <option value="draft">Rascunho</option>
                 <option value="in_review">Em revisão</option>

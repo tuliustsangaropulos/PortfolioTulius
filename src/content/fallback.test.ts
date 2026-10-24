@@ -21,9 +21,7 @@ const expectedSlugs = [
 describe("estrutura editorial", () => {
   it("mantém 14 seções e 28 painéis", () => {
     expect(sections).toHaveLength(14)
-    expect(
-      sections.flatMap((section) => [section.panelA, section.panelB]),
-    ).toHaveLength(28)
+    expect(sections.flatMap((section) => [section.panelA, section.panelB])).toHaveLength(28)
   })
 
   it("preserva slugs e ordem", () => {
