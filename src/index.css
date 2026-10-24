@@ -327,6 +327,7 @@
   .layout-contact .panel-a .content-item img { width: 100%; aspect-ratio: .85; object-position: top; }
   .layout-contact .panel-a .content-item { display: block; }
   .contact-link { grid-template-columns: 1fr auto; }
+  .layout-contact .item-value { overflow-wrap: anywhere; }
   .reveal { opacity: 1; transform: none; }
   .item-hidden-desktop { display: grid !important; }
   .item-hidden-mobile { display: none !important; }
