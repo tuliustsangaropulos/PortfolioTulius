@@ -76,6 +76,7 @@ export function usePortfolio(includeDrafts = false) {
 
   useEffect(() => {
     if (!supabase) return
+    const supabaseClient = supabase
     let cancelled = false
     setLoading(true)
     let query = supabase
@@ -134,7 +135,7 @@ export function usePortfolio(includeDrafts = false) {
         if (activeSources.size) {
           const results = await Promise.all(
             Array.from(activeSources).map(async (source) => {
-              const query = supabase.from(source).select("*").order("sort_order")
+              const query = supabaseClient.from(source).select("*").order("sort_order")
               const response = includeDrafts
                 ? await query.neq("status", "archived")
                 : await query.eq("status", "published")
