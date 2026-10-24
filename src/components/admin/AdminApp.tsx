@@ -197,6 +197,7 @@ function Dashboard({
   loadStatus: "loading" | "ready" | "error"
 }) {
   const published = sections.filter((s) => s.status === "published").length
+  const sourceStatus = { loading: "Carregando", ready: "Online", error: "Erro" }[loadStatus]
   const [issueCount, setIssueCount] = useState<number | null>(null)
   useEffect(() => {
     if (!supabase) return
@@ -223,11 +224,11 @@ function Dashboard({
         <article>
           <span>Pendências editoriais</span>
           <strong>{issueCount ?? "—"}</strong>
-          <small>{issueCount === null ? "Consulta indisponível" : "Registros editoriais no CMS"}</small>
+          <small>Registros editoriais no CMS</small>
         </article>
         <article>
           <span>Fonte de dados</span>
-          <strong>{loadStatus === "ready" ? "Online" : loadStatus === "error" ? "Erro" : "Carregando"}</strong>
+          <strong>{sourceStatus}</strong>
           <small>Consulta de seções do Supabase</small>
         </article>
       </div>
