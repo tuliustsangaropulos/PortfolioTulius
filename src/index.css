@@ -50,6 +50,7 @@
 .nav-drawer li button svg { opacity: 0; transition: transform .2s, opacity .2s; }
 .nav-drawer li button:hover svg, .nav-drawer li button.active svg { opacity: 1; transform: translate(3px, -3px); }
 .nav-drawer li button.active { color: var(--orange); }
+.menu-group-label { display: block; padding: 1rem 0 .35rem; color: #a9a19b; font: 700 .65rem var(--font-body); text-transform: uppercase; letter-spacing: .16em; }
 .drawer-foot { color: #aaa; }
 .nav-open { overflow: hidden; }
 
