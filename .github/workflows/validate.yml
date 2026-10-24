@@ -26,10 +26,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Formatting
-        run: |
-          pnpm exec oxfmt src/components/admin/AdminApp.tsx
-          git diff -- src/components/admin/AdminApp.tsx
-          pnpm format:check
+        run: pnpm format:check
       - name: TypeScript
         run: pnpm typecheck
       - name: Unit tests

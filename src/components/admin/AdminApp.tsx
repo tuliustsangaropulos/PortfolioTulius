@@ -218,7 +218,9 @@ function Dashboard({
       <div className="admin-stats">
         <article>
           <span>Seções publicadas</span>
-          <strong>{published}/{sections.length}</strong>
+          <strong>
+            {published}/{sections.length}
+          </strong>
           <small>{sections.length - published} aguardando publicação</small>
         </article>
         <article>
@@ -853,8 +855,8 @@ export function AdminApp() {
     <AdminShell active={active} setActive={setActive}>
       {loadError && (
         <div className="admin-warning">
-          <strong>Não foi possível carregar as seções.</strong> {loadError}. Confira a conexão
-          e as permissões do Supabase antes de editar conteúdo.
+          <strong>Não foi possível carregar as seções.</strong> {loadError}. Confira a conexão e as
+          permissões do Supabase antes de editar conteúdo.
         </div>
       )}
       {screens[active]}
