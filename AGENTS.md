@@ -1,37 +1,38 @@
-# figma-make-app
+# PortfolioTulius
 
-React + Vite + Tailwind CSS project running inside Figma Make.
+Portfólio editorial com CMS, desenvolvido em React 19, TypeScript, Vite, Tailwind CSS v4 e Supabase. O desenvolvimento é feito localmente com Codex/VS Code; a Vercel é o destino de publicação.
 
-## Development Server
+## Regras de trabalho
 
-A Vite development server is **already running** on `$PORT` (default 8443). You don't need to start it manually.
+- Preserve integralmente o design, textos, fotografias, cores, fontes, responsividade e componentes existentes, salvo solicitação explícita.
+- Faça alterações pequenas e localizadas. Preserve a acessibilidade, os metadados SEO e os fluxos público e administrativo.
+- Não altere schema, migrations, dados, políticas ou configuração do projeto Supabase sem solicitação explícita.
+- Não altere configurações da Vercel nem faça deploy sem solicitação explícita.
+- Nunca leia, exiba, copie ou versione valores reais de `.env.local`, `.env.*` ou tokens. Use `.env.example` apenas para documentar nomes e placeholders.
+- Não rode formatadores que reescrevam arquivos ou testes sem solicitação; quando solicitado, prefira os scripts existentes no `package.json`.
 
-- Preview URL: The user can access the running app through the preview panel
-- Hot reload: Changes to source files are reflected immediately
+## Estrutura
 
-## Project Structure
+- `src/main.tsx` e `src/App.tsx`: entrada da aplicação.
+- `src/app/routes.tsx`: rotas públicas, administrativas e 404.
+- `src/components/public/`: site público e navegação.
+- `src/components/admin/`: CMS e autenticação administrativa.
+- `src/hooks/usePortfolio.ts`: conteúdo, fallback local e metadados SEO.
+- `src/content/fallback.ts`: conteúdo editorial local.
+- `src/lib/supabase.ts`: cliente Supabase configurado por variáveis de ambiente.
+- `src/index.css`: estilos globais, Tailwind CSS v4 e tokens visuais.
+- `supabase/`: migrations, seed, funções e roteiro RLS; não aplicar automaticamente.
 
-This is the canonical project structure. Start with task-relevant files below. Only follow imports or inspect other files when required, when a documented path is missing, or when the repository contradicts this guide.
+## Desenvolvimento local
 
-- `src/main.tsx` - React entrypoint; imports `src/index.css` and mounts `src/App.tsx` into the `#root` element
-- `src/App.tsx` - Primary application component and the usual starting point for UI work
-- `src/index.css` - Global CSS entrypoint and Tailwind CSS v4 import
-- `index.html` - Vite HTML shell containing the `#root` element and loading `src/main.tsx`
-- `package.json` - Project dependencies and the Vite build, development, preview, and formatting scripts
-- `vite.config.ts` - Vite configuration with React, Tailwind CSS v4, and Figma Make plugins plus the `@` alias for `src`
-- `.mise.toml` - Toolchain versions for Node.js and pnpm
+Requer Node.js compatível com Vite e pnpm. Instale com `pnpm install --frozen-lockfile`. Copie `.env.example` para `.env.local` e preencha as variáveis públicas já configuradas para o projeto Supabase existente. Inicie com `pnpm dev`.
 
-## Dependencies
+Scripts disponíveis: `pnpm format:check`, `pnpm typecheck`, `pnpm test`, `pnpm build` e `pnpm check` (executa as verificações em sequência).
 
-- Runtime: React 19 and React DOM 19
-- Styling: Tailwind CSS v4 with the `@tailwindcss/vite` plugin
-- Build tooling: Vite 8, TypeScript 5.7, and `@vitejs/plugin-react`
-- Formatting: oxfmt
+## UI e estilos
 
-## Styling
+Use classes utilitárias Tailwind diretamente no JSX. Mantenha regras base globais dentro de `@layer base` em `src/index.css` para que utilities possam sobrescrevê-las. Preserve as fontes e os tokens visuais existentes. CSS `@import` deve permanecer antes das regras CSS.
 
-This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin configured in `vite.config.ts`. `src/index.css` imports Tailwind with `@import 'tailwindcss';`. Use Tailwind utility classes directly in JSX and put global CSS or Tailwind v4 theme customization in `src/index.css`. This scaffold does not need a Tailwind config file or PostCSS config.
+## Publicação
 
-`src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
-
-Tailwind emits utility classes in `@layer utilities`, and CSS outside any cascade layer overrides every layer regardless of specificity. Put global element styles, such as resets and defaults for `body`, headings, `button`, or `input`, inside `@layer base { ... }` so utility classes on those elements still apply. Tailwind's Preflight already applies `box-sizing: border-box`, removes default margins, and sets `font: inherit` on form controls, so do not repeat those rules.
+A Vercel executa o build Vite (`pnpm build`). As variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` devem existir no ambiente local e nos ambientes Vercel apropriados. Não incluir chaves `service_role` no frontend. Antes de publicar, revisar o diff, validar SEO/domínio e seguir `docs/DEPLOYMENT.md`; não executar deploy sem pedido explícito.
