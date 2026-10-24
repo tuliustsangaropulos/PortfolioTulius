@@ -433,7 +433,7 @@ function Section({ section, total }: { section: PortfolioSection; total: number 
 }
 
 export function PublicSite({ preview = false }: { preview?: boolean }) {
-  const { sections, tokens, source, loading, error } = usePortfolio(preview)
+  const { sections, navigation, tokens, source, loading, error } = usePortfolio(preview)
   const visible = useMemo(
     () => sections.filter((section) => preview || section.visible),
     [sections, preview],
@@ -523,7 +523,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
           Pré-visualização protegida · conteúdo em rascunho
         </div>
       )}
-      <Navigation sections={visible} current={current} panel={panel} />
+      <Navigation sections={visible} navigation={navigation} current={current} panel={panel} />
       {loading && <div className="data-status">Sincronizando conteúdo…</div>}
       {error && (
         <div className="data-error" role="status">
