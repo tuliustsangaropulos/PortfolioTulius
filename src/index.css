@@ -83,6 +83,7 @@
 .area-grid .item-label, .profile-b-items .content-item:nth-child(-n+5) .item-label { color: var(--orange); }
 .item-value { display: block; color: var(--orange-dark); font-family: var(--font-display); font-size: clamp(2rem, 3vw, 4rem); line-height: 1; }
 .theme-ink .item-value { color: var(--orange); }
+.theme-orange .item-value { color: var(--ink); }
 .item-meta { color: var(--orange-dark) !important; font-weight: 700; }
 .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: .75rem 0 0; padding: 0; list-style: none; }
 .tags li, .draft-chip { border: 1px solid var(--line); padding: .35rem .55rem; font-size: .72rem; }

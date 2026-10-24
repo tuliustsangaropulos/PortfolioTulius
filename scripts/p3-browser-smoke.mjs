@@ -55,10 +55,15 @@ try {
           overflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
           desktopDisplay: desktop ? getComputedStyle(desktop).display : null,
           mobileDisplay: mobile ? getComputedStyle(mobile).display : null,
+          headerWidth: document.querySelector(".site-header")?.getBoundingClientRect().width ?? null,
+          menuRight: document.querySelector(".menu-button")?.getBoundingClientRect().right ?? null,
+          brandRight: document.querySelector(".brand-button")?.getBoundingClientRect().right ?? null,
+          documentScrollWidth: document.documentElement.scrollWidth,
+          bodyScrollWidth: document.body.scrollWidth,
           portraitComplete: portrait?.complete ?? null,
           portraitNaturalWidth: portrait?.naturalWidth ?? null,
           appError: document.querySelector(".data-error")?.textContent?.slice(0, 140) ?? null,
-          widestElements: Array.from(document.querySelectorAll(".public-site main *"))
+          widestElements: Array.from(document.querySelectorAll("body *"))
             .map((element) => ({ element, rect: element.getBoundingClientRect() }))
             .filter(({ rect }) => rect.width > 0 && rect.right > requestedWidth + 2)
             .sort((a, b) => b.rect.right - a.rect.right)
