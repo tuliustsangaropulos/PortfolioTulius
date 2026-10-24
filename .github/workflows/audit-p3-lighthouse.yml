@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - .github/workflows/audit-p3-lighthouse.yml
+      - scripts/p3-browser-smoke.mjs
   workflow_dispatch:
 
 permissions:

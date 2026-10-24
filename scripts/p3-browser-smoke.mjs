@@ -40,7 +40,7 @@ try {
       await page.setViewport({ width, height, deviceScaleFactor: 1, isMobile: width < 768, hasTouch: width < 768 })
       await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
       await page.waitForSelector("section.portfolio-section", { timeout: 15000 })
-      const findings = await page.evaluate(() => {
+      const findings = await page.evaluate((requestedWidth) => {
         const portrait = document.querySelector(".profile-portrait img, .mobile-profile-hero img")
         const desktop = document.querySelector(".desktop-panel")
         const mobile = document.querySelector(".mobile-panels")
@@ -48,6 +48,9 @@ try {
           sectionCount: document.querySelectorAll("section.portfolio-section").length,
           mobilePanelCount: document.querySelectorAll(".mobile-panel").length,
           viewportWidth: window.innerWidth,
+          layoutViewportWidth: document.documentElement.clientWidth,
+          visualViewportWidth: window.visualViewport?.width ?? null,
+          requestedWidth,
           documentWidth: document.documentElement.scrollWidth,
           overflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
           desktopDisplay: desktop ? getComputedStyle(desktop).display : null,
@@ -55,11 +58,23 @@ try {
           portraitComplete: portrait?.complete ?? null,
           portraitNaturalWidth: portrait?.naturalWidth ?? null,
           appError: document.querySelector(".data-error")?.textContent?.slice(0, 140) ?? null,
+          widestElements: Array.from(document.querySelectorAll(".public-site main *"))
+            .map((element) => ({ element, rect: element.getBoundingClientRect() }))
+            .filter(({ rect }) => rect.width > 0 && rect.right > requestedWidth + 2)
+            .sort((a, b) => b.rect.right - a.rect.right)
+            .slice(0, 8)
+            .map(({ element, rect }) => ({
+              tag: element.tagName.toLowerCase(),
+              className: String(element.className).slice(0, 100),
+              text: element.textContent?.trim().slice(0, 45) ?? "",
+              right: Math.round(rect.right),
+              left: Math.round(rect.left),
+            })),
         }
-      })
+      }, width)
       await page.screenshot({ path: path.join(shots, `p3-${width}x${height}.png`), fullPage: false })
       console.log("P3_VIEWPORT " + JSON.stringify({ width, height, ...findings }))
-      if (findings.sectionCount !== 14 || findings.mobilePanelCount !== 28 || findings.overflowPx > 2) failures++
+      if (findings.sectionCount !== 14 || findings.mobilePanelCount !== 28 || findings.documentWidth > width + 2) failures++
     } catch (error) {
       failures++
       console.log("P3_VIEWPORT_ERROR " + JSON.stringify({ width, height, error: String(error).slice(0, 250) }))
