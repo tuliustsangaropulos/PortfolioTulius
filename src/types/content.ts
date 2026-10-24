@@ -40,6 +40,12 @@ export type HeroVisualConfig = {
 }
 
 export type ContentItem = {
+  // Device-specific presentation from block_placements (never duplicated content).
+  placement?: {
+    layoutVariant: string
+    styleConfig: Record<string, unknown>
+    motionConfig: Record<string, unknown>
+  }
   title: string
   label?: string
   text?: string
@@ -73,6 +79,8 @@ export type PortfolioSection = {
   navLabel?: string
   panelA: ContentItem[]
   panelB: ContentItem[]
+  desktopPanelA?: ContentItem[]
+  desktopPanelB?: ContentItem[]
 }
 
 export type DesignTokens = {
