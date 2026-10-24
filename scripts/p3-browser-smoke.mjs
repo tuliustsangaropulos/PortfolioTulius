@@ -60,6 +60,14 @@ try {
           brandRight: document.querySelector(".brand-button")?.getBoundingClientRect().right ?? null,
           documentScrollWidth: document.documentElement.scrollWidth,
           bodyScrollWidth: document.body.scrollWidth,
+          rootScrollWidth: document.getElementById("root")?.scrollWidth ?? null,
+          publicSiteScrollWidth: document.querySelector(".public-site")?.scrollWidth ?? null,
+          mobileName: Array.from(document.querySelectorAll(".mobile-name, .mobile-name span")).slice(0, 3).map((el) => ({ tag: el.tagName, text: el.textContent?.slice(0, 28), clientWidth: el.clientWidth, scrollWidth: el.scrollWidth, right: Math.round(el.getBoundingClientRect().right) })),
+          headerControls: Array.from(document.querySelectorAll(".site-header > *")).map((el) => ({ tag: el.tagName, className: String(el.className), clientWidth: el.clientWidth, scrollWidth: el.scrollWidth, right: Math.round(el.getBoundingClientRect().right) })),
+          overflownContainers: Array.from(document.querySelectorAll(".public-site *"))
+            .filter((el) => el.scrollWidth > el.clientWidth + 3 && el.clientWidth > 0 && getComputedStyle(el).display !== "none")
+            .slice(0, 20)
+            .map((el) => ({ tag: el.tagName, className: String(el.className).slice(0, 45), clientWidth: el.clientWidth, scrollWidth: el.scrollWidth, cssOverflow: getComputedStyle(el).overflow, right: Math.round(el.getBoundingClientRect().right) })),
           portraitComplete: portrait?.complete ?? null,
           portraitNaturalWidth: portrait?.naturalWidth ?? null,
           appError: document.querySelector(".data-error")?.textContent?.slice(0, 140) ?? null,
