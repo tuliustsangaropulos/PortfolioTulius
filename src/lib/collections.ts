@@ -44,9 +44,10 @@ function safeLink(url: string): string {
 export function collectionToItems(
   source: CollectionSource,
   records: RecordRow[],
+  includeDrafts = false,
 ): ContentItem[] {
   return records
-    .filter((row) => row.status === "published")
+    .filter((row) => includeDrafts ? row.status !== "archived" : row.status === "published")
     .slice()
     .sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0))
     .map((row): ContentItem => {
