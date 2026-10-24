@@ -1,4 +1,5 @@
 import type { ContentItem } from "../types/content"
+import type { ContentBlockRow } from "./placements"
 
 export const COLLECTION_SOURCES = [
   "career_experiences",
@@ -116,4 +117,22 @@ export function collectionToItems(
       }
     })
     .filter((item) => item.title.length > 0)
+}
+
+/** Materialize linked cards only for rendering; never write them back to the CMS. */
+export function resolveCollectionBlocks(
+  blocks: ContentBlockRow[],
+  sources: ReadonlyMap<CollectionSource, ContentItem[]>,
+): ContentBlockRow[] {
+  return blocks.map((block) => {
+    const source = block.content_json?.source_collection
+    if (!isCollectionSource(source)) return block
+    return {
+      ...block,
+      content_json: {
+        ...block.content_json,
+        items: sources.get(source) ?? [],
+      },
+    }
+  })
 }
