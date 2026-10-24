@@ -4,13 +4,13 @@ import {
   sections as fallbackSections,
 } from "../content/fallback"
 import { supabase } from "../lib/supabase"
+import {
+  composeSectionPlacements,
+  type BlockPlacementRow,
+  type ContentBlockRow,
+  type SectionPanelRow,
+} from "../lib/placements"
 import type { DesignTokens, PortfolioSection } from "../types/content"
-
-type BlockResult = {
-  sort_order: number
-  mobile_panel: "a" | "b"
-  content_json: { items?: PortfolioSection["panelA"] } | null
-}
 
 type SectionResult = {
   id: string
@@ -24,19 +24,18 @@ type SectionResult = {
   animation_preset: PortfolioSection["animation"] | null
   status: PortfolioSection["status"]
   is_visible: boolean
-  content_blocks?: BlockResult[]
+  content_blocks?: ContentBlockRow[]
 }
 
-function toSection(row: SectionResult): PortfolioSection {
-  const blocks = (row.content_blocks ?? []).sort(
-    (a, b) => a.sort_order - b.sort_order,
+function toSection(
+  row: SectionResult,
+  panels: SectionPanelRow[],
+  placements: BlockPlacementRow[],
+  includeDrafts: boolean,
+): PortfolioSection {
+  const composition = composeSectionPlacements(
+    row.id, row.content_blocks ?? [], panels, placements, includeDrafts,
   )
-  const a = blocks
-    .filter((block) => block.mobile_panel === "a")
-    .flatMap((block) => block.content_json?.items ?? [])
-  const b = blocks
-    .filter((block) => block.mobile_panel === "b")
-    .flatMap((block) => block.content_json?.items ?? [])
   return {
     id: row.id,
     slug: row.slug,
@@ -49,80 +48,85 @@ function toSection(row: SectionResult): PortfolioSection {
     animation: row.animation_preset ?? "fade-up",
     status: row.status,
     visible: row.is_visible,
-    panelA: a,
-    panelB: b,
+    panelA: composition.mobileA,
+    panelB: composition.mobileB,
+    desktopPanelA: composition.desktopA,
+    desktopPanelB: composition.desktopB,
   }
 }
 
 export function usePortfolio(includeDrafts = false) {
-  const [data, setData] = useState(fallbackSections)
+  const [data, setData] = useState<PortfolioSection[]>(
+    supabase ? [] : fallbackSections,
+  )
   const [tokens, setTokens] = useState(defaultTokens)
-  const [source, setSource] = useState<"supabase" | "fallback">("fallback")
+  const [source, setSource] = useState<"supabase" | "fallback">(
+    supabase ? "supabase" : "fallback",
+  )
   const [loading, setLoading] = useState(Boolean(supabase))
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!supabase) return
+    let cancelled = false
+    setLoading(true)
     let query = supabase
       .from("sections")
       .select("*, content_blocks(*)")
       .order("sort_order")
     if (!includeDrafts)
       query = query.eq("status", "published").eq("is_visible", true)
-    Promise.all([
+
+    void Promise.all([
       query,
-      supabase
-        .from("design_tokens")
-        .select("token_key,token_value")
-        .eq("status", "published"),
-      supabase
-        .from("navigation_items")
+      supabase.from("section_panels")
+        .select("id,section_id,panel_key"),
+      supabase.from("block_placements")
+        .select("block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config"),
+      supabase.from("design_tokens")
+        .select("token_key,token_value").eq("status", "published"),
+      supabase.from("navigation_items")
         .select("label,target_slug,sort_order")
-        .eq("status", "published")
-        .eq("is_visible", true)
-        .order("sort_order"),
-      supabase
-        .from("pages")
+        .eq("status", "published").eq("is_visible", true).order("sort_order"),
+      supabase.from("pages")
         .select("seo_title,seo_description")
-        .eq("slug", "home")
-        .eq("status", "published")
-        .maybeSingle(),
-      supabase
-        .from("site_settings")
+        .eq("slug", "home").eq("status", "published").maybeSingle(),
+      supabase.from("site_settings")
         .select("site_title,description,seo_json")
-        .eq("status", "published")
-        .limit(1)
-        .maybeSingle(),
-    ]).then(
-      ([
-        sectionsResult,
-        tokenResult,
-        navigationResult,
-        pageResult,
-        settingsResult,
-      ]) => {
-        if (!sectionsResult.error && sectionsResult.data?.length) {
-          const labels = new Map(
-            (navigationResult.data ?? []).map((item) => [
-              item.target_slug,
-              item.label,
-            ]),
-          )
-          setData(
-            (sectionsResult.data as SectionResult[])
-              .map(toSection)
-              .map((section) => ({
-                ...section,
-                navLabel: labels.get(section.slug) ?? section.title,
-              })),
-          )
-          setSource("supabase")
-          setError(null)
-        } else if (sectionsResult.error) {
-          setError(
-            "Não foi possível sincronizar o conteúdo publicado. Exibindo a cópia editorial de contingência.",
-          )
-        }
+        .eq("status", "published").limit(1).maybeSingle(),
+    ]).then(([
+      sectionsResult, panelsResult, placementsResult,
+      tokenResult, navigationResult, pageResult, settingsResult,
+    ]) => {
+      if (cancelled) return
+      const contentError =
+        sectionsResult.error ?? panelsResult.error ?? placementsResult.error
+      if (contentError) {
+        // Fail closed: never substitute stale fallback content when
+        // an explicitly configured publication database is unavailable.
+        setData([])
+        setSource("supabase")
+        setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
+      } else {
+        const labels = new Map(
+          (navigationResult.data ?? []).map((item) => [
+            item.target_slug, item.label,
+          ]),
+        )
+        setData(
+          (sectionsResult.data as SectionResult[]).map((section) => ({
+            ...toSection(
+              section,
+              (panelsResult.data ?? []) as SectionPanelRow[],
+              (placementsResult.data ?? []) as BlockPlacementRow[],
+              includeDrafts,
+            ),
+            navLabel: labels.get(section.slug) ?? section.title,
+          })),
+        )
+        setSource("supabase")
+        setError(null)
+      }
         if (!tokenResult.error && tokenResult.data?.length) {
           const next = { ...defaultTokens }
           tokenResult.data.forEach((t) => {
@@ -177,9 +181,15 @@ export function usePortfolio(includeDrafts = false) {
         if (seo?.ogImage?.startsWith("https://"))
           setMeta("og:image", seo.ogImage, "property")
         if (seo?.canonical?.startsWith("https://")) setCanonical(seo.canonical)
-        setLoading(false)
-      },
-    )
+      setLoading(false)
+    }).catch(() => {
+      if (cancelled) return
+      setData([])
+      setSource("supabase")
+      setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
+      setLoading(false)
+    })
+    return () => { cancelled = true }
   }, [includeDrafts])
 
   return { sections: data, tokens, source, loading, error }
