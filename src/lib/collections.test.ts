@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { collectionToItems, isCollectionSource } from "./collections"
+import { collectionToItems, isCollectionSource, resolveCollectionBlocks } from "./collections"
+import type { ContentBlockRow } from "./placements"
 
 describe("fontes de coleção editoriais", () => {
   it("valida as fontes permitidas", () => {
@@ -34,4 +35,28 @@ describe("fontes de coleção editoriais", () => {
     expect(quote[0].text).toBe("Depoimento")
     expect(tools[0].text).toBe("Planilhas · Dados")
   })
+  it("preserva cards manuais sem vínculo e nunca os altera ao resolver coleção", () => {
+    const manual: ContentBlockRow = {
+      id: "block", section_id: "section", sort_order: 1,
+      mobile_panel: "a", status: "published",
+      content_json: { items: [{ title: "Manual" }] },
+    }
+    const linked: ContentBlockRow = {
+      ...manual, id: "linked",
+      content_json: {
+        items: [{ title: "Versão editorial original" }],
+        source_collection: "metrics",
+      },
+    }
+    const resolved = resolveCollectionBlocks(
+      [manual, linked],
+      new Map([["metrics", [{ title: "Coleção atualizada" }]]]),
+    )
+    expect(resolved[0]).toEqual(manual)
+    expect(resolved[1].content_json?.items?.[0].title).toBe("Coleção atualizada")
+    expect(linked.content_json?.items?.[0].title).toBe("Versão editorial original")
+    expect(resolveCollectionBlocks([linked], new Map())[0].content_json?.items)
+      .toEqual([])
+  })
+
 })
