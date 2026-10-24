@@ -51,9 +51,19 @@ function ItemCard({
   showArrow?: boolean
 }) {
   const contact = layout === "contact" && item.meta?.match(/^(https|mailto)/)
+  const presentation = item.placement
+  const variant = ["compact", "featured", "wide"].includes(
+    presentation?.layoutVariant ?? "",
+  ) ? presentation?.layoutVariant : "default"
+  const motionPreset = [
+    "none", "fade-in", "fade-up", "stagger", "image-reveal", "metric-count",
+  ].includes(String(presentation?.motionConfig?.preset ?? ""))
+    ? String(presentation?.motionConfig?.preset) : undefined
   const className = [
     "content-item",
     "reveal",
+    variant !== "default" ? `placement-${variant}` : "",
+    motionPreset ? `placement-motion-${motionPreset}` : "",
     item.image ? "has-image" : "",
     item.desktop?.visible === false ? "item-hidden-desktop" : "",
     item.mobile?.visible === false ? "item-hidden-mobile" : "",
@@ -97,6 +107,7 @@ function ItemCard({
   return contact ? (
     <a
       className={`${className} contact-link`}
+      data-motion-once={presentation?.motionConfig?.once === false ? "false" : undefined}
       style={style}
       href={item.meta}
       target={item.meta?.startsWith("http") ? "_blank" : undefined}
@@ -105,17 +116,29 @@ function ItemCard({
       {content}
     </a>
   ) : (
-    <article className={className} style={style}>
+    <article
+      className={className}
+      data-motion-once={presentation?.motionConfig?.once === false ? "false" : undefined}
+      style={style}
+    >
       {content}
     </article>
   )
 }
 
 function ProfileDesktop({ section }: { section: PortfolioSection }) {
-  const areas = section.panelB.slice(0, 5)
-  const careers = section.panelB.slice(5)
-  const profile = section.panelA[0]
-  const hero = profile.hero
+  const panelA = section.desktopPanelA ?? section.panelA
+  const panelB = section.desktopPanelB ?? section.panelB
+  const areas = panelB.slice(0, 5)
+  const careers = panelB.slice(5)
+  const profile = panelA[0]
+  const hero = profile?.hero
+  if (!profile) return (
+    <div className="desktop-editorial">
+      <h2>{section.title}</h2>
+      <p>Nenhum conteúdo publicado para este painel.</p>
+    </div>
+  )
   return (
     <div className="profile-desktop">
       <aside
@@ -133,7 +156,7 @@ function ProfileDesktop({ section }: { section: PortfolioSection }) {
         <div className="profile-sidebar-content">
           <p className="profile-intro">{section.intro}</p>
           <div className="profile-highlights">
-            {section.panelA.slice(1).map((item, i) => (
+            {panelA.slice(1).map((item, i) => (
               <ItemCard
                 key={item.title}
                 item={item}
@@ -185,7 +208,7 @@ function MobilePanel({
       data-panel={panel}
       className={`mobile-panel panel-${panel}`}
     >
-      {isProfile && panel === "a" ? (
+      {isProfile && panel === "a" && profile ? (
         <>
           <div className="mobile-name">
             <span>TULIUS</span>
@@ -260,7 +283,30 @@ function MobilePanel({
 }
 
 function itemStyle(item: ContentItem) {
+  const placement = item.placement
+  const config = placement?.styleConfig ?? {}
+  const number = (key: string, min: number, max: number): number | undefined => {
+    const value = config[key]
+    return typeof value === "number" && Number.isFinite(value)
+      ? Math.max(min, Math.min(max, value)) : undefined
+  }
+  const align = ["left", "center", "right"].includes(String(config.textAlign))
+    ? String(config.textAlign) : undefined
+  const motion = placement?.motionConfig ?? {}
+  const motionNumber = (key: string, max: number) => {
+    const value = motion[key]
+    return typeof value === "number" && Number.isFinite(value)
+      ? Math.max(0, Math.min(max, value)) : undefined
+  }
   return {
+    "--placement-duration": toPixels(motionNumber("duration", 1200)),
+    "--placement-delay": toPixels(motionNumber("delay", 600)),
+    "--placement-distance": toPixels(motionNumber("distance", 48)),
+    "--placement-width": toPercent(number("width", 10, 100)),
+    "--placement-spacing": toPixels(number("spacing", 0, 120)),
+    "--placement-title-size": toPixels(number("titleSize", 8, 120)),
+    "--placement-text-size": toPixels(number("textSize", 8, 72)),
+    "--placement-align": align,
     "--item-title-color": item.titleColor || undefined,
     "--item-text-color": item.textColor || undefined,
     "--item-background": item.backgroundColor || undefined,
@@ -329,7 +375,7 @@ function toDvh(value?: number) {
   return value == null ? undefined : `${value}dvh`
 }
 
-function Section({ section }: { section: PortfolioSection }) {
+function Section({ section, total }: { section: PortfolioSection; total: number }) {
   return (
     <section
       id={section.slug}
@@ -342,7 +388,7 @@ function Section({ section }: { section: PortfolioSection }) {
         ) : (
           <div className="desktop-editorial">
             <header className="section-heading">
-              <span>{String(section.number).padStart(2, "0")} / 14</span>
+              <span>{String(section.number).padStart(2, "0")} / {total}</span>
               <h2>{section.title}</h2>
               {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
               {section.intro && (
@@ -351,7 +397,7 @@ function Section({ section }: { section: PortfolioSection }) {
             </header>
             <div className="desktop-content">
               <div>
-                {section.panelA.map((item, i) => (
+                {(section.desktopPanelA ?? section.panelA).map((item, i) => (
                   <ItemCard
                     key={`${item.title}-${i}`}
                     item={item}
@@ -361,7 +407,7 @@ function Section({ section }: { section: PortfolioSection }) {
                 ))}
               </div>
               <div>
-                {section.panelB.map((item, i) => (
+                {(section.desktopPanelB ?? section.panelB).map((item, i) => (
                   <ItemCard
                     key={`${item.title}-${i}`}
                     item={item}
@@ -434,8 +480,13 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       target.focus({ preventScroll: true })
     }
     addEventListener("popstate", restoreHash)
-    return () => removeEventListener("popstate", restoreHash)
-  }, [])
+    addEventListener("hashchange", restoreHash)
+    if (!loading) requestAnimationFrame(restoreHash)
+    return () => {
+      removeEventListener("popstate", restoreHash)
+      removeEventListener("hashchange", restoreHash)
+    }
+  }, [loading, visible])
 
   const style = {
     "--orange": tokens.orange,
@@ -475,11 +526,16 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
         </div>
       )}
       <main>
+        {!loading && !error && visible.length === 0 && (
+          <div className="data-status" role="status">
+            Nenhuma seção publicada no momento.
+          </div>
+        )}
         <h1 className="sr-only">
           Tulius Tsangaropulos — Comunicação e Estratégia
         </h1>
         {visible.map((section) => (
-          <Section key={section.id} section={section} />
+          <Section key={section.id} section={section} total={visible.length} />
         ))}
       </main>
     </div>
