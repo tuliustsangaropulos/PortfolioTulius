@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react"
 import type { PortfolioSection } from "../../types/content"
+import type { PublicNavigationItem } from "../../lib/navigation"
 import { Icon } from "../ui/Icons"
 
 export function Navigation({
   sections,
+  navigation,
   current,
   panel,
 }: {
   sections: PortfolioSection[]
+  navigation: PublicNavigationItem[]
   current: string
   panel: "a" | "b"
 }) {
@@ -135,19 +138,25 @@ export function Navigation({
             </button>
           </div>
           <ol>
-            {sections.map((section) => (
-              <li key={section.slug}>
+            {navigation.map((item, index) => (
+              <li key={item.slug}>
+                {(index === 0 || navigation[index - 1]?.group !== item.group) && (
+                  <span className="menu-group-label">{item.group}</span>
+                )}
                 <button
-                  className={current === section.slug ? "active" : ""}
-                  onClick={() => go(section.slug)}
+                  className={current === item.slug ? "active" : ""}
+                  onClick={() => go(item.slug)}
                 >
-                  <span>{String(section.number).padStart(2, "0")}</span>
-                  {section.navLabel ?? section.title}
+                  <span>{String(item.number).padStart(2, "0")}</span>
+                  {item.label}
                   <Icon name="arrow" size={18} />
                 </button>
               </li>
             ))}
           </ol>
+          {navigation.length === 0 && (
+            <p className="drawer-foot">Nenhum item de menu publicado.</p>
+          )}
           <p className="drawer-foot">Comunicação · Estratégia · Reputação</p>
         </nav>
       </div>
