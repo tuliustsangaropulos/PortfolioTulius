@@ -83,6 +83,20 @@ jobs:
                   numericValue: audit.numericValue ?? null,
                 }))
               console.log(`P3_AUDITS_${device.toUpperCase()}_${category.toUpperCase()} ${JSON.stringify(failures)}`)
+              if (category === "accessibility") {
+                for (const failed of failures) {
+                  const items = (report.audits?.[failed.id]?.details?.items ?? [])
+                    .slice(0, 12)
+                    .map((item) => ({
+                      selector: item.node?.selector ?? null,
+                      snippet: item.node?.snippet?.slice(0, 350) ?? null,
+                      failureSummary: item.node?.failureSummary?.slice(0, 450) ?? null,
+                      contrastRatio: item.contrastRatio ?? null,
+                      expectedContrastRatio: item.expectedContrastRatio ?? null,
+                    }))
+                  console.log(`P3_A11Y_NODES_${device.toUpperCase()}_${failed.id} ${JSON.stringify(items)}`)
+                }
+              }
             }
           }
           if (missing) process.exitCode = 1
