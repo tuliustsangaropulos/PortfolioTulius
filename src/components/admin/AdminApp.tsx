@@ -189,26 +189,46 @@ function AdminHeader({
   )
 }
 
-function Dashboard({ sections }: { sections: SectionRow[] }) {
+function Dashboard({
+  sections,
+  loadStatus,
+}: {
+  sections: SectionRow[]
+  loadStatus: "loading" | "ready" | "error"
+}) {
   const published = sections.filter((s) => s.status === "published").length
+  const [issueCount, setIssueCount] = useState<number | null>(null)
+  useEffect(() => {
+    if (!supabase) return
+    let active = true
+    void supabase
+      .from("editorial_issues")
+      .select("id", { count: "exact", head: true })
+      .then(({ count, error }) => {
+        if (active) setIssueCount(error ? null : count)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
   return (
     <>
       <AdminHeader title="Visão geral" subtitle="Status editorial e atalhos de publicação" />
       <div className="admin-stats">
         <article>
           <span>Seções publicadas</span>
-          <strong>{published}/14</strong>
-          <small>{14 - published} aguardando publicação</small>
+          <strong>{published}/{sections.length}</strong>
+          <small>{sections.length - published} aguardando publicação</small>
         </article>
         <article>
           <span>Pendências editoriais</span>
-          <strong>9</strong>
-          <small>Conflitos preservados no seed</small>
+          <strong>{issueCount ?? "—"}</strong>
+          <small>{issueCount === null ? "Consulta indisponível" : "Registros editoriais no CMS"}</small>
         </article>
         <article>
           <span>Fonte de dados</span>
-          <strong>{supabase ? "Online" : "Pendente"}</strong>
-          <small>Projeto zfnrhzplwpjpdljraypt</small>
+          <strong>{loadStatus === "ready" ? "Online" : loadStatus === "error" ? "Erro" : "Carregando"}</strong>
+          <small>Consulta de seções do Supabase</small>
         </article>
       </div>
       <section className="admin-card">
@@ -235,10 +255,16 @@ function Dashboard({ sections }: { sections: SectionRow[] }) {
             </div>
           </li>
           <li>
-            <span className="check">!</span>
+            <span className={loadStatus === "ready" ? "check done" : "check"}>
+              {loadStatus === "ready" ? "✓" : "!"}
+            </span>
             <div>
-              <strong>Aplicação das migrations</strong>
-              <p>Necessária no projeto Supabase antes do CRUD persistir.</p>
+              <strong>Persistência do CMS</strong>
+              <p>
+                {loadStatus === "ready"
+                  ? "Estrutura do Supabase acessível; consulta de seções concluída."
+                  : "Verifique a conexão e as permissões do Supabase antes de editar."}
+              </p>
             </div>
           </li>
           <li>
@@ -785,6 +811,7 @@ export function AdminApp() {
   const [active, setActive] = useState("dashboard")
   const [sections, setSections] = useState<SectionRow[]>([])
   const [loadError, setLoadError] = useState("")
+  const [loadStatus, setLoadStatus] = useState<"loading" | "ready" | "error">("loading")
   const load = () => {
     void supabase
       ?.from("sections")
@@ -793,6 +820,7 @@ export function AdminApp() {
       .then(({ data, error }) => {
         setSections(data ?? [])
         setLoadError(error?.message ?? "")
+        setLoadStatus(error ? "error" : "ready")
       })
   }
   useEffect(() => {
@@ -801,7 +829,7 @@ export function AdminApp() {
   if (guard === "loading") return <div className="admin-loading">Verificando autorização…</div>
   if (guard === "denied") return <Navigate to="/admin/login" replace />
   const screens: Record<string, React.ReactNode> = {
-    dashboard: <Dashboard sections={sections} />,
+    dashboard: <Dashboard sections={sections} loadStatus={loadStatus} />,
     sections: <SectionsEditor sections={sections} reload={load} />,
     blocks: <ContentStudio sections={sections} />,
     content: <CollectionsStudio />,
@@ -824,8 +852,8 @@ export function AdminApp() {
     <AdminShell active={active} setActive={setActive}>
       {loadError && (
         <div className="admin-warning">
-          <strong>Schema ainda não aplicado.</strong> {loadError}. Execute as migrations
-          documentadas; a interface pública permanece com o seed editorial local.
+          <strong>Não foi possível carregar as seções.</strong> {loadError}. Confira a conexão
+          e as permissões do Supabase antes de editar conteúdo.
         </div>
       )}
       {screens[active]}
