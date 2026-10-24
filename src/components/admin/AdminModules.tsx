@@ -1886,6 +1886,14 @@ export function EnhancedMediaLibrary() {
   }
   async function save(asset: Record<string, any>) {
     if (!supabase) return
+    if (asset.storage_bucket === "portfolio-public" &&
+      asset.status !== "published")
+      return setMessage(
+        "Arquivos públicos não podem virar rascunho apenas alterando o status. Faça um novo upload privado.",
+      )
+    if (asset.storage_bucket === "portfolio-private" &&
+      asset.status === "published")
+      return setMessage("Use o botão Publicar para mover a mídia para o bucket público.")
     if (asset.status === "published" && !asset.alt_text.trim())
       return setMessage("Alt text é obrigatório para publicar uma mídia.")
     const { error } = await supabase
@@ -1941,15 +1949,24 @@ export function EnhancedMediaLibrary() {
       .from("portfolio-public")
       .upload(asset.storage_path, data, {
         contentType: asset.mime_type,
-        upsert: true,
+        upsert: false,
       })
     if (upload.error) return setMessage(upload.error.message)
     const update = await supabase
       .from("media_assets")
       .update({ storage_bucket: "portfolio-public", status: "published" })
       .eq("id", asset.id)
-    setMessage(update.error?.message ?? "Mídia promovida ao bucket público.")
-    if (!update.error) await load()
+    if (update.error) {
+      const cleanup = await supabase.storage
+        .from("portfolio-public")
+        .remove([asset.storage_path])
+      return setMessage(
+        update.error.message +
+          (cleanup.error ? " Atenção: a cópia pública precisa de remoção manual." : " Cópia pública revertida."),
+      )
+    }
+    setMessage("Mídia promovida ao bucket público.")
+    await load()
   }
   async function replace(
     event: React.ChangeEvent<HTMLInputElement>,
@@ -1964,12 +1981,12 @@ export function EnhancedMediaLibrary() {
       file.size > 8_000_000
     )
       return setMessage("Use JPG, PNG, WebP ou SVG de até 8 MB.")
-    const bucket =
-      asset.storage_bucket === "portfolio-public"
-        ? "portfolio-public"
-        : "portfolio-private"
+    if (asset.storage_bucket !== "portfolio-private")
+      return setMessage(
+        "Substituição direta de mídia pública bloqueada para evitar expor um rascunho. Envie um novo arquivo privado e publique após revisar.",
+      )
     const upload = await supabase.storage
-      .from(bucket)
+      .from("portfolio-private")
       .upload(asset.storage_path, file, {
         contentType: file.type,
         upsert: true,
