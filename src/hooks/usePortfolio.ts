@@ -6,7 +6,7 @@ import {
 import { supabase } from "../lib/supabase"
 import { buildPublicNavigation, type PublicNavigationItem, type NavigationRow } from "../lib/navigation"
 import {
-  collectionToItems, isCollectionSource,
+  collectionToItems, isCollectionSource, resolveCollectionBlocks,
   type CollectionSource,
 } from "../lib/collections"
 import {
@@ -39,17 +39,7 @@ function toSection(
   includeDrafts: boolean,
   collectionItems: Map<CollectionSource, import("../types/content").ContentItem[]>,
 ): PortfolioSection {
-  const blocks = (row.content_blocks ?? []).map((block) => {
-    const source = block.content_json?.source_collection
-    if (!isCollectionSource(source)) return block
-    return {
-      ...block,
-      content_json: {
-        ...block.content_json,
-        items: collectionItems.get(source) ?? [],
-      },
-    }
-  })
+  const blocks = resolveCollectionBlocks(row.content_blocks ?? [], collectionItems)
   const composition = composeSectionPlacements(
     row.id, blocks, panels, placements, includeDrafts,
   )
