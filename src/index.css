@@ -340,6 +340,7 @@
   .layout-contact .panel-a .content-item { display: block; }
   .contact-link { grid-template-columns: 1fr auto; }
   .layout-contact .item-value { overflow-wrap: anywhere; }
+  .layout-contact .panel-b .item-value { font-size: clamp(1.25rem, 6.4vw, 2.4rem); }
   .reveal { opacity: 1; transform: none; }
   .item-hidden-desktop { display: grid !important; }
   .item-hidden-mobile { display: none !important; }

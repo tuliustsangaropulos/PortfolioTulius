@@ -70,6 +70,26 @@ try {
       await page.close()
     }
   }
+  const page = await browser.newPage()
+  try {
+    await page.setViewport({ width: 320, height: 700, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+    await page.goto(base, { waitUntil: "networkidle2", timeout: 40000 })
+    const contact = await page.evaluate(() => {
+      const items = Array.from(document.querySelectorAll(".layout-contact .panel-b .item-value"))
+      return items.map(el => {
+        const range = document.createRange()
+        range.selectNodeContents(el)
+        return { value: el.textContent?.trim().slice(0, 36), lines: range.getClientRects().length }
+      })
+    })
+    console.log("P4_CONTACT_320 " + JSON.stringify({ values: contact }))
+    if (contact.length < 3 || contact.some(x => x.lines > 1)) failures++
+  } catch (error) {
+    failures++
+    console.log("P4_CONTACT_320_ERROR " + String(error))
+  } finally {
+    await page.close()
+  }
 } finally {
   await browser.close()
 }

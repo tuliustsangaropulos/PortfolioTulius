@@ -31,14 +31,18 @@ try {
 
   {
     const page = await browser.newPage()
+    let stage = "init"
     try {
+      stage = "page loaded"
       await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
       await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
+      stage = "menu initial focus"
       await page.waitForFunction(() => document.activeElement?.classList.contains("icon-button"), { timeout: 10000 })
       const mainInert = await page.$eval(".public-site main", el => el.hasAttribute("inert"))
       if (!mainInert) throw new Error("Conteúdo de fundo não recebeu inert")
+      stage = "focus trap"
       await page.keyboard.press("Shift+Tab")
       const wrappedToLast = await page.evaluate(() => document.activeElement === document.querySelector(".nav-drawer ol li:last-child button"))
       if (!wrappedToLast) throw new Error("Focus trap: Shift+Tab não voltou ao último botão")
@@ -54,19 +58,23 @@ try {
       if (!reducedMotion) throw new Error("Preferência de movimento reduzido não detectada")
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
+      stage = "navigate to sobre"
       await page.click(".nav-drawer ol li:nth-child(2) button")
       await page.waitForFunction(() => location.hash === "#sobre", { timeout: 10000 })
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
+      stage = "navigate to resultados"
       await page.click(".nav-drawer ol li:nth-child(3) button")
       await page.waitForFunction(() => location.hash === "#resultados", { timeout: 10000 })
+      stage = "history back"
       await page.evaluate(() => history.back())
       await page.waitForFunction(() => location.hash === "#sobre", { timeout: 10000 })
+      stage = "history back focus"
       await page.waitForFunction(() => document.activeElement?.id === "sobre", { timeout: 10000 })
       console.log("P3_INTERACTION " + JSON.stringify({ menuEscape: true, focusRestored, mainInert, focusTrap: true, hashBack: true, reducedMotion, result: "PASS" }))
     } catch (error) {
       failures++
-      console.log("P3_INTERACTION " + JSON.stringify({ result: "FAIL", error: String(error).slice(0, 260) }))
+      console.log("P3_INTERACTION " + JSON.stringify({ result: "FAIL", stage, error: String(error).slice(0, 260) }))
     } finally {
       await page.close()
     }
