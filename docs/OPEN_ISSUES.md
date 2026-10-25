@@ -10,6 +10,8 @@
 8. Confirmar licenças/créditos finais de mídias.
 9. Confirmar licença web da Neue Montreal; Heading Now Trial permanece excluída.
 
-Backend: aplicar os arquivos SQL ao projeto existente e executar testes com sessões reais. Produto: UI de rollback granular permanece evolução posterior; a listagem de revisões, os editores estruturados e os RPCs já estão implementados em código.
+Backend: o schema do CMS já está ativo. As migrations P0/P1 e a migration P3.1 de revogação de privilégios estão aplicadas. A migration inicial de baseline existe no repositório, mas não está registrada no histórico remoto: **não a reaplicar**, apenas reconciliar historicamente em uma etapa controlada. Persistem testes E2E de escrita, publicação, rollback e Storage com sessão administrativa real.
 
-Qualidade externa pendente: homologação visual/E2E nos viewports definidos e smoke test após deploy, pois o servidor supervisionado não estava acessível durante esta execução.
+Produto: UI de rollback granular permanece evolução futura; a listagem de revisões, os editores estruturados e os RPCs já estão implementados.
+
+Qualidade: existem testes automatizados de Lighthouse, rotas anônimas, menu e responsividade com evidências nos artifacts do GitHub Actions. Restam inspeção visual humana contra as referências de Figma/PDF, zoom real de 200%, ajustes de performance mobile e qualquer falha reportada pelo workflow corrente. Detalhes em `docs/P3_FECHAMENTO.md`.

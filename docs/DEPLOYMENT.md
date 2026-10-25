@@ -8,6 +8,12 @@
 4. O arquivo `vercel.json` já configura rewrite SPA e cache de assets.
 5. Valide `/`, `/admin/login`, `/admin/preview`, 404, assets e deep links.
 
-O projeto não foi publicado nesta execução. Após definir domínio, ajuste canonical/robots e uma imagem Open Graph aprovada pelo editor SEO. O preview Figma permanece `noindex` pela configuração da plataforma.
+## Situação atual (25/10/2026)
 
-Antes do deploy: aplicar migration/seed, executar testes RLS, resolver pendências editoriais, revisar créditos e testar todos os viewports.
+O projeto já está publicado em **https://tulius.work/** na Vercel, sob `portfolio-tulius` na equipe `tuliustsangaropulos-creates-projects`, com integração GitHub `main` → production. O deployment automático foi verificado no P3.
+
+O build gera HTML SEO estático, `robots.txt` e `sitemap.xml`. Rotas `/admin` e `/admin/*` recebem `X-Robots-Tag: noindex, nofollow, noarchive`. Mudanças no SEO armazenadas pelo CMS não reescrevem HTML do deployment já publicado: o conteúdo estático só reflete novos dados após build/deploy.
+
+O CMS e o schema Supabase estão presentes; **não reaplique o arquivo de baseline inicial de forma indiscriminada**. O histórico e as pendências de homologação, performance mobile, Storage e aprovações editoriais constam em `docs/P3_FECHAMENTO.md`.
+
+Validar antes de cada publicação: `pnpm check`, `pnpm smoke:build`, domínio, acessibilidade, rotas protegidas e o workflow Lighthouse para alterações visuais. Não alterar DNS já funcional apenas por recomendações opcionais do provedor.
