@@ -6,8 +6,22 @@ import { defineConfig } from "vite"
 export default defineConfig({
   base: "/",
   plugins: [react(), tailwindcss()],
-  // P6: let Rolldown split imports by the actual route graph.
-  // Forced vendor grouping included admin-only libraries in the public entry.
+  build: {
+    rolldownOptions: {
+      output: {
+        // The broad vendor group avoids a 533 kB main-entry regression.
+        // AdminApp remains a separate lazy route chunk.
+        codeSplitting: {
+          groups: [
+            {
+              name: "vendor",
+              test: /[\\/]node_modules[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
