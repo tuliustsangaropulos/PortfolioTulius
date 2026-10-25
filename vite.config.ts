@@ -14,6 +14,11 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             {
+              // Keep React Router out of the public landing bundle.
+              name: "admin-router",
+              test: /[\\/]node_modules[\\/]react-router[\\/]/,
+            },
+            {
               name: "vendor",
               test: /[\\/]node_modules[\\/]/,
             },
