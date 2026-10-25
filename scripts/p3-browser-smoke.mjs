@@ -67,6 +67,14 @@ try {
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
       stage = "navigate to resultados"
+      // The backdrop class changes before the drawer transform animation settles.
+      // Wait until the actual target is onscreen to avoid intermittent click failures.
+      await page.waitForFunction(() => {
+        const target = document.querySelector(".nav-drawer ol li:nth-child(3) button")
+        if (!target) return false
+        const rect = target.getBoundingClientRect()
+        return rect.left >= 0 && rect.right <= innerWidth && rect.width > 0
+      }, { timeout: 10000 })
       await page.click(".nav-drawer ol li:nth-child(3) button")
       await page.waitForFunction(() => location.hash === "#resultados", { timeout: 10000 })
       stage = "history back"

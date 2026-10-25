@@ -11,6 +11,8 @@ on:
       - src/index.css
       - index.html
       - src/hooks/usePortfolio.ts
+      - vite.config.ts
+      - src/app/**
       - src/components/public/**
       - vercel.json
       - scripts/generate-seo.mjs
