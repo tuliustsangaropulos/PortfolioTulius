@@ -7,6 +7,7 @@ on:
       - .github/workflows/audit-p3-lighthouse.yml
       - scripts/p3-browser-smoke.mjs
       - scripts/p4-visual-audit.mjs
+      - scripts/p5-public-rls.mjs
       - src/index.css
       - index.html
       - src/hooks/usePortfolio.ts
@@ -138,6 +139,12 @@ jobs:
           cp "$GITHUB_WORKSPACE/scripts/p3-browser-smoke.mjs" audit.mjs
           set +e
           node audit.mjs
+      - name: P5 anonymous Supabase RLS integration
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/p3-browser"
+          cp "$GITHUB_WORKSPACE/scripts/p5-public-rls.mjs" p5-public.mjs
+          node p5-public.mjs
           browser_status=$?
           cp "$GITHUB_WORKSPACE/scripts/p4-visual-audit.mjs" visual.mjs
           node visual.mjs
