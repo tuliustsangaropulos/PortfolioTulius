@@ -1,0 +1,83 @@
+import fs from "node:fs"
+import path from "node:path"
+import puppeteer from "puppeteer-core"
+
+const base = "https://tulius.work/"
+const dir = path.join(process.env.RUNNER_TEMP ?? "/tmp", "p4-editorial")
+fs.mkdirSync(dir, { recursive: true })
+const browser = await puppeteer.launch({
+  channel: "chrome",
+  headless: true,
+  args: ["--no-sandbox", "--disable-dev-shm-usage"],
+})
+let failures = 0
+const report = []
+try {
+  for (const variant of [
+    { name: "desktop", width: 1440, height: 900 },
+    { name: "mobile", width: 390, height: 844 },
+  ]) {
+    const page = await browser.newPage()
+    try {
+      await page.setViewport({
+        width: variant.width, height: variant.height,
+        deviceScaleFactor: 1, isMobile: variant.name === "mobile",
+        hasTouch: variant.name === "mobile",
+      })
+      await page.emulateMediaFeatures([
+        { name: "prefers-reduced-motion", value: "reduce" },
+      ])
+      await page.goto(base, { waitUntil: "networkidle2", timeout: 40000 })
+      await page.waitForFunction(() => document.querySelectorAll("section.portfolio-section").length === 14, { timeout: 15000 })
+      await page.evaluate(async () => document.fonts.ready)
+      const slugs = await page.$$eval("section.portfolio-section", nodes => nodes.map(node => node.id))
+      if (slugs.length !== 14 || new Set(slugs).size !== 14) throw new Error("Seções ausentes ou duplicadas")
+      for (const [index, slug] of slugs.entries()) {
+        const panelKeys = variant.name === "desktop" ? ["desktop"] : ["a", "b"]
+        for (const panel of panelKeys) {
+          const selector = variant.name === "desktop"
+            ? "#"+slug+" .desktop-panel" : "#"+slug+"-"+panel
+          const found = await page.$(selector)
+          if (!found) throw new Error("Painel ausente: " + selector)
+          await page.evaluate((sel) => {
+            const element = document.querySelector(sel)
+            element?.scrollIntoView({ block: "start", behavior: "instant" })
+          }, selector)
+          const state = await page.evaluate((sel) => {
+            const el = document.querySelector(sel)
+            const rect = el?.getBoundingClientRect()
+            return {
+              documentWidth: document.documentElement.scrollWidth,
+              textLength: el?.textContent?.trim().length ?? 0,
+              panelWidth: Math.round(rect?.width ?? 0),
+              panelHeight: Math.round(rect?.height ?? 0),
+              visible: !!el && getComputedStyle(el).display !== "none",
+              error: !!document.querySelector(".data-error"),
+            }
+          }, selector)
+          if (!state.visible || state.textLength < 15 || state.error || state.documentWidth > variant.width+2) {
+            failures++
+          }
+          const filename = `p4-${variant.name}-${String(index+1).padStart(2,'0')}-${slug}-${panel}.png`
+          await page.screenshot({ path: path.join(dir, filename), fullPage: false })
+          report.push({ section: slug, panel, ...state, screenshot: filename })
+        }
+      }
+    } catch (error) {
+      failures++
+      console.log("P4_EDITORIAL_ERROR " + JSON.stringify({ variant: variant.name, message: String(error) }))
+    } finally {
+      await page.close()
+    }
+  }
+} finally {
+  await browser.close()
+}
+console.log("P4_EDITORIAL_SUMMARY " + JSON.stringify({
+  captures: report.length,
+  desktop: report.filter(x => x.panel === "desktop").length,
+  mobile: report.filter(x => x.panel !== "desktop").length,
+  failures,
+  badPanels: report.filter(x => !x.visible || x.textLength < 15 || x.error || x.documentWidth > (x.panel === "desktop" ? 1442 : 392)),
+}))
+if (report.length !== 42 || failures) process.exitCode = 1

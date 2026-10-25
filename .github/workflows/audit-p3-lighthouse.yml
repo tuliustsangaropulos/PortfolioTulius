@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/audit-p3-lighthouse.yml
       - scripts/p3-browser-smoke.mjs
+      - scripts/p4-visual-audit.mjs
       - src/index.css
       - src/components/public/**
       - vercel.json
@@ -121,6 +122,16 @@ jobs:
           npm install --no-audit --no-fund --no-save puppeteer-core@25.16.0
           cp "$GITHUB_WORKSPACE/scripts/p3-browser-smoke.mjs" audit.mjs
           node audit.mjs
+          cp "$GITHUB_WORKSPACE/scripts/p4-visual-audit.mjs" visual.mjs
+          node visual.mjs
+      - name: Upload editorial screenshots
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: p4-editorial-42-panels
+          path: ${{ runner.temp }}/p4-editorial/*.png
+          if-no-files-found: warn
+          retention-days: 7
       - name: Upload viewport screenshots
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
