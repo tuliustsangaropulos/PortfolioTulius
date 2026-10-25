@@ -264,6 +264,9 @@
 .replace-button input { position: absolute; opacity: 0; pointer-events: none; }
 
 @media (min-width: 768px) and (max-width: 900px) {
+  .profile-desktop { grid-template-columns: minmax(18rem, 31%) minmax(0, 1fr); }
+  .profile-main { min-width: 0; }
+  .area-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .area-grid .content-item h3 { overflow-wrap: anywhere; }
 }
 
