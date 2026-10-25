@@ -58,6 +58,7 @@ try {
       await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }])
       const reducedMotion = await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)
       if (!reducedMotion) throw new Error("Preferência de movimento reduzido não detectada")
+      stage = "menu reopened after Escape"
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
       stage = "navigate to sobre"
