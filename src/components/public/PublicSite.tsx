@@ -129,7 +129,13 @@ function ItemCard({
   )
 }
 
-function ProfileDesktop({ section }: { section: PortfolioSection }) {
+function ProfileDesktop({
+  section,
+  nextSectionSlug,
+}: {
+  section: PortfolioSection
+  nextSectionSlug?: string
+}) {
   const panelA = section.desktopPanelA ?? section.panelA
   const panelB = section.desktopPanelB ?? section.panelB
   const areas = panelB.slice(0, 5)
@@ -187,6 +193,16 @@ function ProfileDesktop({ section }: { section: PortfolioSection }) {
             <ItemCard key={item.title} item={item} index={i} layout="hero" />
           ))}
         </div>
+        {nextSectionSlug && (
+          <a
+            className="profile-next-section"
+            href={`#${nextSectionSlug}`}
+            aria-label="Ir para a próxima seção"
+            title="Ir para a próxima seção"
+          >
+            <Icon name="down" size={28} />
+          </a>
+        )}
       </div>
     </div>
   )
@@ -261,9 +277,6 @@ function MobilePanel({
       ) : (
         <>
           <header className="panel-heading">
-            <span>
-              {String(section.number).padStart(2, "0")} · {panel.toUpperCase()}
-            </span>
             <h2>{isProfile ? "Experiência e atuação" : section.title}</h2>
             {panel === "a" && section.eyebrow && <p>{section.eyebrow}</p>}
             {panel === "a" && section.intro && <p className="section-intro">{section.intro}</p>}
@@ -364,7 +377,13 @@ function toDvh(value?: number) {
   return value == null ? undefined : `${value}dvh`
 }
 
-function Section({ section, total }: { section: PortfolioSection; total: number }) {
+function Section({
+  section,
+  nextSectionSlug,
+}: {
+  section: PortfolioSection
+  nextSectionSlug?: string
+}) {
   return (
     <section
       id={section.slug}
@@ -373,13 +392,10 @@ function Section({ section, total }: { section: PortfolioSection; total: number 
     >
       <div className="desktop-panel">
         {section.slug === "perfil" ? (
-          <ProfileDesktop section={section} />
+          <ProfileDesktop section={section} nextSectionSlug={nextSectionSlug} />
         ) : (
           <div className="desktop-editorial">
             <header className="section-heading">
-              <span>
-                {String(section.number).padStart(2, "0")} / {total}
-              </span>
               <h2>{section.title}</h2>
               {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
               {section.intro && <p className="section-intro">{section.intro}</p>}
@@ -424,7 +440,6 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
     [sections, preview],
   )
   const [current, setCurrent] = useState("perfil")
-  const [panel, setPanel] = useState<"a" | "b">("a")
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -444,7 +459,6 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
           "[data-section]",
         ) as HTMLElement | null
         if (section) setCurrent(section.dataset.section ?? "perfil")
-        setPanel(((entry.target as HTMLElement).dataset.panel as "a" | "b") ?? "a")
         entry.target
           .querySelectorAll(".reveal")
           .forEach((element) => element.classList.add("is-visible"))
@@ -501,7 +515,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       {preview && (
         <div className="preview-banner">Pré-visualização protegida · conteúdo em rascunho</div>
       )}
-      <Navigation sections={visible} navigation={navigation} current={current} panel={panel} />
+      <Navigation sections={visible} navigation={navigation} current={current} />
       {loading && <div className="data-status">Sincronizando conteúdo…</div>}
       {error && (
         <div className="data-error" role="status">
@@ -520,8 +534,12 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
           </div>
         )}
         <h1 className="sr-only">Tulius Tsangaropulos — Comunicação e Estratégia</h1>
-        {visible.map((section) => (
-          <Section key={section.id} section={section} total={visible.length} />
+        {visible.map((section, index) => (
+          <Section
+            key={section.id}
+            section={section}
+            nextSectionSlug={visible[index + 1]?.slug}
+          />
         ))}
       </main>
     </div>

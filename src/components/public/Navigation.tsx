@@ -7,20 +7,16 @@ export function Navigation({
   sections,
   navigation,
   current,
-  panel,
 }: {
   sections: PortfolioSection[]
   navigation: PublicNavigationItem[]
   current: string
-  panel: "a" | "b"
 }) {
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const drawerRef = useRef<HTMLElement>(null)
-  const currentIndex = Math.max(
-    0,
-    sections.findIndex((s) => s.slug === current),
-  )
+  const activeSection = sections.find((section) => section.slug === current)
+  const theme = current === "perfil" ? "profile" : (activeSection?.theme ?? "paper")
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -86,15 +82,11 @@ export function Navigation({
 
   return (
     <>
-      <header className="site-header">
+      <header className={`site-header header-${theme}`}>
         <button className="brand-button" onClick={() => go("perfil")} aria-label="Voltar ao perfil">
           <span>TULIUS</span>
           <span>TSANGAROPULOS</span>
         </button>
-        <div className="section-count" aria-live="polite">
-          {String(currentIndex + 1).padStart(2, "0")}/{String(sections.length).padStart(2, "0")}{" "}
-          <span className="mobile-panel-count">· {panel === "a" ? "1" : "2"}/2</span>
-        </div>
         <button
           ref={triggerRef}
           className="menu-button"
