@@ -99,7 +99,7 @@ try {
           portraitComplete: portrait?.complete ?? null,
           portraitNaturalWidth: portrait?.naturalWidth ?? null,
           appError: document.querySelector(".data-error")?.textContent?.slice(0, 140) ?? null,
-          widestElements: Array.from(document.querySelectorAll("body *"))
+          widestElements: Array.from(document.querySelectorAll(".public-site main *"))
             .map((element) => ({ element, rect: element.getBoundingClientRect() }))
             .filter(({ rect }) => rect.width > 0 && rect.right > requestedWidth + 2)
             .sort((a, b) => b.rect.right - a.rect.right)
