@@ -88,6 +88,22 @@ try {
           brandRight: document.querySelector(".brand-button")?.getBoundingClientRect().right ?? null,
           documentScrollWidth: document.documentElement.scrollWidth,
           bodyScrollWidth: document.body.scrollWidth,
+          overflowCandidates: Array.from(document.querySelectorAll(".public-site main *"))
+            .filter((el) => el.clientWidth > 0 && getComputedStyle(el).display !== "none")
+            .map((el) => {
+              const rect = el.getBoundingClientRect()
+              return { el, right: Math.round(rect.left + el.scrollWidth), actualRight: Math.round(rect.right) }
+            })
+            .filter(({ right }) => right > requestedWidth + 2)
+            .sort((a, b) => b.right - a.right)
+            .slice(0, 12)
+            .map(({ el, right, actualRight }) => ({
+              tag: el.tagName,
+              className: String(el.className).slice(0, 70),
+              right, actualRight,
+              width: el.clientWidth,
+              scroll: el.scrollWidth,
+            })),
           rootScrollWidth: document.getElementById("root")?.scrollWidth ?? null,
           publicSiteScrollWidth: document.querySelector(".public-site")?.scrollWidth ?? null,
           mobileName: Array.from(document.querySelectorAll(".mobile-name, .mobile-name span")).slice(0, 3).map((el) => ({ tag: el.tagName, text: el.textContent?.slice(0, 28), clientWidth: el.clientWidth, scrollWidth: el.scrollWidth, right: Math.round(el.getBoundingClientRect().right) })),
