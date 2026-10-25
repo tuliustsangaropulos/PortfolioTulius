@@ -13,7 +13,7 @@ try {
   let publicHeaders = null
   page.on("request", (request) => {
     const url = request.url()
-    if (publicHeaders || !/\\.supabase\\.co\\/rest\\/v1\\/sections(?:\\?|$)/.test(url)) return
+    if (publicHeaders || !url.includes(".supabase.co/rest/v1/sections")) return
     const headers = request.headers()
     if (!headers.apikey || !url.startsWith("https://")) return
     restOrigin = new URL(url).origin
