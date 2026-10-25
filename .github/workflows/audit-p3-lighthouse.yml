@@ -8,6 +8,9 @@ on:
       - scripts/p3-browser-smoke.mjs
       - src/index.css
       - src/components/public/**
+      - vercel.json
+      - scripts/generate-seo.mjs
+      - scripts/smoke-production.mjs
   workflow_dispatch:
 
 permissions:

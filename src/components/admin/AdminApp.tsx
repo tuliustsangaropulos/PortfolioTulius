@@ -31,7 +31,9 @@ type SectionRow = {
 function useAdminGuard() {
   const [state, setState] = useState<"loading" | "allowed" | "denied">("loading")
   useEffect(() => {
-    isAdmin().then((allowed) => setState(allowed ? "allowed" : "denied"))
+    isAdmin()
+      .then((allowed) => setState(allowed ? "allowed" : "denied"))
+      .catch(() => setState("denied"))
   }, [])
   return state
 }

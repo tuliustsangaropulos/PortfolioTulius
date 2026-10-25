@@ -16,8 +16,8 @@ check(/<meta\s+name=["']description["'][^>]+>/i.test(html),
   "Meta description ausente.")
 check(/<link\s+rel=["']canonical["'][^>]+>/i.test(html),
   "Canonical ausente.")
-check(robots.includes("Disallow: /admin/"),
-  "robots.txt sem regra para área administrativa.")
+check(robots.includes("Disallow: /admin\n") && robots.includes("Disallow: /admin/"),
+  "robots.txt sem regras para área administrativa.")
 check(/<urlset\b/.test(sitemap) && /<loc>https:\/\//.test(sitemap),
   "sitemap.xml não contém uma URL HTTPS.")
 

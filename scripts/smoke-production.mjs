@@ -44,7 +44,7 @@ if (!/assets\/[^"' ]+\.js/.test(home.text)) {
 console.log("PASS: HTML, título, canonical e bundle.")
 
 const robots = await request("/robots.txt")
-if (!robots.text.includes("Disallow: /admin/")) {
+if (!robots.text.includes("Disallow: /admin\n") || !robots.text.includes("Disallow: /admin/")) {
   throw new Error("robots.txt não protege rotas administrativas.")
 }
 console.log("PASS: robots.txt.")
@@ -55,10 +55,12 @@ if (!sitemap.text.includes("<urlset") || !sitemap.text.includes("<loc>")) {
 }
 console.log("PASS: sitemap.xml.")
 
-const admin = await request("/admin/login")
-const robotsHeader = admin.response.headers.get("x-robots-tag") ?? ""
-if (!robotsHeader.includes("noindex")) {
-  throw new Error("Rota /admin/login sem cabeçalho X-Robots-Tag noindex.")
+for (const adminPath of ["/admin", "/admin/login", "/admin/preview"]) {
+  const admin = await request(adminPath)
+  const robotsHeader = admin.response.headers.get("x-robots-tag") ?? ""
+  if (!robotsHeader.includes("noindex")) {
+    throw new Error(`Rota ${adminPath} sem cabeçalho X-Robots-Tag noindex.`)
+  }
 }
-console.log("PASS: rota administrativa não indexável.")
+console.log("PASS: rotas administrativas não indexáveis.")
 console.log("Smoke HTTP concluído (sem testar login ou renderização JavaScript).")

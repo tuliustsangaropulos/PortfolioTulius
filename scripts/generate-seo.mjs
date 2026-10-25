@@ -87,7 +87,7 @@ async function run() {
   const siteRoot = new URL("../dist/", import.meta.url)
   const domain = new URL(canonical).origin
   await writeFile(new URL("robots.txt", siteRoot),
-    `User-agent: *\nDisallow: /admin/\nSitemap: ${domain}/sitemap.xml\n`)
+    `User-agent: *\nDisallow: /admin\nDisallow: /admin/\nSitemap: ${domain}/sitemap.xml\n`)
   await writeFile(new URL("sitemap.xml", siteRoot),
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapeHtml(domain + "/")}</loc></url></urlset>\n`)
   console.log("SEO: título, descrição, Open Graph, canonical, robots e sitemap gerados.")

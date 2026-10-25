@@ -17,10 +17,36 @@ try {
     try {
       await page.goto(base + route, { waitUntil: "domcontentloaded", timeout: 30000 })
       await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
-      console.log("P3_ANON_ROUTE " + JSON.stringify({ route, finalPath: new URL(page.url()).pathname, result: "PASS" }))
+      const response = await page.goto(base + route, { waitUntil: "domcontentloaded", timeout: 30000 })
+      const noindex = response?.headers()["x-robots-tag"]?.includes("noindex") ?? false
+      if (!noindex) throw new Error("X-Robots-Tag noindex ausente na rota " + route)
+      console.log("P3_ANON_ROUTE " + JSON.stringify({ route, finalPath: new URL(page.url()).pathname, noindex, result: "PASS" }))
     } catch (error) {
       failures++
       console.log("P3_ANON_ROUTE " + JSON.stringify({ route, result: "FAIL", url: page.url(), error: String(error).slice(0, 260) }))
+    } finally {
+      await page.close()
+    }
+  }
+
+  {
+    const page = await browser.newPage()
+    try {
+      await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+      await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
+      await page.click(".menu-button")
+      await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
+      await page.keyboard.press("Escape")
+      await page.waitForFunction(() => !document.querySelector(".nav-backdrop")?.classList.contains("is-open"), { timeout: 10000 })
+      const focusRestored = await page.evaluate(() => document.activeElement?.classList.contains("menu-button"))
+      if (!focusRestored) throw new Error("Foco não voltou ao botão de menu")
+      await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }])
+      const reducedMotion = await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)
+      if (!reducedMotion) throw new Error("Preferência de movimento reduzido não detectada")
+      console.log("P3_INTERACTION " + JSON.stringify({ menuEscape: true, focusRestored, reducedMotion, result: "PASS" }))
+    } catch (error) {
+      failures++
+      console.log("P3_INTERACTION " + JSON.stringify({ result: "FAIL", error: String(error).slice(0, 260) }))
     } finally {
       await page.close()
     }
@@ -30,6 +56,8 @@ try {
     [1920, 1080],
     [1440, 900],
     [1366, 768],
+    [768, 1024],
+    [720, 450], // CSS viewport equivalent to a 1440px screen at ~200% zoom; not native zoom
     [390, 844],
     [360, 800],
     [320, 700],
