@@ -14,4 +14,4 @@ Backend: o schema do CMS já está ativo. As migrations P0/P1 e a migration P3.1
 
 Produto: UI de rollback granular permanece evolução futura; a listagem de revisões, os editores estruturados e os RPCs já estão implementados.
 
-Qualidade: existem testes automatizados de Lighthouse, rotas anônimas, menu e responsividade com evidências nos artifacts do GitHub Actions. Restam inspeção visual humana contra as referências de Figma/PDF, zoom real de 200%, ajustes de performance mobile e qualquer falha reportada pelo workflow corrente. Detalhes em `docs/P3_FECHAMENTO.md`.
+Qualidade: existem testes automatizados de Lighthouse, rotas anônimas, menu e responsividade com evidências nos artifacts do GitHub Actions. A auditoria automatizada passou em 8/8 viewports, inclusive 768 px, sem overflow. Restam inspeção visual humana contra as referências de Figma/PDF, zoom nativo de 200% e melhorias de performance mobile. Detalhes em `docs/P3_FECHAMENTO.md`.

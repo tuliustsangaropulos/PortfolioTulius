@@ -1,6 +1,6 @@
 # P3 — Fechamento técnico e pendências de homologação
 
-Data: **25/10/2026** · Projeto: **PortfolioTulius** · Branch única: **`main`** · Site: **https://tulius.work/**.
+Data: **25/10/2026** · **Estado: validação técnica automatizada aprovada**, com aceites manuais discriminados abaixo. · Projeto: **PortfolioTulius** · Branch única: **`main`** · Site: **https://tulius.work/**.
 
 ## Decisão de escopo e integridade
 
@@ -26,11 +26,11 @@ P3 executada como estabilização, segurança, validação funcional não destru
 - Auditoria automatizada via `scripts/p3-browser-smoke.mjs` e workflow `.github/workflows/audit-p3-lighthouse.yml`: 14 seções e 28 painéis, desktop 1920×1080/1440×900/1366×768, mobile 390×844/360×800/320×700, além de 768×1024 e 720×450 para inspeção de tela estreita. O teste de 720 CSS px **não é** equivalente perfeito a zoom nativo de 200%.
 - Menu testado por teclado: Escape fecha, foco retorna ao botão; `prefers-reduced-motion` detectado. Capturas de tela anexadas como artifact nos runs, com retenção de sete dias.
 - Corrigidos nomes acessíveis, semântica de SVG, heading order, contrastes e overflow de contatos mobile; Lighthouse atingiu **100/100 em acessibilidade** nos perfis mobile e desktop.
-- **Pendente:** comparar visualmente cada painel com a referência original e verificar zoom nativo de 200% e leitores de tela reais. Qualquer overflow residual em 768 px deverá ser resolvido antes de declarar a matriz completa aprovada.
+- **Resultado automatizado final (run 40232589301): 8/8 viewports passaram, sem overflow horizontal inclusive em 768×1024;** menus, Escape, foco e movimento reduzido aprovados. Pendente somente confronto visual humano com a referência, zoom nativo de 200% e leitores de tela reais.
 
 ## P3.4 — Lighthouse e SEO
 
-- Lighthouse 13.5.0 em produção, móvel e desktop: **100/100 em acessibilidade, boas práticas e SEO** nas execuções recentes. Performance desktop tipicamente 96–99; mobile variou significativamente nas execuções (aprox. 60–84). O LCP mobile permaneceu em torno de **4,1–4,7 s** sob emulação de laboratório; manter otimização mobile como backlog explícito, sem prometer metas não aprovadas.
+- Lighthouse 13.5.0 em produção: **100/100 em acessibilidade, boas práticas e SEO** em mobile e desktop. Na auditoria final (run 40232589301), Performance **80 mobile / 98 desktop**, LCP **4,10 s mobile / 1,09 s desktop**, TBT **228 ms mobile / 0 desktop**, CLS praticamente zero. Scores mobile oscilaram entre aproximadamente 60 e 84 durante a série; manter otimização de LCP mobile como backlog, sem confundir laboratório com dados de campo.
 - Canonical, títulos, robots e sitemap verificados. A rota exata `/admin`, além de `/admin/*`, recebe agora cabeçalho `X-Robots-Tag: noindex`; `robots.txt` também cobre as duas formas.
 - Core Web Vitals de campo e INP real não foram medidos; Lighthouse não substitui dados de usuários. Os scores variam com rede/CPU no runner.
 
@@ -38,7 +38,7 @@ P3 executada como estabilização, segurança, validação funcional não destru
 
 - `.github/workflows/validate.yml`: `pnpm format:check`, `pnpm typecheck`, `pnpm test` (**21 testes**) e `pnpm build`, mais `pnpm smoke:build`.
 - `.github/workflows/audit-p3-lighthouse.yml`: `node scripts/smoke-production.mjs`, Lighthouse mobile/desktop, rotas anônimas, menu/foco/motion e matriz de viewports, screenshots como artifact.
-- Em cada commit, checar conclusão de ambos os workflows e estado READY da Vercel. `main` é a única branch de trabalho; não fazer force push.
+- Última auditoria completa de UI/Lighthouse aprovada: https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40232589301. Última validação funcional (código/tablet) aprovada: https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40232589360. Em cada commit, checar conclusão de ambos os workflows e estado READY da Vercel. `main` é a única branch de trabalho; não fazer force push.
 
 ## P3.6 — Fechamento e aceites remanescentes
 
