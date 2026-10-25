@@ -8,6 +8,7 @@ on:
       - scripts/p3-browser-smoke.mjs
       - scripts/p4-visual-audit.mjs
       - scripts/p5-public-rls.mjs
+      - scripts/p6-lighthouse-guard.mjs
       - src/index.css
       - index.html
       - src/hooks/usePortfolio.ts
@@ -124,6 +125,9 @@ jobs:
           }
           if (missing) process.exitCode = 1
           NODE
+      - name: Enforce conservative P6 Lighthouse regression budgets
+        shell: bash
+        run: node "$GITHUB_WORKSPACE/scripts/p6-lighthouse-guard.mjs" "$RUNNER_TEMP"
       - name: Preserve Lighthouse JSON reports
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

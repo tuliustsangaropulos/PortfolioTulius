@@ -41,3 +41,4 @@ jobs:
           node --check scripts/p4-visual-audit.mjs
           node --check scripts/p5-admin-readonly.mjs
           node --check scripts/p5-public-rls.mjs
+          node --check scripts/p6-lighthouse-guard.mjs
