@@ -8,6 +8,8 @@ on:
       - scripts/p3-browser-smoke.mjs
       - scripts/p4-visual-audit.mjs
       - src/index.css
+      - index.html
+      - src/hooks/usePortfolio.ts
       - src/components/public/**
       - vercel.json
       - scripts/generate-seo.mjs
@@ -69,6 +71,11 @@ jobs:
                 SI: "speed-index",
               }).map(([key, id]) => [key, report.audits?.[id]?.numericValue ?? null]),
             )
+            const lcpNode = report.audits?.["largest-contentful-paint-element"]?.details?.items?.[0]?.node
+            console.log(`P6_LCP_ELEMENT_${device.toUpperCase()} ${JSON.stringify({
+              selector: lcpNode?.selector ?? null,
+              snippet: lcpNode?.snippet?.slice(0, 150) ?? null,
+            })}`)
             console.log(`P3_LIGHTHOUSE_${device.toUpperCase()} ${JSON.stringify({
               fetchTime: report.fetchTime,
               finalDisplayedUrl: report.finalDisplayedUrl,
@@ -114,6 +121,14 @@ jobs:
           }
           if (missing) process.exitCode = 1
           NODE
+      - name: Preserve Lighthouse JSON reports
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6fb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: p6-lighthouse-json
+          path: ${{ runner.temp }}/lighthouse-*.json
+          if-no-files-found: warn
+          retention-days: 14
       - name: Browser routes and responsive viewports
         shell: bash
         run: |

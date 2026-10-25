@@ -43,6 +43,10 @@ try {
             const element = document.querySelector(sel)
             element?.scrollIntoView({ block: "start", behavior: "instant" })
           }, selector)
+          // Lazy images must be decoded before recording a panel as visually verified.
+          await page.waitForFunction((sel) =>
+            Array.from(document.querySelectorAll(sel + " img")).every(img => img.complete && img.naturalWidth > 0),
+            { timeout: 12000 }, selector)
           const state = await page.evaluate((sel) => {
             const el = document.querySelector(sel)
             const rect = el?.getBoundingClientRect()
@@ -53,13 +57,16 @@ try {
               panelHeight: Math.round(rect?.height ?? 0),
               visible: !!el && getComputedStyle(el).display !== "none",
               error: !!document.querySelector(".data-error"),
+              images: el?.querySelectorAll("img").length ?? 0,
+              brokenImages: Array.from(el?.querySelectorAll("img") ?? []).filter(img => !img.complete || img.naturalWidth === 0).length,
             }
           }, selector)
-          if (!state.visible || state.textLength < 15 || state.error || state.documentWidth > variant.width+2) {
+          if (!state.visible || state.textLength < 15 || state.error || state.brokenImages > 0 || state.documentWidth > variant.width+2) {
             failures++
           }
           const filename = `p4-${variant.name}-${String(index+1).padStart(2,'0')}-${slug}-${panel}.png`
-          await page.screenshot({ path: path.join(dir, filename), fullPage: false })
+          // Capture all of the selected panel, not the first viewport after scrolling.
+          await found.screenshot({ path: path.join(dir, filename), captureBeyondViewport: true })
           report.push({ section: slug, panel, ...state, screenshot: filename })
         }
       }
@@ -98,6 +105,6 @@ console.log("P4_EDITORIAL_SUMMARY " + JSON.stringify({
   desktop: report.filter(x => x.panel === "desktop").length,
   mobile: report.filter(x => x.panel !== "desktop").length,
   failures,
-  badPanels: report.filter(x => !x.visible || x.textLength < 15 || x.error || x.documentWidth > (x.panel === "desktop" ? 1442 : 392)),
+  badPanels: report.filter(x => !x.visible || x.textLength < 15 || x.error || x.brokenImages > 0 || x.documentWidth > (x.panel === "desktop" ? 1442 : 392)),
 }))
 if (report.length !== 42 || failures) process.exitCode = 1
