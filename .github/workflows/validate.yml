@@ -33,3 +33,5 @@ jobs:
         run: pnpm test
       - name: Production build
         run: pnpm build
+      - name: Offline build smoke
+        run: pnpm smoke:build
