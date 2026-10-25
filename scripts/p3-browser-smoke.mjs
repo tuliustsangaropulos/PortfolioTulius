@@ -15,10 +15,10 @@ try {
   for (const route of ["/admin", "/admin/preview"]) {
     const page = await browser.newPage()
     try {
-      await page.goto(base + route, { waitUntil: "domcontentloaded", timeout: 30000 })
-      await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
       const response = await page.goto(base + route, { waitUntil: "domcontentloaded", timeout: 30000 })
-      const noindex = response?.headers()["x-robots-tag"]?.includes("noindex") ?? false
+      const robotsHeader = response?.headers()["x-robots-tag"] ?? ""
+      const noindex = robotsHeader.includes("noindex")
+      await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
       if (!noindex) throw new Error("X-Robots-Tag noindex ausente na rota " + route)
       console.log("P3_ANON_ROUTE " + JSON.stringify({ route, finalPath: new URL(page.url()).pathname, noindex, result: "PASS" }))
     } catch (error) {
