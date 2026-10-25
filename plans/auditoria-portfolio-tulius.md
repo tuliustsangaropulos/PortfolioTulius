@@ -184,7 +184,7 @@ Portanto, o estado correto é: **site público conectado ao banco real com seed 
 3. ✅ Seed `seed.sql` aplicado: páginas, seções, tokens, navegação, blocos e experiências populados.
 4. ✅ Primeiro administrador cadastrado em `admin_users`.
 5. ✅ Variáveis de ambiente (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) configuradas no Figma Make e `.env`; dev server e cached preview conectados.
-6. ⏳ Token de acesso pessoal `sbp_fcd00c9e3c4e4561fc6cf5bbd3abac1c29508a79` deve ser revogado em `app.supabase.com → Account → Access Tokens`.
+6. ⏳ Token pessoal Supabase foi exposto no histórico deste repositório público. **Revogar pelo painel Supabase → Account → Access Tokens**; confirmar rotação de quaisquer integrações dependentes. Remoção nesta versão não elimina o histórico Git.
 7. ⏳ Fallback silencioso ainda ativo; em produção, erro de consulta deve gerar estado observável.
 
 **Saída:** banco aplicado, seed ativo, admin cadastrado, preview funcional. Token a revogar.
