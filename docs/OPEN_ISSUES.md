@@ -18,8 +18,16 @@ Qualidade: existem testes automatizados de Lighthouse, rotas anônimas, menu e r
 
 ## Pendências de segurança e aceite P5 (25/10/2026)
 
-**Segurança urgente:** revogar no dashboard de tokens da conta Supabase o PAT exposto em histórico público do GitHub; apagar o valor do HEAD não invalida o token. Conferir outras integrações dependentes. Sem confirmação de revogação até esta verificação.
+**Token Supabase exposto:** proprietário decidiu não revogar; risco permanece aceito, não corrigido. Não cobrar essa ação novamente sem mudança de decisão.
 
-**Leaked Password Protection:** indisponível na organização Supabase no plano Free; requer Pro/pagamento, decisão pendente. Não fazer upgrade sem orçamento/aceite.
+**Leaked Password Protection:** proprietário decidiu não habilitar e não fazer upgrade para esse fim. Aviso técnico permanece, por decisão expressa.
 
 **CMS:** oito fluxos SQL e gatilhos de revisão/auditoria aprovados em transação revertida, mais isolamento de Storage por RLS em metadados temporários. Pendentes: E2E por navegador com JWT admin real, upload/download/substituição de arquivo, publicação e retorno do conteúdo no site em cenário isolado, restauração editorial a partir das revisões. Preservar dados reais; não confundir rollback da transação SQL com rollback funcional de versão.
+
+## Decisão expressa do proprietário — 25/10/2026
+
+O proprietário determinou **não revogar o token pessoal Supabase anteriormente exposto** e **não ativar o recurso Leaked Password Protection**. Estas duas ações ficam **fora do escopo**, por decisão do proprietário, e não devem ser novamente solicitadas como condição de avanço de P4/P5/P6, salvo nova orientação expressa. Nenhuma revogação, ativação ou upgrade foi realizada por esta decisão.
+
+Esta decisão **não demonstra que o token exposto seja seguro**: caso ainda esteja válido, permanece o risco de uso não autorizado, inclusive porque versões históricas do Git podem conter a credencial. Também permanece desativada a checagem de senhas comprometidas. A decisão do proprietário registra aceitação de prosseguir sem essas duas medidas, **não** aprovação técnica do risco ou resolução dos avisos de segurança.
+
+Prosseguir com P4/P5/P6 sem alterar essa escolha; registrar em relatórios futuros como **risco aceito, não corrigido**, sem cobranças repetidas.

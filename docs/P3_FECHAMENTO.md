@@ -89,3 +89,11 @@ git status -sb
 - Ações de segurança sem custo: senha única e forte para o admin e MFA, conforme suporte do plano, evitando compartilhamento de credenciais.
 
 **Estado:** segurança e testes SQL ampliados; P5 E2E real e revogação do token pendentes de ação autorizada no dashboard.
+
+## Decisão expressa do proprietário — 25/10/2026
+
+O proprietário determinou **não revogar o token pessoal Supabase anteriormente exposto** e **não ativar o recurso Leaked Password Protection**. Estas duas ações ficam **fora do escopo**, por decisão do proprietário, e não devem ser novamente solicitadas como condição de avanço de P4/P5/P6, salvo nova orientação expressa. Nenhuma revogação, ativação ou upgrade foi realizada por esta decisão.
+
+Esta decisão **não demonstra que o token exposto seja seguro**: caso ainda esteja válido, permanece o risco de uso não autorizado, inclusive porque versões históricas do Git podem conter a credencial. Também permanece desativada a checagem de senhas comprometidas. A decisão do proprietário registra aceitação de prosseguir sem essas duas medidas, **não** aprovação técnica do risco ou resolução dos avisos de segurança.
+
+Prosseguir com P4/P5/P6 sem alterar essa escolha; registrar em relatórios futuros como **risco aceito, não corrigido**, sem cobranças repetidas.

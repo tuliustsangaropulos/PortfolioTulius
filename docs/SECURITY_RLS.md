@@ -28,3 +28,11 @@ Suite SQL reversível sob papel `authenticated` e UID administrativo simulado ex
 **Vulnerabilidade operacional externa ao RLS:** PAT pessoal encontrado no plano histórico público, removido do texto atual (commit `cd61f600`). Revogação no Supabase Dashboard permanece **urgente e não verificada**, pois o histórico público ainda contém a credencial e a integração não permite revogá-la.
 
 **Leaked Password Protection:** Supabase org está no plano Free; a funcionalidade exige Pro ou superior e está desativada. Não atualizar cobrança sem aceite expresso. Manter senha forte e MFA para conta admin como medidas imediatas complementares.
+
+## Decisão expressa do proprietário — 25/10/2026
+
+O proprietário determinou **não revogar o token pessoal Supabase anteriormente exposto** e **não ativar o recurso Leaked Password Protection**. Estas duas ações ficam **fora do escopo**, por decisão do proprietário, e não devem ser novamente solicitadas como condição de avanço de P4/P5/P6, salvo nova orientação expressa. Nenhuma revogação, ativação ou upgrade foi realizada por esta decisão.
+
+Esta decisão **não demonstra que o token exposto seja seguro**: caso ainda esteja válido, permanece o risco de uso não autorizado, inclusive porque versões históricas do Git podem conter a credencial. Também permanece desativada a checagem de senhas comprometidas. A decisão do proprietário registra aceitação de prosseguir sem essas duas medidas, **não** aprovação técnica do risco ou resolução dos avisos de segurança.
+
+Prosseguir com P4/P5/P6 sem alterar essa escolha; registrar em relatórios futuros como **risco aceito, não corrigido**, sem cobranças repetidas.
