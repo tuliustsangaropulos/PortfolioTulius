@@ -1,0 +1,29 @@
+name: P5 Admin Read-Only E2E
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  admin-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Node.js 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24.16.0"
+      - name: Install browser driver
+        run: npm install --no-save --no-audit --no-fund puppeteer-core@25.16.0
+      - name: Run authenticated read-only browser checks
+        env:
+          P5_ADMIN_EMAIL: ${{ secrets.P5_ADMIN_EMAIL }}
+          P5_ADMIN_PASSWORD: ${{ secrets.P5_ADMIN_PASSWORD }}
+          P5_BASE_URL: https://tulius.work
+        run: node scripts/p5-admin-readonly.mjs
