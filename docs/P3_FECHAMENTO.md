@@ -63,3 +63,29 @@ pnpm.cmd smoke:build
 pnpm.cmd smoke:prod
 git status -sb
 ```
+
+## Complemento P5 antecipada — 25/10/2026: homologação transacional sem persistência
+
+**Escopo validado:** sessão PostgreSQL com role `authenticated` e UID administrativo simulado via claim SQL, transação explícita `BEGIN; ... ROLLBACK;`. Não houve JWT emitido pelo Supabase Auth nem sessão administrativa real no navegador. Todos os fixtures temporários foram descartados.
+
+- `create_section_with_panels`: seção de teste e 3 painéis; **PASS**.
+- `save_content_block_atomic`: bloco `rich_text` atualizado e placements desktop/mobile-a; **PASS**.
+- `publish_section`: publicação de seção e bloco sem placeholders; **PASS**.
+- `duplicate_section`: cópia em draft de seção, 3 painéis, 1 bloco e 2 placements; **PASS**.
+- `swap_section_order`: troca das duas seções de teste sem colisão de unicidade; **PASS**.
+- Publicação de seção de teste com placeholder: rejeitada com `section_contains_placeholders`; **PASS**.
+- `save_home_seo_atomic`: alteração temporária lida dentro da transação; **PASS**.
+- `content_revisions` e `audit_logs`: ambos cresceram durante a transação por trigger; **PASS**.
+- `storage.objects`: duas linhas de metadados criadas somente na transação, leitura pública restrita a `portfolio-public`; não admin não leu privado nem conseguiu inserir em privado; **PASS para RLS de metadados**. Não comprova upload/download binário.
+- Após `ROLLBACK`: 14 seções, 42 painéis, 28 blocos, 56 placements, zero `media_assets`, zero objetos nos buckets e zero slugs/SEO de teste remanescentes. As 2 revisões e 2 linhas de auditoria presentes datam de 24/10/2026, anteriores ao teste; não foram produzidas persistentemente pelo ensaio.
+
+**Impedimentos para homologação E2E completa:** credenciais/sessão reais do administrador não estão disponíveis por esta integração; upload de arquivo real, publicação seguida de prévia pública, exclusão/substituição de mídia e restauração por revisão exigem processo controlado. O rollback SQL dos fixtures não é o mesmo que a função editorial de restauração de revisões.
+
+## Segurança prioritária — token exposto e proteção de senhas
+
+- O arquivo `plans/auditoria-portfolio-tulius.md` continha um PAT Supabase em texto claro no GitHub público. Removido da **versão atual da main** no commit `cd61f6004c25e0480e7baf593823d7c7b2c6fe2d`. Busca de código atual por prefixo `sbp_` retornou zero resultados. **Token ainda pode ser recuperado do histórico Git, forks ou caches. Revogação não realizada nem verificada**: a integração disponível não gerencia PATs da conta.
+- Supabase organização `tuliustsangaropulos` verificada no plano **Free** em 25/10/2026. A função `Leaked Password Protection` é disponibilizada pelo Supabase **a partir do plano Pro**, de acordo com https://supabase.com/docs/guides/auth/password-security. O advisor continua apontando a opção desabilitada; habilitar exigiria mudança de plano com custo e autorização financeira explícita, além de acesso à configuração Auth. **Nenhum upgrade executado.**
+- Ação prioritária do proprietário: abrir https://supabase.com/dashboard/account/tokens, revogar o PAT comprometido, verificar dependências locais/CI que o utilizem e, se necessário, criar um substituto com escopo mínimo. Em seguida verificar o Security Advisor. Não colar token em chats, issues ou documentos.
+- Ações de segurança sem custo: senha única e forte para o admin e MFA, conforme suporte do plano, evitando compartilhamento de credenciais.
+
+**Estado:** segurança e testes SQL ampliados; P5 E2E real e revogação do token pendentes de ação autorizada no dashboard.

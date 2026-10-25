@@ -20,3 +20,11 @@ Reorder, duplicação e publicação usam RPCs `security definer` que exigem `pr
 - Permanecem alertas do Security Advisor: seis RPCs `SECURITY DEFINER` executáveis pelo papel `authenticated` (esperado, todas verificam `private.require_portfolio_admin()`) e *leaked password protection* desativada (habilitação manual pendente no Auth).
 - Há somente um usuário Auth, vinculado a um administrador. Não foi criada conta adicional e não foi executado CRUD produtivo de CMS/Storage para não modificar dados reais.
 - A baseline `202610220001_portfolio_cms.sql` existe em Git, mas não consta como versão aplicada no histórico remoto; o schema já existe. Não reaplicar sem plano explícito.
+
+## Complemento de homologação (25/10/2026)
+
+Suite SQL reversível sob papel `authenticated` e UID administrativo simulado executou com êxito criação de seção com 3 painéis, edição atômica de blocos/placements, publicação, duplicação, troca de ordem, rejeição de placeholder, SEO atômico e gravação de histórico/auditoria. Um `ROLLBACK` final preservou os dados reais. Metadados temporários em `storage.objects` validaram isolamento de leitura e bloqueio de escrita de não admin; **não houve upload/download de bytes nem JWT verdadeiro**. Resultado pós-transação: 14 seções, 42 painéis, 28 blocos, 56 placements, 0 objetos e 0 `media_assets`.
+
+**Vulnerabilidade operacional externa ao RLS:** PAT pessoal encontrado no plano histórico público, removido do texto atual (commit `cd61f600`). Revogação no Supabase Dashboard permanece **urgente e não verificada**, pois o histórico público ainda contém a credencial e a integração não permite revogá-la.
+
+**Leaked Password Protection:** Supabase org está no plano Free; a funcionalidade exige Pro ou superior e está desativada. Não atualizar cobrança sem aceite expresso. Manter senha forte e MFA para conta admin como medidas imediatas complementares.
