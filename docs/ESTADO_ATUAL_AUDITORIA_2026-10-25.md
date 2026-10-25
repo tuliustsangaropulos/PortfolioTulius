@@ -64,3 +64,38 @@
 As cinco fontes de projeto documentam: (1) contexto de produto e design; (2) configuração de ambiente; (3) histórico de correções; (4) plano e continuidade P3; (5) inventário GitHub fixo no SHA anterior. Elas são registros versionados e contêm trechos históricos preservados. **Este relatório é o índice operacional mais recente das conferências feitas por conectores em 25/10**, não uma cópia do código, do banco ou das referências visuais.
 
 O usuário pode remover os chats antigos **depois de preservar quaisquer anexos/imagens ou decisões que não estejam nas fontes**. A remoção de conversas não atualiza automaticamente os anexos de fontes do projeto; é necessário anexar a cópia deste relatório como nova fonte quando desejado.
+
+
+## 7. Execução solicitada pelo proprietário — otimização e homologação controlada (25/10/2026)
+
+**Autorização nesta etapa:** o proprietário solicitou executar (i) P5 admin read-only com JWT real, (ii) otimização de RLS/índices e (iii) homologação de CRUD, Storage e publicação com uso dos conectores. A execução abaixo distingue os testes possíveis via conector de SQL dos que exigem sessão JWT e navegador.
+
+### Otimização de banco — executada em produção
+
+- Migration remota `20261025230446_p7_admin_rls_initplan_fk_indexes`, versionada em [`supabase/migrations/20261025230446_p7_admin_rls_initplan_fk_indexes.sql`](../supabase/migrations/20261025230446_p7_admin_rls_initplan_fk_indexes.sql).
+- **22 políticas** `public.* / admin full access` e **1 política** de `storage.objects` mantêm os mesmos papéis e condições de autorização, mas avaliam `private.is_portfolio_admin((select auth.uid()))` em subconsulta por instrução SQL, evitando reavaliação por linha.
+- **9 novos índices btree**, sem unicidade e sem alteração de dados, cobrem as FKs: `audit_logs.user_id`, `block_placements.panel_id`, `content_blocks.media_id`, `content_revisions.actor_user_id`, `editorial_issues.section_id`, `metrics.section_id`, `portfolio_projects.experience_id`, `site_settings.favicon_media_id` e `testimonials.photo_media_id`.
+- Migration remota `20261025230528_p7_admin_users_own_select_initplan`, versionada em [`supabase/migrations/20261025230528_p7_admin_users_own_select_initplan.sql`](../supabase/migrations/20261025230528_p7_admin_users_own_select_initplan.sql): política `owner may read own admin membership` continua impondo `user_id = auth.uid()`, mas com `(select auth.uid())` avaliado por instrução.
+- Os arquivos foram gravados diretamente na `main` conforme a regra de trabalho, e as duas versões **já constam no histórico remoto**. Não reaplicá-las.
+
+**Performance Advisor antes/depois:** 23 → **0** avisos `auth_rls_initplan`; 9 → **0** FKs sem índice. Permanecem **19 avisos `multiple_permissive_policies`** (OR entre leitura pública e leitura administrativa deliberada) e **10 avisos `unused_index`** após a última leitura (estatística contextual, podendo incluir índices recém-criados). Não desabilitar leitura publicada por usuários autenticados nem eliminar índices automaticamente para suprimir avisos. Security Advisor permanece com **6 alertas sobre RPCs `SECURITY DEFINER` para `authenticated`** e **1 aviso de proteção contra senhas vazadas desativada**; não foi alterada a decisão de risco aceito.
+
+### Testes de autorização e CRUD/publicação — executados com ROLLBACK
+
+1. Em transação: identidade `anon` consultou 14 seções públicas e zero `admin_users`/`editorial_issues`/objetos privados.
+2. Identidade `authenticated` não administradora **simulada por claim SQL**, sem criar usuário Auth: leitura das seções publicadas; nenhuma leitura de administradores, revisões ou pendências editoriais; chamada de `create_section_with_panels` bloqueada por autorização. **PASS**.
+3. Identidade de administrador **simulada na sessão SQL** utilizando o único vínculo já cadastrado: criação de seção descartável com seus três painéis, criação de bloco e placements, gravação pela RPC `save_content_block_atomic`, publicação pela RPC `publish_section`, leitura posterior da seção/bloco como `anon`. **PASS**. A transação foi encerrada com **`ROLLBACK`**, sem alterar o conteúdo existente.
+4. Isolamento de Storage **apenas na camada de metadados SQL**: administrador simulado inseriu objetos temporários nos buckets público/privado dentro de transação; `anon` acessou somente o registro público; usuário comum simulado não leu nem atualizou o privado. **PASS**, com **`ROLLBACK`**.
+5. Conferência posterior confirmou que ficaram **14 seções, 42 painéis, 28 blocos, 56 placements, 9 pendências, 2 revisões, 2 audit logs e 0 objetos Storage**. Nenhum arquivo foi de fato enviado à API de Storage.
+
+**Limites — não marcar como homologados:** os testes SQL usam simulação de identidade, não JWT real emitido pelo Auth; não comprovam login, cookies, sessão, UI dos oito módulos, persistência real no browser, upload/download de bytes ou restauração pelo CMS.
+
+### P5 com JWT real — preparado, não executado
+
+O workflow [`P5 Admin Read-Only E2E`](../.github/workflows/p5-admin-readonly.yml) exige os Secrets `P5_ADMIN_EMAIL` e `P5_ADMIN_PASSWORD`. Os conectores disponíveis nesta sessão não disponibilizam disparo autenticado do `workflow_dispatch`, nem credenciais/sessão do usuário para executar esse teste. Não foi criada conta de teste, nem houve solicitação de exposição de senha. Para executar, o proprietário deve cadastrar os dois Secrets no GitHub (Settings → Secrets and variables → Actions) e usar Actions → P5 Admin Read-Only E2E → Run workflow, ou disponibilizar um método autorizado que permita ao agente acionar o workflow sem acessar o valor das credenciais. O usuário deve conferir o resultado real antes de dar aceite.
+
+### Reversão das otimizações (somente se comprovadamente necessária)
+
+As condições originais das políticas administrativas eram `private.is_portfolio_admin(auth.uid())` em `USING` e `WITH CHECK`, o predicado de Storage usava o mesmo verificador combinado aos buckets e a leitura própria de `admin_users` era `user_id = auth.uid()`. Reverter apenas com migration nova, leitura da versão vigente e testes de autorização. Os nove índices têm nomes terminados em `_fk_idx`, especificados integralmente na migration; **não removê-los automaticamente**, especialmente se passarem a ter tráfego de leitura relevante.
+
+**Próximo gate:** confirmar GitHub CI e Vercel `READY` no commit final de documentação, depois realizar P5 com JWT real, upload/download binário descartável e homologação visual/editorial pelo proprietário. Não transformar esta auditoria transacional em aceite da interface administrativa.
