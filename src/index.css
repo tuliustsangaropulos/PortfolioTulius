@@ -37,7 +37,7 @@
 .site-header.header-ink, .site-header.header-orange { color: var(--paper); }
 .site-header.header-orange .brand-button span:first-child { background: var(--ink); color: var(--paper); }
 .site-header.header-orange button:focus-visible, .site-header.header-ink button:focus-visible { outline-color: var(--paper); }
-.menu-button { justify-self: end; display: flex; align-items: center; gap: .6rem; min-height: 44px; border: 0; background: transparent; font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
+.menu-button { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: .6rem; min-height: 44px; border: 0; background: transparent; font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
 .nav-backdrop { position: fixed; z-index: 100; inset: 0; background: color-mix(in srgb, var(--ink) 55%, transparent); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .25s ease, visibility .25s; }
 .nav-backdrop.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
 .nav-drawer { position: absolute; right: 0; top: 0; height: 100%; width: min(34rem, 100%); overflow-y: auto; background: var(--ink); color: var(--paper); padding: clamp(1.25rem, 3vw, 2.5rem); transform: translateX(100%); transition: transform .25s ease-out; }
