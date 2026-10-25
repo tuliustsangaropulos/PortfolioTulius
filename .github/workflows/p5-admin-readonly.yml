@@ -20,10 +20,16 @@ jobs:
         with:
           node-version: "24.16.0"
       - name: Install browser driver
-        run: npm install --no-save --no-audit --no-fund puppeteer-core@25.16.0
+        run: |
+          mkdir -p "$RUNNER_TEMP/p5-browser"
+          cd "$RUNNER_TEMP/p5-browser"
+          npm install --no-save --no-audit --no-fund puppeteer-core@25.16.0
+          cp "$GITHUB_WORKSPACE/scripts/p5-admin-readonly.mjs" suite.mjs
       - name: Run authenticated read-only browser checks
         env:
           P5_ADMIN_EMAIL: ${{ secrets.P5_ADMIN_EMAIL }}
           P5_ADMIN_PASSWORD: ${{ secrets.P5_ADMIN_PASSWORD }}
           P5_BASE_URL: https://tulius.work
-        run: node scripts/p5-admin-readonly.mjs
+        run: |
+          cd "$RUNNER_TEMP/p5-browser"
+          node suite.mjs

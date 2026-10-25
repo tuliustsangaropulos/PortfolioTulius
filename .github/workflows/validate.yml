@@ -35,3 +35,8 @@ jobs:
         run: pnpm build
       - name: Offline build smoke
         run: pnpm smoke:build
+      - name: Browser suites syntax
+        run: |
+          node --check scripts/p3-browser-smoke.mjs
+          node --check scripts/p4-visual-audit.mjs
+          node --check scripts/p5-admin-readonly.mjs
