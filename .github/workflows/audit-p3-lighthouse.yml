@@ -121,9 +121,14 @@ jobs:
           cd "$RUNNER_TEMP/p3-browser"
           npm install --no-audit --no-fund --no-save puppeteer-core@25.16.0
           cp "$GITHUB_WORKSPACE/scripts/p3-browser-smoke.mjs" audit.mjs
+          set +e
           node audit.mjs
+          browser_status=$?
           cp "$GITHUB_WORKSPACE/scripts/p4-visual-audit.mjs" visual.mjs
           node visual.mjs
+          visual_status=$?
+          set -e
+          test "$browser_status" -eq 0 && test "$visual_status" -eq 0
       - name: Upload editorial screenshots
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
