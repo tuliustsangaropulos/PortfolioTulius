@@ -15,7 +15,8 @@ export function Navigation({
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const drawerRef = useRef<HTMLElement>(null)
-  const theme = current === "perfil" ? "profile" : (sections.find((s) => s.slug === current)?.theme ?? "paper")
+  const activeSection = sections.find((section) => section.slug === current)
+  const theme = current === "perfil" ? "profile" : (activeSection?.theme ?? "paper")
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
