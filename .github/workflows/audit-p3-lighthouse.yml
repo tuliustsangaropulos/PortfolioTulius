@@ -124,7 +124,7 @@ jobs:
           NODE
       - name: Preserve Lighthouse JSON reports
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6fb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: p6-lighthouse-json
           path: ${{ runner.temp }}/lighthouse-*.json
@@ -153,7 +153,7 @@ jobs:
           test "$browser_status" -eq 0 && test "$visual_status" -eq 0
       - name: Upload editorial screenshots
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: p4-editorial-42-panels
           path: ${{ runner.temp }}/p4-editorial/*.png
@@ -161,7 +161,7 @@ jobs:
           retention-days: 7
       - name: Upload viewport screenshots
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: p3-viewport-screenshots
           path: ${{ runner.temp }}/p3-screenshots/*.png
