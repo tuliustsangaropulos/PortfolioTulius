@@ -49,13 +49,17 @@ export function Navigation({
     document.addEventListener("keydown", onKey)
     document.body.classList.toggle("nav-open", open)
     const main = document.querySelector<HTMLElement>(".public-site main")
+    let focusTimer: ReturnType<typeof setTimeout> | undefined
     if (open) {
       main?.setAttribute("inert", "")
-      requestAnimationFrame(() => drawerRef.current?.querySelector<HTMLElement>("button")?.focus())
+      focusTimer = setTimeout(() => {
+        drawerRef.current?.querySelector<HTMLButtonElement>(".icon-button")?.focus()
+      }, 300)
     } else {
       main?.removeAttribute("inert")
     }
     return () => {
+      if (focusTimer) clearTimeout(focusTimer)
       document.removeEventListener("keydown", onKey)
       document.body.classList.remove("nav-open")
       main?.removeAttribute("inert")
