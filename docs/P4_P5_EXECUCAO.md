@@ -24,6 +24,16 @@ Referências acessíveis:
 
 **Pendente para aprovação visual final:** comparação lado a lado da composição de cada uma das 14 páginas Canva com a seção correspondente do site, considerando que alterações feitas posteriormente no Figma podem prevalecer sobre o Canva/PDF; validação humana de legibilidade, composição, a11y com leitor de tela real e zoom **nativo** de 200%. A automação comprova renderização e dimensão, não julgamento de fidelidade estética.
 
+## Fechamento da auditoria automatizada ampliada (25/10/2026)
+
+**Execução final aprovada:** https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40236047027.
+
+- P4: **42/42 capturas** (14 desktop, 28 mobile), nenhum painel vazio, erro de carregamento ou overflow; **8 viewports** no smoke principal sem regressão.
+- Menu mobile: transferência inicial de foco após abertura, focus trap de Tab/Shift+Tab, fundo `inert`, Escape, retorno de foco, reabertura imediata e histórico hash/Voltar: **PASS**.
+- Contato a 320 px: WhatsApp, e-mail e LinkedIn renderizados em **uma linha cada**, sem quebra irregular de texto: **PASS**. CSS ajustado somente para valores de Contato na vista mobile.
+- Lighthouse de laboratório: Performance **76 mobile / 98 desktop**; LCP **4,38 s mobile / 1,06 s desktop**; Acessibilidade, Boas Práticas e SEO **100/100** em ambos. Performance mobile permanece no backlog P6.
+- CI geral da execução: **aprovado**. Este aceite é de **automação/estrutura e navegação**, não de equivalência visual pixel a pixel com Canva.
+
 ## P5 — Ampliação de testes
 
 **Executado anteriormente:** 8 cenários transacionais de CRUD/RPC/publicação/SEO e gatilhos de revisão/auditoria; metadados de Storage públicos/privados e bloqueios de não administrador; todas as alterações ocorreram em `BEGIN … ROLLBACK`. Ver `docs/P3_FECHAMENTO.md`.
