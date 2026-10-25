@@ -58,6 +58,14 @@ Configure as duas variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KE
 
 `.gitignore` protege `.env.local`, `.env.*`, `.vercel/`, `node_modules/` e `dist/`, mantendo `.env.example` disponível para versionamento. Nunca versione tokens ou chaves privadas. Revise `git status` e o diff antes de qualquer commit; este README não autoriza commits, push, alterações na Vercel ou deploy.
 
+## Estado atual
+
+O portfólio está publicado em **https://tulius.work/** na Vercel, com deploy automático da branch `main` e CMS conectado ao Supabase. A página `/` usa os conteúdos publicados do banco; quando Supabase está configurado e falha, a interface indica erro, sem substituir silenciosamente conteúdo por fallback. As rotas de administração têm carregamento separado e autenticação obrigatória.
+
+Automação de qualidade: workflows `Validate PortfolioTulius` (formato, tipos, testes, build e smoke offline) e `Audit P3 Lighthouse` (smoke HTTP, Lighthouse, testes P4/P5 e evidências). Testes com JWT admin real requerem `P5_ADMIN_EMAIL` e `P5_ADMIN_PASSWORD` armazenados exclusivamente em GitHub Actions Secrets e execução controlada do workflow manual `P5 Admin Read-Only E2E`.
+
+O estado de validação, os limites da automação e a última homologação manual do proprietário estão documentados em [`docs/P4_P5_P6_FECHAMENTO.md`](docs/P4_P5_P6_FECHAMENTO.md).
+
 ## Documentação adicional
 
 Consulte `docs/` para arquitetura, modelo de conteúdo, CMS, segurança, layout responsivo, sistema visual, motion e publicação.
