@@ -18,8 +18,18 @@ const browser = await puppeteer.launch({
   args: ["--no-sandbox", "--disable-dev-shm-usage"],
 })
 let passed = 0
+const mutations = []
 try {
   const page = await browser.newPage()
+  // Login/logout Auth POSTs are allowed. Writes to CMS data/Storage are never allowed.
+  page.on("request", (request) => {
+    const method = request.method()
+    const address = request.url()
+    if (["POST", "PUT", "PATCH", "DELETE"].includes(method) &&
+        (address.includes("/rest/v1/") || address.includes("/storage/v1/object/"))) {
+      mutations.push({ method, resource: new URL(address).pathname })
+    }
+  })
   await page.goto(new URL("/admin/login", base).href, { waitUntil: "domcontentloaded", timeout: 30000 })
   await page.waitForSelector(".login-card input[type=email]", { timeout: 12000 })
   await page.type(".login-card input[type=email]", email)
@@ -41,7 +51,12 @@ try {
       return true
     }, label)
     if (!clicked) throw new Error("Módulo administrativo indisponível: " + label)
-    await page.waitForSelector(".admin-header h1", { timeout: 10000 })
+    // Wait for the actual selected module; the old header may remain briefly.
+    await page.waitForFunction((target) => {
+      const active = document.querySelector(".admin-sidebar nav button.active")
+      return active?.textContent?.trim() === target &&
+        !!document.querySelector(".admin-header h1")
+    }, { timeout: 10000 }, label)
   }
   passed++
   console.log("P5_ADMIN_MODULES " + JSON.stringify({ result: "PASS", modules: expectedModules.length }))
@@ -59,6 +74,9 @@ try {
   await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
   await page.goto(new URL("/admin/preview", base).href, { waitUntil: "domcontentloaded", timeout: 30000 })
   await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
+  if (mutations.length) {
+    throw new Error("Unexpected content write from read-only suite: " + JSON.stringify(mutations))
+  }
   passed++
   console.log("P5_ADMIN_LOGOUT " + JSON.stringify({ result: "PASS", reaccessBlocked: true }))
 } finally {
