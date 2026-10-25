@@ -43,7 +43,9 @@ try {
       const mainInert = await page.$eval(".public-site main", el => el.hasAttribute("inert"))
       if (!mainInert) throw new Error("Conteúdo de fundo não recebeu inert")
       stage = "focus trap"
-      await page.keyboard.press("Shift+Tab")
+      await page.keyboard.down("Shift")
+      await page.keyboard.press("Tab")
+      await page.keyboard.up("Shift")
       const wrappedToLast = await page.evaluate(() => document.activeElement === document.querySelector(".nav-drawer ol li:last-child button"))
       if (!wrappedToLast) throw new Error("Focus trap: Shift+Tab não voltou ao último botão")
       await page.keyboard.press("Tab")
