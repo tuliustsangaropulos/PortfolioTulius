@@ -31,3 +31,11 @@ Texto pequeno usa grafite sobre laranja. Foco é visível; botões têm alvo mí
 A seção 02 (fundo laranja) apresenta **cinco declarações inicialmente** na coluna direita desktop; a lista é administrável e sua altura pode variar após inclusões/exclusões. A primeira declaração também acompanha a foto no painel A mobile; as demais são listadas no painel B mobile. Preservar o equilíbrio vertical, as regras de tamanho e o recorte central existentes e verificar visualmente quando a lista ultrapassar a altura disponível.
 
 A seção 03 mantém seus **quatro indicadores** à esquerda/centro e exibe **cinco temas de especialidades** na coluna da direita, correspondentes aos cards 01–05 da abertura. Os números desses cards pertencem apenas à seção 01; os títulos da seção 03 não são numerados nem se tornam links nesta entrega.
+
+## Seção 03 — interação e leitura (26/10/2026)
+
+A apresentação conserva a coluna de título **Resultados e projetos em destaque** à esquerda. Na **Visão geral**, a área central mostra os quatro indicadores com ícones em lugar dos números 01–04. A coluna direita apresenta os cinco temas e a opção de retorno à visão geral como botões com hover, foco visível e estado ativo. Ao selecionar tema, o centro apresenta seu eixo, título, subtítulo, temas relacionados, texto curto, conteúdo de Competências reaproveitado e indicadores somente quando pertinentes. Os cinco cards clicáveis da abertura abrem `#resultados` no tema escolhido.
+
+O mobile apresenta títulos/filtros e conteúdo central em sequência em um único painel. Em desktop de altura reduzida, a área central poderá rolar independentemente para manter o bloco temático acessível; validar legibilidade e ausência de cortes. Preservar as cores, fontes, proporções dos cards, contrastes e `prefers-reduced-motion` já definidos.
+
+Os textos originais de **Habilidades**, **Gestão**, **Competências**, **Relações** e **Destaques** da antiga seção 04 estão agora visíveis como destaques de apoio nos dossiês pertinentes. Os registros da seção 04 continuam conservados no CMS e a seção não aparece mais no site público.
