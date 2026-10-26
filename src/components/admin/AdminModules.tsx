@@ -897,6 +897,43 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         onChange={(event) => updateItem(index, { alt: event.target.value })}
                       />
                     </label>
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug ===
+                      "sobre" &&
+                      draft.mobile_panel === "a" &&
+                      index === 0 && (
+                        <>
+                          <label className="field-wide">
+                            Imagem central da seção 02 (desktop)
+                            <input
+                              value={item.aboutDesktopImage ?? ""}
+                              placeholder="/media/tulius-contact.jpg"
+                              onChange={(event) =>
+                                updateItem(index, { aboutDesktopImage: event.target.value })
+                              }
+                            />
+                            <small>
+                              Se vazio, usa /media/tulius-contact.jpg. A imagem do painel mobile
+                              continua no campo Imagem acima.
+                            </small>
+                          </label>
+                          <label className="field-wide">
+                            Descrição da imagem central (desktop)
+                            <input
+                              value={item.aboutDesktopAlt ?? ""}
+                              placeholder={item.alt || "Tulius Tsangaropulos"}
+                              onChange={(event) =>
+                                updateItem(index, { aboutDesktopAlt: event.target.value })
+                              }
+                            />
+                          </label>
+                          <p className="field-wide">
+                            O título e o texto deste item aparecem como terceiro bloco da
+                            coluna direita no desktop. Os outros dois blocos são gerenciados
+                            no painel B. A coluna esquerda usa título, subtítulo e introdução
+                            da seção.
+                          </p>
+                        </>
+                      )}
                   </div>
                   <details className="visual-config">
                     <summary>Estilo, visibilidade e responsividade</summary>
