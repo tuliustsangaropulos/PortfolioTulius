@@ -85,3 +85,10 @@ Detalhes técnicos, limitações e handoff para a próxima fase estão em [`docs
 A seção **Olá!** (`#sobre`) tem composição desktop própria: texto introdutório à esquerda, imagem central de altura integral e três declarações à direita. O retrato central padrão é o arquivo existente `/media/tulius-contact.jpg` (Tulius segurando um tablet); não foi criada imagem artificial. O primeiro item do bloco A alimenta a imagem central e a terceira declaração da direita **sem duplicação no banco**, enquanto os dois itens do bloco B alimentam as duas declarações anteriores. No mobile, a estrutura anterior permanece.
 
 Edição: **Seções → Olá!** gerencia os textos da esquerda; **Blocos e painéis → Olá! → painel A** gerencia o terceiro título/texto da direita e os campos específicos de imagem e texto alternativo desktop; **painel B** gerencia os dois primeiros itens da direita. Os campos opcionais usam JSONB existente; nenhuma migration ou mudança de permissões foi necessária. Consulte [`docs/CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md`](docs/CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md).
+
+## Conteúdo da seção 02 e títulos da seção 03 — 26/10/2026
+
+- **Seção 02:** os cinco textos da coluna direita são gerenciados no único bloco **Olá! → painel B** do CMS. Os controles **Adicionar item**, edição de título/texto, setas de ordenação e exclusão já fazem parte do editor; é necessário salvar para persistir. O painel A mantém apenas os atributos da fotografia. No mobile, o primeiro texto da lista B é apresentado junto à foto no painel A; os quatro seguintes aparecem no painel B, sem duplicação de conteúdo.
+- **Seção 03:** a lista do painel B agora contém os cinco títulos das especialidades dos cards clicáveis da seção 01, na mesma ordem; os quatro indicadores de resultados do painel A permanecem intactos. O antigo placeholder `XXXXX · X/Y/Z` foi substituído e sua pendência editorial registrada como resolvida no Supabase.
+
+O Supabase e o fallback versionado foram sincronizados sem alterar schema/RLS. Ver [continuidade das seções 02 e 03](docs/CONTINUIDADE_CONTEUDO_SECOES_02_03_2026-10-26.md).
