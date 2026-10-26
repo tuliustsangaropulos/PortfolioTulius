@@ -430,7 +430,9 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
         {introductoryItem && (
           <img
             src={desktopImage}
-            alt={introductoryItem.aboutDesktopAlt || introductoryItem.alt || "Tulius Tsangaropulos"}
+            alt={
+              introductoryItem.aboutDesktopAlt || introductoryItem.alt || "Tulius Tsangaropulos"
+            }
             loading="lazy"
             decoding="async"
           />
@@ -438,7 +440,12 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
       </div>
       <div className="about-statements">
         {itemsB.map((item, index) => (
-          <ItemCard key={`${item.title}-${index}`} item={item} index={index} layout={section.layout} />
+          <ItemCard
+            key={`${item.title}-${index}`}
+            item={item}
+            index={index}
+            layout={section.layout}
+          />
         ))}
         {itemsA.map((item, index) => (
           <ItemCard
