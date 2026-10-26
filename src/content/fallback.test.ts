@@ -99,3 +99,26 @@ describe("interação da seção 03 e remoção da seção 04", () => {
     expect(results?.panelB.some((item) => Boolean(item.inheritedHighlights?.length))).toBe(true)
   })
 })
+
+describe("formação e experiência profissional em camadas", () => {
+  const companies = ["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"]
+
+  it("usa identidade escura na formação e papel branco nas seis empresas", () => {
+    expect(sections.find((section) => section.slug === "formacao")?.theme).toBe("ink")
+    for (const slug of companies) {
+      expect(sections.find((section) => section.slug === slug)?.theme).toBe("paper")
+    }
+  })
+
+  it("preserva os conteúdos e inicializa galerias editoriais sem imagens falsas", () => {
+    for (const slug of companies) {
+      const section = sections.find((entry) => entry.slug === slug)
+      expect(section?.panelA.length).toBeGreaterThan(0)
+      expect(section?.panelB.length).toBeGreaterThan(0)
+      expect(section?.experienceMedia?.slides).toHaveLength(3)
+      expect(section?.experienceMedia?.slides?.every((slide) => slide.title && !slide.image)).toBe(
+        true,
+      )
+    }
+  })
+})
