@@ -45,3 +45,15 @@ Use **Salvar alterações** para gravar via RPC `save_content_block_atomic`. A q
 Em **Blocos e painéis → Resultados e projetos em destaque → painel B**, estão os cinco temas iguais aos cards 01–05 da seção 01. Podem ser editados pelo CMS, mas **não são ligados automaticamente** aos títulos da seção 01 após futuras alterações; para manter a equivalência editorial, modificar ambos os blocos ou solicitar a implantação de sincronização automatizada. O painel A da seção 03 contém os quatro indicadores de resultados e não foi alterado nesta rodada.
 
 **Aceite pendente:** salvar/adicionar/excluir/reordenar com JWT administrativo real ainda requer teste autenticado de navegador; o sucesso do SQL e os testes unitários não demonstram o fluxo UI completo.
+
+## Seção 03 — resultados temáticos e ícones (26/10/2026)
+
+**Gerenciar indicadores:** em **Blocos e painéis → Resultados e projetos em destaque → painel A**, cada indicador continua com valor, título e texto. O campo **Ícone do indicador** escolhe entre dez pictogramas internos (gráfico, crescimento, pessoas, imprensa, meta, comunicação, projetos, eventos, destaque e estratégia), sem URLs de ícones externos. Em **Exibir este indicador nos temas**, marque uma ou mais especialidades às quais o resultado comprovado pertence. Na **Visão geral**, os quatro indicadores aparecem juntos; em cada tema, aparecem apenas os resultados vinculados. Não inferir números nem relacionar resultados sem fundamento.
+
+**Gerenciar os cinco temas:** no mesmo módulo, abrir o **painel B** de Resultados. O campo **Título** é o rótulo clicável à direita; campos adicionais editam **Identificador do tema**, **Eixo central**, **Título central**, **Subtítulo central**, **Temas relacionados**, **Texto curto** e **Conteúdo reaproveitado da antiga seção 04** (uma linha por destaque). Ordem e itens continuam editáveis pelas ferramentas padrão do bloco. O identificador de tema deve ser único, minúsculo e sem caracteres especiais (`corporativa`, `projetos`, `eventos`, `marketing`, `imprensa` na entrega).
+
+**Ligação desde a abertura:** em **Perfil → painel B → cards 01 a 05**, além do campo **Destino do card**, há **Tema selecionado na seção 03**. O tema é aplicado somente se o destino continuar sendo `resultados`. Identificadores permanecem estáveis após reorganizar os cards, desde que não sejam removidos ou editados indevidamente.
+
+**Seção 04:** `competencias` recebeu `is_visible=false` em `sections`. Não foi excluída nem arquivada, continua disponível no admin. Os cinco registros originais de Habilidades, Gestão, Competências, Relações e Destaques também foram transpostos para os destaques temáticos da seção 03. Para reativar a antiga seção, usar a gestão de visibilidade do CMS em operação expressamente autorizada.
+
+**Aceite pendente:** selecionar, salvar e publicar alterações com JWT administrativo real, verificar revisão/rollback, e testar vinculação/tema depois de reordenação. Atualização direta de JSONB e build não validam esse fluxo autenticado.
