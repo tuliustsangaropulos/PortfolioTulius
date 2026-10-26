@@ -49,3 +49,11 @@ Os textos originais de **Habilidades**, **Gestão**, **Competências**, **Relaç
 Os 18 slots de mídia representam temas de projeto reais, mas **as imagens ainda não existem no acervo aprovado**. O componente mantém placeholders textuais com contraste e não exibe imagens de bancos de imagens como prova do trabalho. O CMS define URLs e descrições acessíveis para futura substituição. Mobile usa nav horizontal rolável, conteúdo textual seguido da galeria; respeitar `prefers-reduced-motion`. Validar a experiência sticky em navegadores móveis e telas baixas para evitar bloqueios de scroll.
 
 **Ajuste responsivo posterior à captura:** a auditoria visual encontrou a galeria mobile parcialmente coberta por conteúdo do próximo empregador quando se mantinha `position:sticky` em painéis mais altos que o viewport. A partir do commit `6cfe4d04`, a sobreposição sticky é **exclusiva do desktop/tablet**, e no mobile os painéis de experiência voltam a `position:relative`, permitindo leitura integral; a barra de empresas continua sticky e horizontal. Publicação desse ajuste depende de nova disponibilidade de deploy na Vercel.
+
+## Ferramentas e estados de interação — 26/10/2026
+
+**Ferramentas:** substituir o creme anterior pelo cinza-escuro da identidade (`var(--ink)`) em toda a seção; texto auxiliar branco, títulos alternando branco/laranja para dar hierarquia. Cada grupo da coluna direita ganha de dois a três círculos laranja com pictogramas SVG brancos, compondo blocos próximos à referência enviada. Os ícones representam plataformas e práticas por ilustração vetorial local, sem afirmar que são logos oficiais. Ajustar tamanho para desktop, tablet e mobile; manter conteúdo textual e contrastes.
+
+**Seção 01:** os seis cards de histórico profissional recebem interação na superfície inteira, com fundo sutil alaranjado, linha de acento à esquerda, título em laranja-escuro e foco visível. Não aplicar esse estilo à fotografia nem aos cinco cards temáticos (que mantêm o hover anterior).
+
+**Contato:** títulos de canais e valores são brancos ao passar o cursor ou focalizar o link; o fundo laranja, o texto secundário e o ícone de seta permanecem.
