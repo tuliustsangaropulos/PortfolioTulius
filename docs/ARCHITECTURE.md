@@ -35,3 +35,11 @@ O fallback só é usado quando a consulta falha ou o schema ainda não existe. E
 Os cinco títulos da seção `resultados` ficam em `content_blocks` / painel B e correspondem editorialmente às cinco especialidades de `perfil` / painel B (índices 0 a 4); não há consulta dinâmica cruzada. Esta decisão conserva a edição independente pelo CMS e a possibilidade de títulos futuros diferentes, mas requer atenção quando o proprietário solicitar sincronização automática.
 
 A edição de JSONB pelo admin utiliza a RPC `save_content_block_atomic`. O ajuste de conteúdo publicado foi transacional, sem migração, schema novo ou mudança de permissão. O histórico da pendência provisória ficou preservado em `editorial_issues` com status resolvido.
+
+## Resultados interativos e navegação cruzada (26/10/2026)
+
+`PublicSite.tsx` gerencia `selectedTheme` no nível `PublicSite`. Os cards temáticos `ProfileDesktop` / `MobilePanel` usam `onNavigate` apenas quando `resolveHeroCardDestination(...)=resultados`; definem a chave estável `themeKey` antes da navegação nativa `#resultados`. `ResultsDesktop` e `ResultsMobile` compartilham `ResultsCenter` e `ResultsThemeChooser`, com botões reais, foco e `aria-pressed`. O estado `null` mantém a visão geral dos quatro indicadores e `relatedThemeKeys` controla os indicadores associados em cada tema. A UI não fabrica novos valores numéricos.
+
+`src/components/ui/Icons.tsx` fornece o conjunto fixo de SVGs; `ContentItem` em `src/types/content.ts` ganhou campos opcionais. O CMS usa `content_json.items` existente com `save_content_block_atomic`. `src/content/resultThemes.ts` mantém o fallback editorial dos cinco dossiês, sem criar fonte paralela no banco. O teste público foi atualizado para 13 seções e 25 painéis mobile, refletindo a seção `competencias` escondida (`is_visible=false`) e a composição única mobile em `resultados`. O menu mostra índices sequenciais somente dos itens visíveis.
+
+Não foram alterados schema, papéis, policies RLS, Storage ou segredos. As mudanças de conteúdo e visibilidade no Supabase foram transacionais/guardadas e precisam ser documentadas separadamente da aprovação de CI.
