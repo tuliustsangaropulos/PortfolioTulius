@@ -129,11 +129,20 @@ describe("links de experiência e ícones de ferramentas", () => {
 
   it("liga as seis experiências às seções públicas correspondentes", () => {
     expect(profile?.panelB.slice(5).map((item) => item.targetSlug)).toEqual([
-      "invest-rs", "prefeitura-sp", "vale", "inpress", "globo-sportv", "cdi",
+      "invest-rs",
+      "prefeitura-sp",
+      "vale",
+      "inpress",
+      "globo-sportv",
+      "cdi",
     ])
-    expect(profile?.panelB.slice(5).every((item) =>
-      sections.some((section) => section.slug === item.targetSlug && section.visible)
-    )).toBe(true)
+    expect(
+      profile?.panelB
+        .slice(5)
+        .every((item) =>
+          sections.some((section) => section.slug === item.targetSlug && section.visible),
+        ),
+    ).toBe(true)
   })
 
   it("apresenta seis conjuntos de pictogramas sobre o tema escuro", () => {
