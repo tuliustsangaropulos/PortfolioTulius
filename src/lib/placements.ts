@@ -1,4 +1,4 @@
-import type { ContentItem } from "../types/content"
+import type { ContentItem, ExperienceMedia } from "../types/content"
 
 // Presentation lives in block_placements; content_json remains the sole content source.
 export type PlacementPresentation = {
@@ -17,7 +17,7 @@ export type ContentBlockRow = {
   sort_order: number
   mobile_panel: "a" | "b"
   status: string
-  content_json: { items?: ContentItem[]; source_collection?: string | null } | null
+  content_json: { items?: ContentItem[]; source_collection?: string | null; experienceMedia?: ExperienceMedia } | null
 }
 
 export type SectionPanelRow = {
