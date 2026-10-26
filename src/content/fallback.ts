@@ -600,34 +600,34 @@ export const sections: PortfolioSection[] = [
     panelA: [
       {
         title: "Análise e indicadores",
-        toolIcons: ["analytics","search"],
+        toolIcons: ["analytics", "search"],
         text: "Google Analytics 4 (GA4) · Google Search Console · KPIs, dashboards e relatórios",
       },
       {
         title: "Mídia e performance",
-        toolIcons: ["meta","growth"],
+        toolIcons: ["meta", "growth"],
         text: "Meta Ads · Segmentação e gestão de campanhas · Monitoramento de resultados",
       },
       {
         title: "CRM e monitoramento",
-        toolIcons: ["salesforce","hubspot","sprinklr"],
+        toolIcons: ["salesforce", "hubspot", "sprinklr"],
         text: "Salesforce · HubSpot · Sprinklr · CRM e relacionamento · Monitoramento de reputação",
       },
     ],
     panelB: [
       {
         title: "Projetos e colaboração",
-        toolIcons: ["asana","notion"],
+        toolIcons: ["asana", "notion"],
         text: "Asana · Notion · Planejamento e fluxos de trabalho · Gestão de equipes e entregas",
       },
       {
         title: "Conteúdo e design",
-        toolIcons: ["adobe","figma","wordpress"],
+        toolIcons: ["adobe", "figma", "wordpress"],
         text: "Adobe Creative Cloud · Figma · WordPress · Produção de conteúdo visual e digital",
       },
       {
         title: "Comunicação digital",
-        toolIcons: ["social","video","megaphone"],
+        toolIcons: ["social", "video", "megaphone"],
         text: "Conteúdo e mídias sociais · Comunicação institucional e executiva · Planejamento de campanhas",
       },
     ],
