@@ -3,6 +3,7 @@ import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage, validateContentItems } from "../../lib/validation"
 import { stagePrivateMediaChange } from "../../lib/media-operations"
 import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
+import { PublishedMediaPicker } from "./PublishedMediaPicker"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
 import type {
   ContentItem,
@@ -835,24 +836,23 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     espaço reservado identificado, não uma fotografia fictícia.
                   </p>
                   <div className="field-grid">
-                    <label>
-                      URL do logo da empresa (/media/arquivo ou HTTPS)
-                      <input
-                        value={draft.content_json.experienceMedia?.logo ?? ""}
-                        onChange={(event) =>
-                          setDraft({
-                            ...draft,
-                            content_json: {
-                              ...draft.content_json,
-                              experienceMedia: {
-                                ...draft.content_json.experienceMedia,
-                                logo: event.target.value,
-                              },
+                    <PublishedMediaPicker
+                      label="Logotipo da empresa"
+                      value={draft.content_json.experienceMedia?.logo ?? ""}
+                      onChange={(logo, alt) =>
+                        setDraft({
+                          ...draft,
+                          content_json: {
+                            ...draft.content_json,
+                            experienceMedia: {
+                              ...draft.content_json.experienceMedia,
+                              logo,
+                              logoAlt: alt,
                             },
-                          })
-                        }
-                      />
-                    </label>
+                          },
+                        })
+                      }
+                    />
                     <label>
                       Descrição alternativa do logo
                       <input
@@ -954,7 +954,6 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         {(
                           [
                             ["title", "Título do projeto"],
-                            ["image", "URL da foto"],
                             ["alt", "Descrição alternativa da foto"],
                             ["caption", "Legenda da imagem"],
                           ] as const
@@ -982,6 +981,24 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             />
                           </label>
                         ))}
+                        <PublishedMediaPicker
+                          label="Fotografia do slide"
+                          value={slide.image ?? ""}
+                          onChange={(image, alt) => {
+                            const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
+                            slides[slideIndex] = { ...slide, image, alt }
+                            setDraft({
+                              ...draft,
+                              content_json: {
+                                ...draft.content_json,
+                                experienceMedia: {
+                                  ...draft.content_json.experienceMedia,
+                                  slides,
+                                },
+                              },
+                            })
+                          }}
+                        />
                       </div>
                     </div>
                   ))}
@@ -1327,13 +1344,11 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         </small>
                       </fieldset>
                     )}
-                    <label>
-                      Imagem
-                      <input
-                        value={item.image ?? ""}
-                        onChange={(event) => updateItem(index, { image: event.target.value })}
-                      />
-                    </label>
+                    <PublishedMediaPicker
+                      label="Imagem do item"
+                      value={item.image ?? ""}
+                      onChange={(image, alt) => updateItem(index, { image, alt })}
+                    />
                     <label>
                       Texto alternativo
                       <input
@@ -1345,20 +1360,19 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                       draft.mobile_panel === "a" &&
                       index === 0 && (
                         <>
-                          <label className="field-wide">
-                            Imagem central da seção 02 (desktop)
-                            <input
+                          <div className="field-wide">
+                            <PublishedMediaPicker
+                              label="Imagem central da seção 02 (desktop)"
                               value={item.aboutDesktopImage ?? ""}
-                              placeholder="/media/tulius-contact.jpg"
-                              onChange={(event) =>
-                                updateItem(index, { aboutDesktopImage: event.target.value })
+                              onChange={(aboutDesktopImage, alt) =>
+                                updateItem(index, { aboutDesktopImage, aboutDesktopAlt: alt })
                               }
                             />
                             <small>
                               Se vazio, usa /media/tulius-contact.jpg. A imagem do painel mobile
                               continua no campo Imagem acima.
                             </small>
-                          </label>
+                          </div>
                           <label className="field-wide">
                             Descrição da imagem central (desktop)
                             <input

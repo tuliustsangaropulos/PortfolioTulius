@@ -95,3 +95,12 @@ A Biblioteca de mídia agora exibe a **imagem real**, em vez de um ícone fixo, 
 - **Bucket `portfolio-public`:** a URL pública é obtida pelo SDK via `getPublicUrl(storage_path)`; não é necessário abrir o bucket privado para visitantes.
 - **Fluxos preservados:** upload privado, metadados, revisão, publicação, substituição e referência de logo por URL em `Blocos e painéis`. Não houve alteração de Auth, RLS, bucket nem conteúdo editorial.
 - **Limite:** testes unitários cobrem geração da URL e falhas. Sem execução E2E com JWT admin, não afirmar que o carregamento de imagens privadas foi homologado no navegador real.
+
+
+## Seleção de imagens nos Blocos — 26/10/2026
+
+Em **Admin → Blocos e painéis**, os antigos campos de URL para imagens dos itens, foto principal desktop da seção Olá!, logos das seis empresas e fotografias dos slides foram substituídos por **Escolher da biblioteca**, com grade de miniaturas, busca pelo título/nome e indicação da seleção atual. A imagem escolhida grava a URL pública existente no mesmo campo do JSONB (sem migração) somente ao clicar em **Salvar alterações / Salvar bloco**.
+
+A lista inclui exclusivamente imagens com `status=published`, `storage_bucket=portfolio-public`, MIME de imagem permitido e caminho válido. Arquivos privados e rascunhos não podem ser referenciados pelo site público. Primeiro envie e publique na aba **Mídia**, depois escolha em **Blocos**. A descrição alternativa é preenchida com o `alt_text` cadastrado na biblioteca; revise-a no contexto da seção antes de salvar. A ação **Remover imagem** limpa a associação no formulário e exige salvar o bloco; na foto desktop da seção Olá!, valor vazio preserva o fallback local `/media/tulius-contact.jpg`.
+
+Referências antigas HTTPS ou `/media/` continuam exibidas/preservadas no formulário mesmo que não constem da biblioteca; não são apagadas automaticamente. Não foram alterados os registros de `media_assets`, os arquivos de Storage, as políticas RLS, nem as demais partes do CMS. Login, gravação e escolha visual com JWT administrativo real exigem homologação humana separada.
