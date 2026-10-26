@@ -31,3 +31,9 @@ O proprietário determinou **não revogar o token pessoal Supabase anteriormente
 Esta decisão **não demonstra que o token exposto seja seguro**: caso ainda esteja válido, permanece o risco de uso não autorizado, inclusive porque versões históricas do Git podem conter a credencial. Também permanece desativada a checagem de senhas comprometidas. A decisão do proprietário registra aceitação de prosseguir sem essas duas medidas, **não** aprovação técnica do risco ou resolução dos avisos de segurança.
 
 Prosseguir com P4/P5/P6 sem alterar essa escolha; registrar em relatórios futuros como **risco aceito, não corrigido**, sem cobranças repetidas.
+
+## Ajustes visuais da seção 01 — fase de avaliação manual (25/10/2026)
+
+Implementados no código: links integrais e hover dos cinco cards de especialidades, destino padrão para `#resultados` com seletor no CMS, selo reposicionado e texto expandido para Comunicação e Marketing, seta inferior animada e navegação sem mostrar a faixa da seção anterior, e título **MENU** no drawer. Sem alteração de schema ou dados publicados do Supabase (o padrão de texto do selo não exige persistência porque o JSON do perfil ainda não declara `hero.badgeText`).
+
+**A validar pelo proprietário:** conferir visualmente o círculo e a legibilidade da frase em tamanhos diferentes; os cinco hover/foco e o clique no desktop e mobile; se `#sobre` ocupa integralmente a tela após clicar na seta; uso do seletor no admin com JWT real, gravação/preview/publicação e rollback editorial em contexto controlado. A confirmação de build Vercel `READY` **não substitui** essas verificações visuais nem o aceite. Próxima frente acordada: avaliar a **seção 02**, sem iniciar mudança nela nesta entrega.
