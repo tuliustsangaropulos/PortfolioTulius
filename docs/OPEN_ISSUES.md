@@ -45,3 +45,11 @@ Implementados no código: links integrais e hover dos cinco cards de especialida
 **Qualidade técnica:** o GitHub Actions `Validate PortfolioTulius` passou completamente no commit `d6e1083` (formatação, TypeScript, Vitest, build, smoke e sintaxe das suítes). Evidência: https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40263871192. Uma melhoria na rotina CI exibe o diff sugerido por `oxfmt` quando a checagem de formatação falha; não modifica arquivos persistidos pelo runner.
 
 **Homologação pendente:** comparar o resultado visual com o anexo 2 da solicitação em navegadores reais, incluindo ajuste fino de recorte/posição da imagem em desktop baixo, 768 px e zoom; testar a edição/salvamento de imagem desktop e dos três textos em sessão real do admin; confirmar o último deployment Vercel e o workflow Lighthouse no SHA final documental. Não registrar teste visual ou CMS autenticado como aprovado sem execução.
+
+## Atualização de conteúdo das seções 02 e 03 — 26/10/2026
+
+Concluído e verificado no Supabase: cinco textos em uma única lista editável no painel B de `sobre` (inicialmente 5; quantidade variável, com ações adicionar/editar/excluir/reordenar no CMS), enquanto o painel A permanece responsável pela fotografia. Renderers desktop/mobile usam uma única fonte de texto. Na seção `resultados`, os sete títulos anteriores do painel B foram substituídos pelos cinco temas de especialidades da seção 01; os quatro indicadores do painel A não foram alterados.
+
+A pendência `panelB.placeholder` (X/Y/Z/XXXXX) da seção `resultados` foi marcada `resolved` no banco com justificativa; preservar registro histórico, mas **não classificar essa pendência específica como aberta daqui em diante**. Os outros itens editoriais e decisões de segurança permanecem inalterados. Este fechamento refere-se apenas ao placeholder removido do painel B, não a qualquer indicador ou informação que ainda precise comprovação.
+
+**Pendências de aceite:** testar autenticamente inclusão, edição, ordem, exclusão, confirmação e salvamento do bloco `sobre/B` pela UI; inspecionar cinco textos em desktop/mobile e correspondência dos títulos da seção 03; confirmar acessibilidade/overflow em desktop baixo e mobile. Ver `docs/CONTINUIDADE_CONTEUDO_SECOES_02_03_2026-10-26.md`.
