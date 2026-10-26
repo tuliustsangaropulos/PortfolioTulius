@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest"
-import { getPublishedImageChoices, withOpenGraphImage, type MediaLibraryRow } from "./media-selection"
+import {
+  getPublishedImageChoices,
+  withOpenGraphImage,
+  type MediaLibraryRow,
+} from "./media-selection"
 
 const base: MediaLibraryRow = {
   id: "a",
@@ -74,7 +78,11 @@ describe("getPublishedImageChoices", () => {
 
 describe("withOpenGraphImage", () => {
   it("keeps other SEO options while selecting a published image", () => {
-    const original = { canonical: "https://tulius.work/", robots: "index,follow", ogImage: "https://old.example/og.png" }
+    const original = {
+      canonical: "https://tulius.work/",
+      robots: "index,follow",
+      ogImage: "https://old.example/og.png",
+    }
     const changed = withOpenGraphImage(original, "https://assets.example/share.png")
     expect(changed).toEqual({
       canonical: "https://tulius.work/",

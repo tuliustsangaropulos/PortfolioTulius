@@ -2106,8 +2106,8 @@ export function SeoStudio() {
                 }
               />
               <small>
-                Selecione uma imagem publicada. A alteração dos metadados HTML será aplicada
-                no próximo deploy após salvar o SEO.
+                Selecione uma imagem publicada. A alteração dos metadados HTML será aplicada no
+                próximo deploy após salvar o SEO.
               </small>
             </div>
             <label className="field-wide">
