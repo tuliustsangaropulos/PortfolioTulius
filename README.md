@@ -106,3 +106,11 @@ A seção **Formação** utiliza agora o fundo escuro `#171617` e tipografia bra
 Cada experiência possui logotipo opcional, título, lista de realizações existente e galeria de slides associada a projetos reais, editável no CMS. Os 18 slides editoriais iniciais contêm títulos de projetos, **mas não fotografias**: não havia imagens de portfólio ou marcas aprovadas no GitHub, em `public/media`, em `media_assets` nem no Storage. O frontend mostra espaços reservados explicitamente identificados e monogramas temporários, sem simular fotografias do trabalho. As URLs aprovadas, descrições alternativas e legendas podem ser cadastradas em `/admin` → **Blocos e painéis** → empresa → **Painel A**.
 
 Ver `docs/CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md`. Verificar validação de deployment em `docs/OPEN_ISSUES.md`; a API Vercel apresentou limite diário de implantações, portanto o SHA publicado deve ser conferido antes do aceite visual.
+
+## Ferramentas, experiências clicáveis e hover de contato — 26/10/2026
+
+A seção `#ferramentas` utiliza o tema escuro da identidade (`ink` / `#171617`) com títulos brancos/laranja e conjuntos de ícones vetoriais locais para as seis categorias de ferramentas. Os nomes/descrições originais permanecem no CMS. A seleção de até três pictogramas por grupo está no bloco A ou B de Ferramentas, campo **Ícones de plataformas**.
+
+Os seis itens de **Experiência e atuação** na seção 01 agora apontam, respectivamente, para `#invest-rs`, `#prefeitura-sp`, `#vale`, `#inpress`, `#globo-sportv`, `#cdi`. O card inteiro é uma âncora com hover e foco visível, tanto no desktop como no mobile; o destino pode ser editado em **Perfil → Blocos e painéis → painel B** (itens 6–11). Os cinco cards de especialidades continuam com o próprio mecanismo independente de navegação para a seção 03.
+
+No Contato, os títulos e valores clicáveis ganham contraste branco em hover/foco, mantendo a base laranja. Não foram alterados números, e-mails, URLs, empresas ou conteúdos. Ver `docs/CONTINUIDADE_FERRAMENTAS_CARDS_CONTATO_2026-10-26.md`.
