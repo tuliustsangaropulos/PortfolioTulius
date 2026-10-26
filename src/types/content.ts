@@ -1,4 +1,14 @@
-export type MetricIconName = "chart" | "trending" | "users" | "newspaper" | "target" | "megaphone" | "briefcase" | "calendar" | "award" | "layers"
+export type MetricIconName =
+  | "chart"
+  | "trending"
+  | "users"
+  | "newspaper"
+  | "target"
+  | "megaphone"
+  | "briefcase"
+  | "calendar"
+  | "award"
+  | "layers"
 
 export type ThemeName = "paper" | "cream" | "ink" | "orange"
 
