@@ -12,8 +12,12 @@ Os cinco primeiros itens de `content_blocks.content_json.items` no bloco `perfil
 
 Esse campo é armazenado no JSONB já existente, validado no cliente e persistido pela RPC `save_content_block_atomic`. **Nenhuma nova coluna, tabela, migration ou permissão foi criada.** A configuração do card é distinta dos itens do menu (`navigation_items`).
 
-## Seção 02: uma fonte de conteúdo, duas apresentações
+## Seções 02 e 03 — conteúdo após revisão de 26/10/2026
 
-`sections.slug = 'sobre'` mantém o layout editorial padrão no banco, mas `PublicSite.tsx` seleciona uma composição desktop de três colunas. `content_blocks` / `mobile_panel='a'` contém o item **Estratégia também é escuta**: `title` e `text` são renderizados como **terceiro texto da coluna direita** sem `image` no desktop; o mesmo item preserva seu formato original no mobile. O campo `image` existente alimenta o mobile; os novos opcionais `aboutDesktopImage` e `aboutDesktopAlt` permitem a imagem central desktop com fonte independente e alt próprio. `mobile_panel='b'` fornece os outros dois textos da direita na ordem atual.
+A seção `sobre` mantém dois blocos `content_blocks` e não recebeu novas tabelas:
+- `mobile_panel='a'`: **um item técnico de foto**, com `title="Imagem da seção 02"`, `image/alt` mobile e campos opcionais `aboutDesktopImage/aboutDesktopAlt` para o centro desktop.
+- `mobile_panel='b'`: **array JSONB de declarações** (inicialmente 5, sem limite fixo), cada uma contendo `title` e `text`. Ordem: Estratégia também é escuta.; Comunicação de ponta a ponta; Visão editorial; Resultados que orientam decisões; A voz de quem lidera. O componente desktop percorre a lista completa e o mobile reutiliza o primeiro título/texto com a foto no painel A e os demais no painel B. Não há duplicação do texto no banco.
 
-Os campos opcionais ficam dentro do JSONB `content_blocks.content_json.items`, sem migração. Se a imagem desktop estiver ausente, utiliza-se o asset já versionado `/media/tulius-contact.jpg` com alt padrão descritivo. No CMS, o mesmo item continua editável pelo fluxo transacional existente.
+Na seção `resultados`, o painel B contém os cinco títulos correspondentes aos cards de especialidades da seção 01, em substituição aos sete títulos anteriores, inclusive ao placeholder `XXXXX · X/Y/Z`. O painel A de métricas não foi alterado. O registro de `editorial_issues` para o placeholder foi mantido com `status='resolved'` e motivo da resolução; não foi apagado.
+
+Todas as edições do administrador seguem `save_content_block_atomic` e a estrutura existente de RLS/revisões; a mudança dos dados publicados foi realizada por transação SQL controlada e confirmada com leitura posterior. **Os títulos da seção 03 são um snapshot editorial, não uma referência relacional dinâmica às especialidades da seção 01.**
