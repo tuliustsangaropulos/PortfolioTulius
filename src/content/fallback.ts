@@ -97,31 +97,37 @@ export const sections: PortfolioSection[] = [
       { title: "Imprensa e influenciadores", themeKey: "imprensa", label: "05" },
       {
         title: "Invest RS",
+        targetSlug: "invest-rs",
         meta: "Porto Alegre · 2026",
         text: "Gestão de Eventos · Comunicação Institucional · Relações Públicas · Inovação Digital",
       },
       {
         title: "Prefeitura de São Paulo",
+        targetSlug: "prefeitura-sp",
         meta: "2024–2026",
         text: "Liderança de Equipes · Relacionamento com a Imprensa · Gestão de Crise · Estratégia Digital · Comunicação Interna · Media Training",
       },
       {
         title: "Vale",
+        targetSlug: "vale",
         meta: "São Paulo · 2020–2024",
         text: "Comunicação Corporativa Global · Comunicação Executiva · Gestão de Projetos · Campanhas Digitais · Reputação e Gestão de Crise",
       },
       {
         title: "Grupo InPress",
+        targetSlug: "inpress",
         meta: "São Paulo · 2019–2020",
         text: "Assessoria de Imprensa · Relações Públicas · Gestão de Contas · Comunicação Integrada · Branding e Design",
       },
       {
         title: "TV Globo/SporTV",
+        targetSlug: "globo-sportv",
         meta: "Rio de Janeiro, Pequim e São Paulo · 2015–2019",
         text: "Jornalismo · Correspondente Internacional · Produção, Reportagem e Edição · Conteúdo Editorial",
       },
       {
         title: "CDI Comunicação",
+        targetSlug: "cdi",
         meta: "São Paulo · 2014–2015",
         text: "Planejamento Estratégico · Comunicação Institucional · Relações Públicas · Gestão de Stakeholders",
       },
@@ -587,35 +593,41 @@ export const sections: PortfolioSection[] = [
     slug: "ferramentas",
     number: 12,
     title: "Ferramentas",
-    theme: "cream",
+    theme: "ink",
     layout: "editorial",
     status: "published",
     visible: true,
     panelA: [
       {
         title: "Análise e indicadores",
+        toolIcons: ["analytics","search"],
         text: "Google Analytics 4 (GA4) · Google Search Console · KPIs, dashboards e relatórios",
       },
       {
         title: "Mídia e performance",
+        toolIcons: ["meta","growth"],
         text: "Meta Ads · Segmentação e gestão de campanhas · Monitoramento de resultados",
       },
       {
         title: "CRM e monitoramento",
+        toolIcons: ["salesforce","hubspot","sprinklr"],
         text: "Salesforce · HubSpot · Sprinklr · CRM e relacionamento · Monitoramento de reputação",
       },
     ],
     panelB: [
       {
         title: "Projetos e colaboração",
+        toolIcons: ["asana","notion"],
         text: "Asana · Notion · Planejamento e fluxos de trabalho · Gestão de equipes e entregas",
       },
       {
         title: "Conteúdo e design",
+        toolIcons: ["adobe","figma","wordpress"],
         text: "Adobe Creative Cloud · Figma · WordPress · Produção de conteúdo visual e digital",
       },
       {
         title: "Comunicação digital",
+        toolIcons: ["social","video","megaphone"],
         text: "Conteúdo e mídias sociais · Comunicação institucional e executiva · Planejamento de campanhas",
       },
     ],
