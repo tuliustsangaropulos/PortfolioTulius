@@ -51,7 +51,7 @@ export function resolveHeroCardDestination(
 }
 
 export function isSafeEditorialImage(value: string) {
-  if (/^\\/media\\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(value)) return true
+  if (value.startsWith("/media/")) return /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(value.slice(7))
   if (value.startsWith("https://")) {
     try {
       return new URL(value).protocol === "https:"
