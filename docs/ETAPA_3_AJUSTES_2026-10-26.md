@@ -24,6 +24,8 @@ Foram incluídas notas editoriais de consolidação sem alterar `content_json`, 
 
 ## Segurança e pendências preservadas
 
-Não há alteração de schema, RLS, grants, funções, Auth, buckets, PAT, Leaked Password Protection nem usuários. O item de navegação para a seção oculta `competencias` ainda merece alinhamento de metadados, mas não é exposto pelo menu público graças ao filtro de seções visíveis.
+Não há alteração de schema, RLS, grants, funções, Auth, buckets, PAT, Leaked Password Protection nem usuários. A navegação foi conciliada no Supabase: o registro `competencias` passou a `is_visible=false`, permanecendo 13 itens de navegação publicados e visíveis. A seção e seu conteúdo histórico continuam preservados.
 
-Pendências de aceite: execução Lighthouse/P3 no código final implantado, validação de performance mobile, sessão real P5 Admin Read-Only, simulações de falhas em Storage com JWT real e confirmação de UX nos principais breakpoints. Commit/CI/deployment devem ser verificados por SHA: alterações no repositório não garantem publicação automática.
+**Evidências automatizadas:** no commit `e3bc828a487cd5fc17604cd1d20a986292225f8d`, o CI `Validate PortfolioTulius` passou (formatação, TypeScript, 46/46 testes em 7 arquivos, build e smoke). A auditoria `Audit P3 Lighthouse`, executada no SHA `9ac8eb5321baf54eba802ebe10754a40a0e096b6` que contém a correção CSS, passou em 8 viewports e 38 capturas, sem overflow de página; Lighthouse mobile 75/100 performance, 100 acessibilidade, 100 boas práticas e 100 SEO; desktop 96/100 performance, 100 nas outras categorias. O SHA de auditoria precede dois ajustes no wrapper de gravação do CMS, sem mudanças posteriores no CSS público. A Vercel confirmou `READY` do SHA `e3bc828`.
+
+**Pendências de aceite:** validar performance mobile (LCP ~4,51 s), sessão real P5 Admin Read-Only, operações de mídia com JWT real e confirmação manual de UX nos principais breakpoints. A implantação automática e testes de produção não substituem aceite humano nem autenticação administrativa.
