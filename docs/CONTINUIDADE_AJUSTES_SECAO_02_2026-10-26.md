@@ -60,3 +60,9 @@ Foram atualizados `README.md`, `docs/ADMIN_CMS.md`, `docs/CONTENT_MODEL.md`, `do
 **Fontes do projeto ChatGPT:** adicionar este arquivo como a fonte mais recente da seção 02. Continuar preservando `CONTINUIDADE_AJUSTES_SECAO_01_PORTFOLIOTULIUS_2026-10-25.md` e demais arquivos históricos; não sobrescrevê-los. Se necessário atualizar o relatório consolidado de estado no GitHub e substituir apenas sua cópia antiga anexada às fontes.
 
 **Próxima interação:** receber do proprietário feedback visual real da seção 02 e refinamentos pontuais; não redesenhar outras seções sem instrução.
+
+## 7. Refinamento pós-auditoria da fotografia
+
+As capturas P4 do commit `d6e1083` revelaram que `tulius-contact.jpg` tem fundo preto e este obscurecia o círculo branco quando exibido diretamente. Sem alterar o asset de origem, o CSS `.about-portrait img` recebeu um recorte de silhueta por `clip-path`; a imagem voltou à composição sobre o halo branco, sem retângulo preto. A auditoria P4 do SHA `ac15053c` confirmou visualmente essa eliminação na captura desktop de 1440×900 ([run 40264875355](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40264875355)). A distância da foto ao topo foi refinada e o contorno superior suavizado posteriormente em `cdd2e110`; essas últimas mudanças dependem de sua própria verificação de CI/print.
+
+O `clip-path` é uma máscara CSS de apresentação feita para o asset padrão do repositório. **Ao trocar `aboutDesktopImage` no CMS por outra foto, o recorte pode não coincidir com a nova silhueta.** Essa limitação deve orientar futuros refinamentos: caso haja uma foto PNG/WebP com transparência já preparada, preferir uma regra sem máscara específica e manter a foto original do CMS intacta.
