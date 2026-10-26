@@ -85,7 +85,9 @@ function ItemCard({
   const content = (
     <>
       {layout === "metrics" && item.value && (
-        <span className="result-metric-icon"><Icon name={item.metricIcon ?? "chart"} size={23} /></span>
+        <span className="result-metric-icon">
+          <Icon name={item.metricIcon ?? "chart"} size={23} />
+        </span>
       )}
       {item.image && (
         <img
@@ -337,7 +339,9 @@ function MobilePanel({
                     : undefined
                 }
                 onNavigate={
-                  isProfile && panel === "b" && i < 5 &&
+                  isProfile &&
+                  panel === "b" &&
+                  i < 5 &&
                   resolveHeroCardDestination(item.targetSlug, publishedSlugs) === "resultados"
                     ? () => onSelectTheme(item.themeKey || RESULT_THEME_KEYS[i])
                     : undefined
@@ -479,7 +483,6 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
   )
 }
 
-
 const RESULT_THEME_KEYS = ["corporativa", "projetos", "eventos", "marketing", "imprensa"]
 
 function ResultsCenter({
@@ -491,7 +494,9 @@ function ResultsCenter({
 }) {
   const topics = section.desktopPanelB ?? section.panelB
   const metrics = section.desktopPanelA ?? section.panelA
-  const topic = topics.find((item, index) => (item.themeKey || RESULT_THEME_KEYS[index]) === selectedTheme)
+  const topic = topics.find(
+    (item, index) => (item.themeKey || RESULT_THEME_KEYS[index]) === selectedTheme,
+  )
   const filteredMetrics = topic
     ? metrics.filter((item) => item.relatedThemeKeys?.includes(topic.themeKey || ""))
     : metrics
@@ -514,7 +519,9 @@ function ResultsCenter({
             <div className="results-inherited">
               <strong>Competências e experiência</strong>
               <ul>
-                {topic.inheritedHighlights?.map((highlight) => <li key={highlight}>{highlight}</li>)}
+                {topic.inheritedHighlights?.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
               </ul>
             </div>
           )}
@@ -656,7 +663,11 @@ function Section({
         ) : section.slug === "sobre" ? (
           <AboutDesktop section={section} />
         ) : section.slug === "resultados" ? (
-          <ResultsDesktop section={section} selectedTheme={selectedTheme} onSelectTheme={onSelectTheme} />
+          <ResultsDesktop
+            section={section}
+            selectedTheme={selectedTheme}
+            onSelectTheme={onSelectTheme}
+          />
         ) : (
           <div className="desktop-editorial">
             <header className="section-heading">
@@ -691,23 +702,27 @@ function Section({
       </div>
       <div className="mobile-panels">
         {section.slug === "resultados" ? (
-          <ResultsMobile section={section} selectedTheme={selectedTheme} onSelectTheme={onSelectTheme} />
+          <ResultsMobile
+            section={section}
+            selectedTheme={selectedTheme}
+            onSelectTheme={onSelectTheme}
+          />
         ) : (
           <>
-        <MobilePanel
-          section={section}
-          panel="a"
-          items={section.panelA}
-          publishedSlugs={publishedSlugs}
-          onSelectTheme={onSelectTheme}
-        />
-        <MobilePanel
-          section={section}
-          panel="b"
-          items={section.panelB}
-          publishedSlugs={publishedSlugs}
-          onSelectTheme={onSelectTheme}
-        />
+            <MobilePanel
+              section={section}
+              panel="a"
+              items={section.panelA}
+              publishedSlugs={publishedSlugs}
+              onSelectTheme={onSelectTheme}
+            />
+            <MobilePanel
+              section={section}
+              panel="b"
+              items={section.panelB}
+              publishedSlugs={publishedSlugs}
+              onSelectTheme={onSelectTheme}
+            />
           </>
         )}
       </div>
