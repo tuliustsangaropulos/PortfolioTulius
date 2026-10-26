@@ -1,5 +1,7 @@
+import type { MetricIconName } from "../../types/content"
+
 type IconProps = {
-  name: "menu" | "close" | "arrow" | "up" | "down" | "edit" | "image" | "palette" | "logout"
+  name: "menu" | "close" | "arrow" | "up" | "down" | "edit" | "image" | "palette" | "logout" | MetricIconName
   size?: number
 }
 
@@ -48,6 +50,16 @@ export function Icon({ name, size = 22 }: IconProps) {
         <path d="M7 10h.01M8.5 6.5h.01M13 6h.01" />
       </>
     ),
+    chart: <><path d="M4 20V4M4 20h16M8 17v-5M12 17V8M16 17V5" /></>,
+    trending: <><path d="M3 17l6-6 4 4 8-8M15 7h6v6" /></>,
+    users: <><circle cx="9" cy="8" r="3" /><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 5a3 3 0 0 1 0 6M19 14a5 5 0 0 1 2 4v2" /></>,
+    newspaper: <><path d="M5 3h14v18H5a3 3 0 0 1-3-3V6M8 7h7M8 11h8M8 15h8" /></>,
+    target: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1" /></>,
+    megaphone: <><path d="M3 11h4l11-6v14L7 13H3zM7 13l2 6h4" /></>,
+    briefcase: <><rect x="3" y="7" width="18" height="14" rx="2" /><path d="M8 7V4h8v3M3 13h18" /></>,
+    calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4M17 3v4M3 10h18" /></>,
+    award: <><circle cx="12" cy="8" r="5" /><path d="m8 12-2 9 6-3 6 3-2-9" /></>,
+    layers: <><path d="m12 2 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 17l9 5 9-5" /></>,
     logout: (
       <>
         <path d="M10 5H5v14h5M14 8l4 4-4 4M9 12h9" />
