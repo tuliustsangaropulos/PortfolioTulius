@@ -103,11 +103,19 @@ describe("validação do conteúdo interativo de resultados", () => {
 
 describe("ícones de Ferramentas", () => {
   it("aceita até três pictogramas locais por item", () => {
-    expect(validateContentItems([{title: "Análise", toolIcons: ["analytics","search"]}])).toHaveLength(0)
+    expect(
+      validateContentItems([{ title: "Análise", toolIcons: ["analytics", "search"] }]),
+    ).toHaveLength(0)
   })
   it("rejeita símbolos não autorizados, repetições ou mais de três", () => {
-    expect(validateContentItems([{title: "A",toolIcons: ["fake" as "analytics"]}])).toHaveLength(1)
-    expect(validateContentItems([{title: "A",toolIcons: ["analytics","analytics"]}])).toHaveLength(1)
-    expect(validateContentItems([{title: "A",toolIcons: ["analytics","search","meta","growth"]}])).toHaveLength(1)
+    expect(validateContentItems([{ title: "A", toolIcons: ["fake" as "analytics"] }])).toHaveLength(
+      1,
+    )
+    expect(
+      validateContentItems([{ title: "A", toolIcons: ["analytics", "analytics"] }]),
+    ).toHaveLength(1)
+    expect(
+      validateContentItems([{ title: "A", toolIcons: ["analytics", "search", "meta", "growth"] }]),
+    ).toHaveLength(1)
   })
 })
