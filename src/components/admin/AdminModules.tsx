@@ -811,10 +811,10 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                   <div className="admin-card">
                     <strong>Textos da seção 02 — coluna direita</strong>
                     <p>
-                      Cada item corresponde a um título e texto. Use Adicionar item, as setas
-                      de ordenação e Remover item para gerenciar a lista completa. O primeiro
-                      item também aparece junto à foto no painel A mobile. Clique em Salvar
-                      alterações para publicar suas edições no bloco.
+                      Cada item corresponde a um título e texto. Use Adicionar item, as setas de
+                      ordenação e Remover item para gerenciar a lista completa. O primeiro item
+                      também aparece junto à foto no painel A mobile. Clique em Salvar alterações
+                      para publicar suas edições no bloco.
                     </p>
                   </div>
                 )}
