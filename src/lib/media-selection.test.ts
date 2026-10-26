@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { getPublishedImageChoices, type MediaLibraryRow } from "./media-selection"
+import { getPublishedImageChoices, withOpenGraphImage, type MediaLibraryRow } from "./media-selection"
 
 const base: MediaLibraryRow = {
   id: "a",
@@ -69,5 +69,31 @@ describe("getPublishedImageChoices", () => {
         throw new Error("storage")
       }),
     ).toEqual([])
+  })
+})
+
+describe("withOpenGraphImage", () => {
+  it("keeps other SEO options while selecting a published image", () => {
+    const original = { canonical: "https://tulius.work/", robots: "index,follow", ogImage: "https://old.example/og.png" }
+    const changed = withOpenGraphImage(original, "https://assets.example/share.png")
+    expect(changed).toEqual({
+      canonical: "https://tulius.work/",
+      robots: "index,follow",
+      ogImage: "https://assets.example/share.png",
+    })
+    expect(original.ogImage).toBe("https://old.example/og.png")
+  })
+
+  it("can clear the image without losing SEO metadata", () => {
+    expect(withOpenGraphImage({ canonical: "https://tulius.work/" }, "")).toEqual({
+      canonical: "https://tulius.work/",
+      ogImage: "",
+    })
+  })
+
+  it("accepts empty original configuration", () => {
+    expect(withOpenGraphImage(null, "https://assets.example/share.png")).toEqual({
+      ogImage: "https://assets.example/share.png",
+    })
   })
 })

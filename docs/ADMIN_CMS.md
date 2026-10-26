@@ -104,3 +104,14 @@ Em **Admin → Blocos e painéis**, os antigos campos de URL para imagens dos it
 A lista inclui exclusivamente imagens com `status=published`, `storage_bucket=portfolio-public`, MIME de imagem permitido e caminho válido. Arquivos privados e rascunhos não podem ser referenciados pelo site público. Primeiro envie e publique na aba **Mídia**, depois escolha em **Blocos**. A descrição alternativa é preenchida com o `alt_text` cadastrado na biblioteca; revise-a no contexto da seção antes de salvar. A ação **Remover imagem** limpa a associação no formulário e exige salvar o bloco; na foto desktop da seção Olá!, valor vazio preserva o fallback local `/media/tulius-contact.jpg`.
 
 Referências antigas HTTPS ou `/media/` continuam exibidas/preservadas no formulário mesmo que não constem da biblioteca; não são apagadas automaticamente. Não foram alterados os registros de `media_assets`, os arquivos de Storage, as políticas RLS, nem as demais partes do CMS. Login, gravação e escolha visual com JWT administrativo real exigem homologação humana separada.
+
+
+## Seletor de imagem em todos os formulários aplicáveis (26/10/2026)
+
+Foi feita a inspeção dos formulários de `AdminApp.tsx` e `AdminModules.tsx`. A única referência de **imagem** ainda editável como texto livre fora de **Blocos e painéis** era **SEO → Imagem Open Graph** (`site_settings.seo_json.ogImage`). Esse campo passou a usar o componente visual `PublishedMediaPicker`, com busca, miniatura, remoção e seleção de mídias publicadas.
+
+A alteração de `ogImage` preserva as demais propriedades de `seo_json`, inclusive `canonical` e `robots`. É gravada somente pelo botão **Salvar SEO**, pela RPC existente `save_home_seo_atomic`. Os metadados embutidos no HTML e nas prévias sociais são regenerados no **próximo build/deploy**; mudar o banco não altera imediatamente o HTML já entregue ao visitante.
+
+Inventário de campos com seletor: `content_json.items[].image`, `content_json.items[].aboutDesktopImage`, `content_json.experienceMedia.logo`, `content_json.experienceMedia.slides[].image`, e `site_settings.seo_json.ogImage`. A Biblioteca de mídia propriamente dita administra objetos, prévias, upload e metadados, não vínculos de imagem em páginas. **Coleções** não expõe campo de imagem editável no formulário atual. URLs genéricas, endereços de contato, `canonical`, cores e seletores de ícones continuam sendo controles apropriados aos seus tipos — não imagens.
+
+Não foram alterados imagens existentes, conteúdo editorial, banco de dados, Auth, Storage ou RLS. A sessão administrativa com JWT real e a prévia real de redes sociais continuam condições separadas de aceite.

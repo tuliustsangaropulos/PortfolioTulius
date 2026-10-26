@@ -52,3 +52,11 @@ export function getPublishedImageChoices(
         : []
     })
 }
+
+/** Keep unrelated SEO options unchanged when choosing or clearing the share image. */
+export function withOpenGraphImage(
+  seoJson: Record<string, unknown> | null | undefined,
+  imageUrl: string,
+): Record<string, unknown> {
+  return { ...(seoJson ?? {}), ogImage: imageUrl }
+}

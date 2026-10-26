@@ -4,6 +4,7 @@ import { isSafeEditorialImage, validateContentItems } from "../../lib/validation
 import { stagePrivateMediaChange } from "../../lib/media-operations"
 import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
 import { PublishedMediaPicker } from "./PublishedMediaPicker"
+import { withOpenGraphImage } from "../../lib/media-selection"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
 import type {
   ContentItem,
@@ -2093,22 +2094,22 @@ export function SeoStudio() {
                 onChange={(event) => setPage({ ...page, seo_description: event.target.value })}
               />
             </label>
-            <label className="field-wide">
-              Imagem Open Graph
-              <input
+            <div className="field-wide">
+              <PublishedMediaPicker
+                label="Imagem Open Graph (compartilhamento)"
                 value={settings.seo_json?.ogImage ?? ""}
-                onChange={(event) =>
+                onChange={(ogImage) =>
                   setSettings({
                     ...settings,
-                    seo_json: {
-                      ...(settings.seo_json ?? {}),
-                      ogImage: event.target.value,
-                    },
+                    seo_json: withOpenGraphImage(settings.seo_json, ogImage),
                   })
                 }
-                placeholder="URL HTTPS de mídia aprovada"
               />
-            </label>
+              <small>
+                Selecione uma imagem publicada. A alteração dos metadados HTML será aplicada
+                no próximo deploy após salvar o SEO.
+              </small>
+            </div>
             <label className="field-wide">
               Canonical
               <input
