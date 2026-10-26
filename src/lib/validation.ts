@@ -64,7 +64,23 @@ export function isSafeEditorialImage(value: string) {
 
 export function validateContentItems(items: ContentItem[]) {
   const errors: string[] = []
+  const metricIcons = [
+    "chart", "trending", "users", "newspaper", "target",
+    "megaphone", "briefcase", "calendar", "award", "layers",
+  ]
+  const usedThemeKeys = new Set<string>()
   items.forEach((item, index) => {
+    if (item.metricIcon && !metricIcons.includes(item.metricIcon))
+      errors.push(`Item ${index + 1}: ícone de indicador inválido.`)
+    if (item.themeKey) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.themeKey))
+        errors.push(`Item ${index + 1}: identificador de tema inválido.`)
+      if (usedThemeKeys.has(item.themeKey))
+        errors.push(`Item ${index + 1}: identificador de tema repetido.`)
+      usedThemeKeys.add(item.themeKey)
+    }
+    if (item.relatedThemeKeys?.some((key) => !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(key)))
+      errors.push(`Item ${index + 1}: associação temática inválida.`)
     if (!item.title.trim()) errors.push(`Item ${index + 1}: título obrigatório.`)
     if (item.targetSlug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.targetSlug))
       errors.push(`Item ${index + 1}: destino de seção inválido.`)
