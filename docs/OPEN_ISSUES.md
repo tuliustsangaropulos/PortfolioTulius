@@ -93,3 +93,9 @@ A pendência `panelB.placeholder` (X/Y/Z/XXXXX) da seção `resultados` foi marc
 **Ações ainda abertas:** quando a quota permitir, publicar SHA de produção correspondente à `main`, verificar aliases e rodar testes de navegação/interação/capturas em desktop e mobile; testar CRUD, gravação e rollback por sessão admin real; providenciar mídias/logos aprovados dos projetos das seis empresas (18 slots preparados, sem imagens). Preservar os registros históricos das fases anteriores mesmo quando citarem 14/28/42 no contexto de sua execução original.
 
 Esta atualização é documental. **Nenhuma mudança foi feita no código da aplicação, no Supabase ou em configurações de infraestrutura nesta conferência.**
+
+### Atualização de status após recuperação da Vercel — 26/10/2026
+
+**Supera apenas o bloqueio de publicação indicado nos registros anteriores.** Foi confirmado deployment Vercel de produção **READY** `dpl_DEAtJaZsRybM7HRV84TbYkZpT8gX` com commit `1f528b9560a062a5a0459de88516fd56ee9fc6b8` e aliases `tulius.work` / `www.tulius.work` sem erro de alias. Esse commit **inclui** o código das ferramentas, hover de contato, seis cards clicáveis e a correção mobile da sobreposição das experiências. O erro anterior `api-deployments-free-per-day` deve ser tratado como ocorrência histórica, não bloqueio ainda vigente da última versão publicada.
+
+**Ainda abertos:** inspeção manual do site publicado (desktop, mobile, barra sticky, seis destinos e galerias, Ferramentas e Contato), fluxo CMS autenticado de escrita/revisão/rollback, inclusão e licença de seis marcas/18 imagens de projetos; melhorias já enumeradas nas pendências editoriais. O CI mais recente do ramo deve ser conferido por SHA: a existência de um deployment READY não constitui aceite humano nem E2E admin.
