@@ -234,6 +234,9 @@ function MobilePanel({
   publishedSlugs: string[]
 }) {
   const isProfile = section.slug === "perfil"
+  const isAbout = section.slug === "sobre"
+  const aboutStatement = section.panelB[0]
+  const visibleItems = isAbout && panel === "b" ? items.slice(1) : items
   const profile = items[0]
   const hero = profile?.hero
   return (
@@ -298,10 +301,19 @@ function MobilePanel({
             {panel === "a" && section.intro && <p className="section-intro">{section.intro}</p>}
           </header>
           <div className={`mobile-items ${isProfile && panel === "b" ? "profile-b-items" : ""}`}>
-            {items.map((item, i) => (
+            {visibleItems.map((item, i) => (
               <ItemCard
                 key={`${item.title}-${i}`}
-                item={item}
+                item={
+                  isAbout && panel === "a" && i === 0
+                    ? {
+                        ...item,
+                        title: aboutStatement?.title ?? "",
+                        text: aboutStatement?.text,
+                        label: aboutStatement?.label,
+                      }
+                    : item
+                }
                 index={i}
                 layout={section.layout}
                 targetSlug={
@@ -437,14 +449,6 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
           <ItemCard
             key={`${item.title}-${index}`}
             item={item}
-            index={index}
-            layout={section.layout}
-          />
-        ))}
-        {itemsA.map((item, index) => (
-          <ItemCard
-            key={`${item.title}-${index}`}
-            item={{ ...item, image: undefined, alt: undefined }}
             index={index}
             layout={section.layout}
           />
