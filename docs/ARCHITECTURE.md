@@ -53,3 +53,11 @@ A composição desktop tem título/identidade à esquerda, conteúdos A+B no cen
 O contrato `ExperienceMedia` tipado é armazenado em `content_json.experienceMedia` do bloco A, carregado pelo hook e editado no `ContentStudio` pelo mesmo salvamento atômico. Não há novo endpoint, migration ou modificação de roles. Os slugs do grupo são estáveis e documentados; adição/reordenação de empresas exigirá reavaliar ordem de stacking.
 
 **Correção mobile:** seis cards altos podem exceder `100svh` devido ao conjunto de itens e galeria. Uma pilha CSS sticky nesses casos sobrepunha elementos do próximo card, confundindo os painéis; o breakpoint `max-width:767px` desativa sticky apenas nos cards (`position:relative`), mantendo a barra de empresas sticky. Desktop conserva o efeito solicitado. Verificar o deploy do commit `6cfe4d04` ou posterior.
+
+## Interatividade visual de Ferramentas, carreira e contato — 26/10/2026
+
+`src/components/public/ToolIcons.tsx` contém os pictogramas SVG autocontidos das ferramentas, sem dependências externas, fontes de ícones ou carregamento por rede. `ContentItem.toolIcons` é validado por `validateContentItems`; `ItemCard` injeta o cluster quando o campo existe. CSS escopado a `#ferramentas` estabelece fundo/tipografia sem afetar outras seções.
+
+Os itens de carreira de `ProfileDesktop` e `MobilePanel` reutilizam `ItemCard` com `targetSlug` somente quando o slug pertence à lista de seções publicadas. A classe `area-card-link` acrescenta hover e foco acessível. Os cinco cards temáticos (índices 0–4) mantêm `resolveHeroCardDestination` e o estado `selectedTheme` anteriores, sem regressão.
+
+`#contato .contact-link` ganha CSS de cor de título e valor em hover/foco. Nenhum JavaScript adicional nem modificação da navegação externa foi necessária. A persistência dos ícones e dos destinos acontece nos blocos existentes de `content_json` via RPC do admin, sem schema novo.
