@@ -2426,9 +2426,7 @@ export function EnhancedMediaLibrary() {
                   alt={asset.alt_text?.trim() || asset.title?.trim() || "Prévia da mídia"}
                   loading="lazy"
                   decoding="async"
-                  onError={() =>
-                    setFailedImages((current) => ({ ...current, [asset.id]: true }))
-                  }
+                  onError={() => setFailedImages((current) => ({ ...current, [asset.id]: true }))}
                 />
               ) : (
                 <div className="media-preview-fallback">
@@ -2436,7 +2434,7 @@ export function EnhancedMediaLibrary() {
                   <small>
                     {failedImages[asset.id]
                       ? "Imagem indisponível. Confira o arquivo no Storage."
-                      : previews[asset.id]?.error ?? "Carregando prévia…"}
+                      : (previews[asset.id]?.error ?? "Carregando prévia…")}
                   </small>
                 </div>
               )}
