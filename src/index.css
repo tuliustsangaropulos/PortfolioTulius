@@ -612,9 +612,12 @@
 #ferramentas .content-item h3 { color: var(--paper); }
 #ferramentas .desktop-content > div .content-item:nth-child(odd) h3,
 #ferramentas .mobile-items .content-item:nth-child(odd) h3 { color: var(--orange); }
-.tools-editorial { grid-template-columns: minmax(15rem, 3fr) minmax(0, 9fr); gap: clamp(1rem, 2.5vw, 3rem); }
-.tools-editorial .desktop-content { gap: clamp(.8rem, 1.3vw, 1.6rem); }
-.tools-editorial .desktop-content > div { gap: .35rem; }
+/* Reserve independent space for the monumental heading and the two tool columns. */
+.tools-editorial { grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); gap: clamp(2rem, 3.5vw, 4rem); }
+.tools-editorial > .section-heading { min-width: 0; }
+.tools-editorial > .section-heading h2 { max-width: none; font-size: clamp(3.2rem, 5.5vw, 7.2rem); overflow-wrap: normal; }
+.tools-editorial .desktop-content { min-width: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 1.7vw, 2rem); }
+.tools-editorial .desktop-content > div { min-width: 0; gap: .35rem; }
 .tools-editorial .content-item { min-height: 8rem; grid-template-columns: 7rem minmax(0, 1fr); align-items: center; gap: clamp(.65rem, 1vw, 1rem); padding: .65rem 0; }
 .tools-editorial .content-item h3 { font-size: clamp(1.12rem, 1.45vw, 1.7rem); }
 .tools-editorial .content-item p { font-size: clamp(.8rem, .87vw, .95rem); }
@@ -651,9 +654,12 @@
   color: var(--paper);
 }
 @media (max-width: 1100px) and (min-width: 768px) {
- .tools-editorial { grid-template-columns: minmax(12rem, 2.5fr) minmax(0, 9.5fr); }
- .tools-editorial .content-item { grid-template-columns: 5.2rem minmax(0, 1fr); }
- .tools-editorial .tools-icon-cluster { transform: scale(.76); transform-origin: left center; }
+  /* Put the heading above the cards before horizontal room becomes insufficient. */
+  .tools-editorial { grid-template-columns: minmax(0, 1fr); align-content: center; align-items: stretch; gap: clamp(1.5rem, 3vh, 2.5rem); }
+  .tools-editorial > .section-heading h2 { font-size: clamp(3.7rem, 8vw, 6.4rem); margin-bottom: 0; }
+  .tools-editorial .desktop-content { gap: clamp(1.25rem, 2.2vw, 2.5rem); }
+  .tools-editorial .content-item { grid-template-columns: 5.2rem minmax(0, 1fr); min-height: 7.4rem; gap: .75rem; padding: .5rem 0; }
+  .tools-editorial .tools-icon-cluster { transform: scale(.74); transform-origin: left center; }
 }
 @media (max-width: 767px) {
  #ferramentas .mobile-items .content-item { display: grid; grid-template-columns: minmax(5.2rem, 7rem) minmax(0, 1fr); align-items: center; gap: .85rem; min-height: 8rem; }
