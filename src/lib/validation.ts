@@ -65,8 +65,16 @@ export function isSafeEditorialImage(value: string) {
 export function validateContentItems(items: ContentItem[]) {
   const errors: string[] = []
   const metricIcons = [
-    "chart", "trending", "users", "newspaper", "target",
-    "megaphone", "briefcase", "calendar", "award", "layers",
+    "chart",
+    "trending",
+    "users",
+    "newspaper",
+    "target",
+    "megaphone",
+    "briefcase",
+    "calendar",
+    "award",
+    "layers",
   ]
   const usedThemeKeys = new Set<string>()
   items.forEach((item, index) => {
