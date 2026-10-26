@@ -57,3 +57,11 @@ Sem DDL nem Storage novo, cada bloco publicado de `content_blocks` com `mobile_p
 **Exemplo estrutural, não dados existentes:** os campos `logo`, `logoAlt`, `image`, `alt` e `caption` são opcionais e **não foram preenchidos** no seed. Inicialmente há três `slides` com `title` por empresa; o CMS os preserva/edita. O hook `usePortfolio` incorpora `experienceMedia` na `PortfolioSection` a partir do primeiro bloco publicado A; `ExperienceStack` renderiza `logo`/slides se houver mídia válida.
 
 Conteúdo e imagens não são duplicados nos módulos mobile/desktop: os dois leem `experienceMedia` da seção. Todos os `items` A/B antigos permanecem. `sections.theme`: `formacao=ink`; seis empresas `paper`. Grupo de slugs e ordem: `invest-rs`, `prefeitura-sp`, `vale`, `globo-sportv`, `inpress`, `cdi`. Mais detalhes em `docs/CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md`.
+
+## Ícones de Ferramentas e destinos da abertura — 26/10/2026
+
+Em `content_blocks.content_json.items[]` dos painéis A/B da seção `ferramentas`, acrescentado `toolIcons?: ToolIconName[]`: até três nomes de um conjunto fixo de quinze ícones SVG locais, validados no CMS (`analytics`, `search`, `meta`, `growth`, `salesforce`, `hubspot`, `sprinklr`, `asana`, `notion`, `adobe`, `figma`, `wordpress`, `social`, `video`, `megaphone`). São pictogramas ilustrativos, **não arquivos oficiais dos logotipos**. O componente `ToolIcons` exibe grupos de badges laranja com desenhos brancos. `sections.theme='ink'` para `ferramentas`.
+
+Os seis objetos de carreira em `perfil/B` (índices 5–10 em base zero) receberam `targetSlug`, na ordem editorial já existente: `invest-rs`, `prefeitura-sp`, `vale`, `inpress`, `globo-sportv`, `cdi`. São âncoras com destino condicionado à publicação do slug, independentes dos cinco cards de especialidades (tema/resultado). O campo já existente `targetSlug` foi estendido, sem novos modelos ou tabelas.
+
+Sem DDL, migrations, Auth, RLS ou Storage; mudanças do banco limitaram-se a campos JSONB dos três blocos citados e ao tema da seção Ferramentas.
