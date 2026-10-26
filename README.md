@@ -79,3 +79,9 @@ Os resultados, limites e instruções de execução dos testes visuais e do CMS 
 Os cinco cards numerados da primeira seção agora são links internos com hover/foco e destino padrão na seção 03 (`#resultados`); o destino é editável em `/admin` → **Blocos e painéis** → Perfil / painel B → itens 01–05. O selo circular tem frase ampliada e a seta inferior navega à seção 02 com rolagem suave. O menu lateral exibe **MENU**.
 
 Detalhes técnicos, limitações e handoff para a próxima fase estão em [`docs/CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md`](docs/CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md).
+
+## Seção 02 — composição editorial e administração (26/10/2026)
+
+A seção **Olá!** (`#sobre`) tem composição desktop própria: texto introdutório à esquerda, imagem central de altura integral e três declarações à direita. O retrato central padrão é o arquivo existente `/media/tulius-contact.jpg` (Tulius segurando um tablet); não foi criada imagem artificial. O primeiro item do bloco A alimenta a imagem central e a terceira declaração da direita **sem duplicação no banco**, enquanto os dois itens do bloco B alimentam as duas declarações anteriores. No mobile, a estrutura anterior permanece.
+
+Edição: **Seções → Olá!** gerencia os textos da esquerda; **Blocos e painéis → Olá! → painel A** gerencia o terceiro título/texto da direita e os campos específicos de imagem e texto alternativo desktop; **painel B** gerencia os dois primeiros itens da direita. Os campos opcionais usam JSONB existente; nenhuma migration ou mudança de permissões foi necessária. Consulte [`docs/CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md`](docs/CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md).
