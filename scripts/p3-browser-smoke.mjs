@@ -131,6 +131,47 @@ try {
     }
   }
 
+
+  // Company experience stack: navigation stays pinned while the next employer covers the previous.
+  {
+    const page = await browser.newPage()
+    let stage = "load"
+    try {
+      await page.setViewport({ width: 1440, height: 900 })
+      await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
+      stage = "sections and themes"
+      const initial = await page.evaluate(() => ({
+        stack: !!document.querySelector(".experience-stack"),
+        cards: document.querySelectorAll(".experience-stack .experience-card").length,
+        tabs: document.querySelectorAll(".experience-index a").length,
+        formationInk: getComputedStyle(document.querySelector("#formacao")).backgroundColor,
+        gallery: document.querySelectorAll(".experience-gallery").length,
+      }))
+      if (!initial.stack || initial.cards !== 6 || initial.tabs !== 6 || initial.gallery < 6)
+        throw new Error("Estrutura das seis empresas incompleta: " + JSON.stringify(initial))
+      stage = "sticky navigation"
+      await page.$eval("#prefeitura-sp", (node) => node.scrollIntoView({ behavior: "instant", block: "start" }))
+      await page.waitForFunction(() => {
+        const bar = document.querySelector(".experience-index")?.getBoundingClientRect()
+        const panel = document.querySelector("#prefeitura-sp")?.getBoundingClientRect()
+        return !!bar && !!panel && bar.top >= 65 && bar.top < 90 && panel.top <= 3
+      }, { timeout: 10000 })
+      stage = "slide controls"
+      await page.click("#prefeitura-sp .desktop-panel .experience-gallery-controls button:last-child")
+      await page.waitForFunction(() =>
+        document.querySelector("#prefeitura-sp .desktop-panel .experience-gallery-controls span")?.textContent?.includes("2 / 3"),
+        { timeout: 10000 },
+      )
+      console.log("P3_EXPERIENCE_STACK " + JSON.stringify({ companies: 6, fixedSelector: true, galleryNavigation: true, result: "PASS" }))
+      await page.screenshot({ path: path.join(shots, "p3-experience-stack-1440.png") })
+    } catch (error) {
+      failures++
+      console.log("P3_EXPERIENCE_STACK " + JSON.stringify({ result: "FAIL", stage, error: String(error).slice(0, 350) }))
+    } finally {
+      await page.close()
+    }
+  }
+
   const viewports = [
     [1920, 1080],
     [1440, 900],
