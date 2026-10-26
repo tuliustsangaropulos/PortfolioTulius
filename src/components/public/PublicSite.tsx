@@ -4,6 +4,7 @@ import type { ContentItem, HeroVisualConfig, PortfolioSection } from "../../type
 import { Icon } from "../ui/Icons"
 import { Navigation } from "./Navigation"
 import { ExperienceStack, EXPERIENCE_SLUGS } from "./ExperienceStack"
+import { ToolIcons } from "./ToolIcons"
 import { placementMotionVariables } from "../../lib/placement-motion"
 import { resolveHeroCardDestination } from "../../lib/validation"
 
@@ -90,6 +91,7 @@ function ItemCard({
           <Icon name={item.metricIcon ?? "chart"} size={23} />
         </span>
       )}
+      {item.toolIcons && item.toolIcons.length > 0 && <ToolIcons icons={item.toolIcons} />}
       {item.image && (
         <img
           src={item.image}
@@ -220,7 +222,13 @@ function ProfileDesktop({
         <h2>Experiência e atuação</h2>
         <div className="career-grid">
           {careers.map((item, i) => (
-            <ItemCard key={item.title} item={item} index={i} layout="hero" />
+            <ItemCard
+              key={item.title}
+              item={item}
+              index={i}
+              layout="hero"
+              targetSlug={publishedSlugs.includes(item.targetSlug ?? "") ? item.targetSlug : undefined}
+            />
           ))}
         </div>
         {nextSectionSlug && (
@@ -335,8 +343,12 @@ function MobilePanel({
                 index={i}
                 layout={section.layout}
                 targetSlug={
-                  isProfile && panel === "b" && i < 5
-                    ? resolveHeroCardDestination(item.targetSlug, publishedSlugs)
+                  isProfile && panel === "b"
+                    ? i < 5
+                      ? resolveHeroCardDestination(item.targetSlug, publishedSlugs)
+                      : publishedSlugs.includes(item.targetSlug ?? "")
+                        ? item.targetSlug
+                        : undefined
                     : undefined
                 }
                 onNavigate={
@@ -670,7 +682,7 @@ function Section({
             onSelectTheme={onSelectTheme}
           />
         ) : (
-          <div className="desktop-editorial">
+          <div className={section.slug === "ferramentas" ? "desktop-editorial tools-editorial" : "desktop-editorial"}>
             <header className="section-heading">
               <h2>{section.title}</h2>
               {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
