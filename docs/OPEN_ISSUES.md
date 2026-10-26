@@ -61,3 +61,13 @@ A pendência `panelB.placeholder` (X/Y/Z/XXXXX) da seção `resultados` foi marc
 **Critérios técnicos:** após ocultar uma seção e unificar o painel mobile de resultados, o contrato público passa a 13 seções e 25 painéis mobile. `scripts/p3-browser-smoke.mjs`, `scripts/p4-visual-audit.mjs` e `scripts/p5-public-rls.mjs` foram atualizados conforme esse contrato, preservando verificações de overflow, RLS e visibilidade. Ícones e associações `relatedThemeKeys` ficam no bloco A; textos e tema `themeKey` no bloco B da seção Resultados; os cinco cards Perfil/B também têm `themeKey` estável.
 
 **Homologação pendente:** interação real mouse/teclado e navegação desde todos os cards; captura visual dos temas em desktop e mobile, inclusive alturas pequenas; gravação dos ícones/temas/textos via JWT administrativo real e revisão de rollback; auditoria completa após atualização dos testes. A ausência de métricas associadas a temas sem números comprovados é intencional, não perda de informação. Ver `docs/CONTINUIDADE_INTERATIVIDADE_SECAO_03_2026-10-26.md`.
+
+## Formação e experiências em camadas — 26/10/2026
+
+**Implementado no GitHub e Supabase:** Formação `theme=ink`, texto branco/laranja; seis experiências `theme=paper` e composição sticky sobreposta; seletor fixo das seis empresas com marca/título, links de âncora e estados ativos; galeria por projeto com setas, contador e indicadores; CMS para cadastrar/remover/reordenar slides, logo, URLs, alt e legendas, sem schema/RLS novo. Os blocos A/B existentes foram preservados. Foram criados 18 slides editoriais de texto (três por empresa) associados a projetos cadastrados.
+
+**PENDÊNCIA DE ATIVOS OBRIGATÓRIOS:** não há fotos reais dos projetos nem logotipos autorizados em `media_assets`, Storage ou `public/media`. As galerias exibem placeholders, e as marcas são monogramas temporários. O usuário deverá fornecer/aprovar arquivos (logo e fotografias com direitos de uso) para concluir o requisito visual. Não afirmar que as fotos foram publicadas.
+
+**PENDÊNCIA DE PUBLICAÇÃO / CI:** a API da Vercel respondeu HTTP 402 `api-deployments-free-per-day` ao tentar novo deploy (limite diário); foi encontrada publicação automática `READY` em commit de código anterior ao último ajuste de testes. Confirmar o SHA do deployment efetivamente ativo antes de declarar o código atualizado em produção. O GitHub `main` recebeu commits posteriores. Não alterar cobrança ou quota sem autorização.
+
+**PENDÊNCIA DE ACEITE:** validar os seis layers por rolagem real (especialmente mobile e alturas baixas), seleção de empresas, sliders/pontos e links no navegador; conferir o header global e ausência de sobreposição indevida; homologar campos de mídia pelo admin autenticado e revisão/rollback; entregar fotografias/logos.
