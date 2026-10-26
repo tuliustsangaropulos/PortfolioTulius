@@ -90,11 +90,11 @@ export const sections: PortfolioSection[] = [
       },
     ],
     panelB: [
-      { title: "Comunicação Corporativa", label: "01" },
-      { title: "Gestão e execução de projetos", label: "02" },
-      { title: "Relações públicas e gestão de eventos", label: "03" },
-      { title: "Marketing digital, branding e performance", label: "04" },
-      { title: "Imprensa e influenciadores", label: "05" },
+      { title: "Comunicação Corporativa", themeKey: "corporativa", label: "01" },
+      { title: "Gestão e execução de projetos", themeKey: "projetos", label: "02" },
+      { title: "Relações públicas e gestão de eventos", themeKey: "eventos", label: "03" },
+      { title: "Marketing digital, branding e performance", themeKey: "marketing", label: "04" },
+      { title: "Imprensa e influenciadores", themeKey: "imprensa", label: "05" },
       {
         title: "Invest RS",
         meta: "Porto Alegre · 2026",
