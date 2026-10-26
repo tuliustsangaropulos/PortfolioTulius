@@ -33,7 +33,6 @@ describe("validateContentItems", () => {
   })
 })
 
-
 describe("resolveHeroCardDestination", () => {
   const published = ["perfil", "sobre", "resultados", "contato"]
 
@@ -48,6 +47,8 @@ describe("resolveHeroCardDestination", () => {
   })
 
   it("rejeita destinos inválidos antes de salvar", () => {
-    expect(validateContentItems([{ title: "Card", targetSlug: "javascript:alert(1)" }])).toHaveLength(1)
+    expect(
+      validateContentItems([{ title: "Card", targetSlug: "javascript:alert(1)" }]),
+    ).toHaveLength(1)
   })
 })
