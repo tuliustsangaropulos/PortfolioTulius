@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   clampNumber,
+  isSafeEditorialImage,
   isSafePublicUrl,
   resolveHeroCardDestination,
   validateContentItems,
@@ -50,5 +51,27 @@ describe("resolveHeroCardDestination", () => {
     expect(
       validateContentItems([{ title: "Card", targetSlug: "javascript:alert(1)" }]),
     ).toHaveLength(1)
+  })
+})
+
+describe("section 02 desktop portrait", () => {
+  it("allows local media or HTTPS images, rejecting unsafe image URLs", () => {
+    expect(isSafeEditorialImage("/media/tulius-contact.jpg")).toBe(true)
+    expect(isSafeEditorialImage("https://example.org/portrait.webp")).toBe(true)
+    expect(isSafeEditorialImage("javascript:alert(1)")).toBe(false)
+    expect(isSafeEditorialImage("/media/../private.jpg")).toBe(false)
+  })
+
+  it("requires alternative text for explicitly configured desktop media", () => {
+    expect(validateContentItems([
+      { title: "Estratégia", aboutDesktopImage: "/media/tulius-contact.jpg" },
+    ])).toHaveLength(1)
+    expect(validateContentItems([
+      {
+        title: "Estratégia",
+        alt: "Retrato de Tulius",
+        aboutDesktopImage: "/media/tulius-contact.jpg",
+      },
+    ])).toHaveLength(0)
   })
 })
