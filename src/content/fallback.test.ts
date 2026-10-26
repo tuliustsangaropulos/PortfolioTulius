@@ -74,7 +74,9 @@ describe("interação da seção 03 e remoção da seção 04", () => {
     const themeKeys = results?.panelB.map((item) => item.themeKey)
     expect(heroKeys).toEqual(["corporativa", "projetos", "eventos", "marketing", "imprensa"])
     expect(themeKeys).toEqual(heroKeys)
-    expect(results?.panelB.every((item) => Boolean(item.themeTitle && item.themeSummary))).toBe(true)
+    expect(results?.panelB.every((item) => Boolean(item.themeTitle && item.themeSummary))).toBe(
+      true,
+    )
   })
 
   it("preserva quatro métricas com ícones editáveis e associação temática", () => {
@@ -85,7 +87,9 @@ describe("interação da seção 03 e remoção da seção 04", () => {
       "newspaper",
       "megaphone",
     ])
-    expect(results?.panelA.every((item) => !item.label && Boolean(item.relatedThemeKeys))).toBe(true)
+    expect(results?.panelA.every((item) => !item.label && Boolean(item.relatedThemeKeys))).toBe(
+      true,
+    )
   })
 
   it("aproveita a seção 04 e a oculta sem apagar seu conteúdo histórico", () => {
