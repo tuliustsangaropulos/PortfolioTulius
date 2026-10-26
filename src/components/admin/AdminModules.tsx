@@ -8,6 +8,7 @@ import type {
   HeroDeviceStyle,
   HeroVisualConfig,
   MetricIconName,
+  ExperienceMedia,
 } from "../../types/content"
 import { Icon } from "../ui/Icons"
 
@@ -20,7 +21,7 @@ type BlockRow = {
   id: string
   section_id: string
   block_type: string
-  content_json: { items?: ContentItem[]; source_collection?: string | null }
+  content_json: { items?: ContentItem[]; source_collection?: string | null; experienceMedia?: ExperienceMedia }
   mobile_panel: "a" | "b"
   sort_order: number
   status: string
