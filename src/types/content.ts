@@ -1,3 +1,5 @@
+export type MetricIconName = "chart" | "trending" | "users" | "newspaper" | "target" | "megaphone" | "briefcase" | "calendar" | "award" | "layers"
+
 export type ThemeName = "paper" | "cream" | "ink" | "orange"
 
 export type DeviceItemStyle = {
@@ -60,6 +62,15 @@ export type ContentItem = {
   placeholder?: boolean
   icon?: "arrow" | "none"
   targetSlug?: string
+  metricIcon?: MetricIconName
+  relatedThemeKeys?: string[]
+  themeKey?: string
+  themeAxis?: string
+  themeTitle?: string
+  themeSubtitle?: string
+  themeTopics?: string
+  themeSummary?: string
+  inheritedHighlights?: string[]
   titleColor?: string
   textColor?: string
   backgroundColor?: string
