@@ -99,3 +99,14 @@ O workflow [`P5 Admin Read-Only E2E`](../.github/workflows/p5-admin-readonly.yml
 As condições originais das políticas administrativas eram `private.is_portfolio_admin(auth.uid())` em `USING` e `WITH CHECK`, o predicado de Storage usava o mesmo verificador combinado aos buckets e a leitura própria de `admin_users` era `user_id = auth.uid()`. Reverter apenas com migration nova, leitura da versão vigente e testes de autorização. Os nove índices têm nomes terminados em `_fk_idx`, especificados integralmente na migration; **não removê-los automaticamente**, especialmente se passarem a ter tráfego de leitura relevante.
 
 **Próximo gate:** confirmar GitHub CI e Vercel `READY` no commit final de documentação, depois realizar P5 com JWT real, upload/download binário descartável e homologação visual/editorial pelo proprietário. Não transformar esta auditoria transacional em aceite da interface administrativa.
+
+## 8. Atualização posterior — ajustes da seção 01 (25/10/2026, horário do proprietário)
+
+**Natureza:** complementação ao snapshot P7 acima; não reescreve as conferências históricas nem as decisões de risco. O proprietário autorizou especificamente ajustar a navegação e a composição visual da abertura.
+
+- GitHub `main`: alterações de UI da seção 01 após o SHA P7, incluindo cards de especialidades transformados em links com hover/foco, seletor de destino no CMS, texto e alinhamento do selo, animação da seta, correção de âncora para seção 02 e título “MENU” no drawer.
+- Supabase `portfolio`: inspecionados os dois blocos da seção `perfil`. O bloco A tem cinco itens e o B tem onze; não existe `hero.badgeText` persistido para o primeiro item. Assim, a nova legenda utiliza o fallback de interface. `targetSlug` é um campo opcional nos itens do JSONB já existente, com destino padrão `resultados`. Não foi executado DDL, migration, update de conteúdo, modificação de permissões ou de RLS.
+- Vercel: a integração GitHub → Production publicou os commits de código com `READY`; o último commit **exclusivamente de documentação** também dispara deploy automático e deve ser conferido no final. Não confundir `READY` com aprovação de TypeScript/Vitest ou teste visual real.
+- Documentação em `README.md`, `docs/OPEN_ISSUES.md`, `docs/ADMIN_CMS.md`, `docs/CONTENT_MODEL.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN_SYSTEM.md` e [relatório próprio desta etapa](CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md).
+
+**Pendências de aceite:** executar a suíte e inspecionar visualmente as duas metades da primeira seção, inclusive selo não cortado, card hover/foco e a seta em diferentes alturas; depois realizar edição de destino com JWT administrativo real e validar a gravação da RPC. Não foi iniciada alteração na seção 02. Próximo ciclo: receber observações específicas dela do proprietário.
