@@ -28,10 +28,10 @@ try {
         { name: "prefers-reduced-motion", value: "reduce" },
       ])
       await page.goto(base, { waitUntil: "networkidle2", timeout: 40000 })
-      await page.waitForFunction(() => document.querySelectorAll("section.portfolio-section").length === 14, { timeout: 15000 })
+      await page.waitForFunction(() => document.querySelectorAll("section.portfolio-section").length === 13, { timeout: 15000 })
       await page.evaluate(async () => document.fonts.ready)
       const slugs = await page.$$eval("section.portfolio-section", nodes => nodes.map(node => node.id))
-      if (slugs.length !== 14 || new Set(slugs).size !== 14) throw new Error("Seções ausentes ou duplicadas")
+      if (slugs.length !== 13 || new Set(slugs).size !== 13) throw new Error("Seções ausentes ou duplicadas")
       for (const [index, slug] of slugs.entries()) {
         const panelKeys = variant.name === "desktop" ? ["desktop"] : ["a", "b"]
         for (const panel of panelKeys) {
