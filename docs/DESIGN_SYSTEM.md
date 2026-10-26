@@ -26,8 +26,8 @@ Texto pequeno usa grafite sobre laranja. Foco é visível; botões têm alvo mí
 - A seta inferior do painel direito anima somente o ícone em ciclo discreto; a regra global de `prefers-reduced-motion` impede animação contínua quando o usuário prefere movimento reduzido.
 - Âncoras das seções desktop fazem alinhamento pelo topo, sem `scroll-margin-top` do header. O menu lateral tem o título literal **MENU**.
 
-## Seção 02 — direção editorial (26/10/2026)
+## Quantidade e distribuição dos textos — seções 02 e 03, 26/10/2026
 
-Na área desktop da seção `sobre` (fundo laranja), preservar a introdução à esquerda e compor **imagem vertical central de ponta a ponta** e **três declarações em coluna à direita**, na ordem Comunicação de ponta a ponta / Visão editorial / Estratégia também é escuta. A foto padrão, já existente na biblioteca do repositório, é `tulius-contact.jpg` (Tulius com tablet), em escala de cinza sobre círculo branco, com enquadramento controlado por `object-fit` CSS. A fotografia do bloco A não se repete no card textual da direita. O conteúdo e a imagem continuam editáveis no CMS; a apresentação responsiva mobile permanece anterior.
+A seção 02 (fundo laranja) apresenta **cinco declarações inicialmente** na coluna direita desktop; a lista é administrável e sua altura pode variar após inclusões/exclusões. A primeira declaração também acompanha a foto no painel A mobile; as demais são listadas no painel B mobile. Preservar o equilíbrio vertical, as regras de tamanho e o recorte central existentes e verificar visualmente quando a lista ultrapassar a altura disponível.
 
-Rever manualmente o recorte real da fotografia, a borda do círculo, a legibilidade do texto nas colunas e os viewports intermediários. Esta descrição é objetivo de implementação, não homologação visual.
+A seção 03 mantém seus **quatro indicadores** à esquerda/centro e exibe **cinco temas de especialidades** na coluna da direita, correspondentes aos cards 01–05 da abertura. Os números desses cards pertencem apenas à seção 01; os títulos da seção 03 não são numerados nem se tornam links nesta entrega.
