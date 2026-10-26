@@ -806,6 +806,18 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
               </div>
             </fieldset>
             <div className="block-items">
+              {sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                draft.mobile_panel === "b" && (
+                  <div className="admin-card">
+                    <strong>Textos da seção 02 — coluna direita</strong>
+                    <p>
+                      Cada item corresponde a um título e texto. Use Adicionar item, as setas
+                      de ordenação e Remover item para gerenciar a lista completa. O primeiro
+                      item também aparece junto à foto no painel A mobile. Clique em Salvar
+                      alterações para publicar suas edições no bloco.
+                    </p>
+                  </div>
+                )}
               {(draft.content_json.items ?? []).map((item, index) => (
                 <article className="block-item-editor" key={index}>
                   <div className="block-item-head">
@@ -923,9 +935,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             />
                           </label>
                           <p className="field-wide">
-                            O título e o texto deste item aparecem como terceiro bloco da coluna
-                            direita no desktop. Os outros dois blocos são gerenciados no painel B. A
-                            coluna esquerda usa título, subtítulo e introdução da seção.
+                            Este item guarda apenas as imagens da seção 02. Os cinco títulos e
+                            textos da direita são gerenciados juntos no painel B. A coluna esquerda
+                            usa título, subtítulo e introdução da seção.
                           </p>
                         </>
                       )}
