@@ -71,3 +71,11 @@ Os textos e conteúdos existentes dos **Painéis A e B** continuam administráve
 A seção Formação mantém os mesmos blocos; sua identidade escura foi configurada no tema da seção. As seis empresas receberam `theme='paper'`, mas o layout especial é exclusivo desses slugs. Não alterar a ordem para fora do grupo sem reavaliar o componente `ExperienceStack`.
 
 **Ainda pendente:** homologar inclusões e exclusões de slides, persistência/rollback com sessão autenticada, qualidade/ direitos das imagens e arquivo real das seis logomarcas.
+
+## Ferramentas e links de experiência — 26/10/2026
+
+- **Ferramentas:** em `/admin` → **Blocos e painéis** → **Ferramentas**, selecionar **Painel A** ou **Painel B**. Cada item possui checkboxes **Ícones de plataformas (até três)**: Google Analytics, Search Console, Meta Ads, indicadores, Salesforce, HubSpot, Sprinklr, Asana, Notion, Adobe, Figma, WordPress, social, vídeo e campanhas. A lista de quinze pictogramas é local e tipada; cada item aceita no máximo três sem repetições. Salvar alterações pela RPC existente `save_content_block_atomic`.
+- **Experiência e atuação (seção 01):** em **Perfil → Painel B**, os itens **6–11** agora expõem **Empresa de destino (card clicável)**. Selecionar uma das seis seções de experiência publicadas, ou **Sem link**. Os cinco itens 1–5 continuam com seus campos de tema/destino existentes. O clique da caixa inteira funciona em desktop/mobile, com hover e foco.
+- **Contato:** efeito de hover e foco no CSS, sem novos campos e sem mudanças em URLs.
+
+A identidade da seção Ferramentas usa `sections.theme='ink'`. Na ausência de alteração explícita, preservar textos originais. **Pendente:** testar edição, salvamento, revisão/rollback de ícones e destinos usando uma sessão JWT administrativa real; os commits GitHub e SQL não substituem essa homologação.
