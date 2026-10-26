@@ -72,7 +72,7 @@ describe("section 02 desktop portrait", () => {
       validateContentItems([
         {
           title: "Estratégia",
-          alt: "Retrato de Tulius",
+          aboutDesktopAlt: "Tulius com tablet",
           aboutDesktopImage: "/media/tulius-contact.jpg",
         },
       ]),
