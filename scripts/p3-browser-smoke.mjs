@@ -105,7 +105,7 @@ try {
       await page.waitForFunction(() => {
         const active = document.querySelector('#resultados .desktop-panel .results-theme-list button[aria-pressed="true"]')
         const text = document.querySelector("#resultados .desktop-panel .results-topic h3")
-        return active?.textContent?.includes("MARKETING") &&
+        return active?.textContent?.toLocaleLowerCase("pt-BR").includes("marketing") &&
           text?.textContent?.toLocaleLowerCase("pt-BR").includes("resultados que orientam decisões")
       }, { timeout: 10000 })
       stage = "switch topic"
