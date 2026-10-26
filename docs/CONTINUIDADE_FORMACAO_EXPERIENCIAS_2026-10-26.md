@@ -85,3 +85,7 @@ Os jobs `Validate PortfolioTulius` passaram após formatação, TypeScript, test
 ## 6. Fontes do projeto ChatGPT
 
 Adicionar este arquivo como fonte de continuidade e atualizar a cópia anexada de `ESTADO_ATUAL_AUDITORIA_2026-10-25.md` se estiver desatualizada. Preservar os arquivos históricos de contexto, ambiente, seção 01, seção 02 e seção 03.
+
+### Correção após auditoria de capturas
+
+A auditoria automatizada no ambiente publicado confirmou a pilha fixa e a navegação dos slides em desktop, mas a captura `p4-mobile-05-invest-rs-b.png` mostrou texto da Prefeitura de São Paulo cobrindo a galeria Invest RS no mobile. O componente foi corrigido por CSS no commit `6cfe4d04`: **desktop/tablet permanece sticky e sobreposto**; **mobile até 767px utiliza cards relativos, sem sobreposição**, mantendo o seletor fixo para evitar perda de conteúdo. O deployment de produção ainda está limitado pela quota da Vercel; esta correção não deve ser descrita como publicada sem novo deploy e inspeção. A galeria mantém os 18 espaços editoriais sem fotos reais aprovadas.
