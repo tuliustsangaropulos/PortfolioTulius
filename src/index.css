@@ -508,3 +508,97 @@
 @media (prefers-reduced-motion: reduce) {
   .content-item.placement-motion-image-reveal.has-image img { clip-path: inset(0); }
 }
+
+/* Formation — identity dark gray with white supporting copy. */
+#formacao { background: var(--ink); color: var(--paper); }
+#formacao .item-meta, #formacao .content-item p, #formacao .section-intro,
+#formacao .panel-heading p { color: var(--paper); }
+#formacao .item-label { color: var(--orange); }
+
+/* Six white company panels rise over the preceding panel as the page scrolls. */
+.experience-stack { position: relative; isolation: isolate; background: var(--paper); }
+.experience-index {
+  position: sticky; top: var(--header); z-index: 40;
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: .25rem; padding: .35rem var(--gutter);
+  background: var(--paper); border-bottom: 1px solid #17161725;
+}
+.experience-index a {
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+  min-width: 0; padding: .4rem .25rem; text-decoration: none;
+  color: var(--ink); font-size: clamp(.55rem, .72vw, .78rem);
+  font-weight: 700; line-height: 1.2; text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: background .18s, border-color .18s;
+}
+.experience-index a:hover, .experience-index a:focus-visible { background: #eee9e5; }
+.experience-index a.is-active { border-color: var(--orange); }
+.company-mark { width: 3.5rem; height: 3.5rem; flex: none; display: inline-grid;
+  place-items: center; border: 1px solid #17161722; background: #f1eeec;
+  color: var(--ink); overflow: hidden; }
+.company-mark img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.company-mark-small { width: 1.8rem; height: 1.8rem; }
+.experience-monogram { font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; }
+.company-mark-small .experience-monogram { font-size: .85rem; }
+.experience-card {
+  position: sticky; top: 0; min-height: 100svh;
+  background: var(--paper); color: var(--ink); border-top: 1px solid #17161713;
+  scroll-snap-align: start;
+}
+.experience-desktop {
+  max-width: var(--container); min-height: 100svh; margin: 0 auto;
+  padding: calc(var(--header) + 4.5rem) var(--gutter) clamp(2rem, 4vh, 4rem);
+  display: grid; grid-template-columns: minmax(0, .94fr) minmax(0, 1.08fr) minmax(0, 1.15fr);
+  gap: clamp(1.15rem, 3vw, 3.25rem); align-items: center;
+}
+.experience-heading { min-width: 0; }
+.experience-heading h2 { font-family: var(--font-heading); text-transform: uppercase;
+  font-size: clamp(3.2rem, 5vw, 6.8rem); line-height: .9; letter-spacing: -.04em;
+  margin: 1rem 0 .65rem; overflow-wrap: anywhere; }
+.experience-heading p { font-size: clamp(.79rem, .95vw, 1rem); line-height: 1.55; }
+.experience-heading .experience-eyebrow { font-weight: 750; color: var(--orange-dark); }
+.experience-projects { max-height: calc(100svh - 13rem); overflow-y: auto; scrollbar-width: thin; }
+.experience-projects > h3 { font-family: var(--font-display); font-size: clamp(1.3rem, 1.6vw, 1.9rem);
+  text-transform: uppercase; margin: 0 0 .4rem; }
+.experience-project { border-top: 1px solid #17161733; padding: .7rem 0; }
+.experience-project h4 { font-family: var(--font-display); font-size: clamp(1.1rem, 1.3vw, 1.5rem);
+  line-height: 1.1; text-transform: uppercase; }
+.experience-project p { margin: .3rem 0 0; font-size: clamp(.74rem, .87vw, .95rem); line-height: 1.4; }
+.experience-value { display: block; font-size: 1.3rem; color: var(--orange-dark); }
+.experience-gallery { min-width: 0; }
+.experience-media-frame { width: 100%; aspect-ratio: .9; max-height: 57svh; overflow: hidden; background: #e9e5e2; }
+.experience-media-frame > img { width: 100%; height: 100%; object-fit: cover; }
+.experience-image-pending { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: clamp(1.25rem, 2.5vw, 2.5rem); background: linear-gradient(145deg, #e8e5e2, #f3f1ef); }
+.experience-image-pending span, .experience-gallery-kicker { color: var(--orange-dark);
+  font-size: .65rem; letter-spacing: .12em; font-weight: 800; }
+.experience-image-pending strong { margin-top: .7rem; max-width: 15ch; font: 800 clamp(1.8rem, 3vw, 3rem)/.94 var(--font-display); text-transform: uppercase; }
+.experience-image-pending p { margin-top: .8rem; font-size: .78rem; line-height: 1.4; max-width: 28ch; }
+.experience-gallery-footer { display: flex; justify-content: space-between; align-items: center; gap: .7rem; margin-top: .75rem; }
+.experience-gallery-footer h3 { margin: .25rem 0; font-family: var(--font-display); font-size: 1.3rem; text-transform: uppercase; }
+.experience-gallery-footer p { font-size: .75rem; line-height: 1.35; }
+.experience-gallery-controls { display: flex; align-items: center; flex: none; gap: .3rem; font-size: .69rem; }
+.experience-gallery-controls button { display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border: 1px solid currentColor; background: transparent; }
+.experience-gallery-controls button:hover, .experience-gallery-controls button:focus-visible { color: var(--paper); background: var(--ink); }
+.experience-gallery-dots { display: flex; gap: .4rem; margin-top: .6rem; }
+.experience-gallery-dots button { width: 1.35rem; height: .35rem; border: 0; background: #bbb; }
+.experience-gallery-dots button.is-active { background: var(--orange); }
+@media (min-width: 768px) and (max-width: 1100px) {
+ .experience-desktop { grid-template-columns: minmax(0, .9fr) minmax(0, 1fr) minmax(0, 1.05fr); gap: 1.2rem; }
+ .experience-heading h2 { font-size: clamp(2.6rem, 5vw, 4.4rem); }
+}
+@media (max-width: 767px) {
+ .experience-index { display: flex; overflow-x: auto; gap: .4rem; padding-inline: 1rem; scrollbar-width: thin; }
+ .experience-index a { flex: 0 0 auto; min-height: 2.4rem; font-size: .68rem; padding: .3rem .45rem; }
+ .experience-card { min-height: 100svh; }
+ .experience-desktop { display: none; }
+ .experience-card .mobile-panels { display: block; }
+ .experience-mobile-copy { padding-top: calc(var(--header) + 4.3rem); }
+ .experience-mobile-copy .experience-heading h2 { font-size: clamp(3.2rem, 12vw, 5.1rem); }
+ .experience-mobile-copy .experience-projects { max-height: none; overflow: visible; margin-top: 2rem; }
+ .experience-mobile-gallery { min-height: auto; padding-top: calc(var(--header) + 3rem); }
+ .experience-media-frame { max-height: none; aspect-ratio: 1 / 1.1; }
+}
+@media (prefers-reduced-motion: reduce) {
+ .experience-index a, .experience-gallery-controls button { transition: none; }
+}
