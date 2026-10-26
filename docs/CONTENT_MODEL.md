@@ -21,3 +21,14 @@ A seção `sobre` mantém dois blocos `content_blocks` e não recebeu novas tabe
 Na seção `resultados`, o painel B contém os cinco títulos correspondentes aos cards de especialidades da seção 01, em substituição aos sete títulos anteriores, inclusive ao placeholder `XXXXX · X/Y/Z`. O painel A de métricas não foi alterado. O registro de `editorial_issues` para o placeholder foi mantido com `status='resolved'` e motivo da resolução; não foi apagado.
 
 Todas as edições do administrador seguem `save_content_block_atomic` e a estrutura existente de RLS/revisões; a mudança dos dados publicados foi realizada por transação SQL controlada e confirmada com leitura posterior. **Os títulos da seção 03 são um snapshot editorial, não uma referência relacional dinâmica às especialidades da seção 01.**
+
+## Dossiês temáticos da seção 03 — JSONB (26/10/2026)
+
+Sem tabelas/migrations novas, os dois blocos de `resultados` foram enriquecidos:
+
+- **Painel A, quatro indicadores:** `title`, `value` e `text` permanecem; o antigo `label` numérico foi removido. Acrescentados `metricIcon` (enum finito dos pictogramas SVG internos) e `relatedThemeKeys` (lista de identificadores de temas). Vínculos iniciais: Mídia e Estratégia → marketing; Comunicação Pública → marketing; Jornalismo Internacional → imprensa; Relações Públicas e Imprensa → eventos e imprensa.
+- **Painel B, cinco temas:** `title` (rótulo do seletor); `themeKey` (ID estável); `themeAxis` (eixo); `themeTitle`; `themeSubtitle`; `themeTopics`; `themeSummary`; `inheritedHighlights: string[]` (conteúdo reaproveitado da seção 04). O conteúdo de cada tema foi fornecido pelo proprietário, com associação temática dos cinco eixos aos cinco cartões da abertura.
+
+Os primeiros cinco cards de `perfil`/painel B receberam o atributo opcional `themeKey`, sem alteração dos títulos ou destinos `targetSlug`. A seleção é um estado React `selectedTheme: string | null` compartilhado pelo herói e pela seção de resultados; `null` exibe todos os quatro indicadores. Clique no card com destino `#resultados` define o mesmo tema no painel interativo.
+
+O registro `sections.slug='competencias'` foi **despublicado visualmente por `is_visible=false`**, mantendo `status=published` e todos os blocos originais intactos. Assim o projeto preserva fontes históricas sem renderizar o antigo painel como seção independente. Total esperado: **13 seções públicas e 25 painéis mobile** (resultados usa um único painel mobile interativo). Os demais conteúdos não foram alterados.
