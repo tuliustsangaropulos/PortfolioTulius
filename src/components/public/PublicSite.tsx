@@ -19,12 +19,18 @@ function Badge360({ config }: { config?: HeroVisualConfig }) {
   if (config?.badgeVisible === false) return null
   return (
     <div className="badge-360">
-      <svg viewBox="0 0 160 160" role="img" aria-label="Visão 360 graus da comunicação e marketing">
+      <svg
+        viewBox="0 0 160 160"
+        role="img"
+        aria-label="Visão 360 graus da comunicação e marketing"
+      >
         <defs>
           <path id={pathId} d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0" />
         </defs>
-        <text textLength="350" lengthAdjust="spacingAndGlyphs">
-          <textPath href={`#${pathId}`}>{config?.badgeText || heroDefaults.badgeText}</textPath>
+        <text>
+          <textPath href={`#${pathId}`} textLength="350" lengthAdjust="spacingAndGlyphs">
+            {config?.badgeText || heroDefaults.badgeText}
+          </textPath>
         </text>
         <path d="M55 100 102 53M70 53h32v32" />
       </svg>
