@@ -110,6 +110,8 @@
 /* Section 03 — thematic results; overview preserves all four documented metrics. */
 .results-editorial .desktop-content { grid-template-columns: minmax(0, 1.4fr) minmax(16rem, .8fr); gap: clamp(1rem, 1.6vw, 2rem); }
 .results-center { min-width: 0; max-height: calc(100dvh - 8rem); overflow-y: auto; scrollbar-width: thin; }
+.results-editorial .desktop-content > .results-center { display: block; }
+.results-editorial .results-metrics-grid { width: 100%; }
 .results-metrics-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.65rem, 1.6vw, 1.2rem); }
 .results-metrics-grid .content-item { display: block; width: 100%; padding: .8rem 0; }
 .results-metrics-grid .item-copy { display: block; }
