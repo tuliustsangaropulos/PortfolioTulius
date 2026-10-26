@@ -57,3 +57,17 @@ Em **Blocos e painéis → Resultados e projetos em destaque → painel B**, est
 **Seção 04:** `competencias` recebeu `is_visible=false` em `sections`. Não foi excluída nem arquivada, continua disponível no admin. Os cinco registros originais de Habilidades, Gestão, Competências, Relações e Destaques também foram transpostos para os destaques temáticos da seção 03. Para reativar a antiga seção, usar a gestão de visibilidade do CMS em operação expressamente autorizada.
 
 **Aceite pendente:** selecionar, salvar e publicar alterações com JWT administrativo real, verificar revisão/rollback, e testar vinculação/tema depois de reordenação. Atualização direta de JSONB e build não validam esse fluxo autenticado.
+
+## Administração das galerias e logotipos das seis empresas — 26/10/2026
+
+Em `/admin` → **Blocos e painéis**, selecione uma das seis empresas (Invest RS, Prefeitura de São Paulo, Vale, TV Globo/SporTV, Grupo InPress ou CDI Comunicação) e abra o **Painel A**. A seção **Identidade da empresa e galeria de projetos** edita diretamente `content_json.experienceMedia`, sem nova tabela:
+
+- **URL do logo** (somente `/media/arquivo` ou HTTPS), **descrição alternativa do logo**; se não preenchidos, aparece um monograma tipográfico temporário, que **não representa a marca oficial**.
+- **Slides**: adicionar/excluir/reordenar, editar título do projeto, URL da foto, texto alternativo e legenda. O conteúdo inicial contém três projetos por empresa sem foto aprovada. A galeria mantém espaço reservado identificando a pendência, nunca fotografia fictícia.
+- Salvar com **Salvar bloco**, pela mesma RPC atômica `save_content_block_atomic` e mecanismo de revisão do CMS. URLs são validadas pela lista segura `isSafeEditorialImage`; cada foto e logo informativos exigem `alt`.
+
+Os textos e conteúdos existentes dos **Painéis A e B** continuam administráveis e foram preservados. As imagens devem ser registros realmente relacionados ao projeto e com autorização de uso; **não inserir material ilustrativo genérico como se documentasse a atuação profissional**. Somente depois de cadastrar URLs válidas a galeria exibirá fotos. O sistema não cria arquivos nem transfere imagens automaticamente para o Storage.
+
+A seção Formação mantém os mesmos blocos; sua identidade escura foi configurada no tema da seção. As seis empresas receberam `theme='paper'`, mas o layout especial é exclusivo desses slugs. Não alterar a ordem para fora do grupo sem reavaliar o componente `ExperienceStack`.
+
+**Ainda pendente:** homologar inclusões e exclusões de slides, persistência/rollback com sessão autenticada, qualidade/ direitos das imagens e arquivo real das seis logomarcas.
