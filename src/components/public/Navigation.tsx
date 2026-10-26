@@ -113,7 +113,7 @@ export function Navigation({
           role="dialog"
         >
           <div className="drawer-head">
-            <p>Índice / {sections.length} seções</p>
+            <p>MENU</p>
             <button className="icon-button" onClick={closeMenu} aria-label="Fechar menu">
               <Icon name="close" />
             </button>
