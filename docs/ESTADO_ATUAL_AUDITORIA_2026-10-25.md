@@ -191,3 +191,9 @@ O proprietário solicitou: Ferramentas com fundo cinza-escuro da identidade, fon
 **Pendências de aceite inalteradas:** implantação final e validação visual, especialmente o correção de stacking mobile; envio/autorização das fotografias e seis logomarcas; E2E do admin autenticado para mídias, temas e navegação; revisão de riscos explicitamente aceitos sem reabrir decisões por conta desta documentação.
 
 Esta seção é um adendo de continuidade, não substitui a auditoria técnica inicial nem afirma que arquivos históricos sobre 14 seções foram falsos na época em que foram produzidos.
+
+### 14.1. Evidência posterior — Vercel recuperada em 26/10/2026
+
+Após a auditoria documental acima, a Vercel apresentou deployment **`dpl_DEAtJaZsRybM7HRV84TbYkZpT8gX`**, estado **READY**, para o commit `1f528b9560a062a5a0459de88516fd56ee9fc6b8`, com aliases `tulius.work`, `www.tulius.work` e `aliasError=null`. Essa revisão é posterior aos ajustes de código de Ferramentas, links da seção 01 e hover de Contato, bem como à correção da sobreposição mobile. Logo, o bloqueio HTTP 402 anotado nos momentos anteriores foi **temporário** e o bundle contendo esses ajustes passou a existir em produção.
+
+O commit de produção **não é necessariamente o mesmo SHA da `main` após os últimos commits exclusivamente documentais**, e a publicação READY **não equivale** a homologação visual, administração autenticada ou disponibilidade de imagens reais. Permanecem pendentes testes humanos/teclado em aparelhos, dados de mídia autorizados e E2E de gravação e rollback CMS. Preservar as anotações da tentativa HTTP 402 como histórico, mas usar esta evidência posterior para interpretar o estado de publicação.
