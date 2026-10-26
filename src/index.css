@@ -513,6 +513,8 @@
 #formacao { background: var(--ink); color: var(--paper); }
 #formacao .item-meta, #formacao .content-item p, #formacao .section-intro,
 #formacao .panel-heading p { color: var(--paper); }
+/* Override the globally important metadata color on the dark Formation surface. */
+#formacao .item-meta { color: var(--paper) !important; }
 #formacao .item-label { color: var(--orange); }
 
 /* Six white company panels rise over the preceding panel as the page scrolls. */

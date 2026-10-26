@@ -79,3 +79,9 @@ A seção Formação mantém os mesmos blocos; sua identidade escura foi configu
 - **Contato:** efeito de hover e foco no CSS, sem novos campos e sem mudanças em URLs.
 
 A identidade da seção Ferramentas usa `sections.theme='ink'`. Na ausência de alteração explícita, preservar textos originais. **Pendente:** testar edição, salvamento, revisão/rollback de ícones e destinos usando uma sessão JWT administrativa real; os commits GitHub e SQL não substituem essa homologação.
+
+## Etapa 3 — mídia com compensação e aprovação de textos (26/10/2026)
+
+Uploads privados e substituições passam por procedimento compensatório: o arquivo novo é enviado, os metadados são gravados, e somente então um arquivo substituído é removido; se a gravação falha, tenta-se remover o novo arquivo. Uma falha de limpeza é reportada ao operador. **Não é uma transação distribuída entre PostgreSQL e Storage**; homologação com JWT administrativo real ainda falta.
+
+A pedido do proprietário, os textos publicados de `resultados/A`, `invest-rs/A` e `invest-rs/B` tiveram a marca de placeholder do bloco removida. O item específico **Ativos visuais**, dentro de `invest-rs/B`, continua `placeholder=true` por não haver imagens aprovadas; as notas `editorial_note` documentam a distinção. O conteúdo `content_json` não foi reescrito. Ver [registro da etapa 3](ETAPA_3_AJUSTES_2026-10-26.md).

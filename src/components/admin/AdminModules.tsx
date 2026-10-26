@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage, validateContentItems } from "../../lib/validation"
+import { stagePrivateMediaChange } from "../../lib/media-operations"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
 import type {
   ContentItem,
@@ -2288,18 +2289,22 @@ export function EnhancedMediaLibrary() {
     )
       return setMessage("Use JPG, PNG, WebP ou SVG de até 8 MB.")
     const path = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`
-    const { error } = await supabase.storage.from("portfolio-private").upload(path, file)
-    if (error) return setMessage(error.message)
-    const result = await supabase.from("media_assets").insert({
-      storage_bucket: "portfolio-private",
-      storage_path: path,
-      mime_type: file.type,
-      file_size: file.size,
-      alt_text: "",
-      status: "draft",
+    const client = supabase
+    const result = await stagePrivateMediaChange({
+      stage: () => client.storage.from("portfolio-private").upload(path, file),
+      persist: () =>
+        client.from("media_assets").insert({
+          storage_bucket: "portfolio-private",
+          storage_path: path,
+          mime_type: file.type,
+          file_size: file.size,
+          alt_text: "",
+          status: "draft",
+        }),
+      undoStage: () => client.storage.from("portfolio-private").remove([path]),
     })
-    setMessage(result.error?.message ?? "Upload concluído como rascunho privado.")
-    if (!result.error) await load()
+    setMessage(result.ok ? "Upload concluído como rascunho privado." : result.message)
+    if (result.ok) await load()
   }
   async function promote(asset: Record<string, any>) {
     if (!supabase || !asset.alt_text.trim())
@@ -2344,23 +2349,37 @@ export function EnhancedMediaLibrary() {
       return setMessage(
         "Substituição direta de mídia pública bloqueada para evitar expor um rascunho. Envie um novo arquivo privado e publique após revisar.",
       )
-    const upload = await supabase.storage
-      .from("portfolio-private")
-      .upload(asset.storage_path, file, {
-        contentType: file.type,
-        upsert: true,
-      })
-    if (upload.error) return setMessage(upload.error.message)
-    const update = await supabase
-      .from("media_assets")
-      .update({
-        mime_type: file.type,
-        file_size: file.size,
-        status: "draft",
-      })
-      .eq("id", asset.id)
-    setMessage(update.error?.message ?? "Arquivo substituído; revise e publique.")
-    if (!update.error) await load()
+    // Never overwrite existing bytes before the metadata pointer is committed.
+    const client = supabase
+    const newPath = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`
+    const result = await stagePrivateMediaChange({
+      stage: () =>
+        client.storage.from("portfolio-private").upload(newPath, file, {
+          contentType: file.type,
+          upsert: false,
+        }),
+      persist: () =>
+        client
+          .from("media_assets")
+          .update({
+            storage_path: newPath,
+            mime_type: file.type,
+            file_size: file.size,
+            status: "draft",
+          })
+          .eq("id", asset.id)
+          .select("id")
+          .single(),
+      undoStage: () => client.storage.from("portfolio-private").remove([newPath]),
+      cleanupOld: () =>
+        client.storage.from("portfolio-private").remove([asset.storage_path]),
+    })
+    setMessage(
+      result.ok
+        ? `Arquivo substituído; revise e publique.${result.warning ? ` ${result.warning}` : ""}`
+        : result.message,
+    )
+    if (result.ok) await load()
   }
   return (
     <>

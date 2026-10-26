@@ -36,3 +36,9 @@ O proprietário determinou **não revogar o token pessoal Supabase anteriormente
 Esta decisão **não demonstra que o token exposto seja seguro**: caso ainda esteja válido, permanece o risco de uso não autorizado, inclusive porque versões históricas do Git podem conter a credencial. Também permanece desativada a checagem de senhas comprometidas. A decisão do proprietário registra aceitação de prosseguir sem essas duas medidas, **não** aprovação técnica do risco ou resolução dos avisos de segurança.
 
 Prosseguir com P4/P5/P6 sem alterar essa escolha; registrar em relatórios futuros como **risco aceito, não corrigido**, sem cobranças repetidas.
+
+## Revalidação SQL não destrutiva da etapa 2 e escopo da etapa 3 (26/10/2026)
+
+O estado atual é de **13 seções publicadas e visíveis**, entre 14 seções cadastradas: `competencias` foi ocultada sem exclusão. Em transações `READ ONLY`, o papel anônimo e o papel autenticado não administrador, ambos simulados, leram 13 seções e zero registros administrativos; um UID admin simulado leu 14 seções e seus registros autorizados. **Isso não equivale a JWT emitido pelo Auth.** Os 22 objetos `public` continuam com RLS.
+
+Confirmou-se que `anon` possui `USAGE` SQL no schema `private` e `EXECUTE` em `private.is_portfolio_admin`. Antes de eventual revogação, verificar schemas efetivamente expostos na Data API e dependências de RLS/RPC; nenhuma revogação foi executada. A validação editorial dos três blocos da etapa 3 não modificou grants, RLS ou Auth. As decisões de risco aceito registradas acima permanecem válidas.

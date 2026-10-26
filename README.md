@@ -114,3 +114,8 @@ A seção `#ferramentas` utiliza o tema escuro da identidade (`ink` / `#171617`)
 Os seis itens de **Experiência e atuação** na seção 01 agora apontam, respectivamente, para `#invest-rs`, `#prefeitura-sp`, `#vale`, `#inpress`, `#globo-sportv`, `#cdi`. O card inteiro é uma âncora com hover e foco visível, tanto no desktop como no mobile; o destino pode ser editado em **Perfil → Blocos e painéis → painel B** (itens 6–11). Os cinco cards de especialidades continuam com o próprio mecanismo independente de navegação para a seção 03.
 
 No Contato, os títulos e valores clicáveis ganham contraste branco em hover/foco, mantendo a base laranja. Não foram alterados números, e-mails, URLs, empresas ou conteúdos. Ver `docs/CONTINUIDADE_FERRAMENTAS_CARDS_CONTATO_2026-10-26.md`.
+
+
+### Atualização operacional da etapa 3 — 26/10/2026
+
+Textos atualmente publicados em `resultados/A`, `invest-rs/A` e `invest-rs/B` foram consolidados editorialmente no Supabase sem reescrever o JSONB. O item **Ativos visuais** continua pendente de fotografias aprovadas, e os 18 slides profissionais seguem sem fotos. O CSS de contraste da Formação e a biblioteca privada de mídia receberam correções pontuais e testes unitários. Consulte [Etapa 3](docs/ETAPA_3_AJUSTES_2026-10-26.md); o aceite visual e administrativo autenticado ainda requer provas separadas.
