@@ -1268,12 +1268,21 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           Empresa de destino (card clicável)
                           <select
                             value={item.targetSlug ?? ""}
-                            onChange={(event) => updateItem(index, { targetSlug: event.target.value })}
+                            onChange={(event) =>
+                              updateItem(index, { targetSlug: event.target.value })
+                            }
                           >
                             <option value="">Sem link</option>
                             {sections
                               .filter((entry) =>
-                                ["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(entry.slug),
+                                [
+                                  "invest-rs",
+                                  "prefeitura-sp",
+                                  "vale",
+                                  "globo-sportv",
+                                  "inpress",
+                                  "cdi",
+                                ].includes(entry.slug),
                               )
                               .map((entry) => (
                                 <option key={entry.id} value={entry.slug}>
@@ -1281,17 +1290,24 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                                 </option>
                               ))}
                           </select>
-                          <small>O card inteiro direciona para a seção da empresa, incluindo no mobile.</small>
+                          <small>
+                            O card inteiro direciona para a seção da empresa, incluindo no mobile.
+                          </small>
                         </label>
                       )}
-                    {sections.find((entry) => entry.id === draft.section_id)?.slug === "ferramentas" && (
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug ===
+                      "ferramentas" && (
                       <fieldset className="field-wide">
                         <legend>Ícones de plataformas (até três)</legend>
-                        {toolIconOptions.map(({value, label}) => (
+                        {toolIconOptions.map(({ value, label }) => (
                           <label className="toggle-field" key={value}>
-                            <input type="checkbox"
+                            <input
+                              type="checkbox"
                               checked={(item.toolIcons ?? []).includes(value)}
-                              disabled={!(item.toolIcons ?? []).includes(value) && (item.toolIcons?.length ?? 0) >= 3}
+                              disabled={
+                                !(item.toolIcons ?? []).includes(value) &&
+                                (item.toolIcons?.length ?? 0) >= 3
+                              }
                               onChange={(checked) => {
                                 const next = item.toolIcons ?? []
                                 updateItem(index, {
@@ -1304,7 +1320,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             {label}
                           </label>
                         ))}
-                        <small>Ícones vetoriais locais, associados às plataformas indicadas no texto.</small>
+                        <small>
+                          Ícones vetoriais locais, associados às plataformas indicadas no texto.
+                        </small>
                       </fieldset>
                     )}
                     <label>
