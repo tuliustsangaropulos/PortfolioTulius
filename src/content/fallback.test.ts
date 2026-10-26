@@ -36,3 +36,30 @@ describe("estrutura editorial", () => {
     expect(sections[0].panelB.slice(5)).toHaveLength(6)
   })
 })
+
+describe("conteúdo da seção 02 e especialidades da seção 03", () => {
+  const profile = sections.find((section) => section.slug === "perfil")
+  const about = sections.find((section) => section.slug === "sobre")
+  const results = sections.find((section) => section.slug === "resultados")
+
+  it("mantém cinco textos gerenciáveis no painel B da seção 02", () => {
+    expect(about?.panelA).toHaveLength(1)
+    expect(about?.panelB.map((item) => item.title)).toEqual([
+      "Estratégia também é escuta.",
+      "Comunicação de ponta a ponta",
+      "Visão editorial",
+      "Resultados que orientam decisões",
+      "A voz de quem lidera",
+    ])
+    expect(about?.panelA[0]?.image).toBe("/media/tulius-portrait.jpg")
+  })
+
+  it("reutiliza os cinco temas da abertura na lista da seção 03", () => {
+    const opening = profile?.panelB.slice(0, 5).map((item) => item.title.toLowerCase())
+    const specialties = results?.panelB.map((item) => item.title.toLowerCase())
+    expect(specialties).toEqual(opening)
+    expect(results?.panelB).toHaveLength(5)
+    expect(results?.panelA).toHaveLength(4)
+    expect(results?.panelB.some((item) => item.placeholder)).toBe(false)
+  })
+})
