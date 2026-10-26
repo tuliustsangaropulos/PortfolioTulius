@@ -53,6 +53,9 @@ export type ContentItem = {
   value?: string
   image?: string
   alt?: string
+  /** Independent full-height image for section 02 on desktop; mobile retains image. */
+  aboutDesktopImage?: string
+  aboutDesktopAlt?: string
   tags?: string[]
   placeholder?: boolean
   icon?: "arrow" | "none"
