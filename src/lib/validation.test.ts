@@ -63,15 +63,19 @@ describe("section 02 desktop portrait", () => {
   })
 
   it("requires alternative text for explicitly configured desktop media", () => {
-    expect(validateContentItems([
-      { title: "Estratégia", aboutDesktopImage: "/media/tulius-contact.jpg" },
-    ])).toHaveLength(1)
-    expect(validateContentItems([
-      {
-        title: "Estratégia",
-        alt: "Retrato de Tulius",
-        aboutDesktopImage: "/media/tulius-contact.jpg",
-      },
-    ])).toHaveLength(0)
+    expect(
+      validateContentItems([
+        { title: "Estratégia", aboutDesktopImage: "/media/tulius-contact.jpg" },
+      ]),
+    ).toHaveLength(1)
+    expect(
+      validateContentItems([
+        {
+          title: "Estratégia",
+          alt: "Retrato de Tulius",
+          aboutDesktopImage: "/media/tulius-contact.jpg",
+        },
+      ]),
+    ).toHaveLength(0)
   })
 })
