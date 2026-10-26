@@ -56,6 +56,7 @@ export type ContentItem = {
   tags?: string[]
   placeholder?: boolean
   icon?: "arrow" | "none"
+  targetSlug?: string
   titleColor?: string
   textColor?: string
   backgroundColor?: string
