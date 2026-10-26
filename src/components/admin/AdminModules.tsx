@@ -21,7 +21,11 @@ type BlockRow = {
   id: string
   section_id: string
   block_type: string
-  content_json: { items?: ContentItem[]; source_collection?: string | null; experienceMedia?: ExperienceMedia }
+  content_json: {
+    items?: ContentItem[]
+    source_collection?: string | null
+    experienceMedia?: ExperienceMedia
+  }
   mobile_panel: "a" | "b"
   sort_order: number
   status: string
@@ -819,94 +823,186 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
             </fieldset>
             {["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(
               sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
-            ) && draft.mobile_panel === "a" && (
-              <fieldset className="admin-card">
-                <legend>Identidade da empresa e galeria de projetos</legend>
-                <p>Use arquivos próprios/autorizados. Sem imagens aprovadas, o site mostra um espaço reservado identificado, não uma fotografia fictícia.</p>
-                <div className="field-grid">
-                  <label>
-                    URL do logo da empresa (/media/arquivo ou HTTPS)
-                    <input
-                      value={draft.content_json.experienceMedia?.logo ?? ""}
-                      onChange={(event) => setDraft({
-                        ...draft,
-                        content_json: {
-                          ...draft.content_json,
-                          experienceMedia: {
-                            ...draft.content_json.experienceMedia,
-                            logo: event.target.value,
-                          },
-                        },
-                      })}
-                    />
-                  </label>
-                  <label>
-                    Descrição alternativa do logo
-                    <input
-                      value={draft.content_json.experienceMedia?.logoAlt ?? ""}
-                      onChange={(event) => setDraft({
-                        ...draft,
-                        content_json: {
-                          ...draft.content_json,
-                          experienceMedia: {
-                            ...draft.content_json.experienceMedia,
-                            logoAlt: event.target.value,
-                          },
-                        },
-                      })}
-                    />
-                  </label>
-                </div>
-                <h3>Slides relacionados aos projetos</h3>
-                {(draft.content_json.experienceMedia?.slides ?? []).map((slide, slideIndex) => (
-                  <div className="block-item-editor" key={slideIndex}>
-                    <div className="block-item-head">
-                      <strong>Slide {slideIndex + 1}</strong>
-                      <div className="order-buttons">
-                        <button type="button" aria-label="Slide anterior na ordem" onClick={() => {
-                          if (slideIndex === 0) return
-                          const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
-                          ;[slides[slideIndex - 1], slides[slideIndex]] = [slides[slideIndex], slides[slideIndex - 1]]
-                          setDraft({ ...draft, content_json: { ...draft.content_json, experienceMedia: { ...draft.content_json.experienceMedia, slides } } })
-                        }}><Icon name="up" size={17} /></button>
-                        <button type="button" aria-label="Slide seguinte na ordem" onClick={() => {
-                          const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
-                          if (slideIndex >= slides.length - 1) return
-                          ;[slides[slideIndex + 1], slides[slideIndex]] = [slides[slideIndex], slides[slideIndex + 1]]
-                          setDraft({ ...draft, content_json: { ...draft.content_json, experienceMedia: { ...draft.content_json.experienceMedia, slides } } })
-                        }}><Icon name="down" size={17} /></button>
-                        <button type="button" aria-label="Excluir slide" onClick={() => {
-                          if (!confirm("Excluir este slide?")) return
-                          const slides = (draft.content_json.experienceMedia?.slides ?? []).filter((_, i) => i !== slideIndex)
-                          setDraft({ ...draft, content_json: { ...draft.content_json, experienceMedia: { ...draft.content_json.experienceMedia, slides } } })
-                        }}><Icon name="close" size={17} /></button>
+            ) &&
+              draft.mobile_panel === "a" && (
+                <fieldset className="admin-card">
+                  <legend>Identidade da empresa e galeria de projetos</legend>
+                  <p>
+                    Use arquivos próprios/autorizados. Sem imagens aprovadas, o site mostra um
+                    espaço reservado identificado, não uma fotografia fictícia.
+                  </p>
+                  <div className="field-grid">
+                    <label>
+                      URL do logo da empresa (/media/arquivo ou HTTPS)
+                      <input
+                        value={draft.content_json.experienceMedia?.logo ?? ""}
+                        onChange={(event) =>
+                          setDraft({
+                            ...draft,
+                            content_json: {
+                              ...draft.content_json,
+                              experienceMedia: {
+                                ...draft.content_json.experienceMedia,
+                                logo: event.target.value,
+                              },
+                            },
+                          })
+                        }
+                      />
+                    </label>
+                    <label>
+                      Descrição alternativa do logo
+                      <input
+                        value={draft.content_json.experienceMedia?.logoAlt ?? ""}
+                        onChange={(event) =>
+                          setDraft({
+                            ...draft,
+                            content_json: {
+                              ...draft.content_json,
+                              experienceMedia: {
+                                ...draft.content_json.experienceMedia,
+                                logoAlt: event.target.value,
+                              },
+                            },
+                          })
+                        }
+                      />
+                    </label>
+                  </div>
+                  <h3>Slides relacionados aos projetos</h3>
+                  {(draft.content_json.experienceMedia?.slides ?? []).map((slide, slideIndex) => (
+                    <div className="block-item-editor" key={slideIndex}>
+                      <div className="block-item-head">
+                        <strong>Slide {slideIndex + 1}</strong>
+                        <div className="order-buttons">
+                          <button
+                            type="button"
+                            aria-label="Slide anterior na ordem"
+                            onClick={() => {
+                              if (slideIndex === 0) return
+                              const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
+                              ;[slides[slideIndex - 1], slides[slideIndex]] = [
+                                slides[slideIndex],
+                                slides[slideIndex - 1],
+                              ]
+                              setDraft({
+                                ...draft,
+                                content_json: {
+                                  ...draft.content_json,
+                                  experienceMedia: {
+                                    ...draft.content_json.experienceMedia,
+                                    slides,
+                                  },
+                                },
+                              })
+                            }}
+                          >
+                            <Icon name="up" size={17} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Slide seguinte na ordem"
+                            onClick={() => {
+                              const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
+                              if (slideIndex >= slides.length - 1) return
+                              ;[slides[slideIndex + 1], slides[slideIndex]] = [
+                                slides[slideIndex],
+                                slides[slideIndex + 1],
+                              ]
+                              setDraft({
+                                ...draft,
+                                content_json: {
+                                  ...draft.content_json,
+                                  experienceMedia: {
+                                    ...draft.content_json.experienceMedia,
+                                    slides,
+                                  },
+                                },
+                              })
+                            }}
+                          >
+                            <Icon name="down" size={17} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Excluir slide"
+                            onClick={() => {
+                              if (!confirm("Excluir este slide?")) return
+                              const slides = (
+                                draft.content_json.experienceMedia?.slides ?? []
+                              ).filter((_, i) => i !== slideIndex)
+                              setDraft({
+                                ...draft,
+                                content_json: {
+                                  ...draft.content_json,
+                                  experienceMedia: {
+                                    ...draft.content_json.experienceMedia,
+                                    slides,
+                                  },
+                                },
+                              })
+                            }}
+                          >
+                            <Icon name="close" size={17} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="field-grid">
+                        {(
+                          [
+                            ["title", "Título do projeto"],
+                            ["image", "URL da foto"],
+                            ["alt", "Descrição alternativa da foto"],
+                            ["caption", "Legenda da imagem"],
+                          ] as const
+                        ).map(([key, label]) => (
+                          <label key={key}>
+                            {label}
+                            <input
+                              value={slide[key] ?? ""}
+                              onChange={(event) => {
+                                const slides = [
+                                  ...(draft.content_json.experienceMedia?.slides ?? []),
+                                ]
+                                slides[slideIndex] = { ...slide, [key]: event.target.value }
+                                setDraft({
+                                  ...draft,
+                                  content_json: {
+                                    ...draft.content_json,
+                                    experienceMedia: {
+                                      ...draft.content_json.experienceMedia,
+                                      slides,
+                                    },
+                                  },
+                                })
+                              }}
+                            />
+                          </label>
+                        ))}
                       </div>
                     </div>
-                    <div className="field-grid">
-                      {([
-                        ["title", "Título do projeto"],
-                        ["image", "URL da foto"],
-                        ["alt", "Descrição alternativa da foto"],
-                        ["caption", "Legenda da imagem"],
-                      ] as const).map(([key, label]) => (
-                        <label key={key}>
-                          {label}
-                          <input value={slide[key] ?? ""} onChange={(event) => {
-                            const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
-                            slides[slideIndex] = { ...slide, [key]: event.target.value }
-                            setDraft({ ...draft, content_json: { ...draft.content_json, experienceMedia: { ...draft.content_json.experienceMedia, slides } } })
-                          }} />
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-                <button type="button" className="secondary-button" onClick={() => {
-                  const slides = [...(draft.content_json.experienceMedia?.slides ?? []), { title: "Novo projeto" }]
-                  setDraft({ ...draft, content_json: { ...draft.content_json, experienceMedia: { ...draft.content_json.experienceMedia, slides } } })
-                }}>Adicionar slide</button>
-              </fieldset>
-            )}
+                  ))}
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => {
+                      const slides = [
+                        ...(draft.content_json.experienceMedia?.slides ?? []),
+                        { title: "Novo projeto" },
+                      ]
+                      setDraft({
+                        ...draft,
+                        content_json: {
+                          ...draft.content_json,
+                          experienceMedia: { ...draft.content_json.experienceMedia, slides },
+                        },
+                      })
+                    }}
+                  >
+                    Adicionar slide
+                  </button>
+                </fieldset>
+              )}
             <div className="block-items">
               {sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
                 draft.mobile_panel === "b" && (
