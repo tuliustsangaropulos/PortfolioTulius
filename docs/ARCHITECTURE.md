@@ -27,3 +27,9 @@ O fallback só é usado quando a consulta falha ou o schema ainda não existe. E
 ## Navegação editorial configurável da abertura
 
 `src/components/public/PublicSite.tsx` transforma os primeiros cinco itens do bloco `perfil` / painel B em links internos (<a href="#slug">) no desktop e no painel B mobile. `src/lib/validation.ts` resolve `targetSlug` exclusivamente contra seções efetivamente publicadas/visíveis; na ausência de campo, usa `resultados`. Os demais `ItemCard` e links de contato mantêm comportamento anterior. O CMS administra `targetSlug` dentro do conteúdo JSONB com `save_content_block_atomic`; não há chamada SQL nova nem alteração em `navigation_items`. A navegação por âncora usa o scroll nativo/suave (com suporte a movimento reduzido).
+
+## Renderização especial da seção `sobre` (26/10/2026)
+
+`src/components/public/PublicSite.tsx` aplica `AboutDesktop` apenas quando `section.slug === "sobre"`, mantendo o fluxo de `MobilePanel` sem alterações. O componente usa `section.desktopPanelA ?? section.panelA` e `section.desktopPanelB ?? section.panelB`: renderiza imagem central por `ContentItem.aboutDesktopImage` com fallback ao asset versionado, e declarações à direita como `[...itemsB, ...itemsA]`. O item da esquerda reaparece **somente como texto** à direita, por apresentação sem `image`, não por duplicação de `content_blocks`. A coluna esquerda segue `sections.title/eyebrow/intro` do CMS.
+
+Os overrides `aboutDesktopImage` e `aboutDesktopAlt` pertencem ao JSONB do bloco existente. `src/lib/validation.ts` aplica allowlist de URL de mídia e alt personalizado. Não houve DDL, novo endpoint público, permissão adicional, mudança de RLS ou alteração na ordem dos dados armazenados.
