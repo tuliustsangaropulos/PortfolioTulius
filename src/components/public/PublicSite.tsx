@@ -40,12 +40,14 @@ function ItemCard({
   layout,
   showArrow = false,
   targetSlug,
+  onNavigate,
 }: {
   item: ContentItem
   index: number
   layout: PortfolioSection["layout"]
   showArrow?: boolean
   targetSlug?: string
+  onNavigate?: () => void
 }) {
   const contact = layout === "contact" && item.meta?.match(/^(https|mailto)/)
   const presentation = item.placement
@@ -82,6 +84,9 @@ function ItemCard({
   const style = itemStyle(item)
   const content = (
     <>
+      {layout === "metrics" && item.value && (
+        <span className="result-metric-icon"><Icon name={item.metricIcon ?? "chart"} size={23} /></span>
+      )}
       {item.image && (
         <img
           src={item.image}
@@ -119,6 +124,7 @@ function ItemCard({
       data-motion-once={presentation?.motionConfig?.once === false ? "false" : undefined}
       style={style}
       href={targetSlug ? `#${targetSlug}` : item.meta}
+      onClick={onNavigate}
       target={contact && item.meta?.startsWith("http") ? "_blank" : undefined}
       rel={contact ? "noreferrer" : undefined}
     >
@@ -139,10 +145,12 @@ function ProfileDesktop({
   section,
   nextSectionSlug,
   publishedSlugs,
+  onSelectTheme,
 }: {
   section: PortfolioSection
   nextSectionSlug?: string
   publishedSlugs: string[]
+  onSelectTheme: (themeKey: string) => void
 }) {
   const panelA = section.desktopPanelA ?? section.panelA
   const panelB = section.desktopPanelB ?? section.panelB
@@ -191,13 +199,18 @@ function ProfileDesktop({
         </div>
         <p className="profile-role">{section.eyebrow}</p>
         <div className="area-grid">
-          {areas.map((item) => (
+          {areas.map((item, index) => (
             <ItemCard
               key={item.label}
               item={item}
               index={0}
               layout="hero"
               targetSlug={resolveHeroCardDestination(item.targetSlug, publishedSlugs)}
+              onNavigate={
+                resolveHeroCardDestination(item.targetSlug, publishedSlugs) === "resultados"
+                  ? () => onSelectTheme(item.themeKey || RESULT_THEME_KEYS[index])
+                  : undefined
+              }
             />
           ))}
         </div>
@@ -227,11 +240,13 @@ function MobilePanel({
   panel,
   items,
   publishedSlugs,
+  onSelectTheme,
 }: {
   section: PortfolioSection
   panel: "a" | "b"
   items: ContentItem[]
   publishedSlugs: string[]
+  onSelectTheme: (themeKey: string) => void
 }) {
   const isProfile = section.slug === "perfil"
   const isAbout = section.slug === "sobre"
@@ -319,6 +334,12 @@ function MobilePanel({
                 targetSlug={
                   isProfile && panel === "b" && i < 5
                     ? resolveHeroCardDestination(item.targetSlug, publishedSlugs)
+                    : undefined
+                }
+                onNavigate={
+                  isProfile && panel === "b" && i < 5 &&
+                  resolveHeroCardDestination(item.targetSlug, publishedSlugs) === "resultados"
+                    ? () => onSelectTheme(item.themeKey || RESULT_THEME_KEYS[i])
                     : undefined
                 }
               />
@@ -458,14 +479,165 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
   )
 }
 
+
+const RESULT_THEME_KEYS = ["corporativa", "projetos", "eventos", "marketing", "imprensa"]
+
+function ResultsCenter({
+  section,
+  selectedTheme,
+}: {
+  section: PortfolioSection
+  selectedTheme: string | null
+}) {
+  const topics = section.desktopPanelB ?? section.panelB
+  const metrics = section.desktopPanelA ?? section.panelA
+  const topic = topics.find((item, index) => (item.themeKey || RESULT_THEME_KEYS[index]) === selectedTheme)
+  const filteredMetrics = topic
+    ? metrics.filter((item) => item.relatedThemeKeys?.includes(topic.themeKey || ""))
+    : metrics
+
+  return (
+    <div className="results-center" aria-live="polite">
+      {topic && (
+        <article className="results-topic">
+          {topic.themeAxis && <p className="results-axis">{topic.themeAxis}</p>}
+          <h3>{topic.themeTitle || topic.title}</h3>
+          {topic.themeSubtitle && <p className="results-subtitle">{topic.themeSubtitle}</p>}
+          {topic.themeTopics && (
+            <div className="results-related">
+              <strong>Temas relacionados</strong>
+              <p>{topic.themeTopics}</p>
+            </div>
+          )}
+          {topic.themeSummary && <p className="results-summary">{topic.themeSummary}</p>}
+          {Boolean(topic.inheritedHighlights?.length) && (
+            <div className="results-inherited">
+              <strong>Competências e experiência</strong>
+              <ul>
+                {topic.inheritedHighlights?.map((highlight) => <li key={highlight}>{highlight}</li>)}
+              </ul>
+            </div>
+          )}
+        </article>
+      )}
+      {filteredMetrics.length > 0 && (
+        <div className="results-metrics-grid">
+          {filteredMetrics.map((item, index) => (
+            <ItemCard
+              key={`${item.title}-${index}`}
+              item={{ ...item, label: undefined }}
+              index={index}
+              layout="metrics"
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ResultsThemeChooser({
+  section,
+  selectedTheme,
+  onSelectTheme,
+}: {
+  section: PortfolioSection
+  selectedTheme: string | null
+  onSelectTheme: (themeKey: string | null) => void
+}) {
+  const items = section.desktopPanelB ?? section.panelB
+  return (
+    <div className="results-theme-list" aria-label="Filtrar resultados por especialidade">
+      <button
+        type="button"
+        className={selectedTheme === null ? "is-active" : ""}
+        aria-pressed={selectedTheme === null}
+        onClick={() => onSelectTheme(null)}
+      >
+        Visão geral — indicadores
+      </button>
+      {items.map((item, index) => {
+        const key = item.themeKey || RESULT_THEME_KEYS[index]
+        return (
+          <button
+            key={key}
+            type="button"
+            aria-pressed={selectedTheme === key}
+            className={selectedTheme === key ? "is-active" : ""}
+            onClick={() => onSelectTheme(key)}
+          >
+            {item.title}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function ResultsDesktop({
+  section,
+  selectedTheme,
+  onSelectTheme,
+}: {
+  section: PortfolioSection
+  selectedTheme: string | null
+  onSelectTheme: (themeKey: string | null) => void
+}) {
+  return (
+    <div className="desktop-editorial results-editorial">
+      <header className="section-heading">
+        <h2>{section.title}</h2>
+        {section.intro && <p className="section-intro">{section.intro}</p>}
+      </header>
+      <div className="desktop-content">
+        <ResultsCenter section={section} selectedTheme={selectedTheme} />
+        <ResultsThemeChooser
+          section={section}
+          selectedTheme={selectedTheme}
+          onSelectTheme={onSelectTheme}
+        />
+      </div>
+    </div>
+  )
+}
+
+function ResultsMobile({
+  section,
+  selectedTheme,
+  onSelectTheme,
+}: {
+  section: PortfolioSection
+  selectedTheme: string | null
+  onSelectTheme: (themeKey: string | null) => void
+}) {
+  return (
+    <div className="mobile-panel results-mobile-panel" id="resultados-a" data-panel="a">
+      <header className="panel-heading">
+        <h2>{section.title}</h2>
+        {section.intro && <p className="section-intro">{section.intro}</p>}
+      </header>
+      <ResultsThemeChooser
+        section={section}
+        selectedTheme={selectedTheme}
+        onSelectTheme={onSelectTheme}
+      />
+      <ResultsCenter section={section} selectedTheme={selectedTheme} />
+    </div>
+  )
+}
+
 function Section({
   section,
   nextSectionSlug,
   publishedSlugs,
+  selectedTheme,
+  onSelectTheme,
 }: {
   section: PortfolioSection
   nextSectionSlug?: string
   publishedSlugs: string[]
+  selectedTheme: string | null
+  onSelectTheme: (themeKey: string | null) => void
 }) {
   return (
     <section
@@ -479,9 +651,12 @@ function Section({
             section={section}
             nextSectionSlug={nextSectionSlug}
             publishedSlugs={publishedSlugs}
+            onSelectTheme={onSelectTheme}
           />
         ) : section.slug === "sobre" ? (
           <AboutDesktop section={section} />
+        ) : section.slug === "resultados" ? (
+          <ResultsDesktop section={section} selectedTheme={selectedTheme} onSelectTheme={onSelectTheme} />
         ) : (
           <div className="desktop-editorial">
             <header className="section-heading">
@@ -515,18 +690,26 @@ function Section({
         )}
       </div>
       <div className="mobile-panels">
+        {section.slug === "resultados" ? (
+          <ResultsMobile section={section} selectedTheme={selectedTheme} onSelectTheme={onSelectTheme} />
+        ) : (
+          <>
         <MobilePanel
           section={section}
           panel="a"
           items={section.panelA}
           publishedSlugs={publishedSlugs}
+          onSelectTheme={onSelectTheme}
         />
         <MobilePanel
           section={section}
           panel="b"
           items={section.panelB}
           publishedSlugs={publishedSlugs}
+          onSelectTheme={onSelectTheme}
         />
+          </>
+        )}
       </div>
     </section>
   )
@@ -539,6 +722,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
     [sections, preview],
   )
   const [current, setCurrent] = useState("perfil")
+  const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -641,6 +825,8 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
             publishedSlugs={visible
               .filter((entry) => entry.status === "published" && entry.visible)
               .map((entry) => entry.slug)}
+            selectedTheme={selectedTheme}
+            onSelectTheme={setSelectedTheme}
           />
         ))}
       </main>
