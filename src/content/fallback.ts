@@ -144,6 +144,8 @@ export const sections: PortfolioSection[] = [
         text: "Uma trajetória conectando organizações e pessoas.",
         image: "/media/tulius-portrait.jpg",
         alt: "Retrato de Tulius Tsangaropulos",
+        aboutDesktopImage: "/media/tulius-contact.jpg",
+        aboutDesktopAlt: "Tulius Tsangaropulos segurando um tablet",
       },
     ],
     panelB: [
