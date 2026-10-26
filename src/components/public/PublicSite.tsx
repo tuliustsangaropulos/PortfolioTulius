@@ -407,6 +407,52 @@ function toDvh(value?: number) {
   return value == null ? undefined : `${value}dvh`
 }
 
+/**
+ * Desktop-only editorial composition for section 02.
+ * All copy remains in the existing CMS rows; the image has its own optional
+ * desktop asset key so the original mobile thumbnail is not changed.
+ */
+function AboutDesktop({ section }: { section: PortfolioSection }) {
+  const itemsA = section.desktopPanelA ?? section.panelA
+  const itemsB = section.desktopPanelB ?? section.panelB
+  const introductoryItem = itemsA[0]
+  const desktopImage =
+    introductoryItem?.aboutDesktopImage?.trim() || "/media/tulius-contact.jpg"
+
+  return (
+    <div className="about-desktop">
+      <header className="section-heading about-heading">
+        <h2>{section.title}</h2>
+        {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
+        {section.intro && <p className="section-intro">{section.intro}</p>}
+      </header>
+      <div className="about-portrait">
+        {introductoryItem && (
+          <img
+            src={desktopImage}
+            alt={introductoryItem.aboutDesktopAlt || introductoryItem.alt || "Tulius Tsangaropulos"}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+      </div>
+      <div className="about-statements">
+        {itemsB.map((item, index) => (
+          <ItemCard key={`${item.title}-${index}`} item={item} index={index} layout={section.layout} />
+        ))}
+        {itemsA.map((item, index) => (
+          <ItemCard
+            key={`${item.title}-${index}`}
+            item={{ ...item, image: undefined, alt: undefined }}
+            index={index}
+            layout={section.layout}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function Section({
   section,
   nextSectionSlug,
@@ -429,6 +475,8 @@ function Section({
             nextSectionSlug={nextSectionSlug}
             publishedSlugs={publishedSlugs}
           />
+        ) : section.slug === "sobre" ? (
+          <AboutDesktop section={section} />
         ) : (
           <div className="desktop-editorial">
             <header className="section-heading">
