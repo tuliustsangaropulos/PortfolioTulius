@@ -110,16 +110,36 @@ describe("formação e experiência profissional em camadas", () => {
     }
   })
 
-  it("preserva os conteúdos e inicializa galerias editoriais sem imagens falsas", () => {
+  it("preserva os conteúdos e vincula sínteses editoriais editáveis sem simular fotografias", () => {
     for (const slug of companies) {
       const section = sections.find((entry) => entry.slug === slug)
       expect(section?.panelA.length).toBeGreaterThan(0)
       expect(section?.panelB.length).toBeGreaterThan(0)
-      expect(section?.experienceMedia?.slides).toHaveLength(3)
-      expect(section?.experienceMedia?.slides?.every((slide) => slide.title && !slide.image)).toBe(
-        true,
-      )
+      expect(section?.experienceMedia?.slides).toHaveLength(slug === "invest-rs" ? 4 : 3)
+      expect(
+        section?.experienceMedia?.slides?.every(
+          (slide) =>
+            Boolean(slide.title) &&
+            slide.image?.startsWith(`/media/editorial-${slug}-`) &&
+            slide.alt?.includes("Não é fotografia do projeto.") &&
+            slide.caption?.includes("não é registro fotográfico"),
+        ),
+      ).toBe(true)
     }
+  })
+
+  it("incorpora a experiência internacional e a trajetória jornalística dos anexos", () => {
+    const profile = sections.find((section) => section.slug === "perfil")
+    const invest = sections.find((section) => section.slug === "invest-rs")
+    const globo = sections.find((section) => section.slug === "globo-sportv")
+    const prefeitura = sections.find((section) => section.slug === "prefeitura-sp")
+
+    expect(profile?.panelA.some((item) => item.text?.includes("34 países"))).toBe(true)
+    expect(invest?.panelB.some((item) => item.title.includes("CRM"))).toBe(true)
+    expect(invest?.panelB.some((item) => item.title.includes("IA e automação"))).toBe(true)
+    expect(prefeitura?.panelB.some((item) => item.title.includes("Território"))).toBe(true)
+    expect(globo?.panelB.filter((item) => item.meta?.startsWith("TRAJETÓRIA"))).toHaveLength(4)
+    expect(globo?.panelB.some((item) => item.title.includes("Chapecoense"))).toBe(true)
   })
 })
 
