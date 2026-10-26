@@ -170,7 +170,7 @@ try {
       }, width)
       await page.screenshot({ path: path.join(shots, `p3-${width}x${height}.png`), fullPage: false })
       console.log("P3_VIEWPORT " + JSON.stringify({ width, height, ...findings }))
-      if (findings.sectionCount !== 14 || findings.mobilePanelCount !== 28 || findings.documentWidth > width + 2) failures++
+      if (findings.sectionCount !== 13 || findings.mobilePanelCount !== 25 || findings.documentWidth > width + 2) failures++
     } catch (error) {
       failures++
       console.log("P3_VIEWPORT_ERROR " + JSON.stringify({ width, height, error: String(error).slice(0, 250) }))
