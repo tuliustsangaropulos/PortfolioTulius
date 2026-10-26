@@ -954,7 +954,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           <label className="field-wide">
                             Texto do selo circular
                             <input
-                              value={item.hero?.badgeText ?? "VISÃO 360° DA COMUNICAÇÃO ·"}
+                              value={item.hero?.badgeText ?? "VISÃO 360° DA COMUNICAÇÃO E MARKETING ·"}
                               onChange={(event) =>
                                 updateHero(index, {
                                   badgeText: event.target.value,
