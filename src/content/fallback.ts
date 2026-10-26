@@ -140,8 +140,7 @@ export const sections: PortfolioSection[] = [
     visible: true,
     panelA: [
       {
-        title: "Estratégia também é escuta.",
-        text: "Uma trajetória conectando organizações e pessoas.",
+        title: "Imagem da seção 02",
         image: "/media/tulius-portrait.jpg",
         alt: "Retrato de Tulius Tsangaropulos",
         aboutDesktopImage: "/media/tulius-contact.jpg",
@@ -150,12 +149,24 @@ export const sections: PortfolioSection[] = [
     ],
     panelB: [
       {
+        title: "Estratégia também é escuta.",
+        text: "Uma trajetória conectando organizações e pessoas.",
+      },
+      {
         title: "Comunicação de ponta a ponta",
         text: "Conecto estratégia, reputação, conteúdo, tecnologia e gestão de projetos.",
       },
       {
         title: "Visão editorial",
         text: "Clareza para temas complexos, repertório internacional e execução orientada por contexto.",
+      },
+      {
+        title: "Resultados que orientam decisões",
+        text: "Indicadores e análise de desempenho para transformar estratégia em impacto mensurável.",
+      },
+      {
+        title: "A voz de quem lidera",
+        text: "Posicionamento e mensagens que fortalecem lideranças e criam conexões com públicos estratégicos.",
       },
     ],
   },
@@ -196,17 +207,11 @@ export const sections: PortfolioSection[] = [
       },
     ],
     panelB: [
-      { title: "Estratégia de comunicação" },
-      { title: "Gestão de resultados" },
-      { title: "Comunicação digital" },
-      { title: "Conteúdo e reputação" },
-      { title: "Relações públicas e imprensa" },
-      { title: "Comunicação executiva" },
-      {
-        title: "XXXXX · X/Y/Z",
-        text: "Conteúdo provisório preservado para revisão editorial.",
-        placeholder: true,
-      },
+      { title: "Comunicação Corporativa" },
+      { title: "Gestão e execução de projetos" },
+      { title: "Relações Públicas e Gestão de Eventos" },
+      { title: "Marketing Digital, Branding e Performance" },
+      { title: "Imprensa e Influenciadores" },
     ],
   },
   {
