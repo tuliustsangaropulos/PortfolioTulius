@@ -835,7 +835,14 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
         <h1 className="sr-only">Tulius Tsangaropulos — Comunicação e Estratégia</h1>
         {visible.map((section, index) => {
           if (EXPERIENCE_SLUGS.includes(section.slug as (typeof EXPERIENCE_SLUGS)[number])) {
-            if (visible.slice(0, index).some((entry) => EXPERIENCE_SLUGS.includes(entry.slug as (typeof EXPERIENCE_SLUGS)[number]))) return null
+            if (
+              visible
+                .slice(0, index)
+                .some((entry) =>
+                  EXPERIENCE_SLUGS.includes(entry.slug as (typeof EXPERIENCE_SLUGS)[number]),
+                )
+            )
+              return null
             return (
               <ExperienceStack
                 key="experience-stack"
