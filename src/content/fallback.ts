@@ -75,7 +75,7 @@ export const sections: PortfolioSection[] = [
       },
       {
         title: "Experiência internacional",
-        text: "Correspondente na China; formação em Dublin (2011) e Buenos Aires (2024).",
+        text: "Correspondente internacional na China, intercâmbio em Dublin, curso em Buenos Aires e vivências em 34 países.",
         icon: "arrow",
       },
       {
@@ -305,9 +305,10 @@ export const sections: PortfolioSection[] = [
     visible: true,
     experienceMedia: {
       slides: [
-        { title: "Guia de Boas-Vindas" },
-        { title: "Organização de eventos" },
-        { title: "Plataforma de eventos e relacionamento" },
+        {"title":"Guia de Boas-Vindas","image":"/media/editorial-invest-rs-01.svg","alt":"Infográfico editorial de Invest RS sobre Guia de Boas-Vindas: Organização editorial do guia; Estrutura para atualização; Apoio à integração de equipes. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Organização de eventos","image":"/media/editorial-invest-rs-02.svg","alt":"Infográfico editorial de Invest RS sobre Organização de eventos: Mais de 10 eventos na atuação; Fornecedores e credenciamento; Logística, comunicação e cobertura. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Plataforma de eventos e relacionamento","image":"/media/editorial-invest-rs-03.svg","alt":"Infográfico editorial de Invest RS sobre Plataforma de eventos e relacionamento: Convites e inscrições; Check-in e segmentação de públicos; Histórico e relatórios de participação. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Estratégia de CRM e mailing institucional","image":"/media/editorial-invest-rs-04.svg","alt":"Infográfico editorial de Invest RS sobre Estratégia de CRM e mailing institucional: Governança e segmentação de contatos; Fluxos de convites e relacionamento; Integrações externas ainda planejadas. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
       ],
     },
     panelA: [
@@ -324,30 +325,33 @@ export const sections: PortfolioSection[] = [
       },
       {
         title: "Guia de Boas-Vindas",
-        text: "Organização editorial e criação de estrutura de atualização do guia institucional.",
+        text: "Organização editorial e estrutura de atualização do Guia de Boas-Vindas, com apoio à apresentação institucional e à integração de equipes.",
       },
       {
         title: "Organização de eventos",
-        text: "Apoio a fornecedores, credenciamento, logística, materiais e cobertura, incluindo a Expointer 2026.",
+        text: "Apoio à organização e à comunicação de mais de 10 eventos institucionais, incluindo a Expointer 2026: fornecedores, credenciamento, logística, materiais e cobertura.",
       },
     ],
     panelB: [
       {
         title: "Plataforma de eventos e relacionamento",
-        text: "Desenvolvimento de plataforma para eventos, convites, inscrições, check-in, segmentação e relatórios.",
+        text: "Estruturação de solução para eventos e relacionamento: convites, inscrições, check-in, segmentação de públicos e relatórios de participação.",
       },
       {
-        title: "Diagnóstico do mailing institucional",
-        text: "Proposta de governança, fluxos de convites e histórico. Integrações externas permanecem planejadas.",
+        title: "Estratégia de CRM e mailing institucional",
+        text: "Diagnóstico e proposta de modelo integrado para mailing e CRM: consolidação de contatos, segmentação, governança, fluxos de convites e histórico de relacionamento. As integrações externas permanecem planejadas.",
       },
       {
         title: "Cartões de visita digitais",
         text: "Concepção de variantes multilíngues, QR Code e vCard.",
       },
       {
-        title: "Ativos visuais",
-        text: "Imagens finais ainda precisam de aprovação editorial.",
-        placeholder: true,
+        title: "Conteúdo e apresentações institucionais",
+        text: "Produção de materiais institucionais, apresentações estratégicas e articulação com stakeholders e agências contratadas.",
+      },
+      {
+        title: "Inovação, IA e automação",
+        text: "Participação em frentes de projetos digitais e inovação com inteligência artificial e automação aplicadas a fluxos de comunicação.",
       },
     ],
   },
@@ -364,9 +368,9 @@ export const sections: PortfolioSection[] = [
     visible: true,
     experienceMedia: {
       slides: [
-        { title: "Planejamento de comunicação" },
-        { title: "Conteúdo institucional e executivo" },
-        { title: "Plataforma SUBPI" },
+        {"title":"Planejamento de comunicação","image":"/media/editorial-prefeitura-sp-01.svg","alt":"Infográfico editorial de Prefeitura de São Paulo sobre Planejamento de comunicação: Comunicação institucional; Comunicação interna; Estratégia digital. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Conteúdo institucional e executivo","image":"/media/editorial-prefeitura-sp-02.svg","alt":"Infográfico editorial de Prefeitura de São Paulo sobre Conteúdo institucional e executivo: Notas oficiais e comunicados; Discursos e revistas; Materiais para diferentes públicos. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Plataforma SUBPI","image":"/media/editorial-prefeitura-sp-03.svg","alt":"Infográfico editorial de Prefeitura de São Paulo sobre Plataforma SUBPI: Portal interno concebido; Cerca de 900 colaboradores no escopo; Comunicados, relatórios e indicadores. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
       ],
     },
     panelA: [
@@ -399,6 +403,10 @@ export const sections: PortfolioSection[] = [
         title: "Plataforma SUBPI",
         text: "Portal interno concebido para cerca de 900 colaboradores, reunindo comunicados, relatórios e indicadores.",
       },
+      {
+        title: "Território e contexto institucional",
+        text: "A Subprefeitura de Pinheiros reúne Pinheiros, Itaim Bibi, Jardim Paulista e Alto de Pinheiros, incluindo áreas estratégicas próximas às avenidas Paulista e Faria Lima.",
+      },
     ],
   },
   {
@@ -414,9 +422,9 @@ export const sections: PortfolioSection[] = [
     visible: true,
     experienceMedia: {
       slides: [
-        { title: "Projetos digitais de ponta a ponta" },
-        { title: "Comunicação executiva e reputação" },
-        { title: "Mídia paga e inteligência de dados" },
+        {"title":"Projetos digitais de ponta a ponta","image":"/media/editorial-vale-01.svg","alt":"Infográfico editorial de Vale sobre Projetos digitais de ponta a ponta: Planejamento, briefing e governança; Coordenação com áreas e agências; Equipe digital de seis pessoas. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Comunicação executiva e reputação","image":"/media/editorial-vale-02.svg","alt":"Infográfico editorial de Vale sobre Comunicação executiva e reputação: Conteúdo para CEO e vice-presidentes; Campanhas institucionais; Reputação corporativa. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Mídia paga e inteligência de dados","image":"/media/editorial-vale-03.svg","alt":"Infográfico editorial de Vale sobre Mídia paga e inteligência de dados: R$ 12 milhões anuais sob gestão; Indicadores e otimização; Relatórios executivos. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
       ],
     },
     panelA: [
@@ -462,9 +470,9 @@ export const sections: PortfolioSection[] = [
     visible: true,
     experienceMedia: {
       slides: [
-        { title: "Produção de ponta a ponta" },
-        { title: "Jornalista em Pequim" },
-        { title: "Reportagens e entradas ao vivo" },
+        {"title":"Produção de ponta a ponta","image":"/media/editorial-globo-sportv-01.svg","alt":"Infográfico editorial de TV Globo / SporTV sobre Produção de ponta a ponta: Pauta e apuração; Entrevistas e captação; Roteiro, reportagem e edição. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Jornalista em Pequim","image":"/media/editorial-globo-sportv-02.svg","alt":"Infográfico editorial de TV Globo / SporTV sobre Jornalista em Pequim: Correspondência internacional na China; Ciclo dos Jogos Olímpicos de 2016; Reportagens e entradas ao vivo. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Reportagens e entradas ao vivo","image":"/media/editorial-globo-sportv-03.svg","alt":"Infográfico editorial de TV Globo / SporTV sobre Reportagens e entradas ao vivo: Série sobre homofobia no futebol; Cobertura do acidente da Chapecoense; Retrospectivas e coberturas especiais. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
       ],
     },
     panelA: [
@@ -500,6 +508,46 @@ export const sections: PortfolioSection[] = [
         label: "06",
         text: "Entradas ao vivo e reportagens diárias, da apuração à edição.",
       },
+      {
+        title: "2015 — Seleção e formação",
+        meta: "TRAJETÓRIA · 2015",
+        text: "Selecionado entre aproximadamente 8 mil candidatos para integrar um grupo de oito repórteres; formação e treinamento em jornalismo e operação audiovisual na TV Globo/SporTV.",
+      },
+      {
+        title: "2016 — Correspondência internacional na China",
+        meta: "TRAJETÓRIA · 2016",
+        text: "Atuação por cerca de um ano em Pequim, no ciclo dos Jogos Olímpicos do Rio 2016, com reportagens sobre esporte, cultura e sociedade.",
+      },
+      {
+        title: "2016 — Entradas ao vivo e produção completa",
+        meta: "TRAJETÓRIA · 2016",
+        text: "Entradas ao vivo diárias, com responsabilidade por apuração, entrevistas, captação de imagens, roteiro, reportagem e edição.",
+      },
+      {
+        title: "2017–2019 — Reportagem, produção e edição",
+        meta: "TRAJETÓRIA · 2017–2019",
+        text: "No Brasil, atuação como produtor, repórter e editor em coberturas de grande repercussão e programas especiais e retrospectivos.",
+      },
+      {
+        title: "Série sobre homofobia no futebol",
+        meta: "DESTAQUE EDITORIAL",
+        text: "Primeira série sobre homofobia no futebol exibida em rede nacional, conforme o infográfico profissional fornecido.",
+      },
+      {
+        title: "Cobertura do acidente da Chapecoense",
+        meta: "DESTAQUE EDITORIAL",
+        text: "Cobertura jornalística do acidente da Chapecoense, conforme a seleção de trabalhos do infográfico profissional.",
+      },
+      {
+        title: "Programas de retrospectiva do ano",
+        meta: "DESTAQUE EDITORIAL",
+        text: "Participação na produção de programas especiais de retrospectiva, reunindo pautas e acontecimentos de destaque.",
+      },
+      {
+        title: "Coberturas especiais no Brasil e no exterior",
+        meta: "DESTAQUE EDITORIAL",
+        text: "Reportagens e séries internacionais, incluindo produções relacionadas a Japão, Coreia do Sul, Hong Kong e Macau.",
+      },
     ],
   },
   {
@@ -515,9 +563,9 @@ export const sections: PortfolioSection[] = [
     visible: true,
     experienceMedia: {
       slides: [
-        { title: "Assessoria de imprensa" },
-        { title: "Relações públicas" },
-        { title: "Campanhas integradas" },
+        {"title":"Assessoria de imprensa","image":"/media/editorial-inpress-01.svg","alt":"Infográfico editorial de Grupo InPress sobre Assessoria de imprensa: Mais de 30 veiculações; TV Globo, Folha e Veja; Exame e Forbes. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Relações públicas","image":"/media/editorial-inpress-02.svg","alt":"Infográfico editorial de Grupo InPress sobre Relações públicas: Jornalistas e influenciadores; Porta-vozes e entrevistas; Eventos e relacionamento. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Campanhas integradas","image":"/media/editorial-inpress-03.svg","alt":"Infográfico editorial de Grupo InPress sobre Campanhas integradas: Contas como GoPro e Sicredi; Johnson & Johnson; Imprensa, eventos e ações digitais. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
       ],
     },
     panelA: [
@@ -558,9 +606,9 @@ export const sections: PortfolioSection[] = [
     visible: true,
     experienceMedia: {
       slides: [
-        { title: "Planejamento estratégico" },
-        { title: "Comunicação institucional" },
-        { title: "Gestão de stakeholders" },
+        {"title":"Planejamento estratégico","image":"/media/editorial-cdi-01.svg","alt":"Infográfico editorial de CDI Comunicação sobre Planejamento estratégico: Planejamento anual; Planos táticos mensais; Públicos, mensagens e indicadores. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Comunicação institucional","image":"/media/editorial-cdi-02.svg","alt":"Infográfico editorial de CDI Comunicação sobre Comunicação institucional: Roteiros e discursos; Apresentações institucionais; Materiais para diferentes públicos. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
+        {"title":"Gestão de stakeholders","image":"/media/editorial-cdi-03.svg","alt":"Infográfico editorial de CDI Comunicação sobre Gestão de stakeholders: Sicredi e Instituto Vladimir Herzog; Relacionamento institucional; Articulação e porta-vozes. Não é fotografia do projeto.","caption":"Síntese editorial baseada no currículo e nos infográficos; não é registro fotográfico da entrega."},
       ],
     },
     panelA: [

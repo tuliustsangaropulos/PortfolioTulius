@@ -668,3 +668,15 @@
  .career-grid .area-card-link, .profile-b-items .content-item.area-card-link:nth-child(n+6),
  #contato .contact-link h3, #contato .contact-link .item-value { transition: none; }
 }
+
+/* Marcadores cronológicos editoriais das experiências — conteúdo gerenciável via meta no CMS. */
+.experience-project-meta {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.105em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: #bc390c;
+}
