@@ -2292,7 +2292,7 @@ export function EnhancedMediaLibrary() {
     const client = supabase
     const result = await stagePrivateMediaChange({
       stage: () => client.storage.from("portfolio-private").upload(path, file),
-      persist: () =>
+      persist: async () =>
         client.from("media_assets").insert({
           storage_bucket: "portfolio-private",
           storage_path: path,
@@ -2358,7 +2358,7 @@ export function EnhancedMediaLibrary() {
           contentType: file.type,
           upsert: false,
         }),
-      persist: () =>
+      persist: async () =>
         client
           .from("media_assets")
           .update({
