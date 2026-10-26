@@ -50,12 +50,28 @@ export function resolveHeroCardDestination(
   return publishedSlugs.includes("resultados") ? "resultados" : undefined
 }
 
+export function isSafeEditorialImage(value: string) {
+  if (/^\\/media\\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(value)) return true
+  if (value.startsWith("https://")) {
+    try {
+      return new URL(value).protocol === "https:"
+    } catch {
+      return false
+    }
+  }
+  return false
+}
+
 export function validateContentItems(items: ContentItem[]) {
   const errors: string[] = []
   items.forEach((item, index) => {
     if (!item.title.trim()) errors.push(`Item ${index + 1}: título obrigatório.`)
     if (item.targetSlug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.targetSlug))
       errors.push(`Item ${index + 1}: destino de seção inválido.`)
+    if (item.aboutDesktopImage && !isSafeEditorialImage(item.aboutDesktopImage))
+      errors.push(`Item ${index + 1}: imagem desktop deve ser HTTPS ou /media/arquivo.`)
+    if (item.aboutDesktopImage && !(item.aboutDesktopAlt || item.alt)?.trim())
+      errors.push(`Item ${index + 1}: imagem desktop exige descrição alternativa.`)
     if (item.image && !item.alt?.trim())
       errors.push(`Item ${index + 1}: imagem informativa exige texto alternativo.`)
     if (
