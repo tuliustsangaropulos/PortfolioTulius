@@ -30,8 +30,8 @@ jobs:
       - name: Show suggested formatting changes
         if: failure()
         run: |
-          pnpm exec oxfmt src/components/public/PublicSite.tsx src/components/admin/AdminModules.tsx
-          git diff --no-ext-diff -- src/components/public/PublicSite.tsx src/components/admin/AdminModules.tsx
+          pnpm exec oxfmt src
+          git diff --no-ext-diff -- src
       - name: TypeScript
         run: pnpm typecheck
       - name: Unit tests
