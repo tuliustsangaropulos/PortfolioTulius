@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage, validateContentItems } from "../../lib/validation"
 import { stagePrivateMediaChange } from "../../lib/media-operations"
+import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
 import type {
   ContentItem,
@@ -2241,14 +2242,31 @@ function IssueRow({
 
 export function EnhancedMediaLibrary() {
   const [assets, setAssets] = useState<Record<string, any>[]>([])
+  const [previews, setPreviews] = useState<Record<string, MediaPreview>>({})
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({})
   const [message, setMessage] = useState("")
   const load = async () => {
-    const { data, error } = (await supabase
-      ?.from("media_assets")
+    const client = supabase
+    if (!client) return
+    const { data, error } = await client
+      .from("media_assets")
       .select("*")
-      .order("created_at", { ascending: false })) ?? { data: [], error: null }
-    setAssets(data ?? [])
-    setMessage(error?.message ?? "")
+      .order("created_at", { ascending: false })
+    const nextAssets = data ?? []
+    setAssets(nextAssets)
+    setFailedImages({})
+    if (error) {
+      setPreviews({})
+      setMessage(error.message)
+      return
+    }
+    const resolved = await Promise.all(
+      nextAssets.map(async (asset) => ({
+        id: asset.id,
+        preview: await resolveMediaPreview(client.storage, asset),
+      })),
+    )
+    setPreviews(Object.fromEntries(resolved.map(({ id, preview }) => [id, preview])))
   }
   useEffect(() => {
     void load()
@@ -2401,8 +2419,27 @@ export function EnhancedMediaLibrary() {
       <div className="media-grid media-editor-grid">
         {assets.map((asset, index) => (
           <article className="admin-card" key={asset.id}>
-            <div className="media-placeholder">
-              <Icon name="image" size={32} />
+            <div className="media-placeholder media-preview">
+              {previews[asset.id]?.url && !failedImages[asset.id] ? (
+                <img
+                  src={previews[asset.id].url}
+                  alt={asset.alt_text?.trim() || asset.title?.trim() || "Prévia da mídia"}
+                  loading="lazy"
+                  decoding="async"
+                  onError={() =>
+                    setFailedImages((current) => ({ ...current, [asset.id]: true }))
+                  }
+                />
+              ) : (
+                <div className="media-preview-fallback">
+                  <Icon name="image" size={32} />
+                  <small>
+                    {failedImages[asset.id]
+                      ? "Imagem indisponível. Confira o arquivo no Storage."
+                      : previews[asset.id]?.error ?? "Carregando prévia…"}
+                  </small>
+                </div>
+              )}
             </div>
             <strong>{asset.storage_path}</strong>
             <small>

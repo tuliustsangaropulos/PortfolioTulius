@@ -85,3 +85,13 @@ A identidade da seção Ferramentas usa `sections.theme='ink'`. Na ausência de 
 Uploads privados e substituições passam por procedimento compensatório: o arquivo novo é enviado, os metadados são gravados, e somente então um arquivo substituído é removido; se a gravação falha, tenta-se remover o novo arquivo. Uma falha de limpeza é reportada ao operador. **Não é uma transação distribuída entre PostgreSQL e Storage**; homologação com JWT administrativo real ainda falta.
 
 A pedido do proprietário, os textos publicados de `resultados/A`, `invest-rs/A` e `invest-rs/B` tiveram a marca de placeholder do bloco removida. O item específico **Ativos visuais**, dentro de `invest-rs/B`, continua `placeholder=true` por não haver imagens aprovadas; as notas `editorial_note` documentam a distinção. O conteúdo `content_json` não foi reescrito. Ver [registro da etapa 3](ETAPA_3_AJUSTES_2026-10-26.md).
+
+
+## Correção da pré-visualização da Biblioteca de mídia — 26/10/2026
+
+A Biblioteca de mídia agora exibe a **imagem real**, em vez de um ícone fixo, em cartões de arquivos privados e públicos. A imagem usa `object-fit: contain` para preservar as proporções dos logotipos e tem fallback visível para caminho ausente, erro de assinatura ou falha de carregamento.
+
+- **Bucket `portfolio-private`:** o admin autenticado solicita uma URL assinada com validade de 3.600 segundos por meio da sessão e das regras RLS existentes; a URL é mantida apenas no estado do componente e não é gravada no CMS. Após expirar, recarregue a Biblioteca de mídia para gerar uma nova prévia.
+- **Bucket `portfolio-public`:** a URL pública é obtida pelo SDK via `getPublicUrl(storage_path)`; não é necessário abrir o bucket privado para visitantes.
+- **Fluxos preservados:** upload privado, metadados, revisão, publicação, substituição e referência de logo por URL em `Blocos e painéis`. Não houve alteração de Auth, RLS, bucket nem conteúdo editorial.
+- **Limite:** testes unitários cobrem geração da URL e falhas. Sem execução E2E com JWT admin, não afirmar que o carregamento de imagens privadas foi homologado no navegador real.
