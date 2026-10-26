@@ -1017,6 +1017,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     {sections.find((entry) => entry.id === draft.section_id)?.slug === "perfil" &&
                       draft.mobile_panel === "b" &&
                       index < 5 && (
+                        <>
                         <label className="field-wide">
                           Destino do card (seção interna)
                           <select
@@ -1053,6 +1054,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                               <option value="imprensa">Imprensa e Influenciadores</option>
                             </select>
                         </label>
+                        </>
                       )}
                     <label>
                       Imagem
