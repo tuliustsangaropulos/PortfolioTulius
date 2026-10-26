@@ -3,7 +3,9 @@ import { describe, expect, it, vi } from "vitest"
 import { resolveMediaPreview } from "./media-preview"
 
 function fakeStorage() {
-  const getPublicUrl = vi.fn().mockReturnValue({ data: { publicUrl: "https://assets.example/public/logo.png" } })
+  const getPublicUrl = vi
+    .fn()
+    .mockReturnValue({ data: { publicUrl: "https://assets.example/public/logo.png" } })
   const createSignedUrl = vi.fn().mockResolvedValue({
     data: { signedUrl: "https://assets.example/private/logo.png?token=limited" },
     error: null,
