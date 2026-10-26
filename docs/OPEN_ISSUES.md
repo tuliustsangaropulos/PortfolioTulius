@@ -73,3 +73,11 @@ A pendência `panelB.placeholder` (X/Y/Z/XXXXX) da seção `resultados` foi marc
 **PENDÊNCIA DE ACEITE:** validar os seis layers por rolagem real (especialmente mobile e alturas baixas), seleção de empresas, sliders/pontos e links no navegador; conferir o header global e ausência de sobreposição indevida; homologar campos de mídia pelo admin autenticado e revisão/rollback; entregar fotografias/logos.
 
 **Ajuste pós-auditoria:** screenshot mobile revelou sobreposição do conteúdo do próximo empregador sobre a galeria atual. Corrigido no código em `6cfe4d04` por desativação do sticky de cards abaixo de 768px, preservando a navegação fixa e o efeito desktop. **A produção `READY` mais recente ainda aponta `f8bc345c`**, portanto a correção não está confirmada no site público e requer novo deployment após liberação da quota Vercel. Não confundir sucesso da auditoria P3 sobre o código em produção antigo com aprovação visual da correção ainda não implantada.
+
+## Ferramentas, links de carreira e contato — 26/10/2026
+
+**Implementado em código e conteúdo:** seção Ferramentas `theme=ink` com pictogramas locais configuráveis por item (até três, sem repetições); seis cards de experiência da seção 01 com destinos individuais corretos e hover/foco na superfície inteira; hover/foco dos valores e títulos clicáveis na seção Contato. Conteúdo original preservado. Banco atualizado com transação que verificou título/contagem dos itens e existência das seções; consultas posteriores confirmaram seis `targetSlug` e seis conjuntos de ícones.
+
+**Pendências de aceitação:** validar edição autenticada dos destinos e dos ícones no CMS, testar a navegação por mouse e teclado em desktop/mobile e confirmar que a versão mais recente está implantada na Vercel. Os ícones são pictogramas semelhantes às plataformas, não assets oficiais; se a exigência passar a ser fidelidade às marcas, cadastrar os respectivos SVGs autorizados é uma tarefa editorial separada.
+
+**Nota de deployment:** acompanhar o limite Vercel `api-deployments-free-per-day` já observado na etapa anterior antes de declarar a atualização publicada.
