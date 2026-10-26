@@ -134,7 +134,7 @@
 .area-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
 .area-grid .content-item { display: block; background: var(--ink); color: white; padding: 1rem; border: 1px solid #ffffff22; }
 .area-grid .content-item h3 { font-size: clamp(1rem, 1.25vw, 1.4rem); }
-.area-grid .area-card-link, .profile-b-items .area-card-link { color: inherit; text-decoration: none; cursor: pointer; transition: background-color .22s ease, color .22s ease, transform .22s ease; }
+.area-grid .area-card-link, .profile-b-items .area-card-link { text-decoration: none; cursor: pointer; transition: background-color .22s ease, color .22s ease, transform .22s ease; }
 .area-grid .area-card-link:hover, .area-grid .area-card-link:focus-visible, .profile-b-items .area-card-link:hover, .profile-b-items .area-card-link:focus-visible { background: var(--orange); color: var(--ink); transform: translateY(-2px); }
 .area-grid .area-card-link:hover .item-label, .area-grid .area-card-link:focus-visible .item-label, .profile-b-items .area-card-link:hover .item-label, .profile-b-items .area-card-link:focus-visible .item-label { color: var(--ink); }
 .area-grid .area-card-link:focus-visible, .profile-b-items .area-card-link:focus-visible { outline: 3px solid var(--ink); outline-offset: -5px; }
