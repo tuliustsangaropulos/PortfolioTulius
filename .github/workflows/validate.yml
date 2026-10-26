@@ -27,6 +27,11 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Formatting
         run: pnpm format:check
+      - name: Show suggested formatting changes
+        if: failure()
+        run: |
+          pnpm exec oxfmt src/components/public/PublicSite.tsx src/components/admin/AdminModules.tsx
+          git diff --no-ext-diff -- src/components/public/PublicSite.tsx src/components/admin/AdminModules.tsx
       - name: TypeScript
         run: pnpm typecheck
       - name: Unit tests
