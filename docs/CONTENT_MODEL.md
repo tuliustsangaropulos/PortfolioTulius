@@ -32,3 +32,28 @@ Sem tabelas/migrations novas, os dois blocos de `resultados` foram enriquecidos:
 Os primeiros cinco cards de `perfil`/painel B receberam o atributo opcional `themeKey`, sem alteração dos títulos ou destinos `targetSlug`. A seleção é um estado React `selectedTheme: string | null` compartilhado pelo herói e pela seção de resultados; `null` exibe todos os quatro indicadores. Clique no card com destino `#resultados` define o mesmo tema no painel interativo.
 
 O registro `sections.slug='competencias'` foi **despublicado visualmente por `is_visible=false`**, mantendo `status=published` e todos os blocos originais intactos. Assim o projeto preserva fontes históricas sem renderizar o antigo painel como seção independente. Total esperado: **13 seções públicas e 25 painéis mobile** (resultados usa um único painel mobile interativo). Os demais conteúdos não foram alterados.
+
+## Metadados de mídia de experiência (26/10/2026)
+
+Sem DDL nem Storage novo, cada bloco publicado de `content_blocks` com `mobile_panel='a'` das seis empresas recebeu a propriedade JSONB opcional `experienceMedia` junto de `items`:
+
+```json
+{
+  "experienceMedia": {
+    "logo": "/media/logo-autorizado.svg",
+    "logoAlt": "Logotipo da empresa",
+    "slides": [
+      {
+        "title": "Nome de projeto",
+        "image": "/media/foto-real-aprovada.jpg",
+        "alt": "Descrição da fotografia",
+        "caption": "Legenda opcional"
+      }
+    ]
+  }
+}
+```
+
+**Exemplo estrutural, não dados existentes:** os campos `logo`, `logoAlt`, `image`, `alt` e `caption` são opcionais e **não foram preenchidos** no seed. Inicialmente há três `slides` com `title` por empresa; o CMS os preserva/edita. O hook `usePortfolio` incorpora `experienceMedia` na `PortfolioSection` a partir do primeiro bloco publicado A; `ExperienceStack` renderiza `logo`/slides se houver mídia válida.
+
+Conteúdo e imagens não são duplicados nos módulos mobile/desktop: os dois leem `experienceMedia` da seção. Todos os `items` A/B antigos permanecem. `sections.theme`: `formacao=ink`; seis empresas `paper`. Grupo de slugs e ordem: `invest-rs`, `prefeitura-sp`, `vale`, `globo-sportv`, `inpress`, `cdi`. Mais detalhes em `docs/CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md`.
