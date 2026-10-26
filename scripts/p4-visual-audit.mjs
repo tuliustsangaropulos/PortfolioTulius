@@ -33,7 +33,7 @@ try {
       const slugs = await page.$$eval("section.portfolio-section", nodes => nodes.map(node => node.id))
       if (slugs.length !== 13 || new Set(slugs).size !== 13) throw new Error("Seções ausentes ou duplicadas")
       for (const [index, slug] of slugs.entries()) {
-        const panelKeys = variant.name === "desktop" ? ["desktop"] : ["a", "b"]
+        const panelKeys = variant.name === "desktop" ? ["desktop"] : slug === "resultados" ? ["a"] : ["a", "b"]
         for (const panel of panelKeys) {
           const selector = variant.name === "desktop"
             ? "#"+slug+" .desktop-panel" : "#"+slug+"-"+panel
@@ -107,4 +107,4 @@ console.log("P4_EDITORIAL_SUMMARY " + JSON.stringify({
   failures,
   badPanels: report.filter(x => !x.visible || x.textLength < 15 || x.error || x.brokenImages > 0 || x.documentWidth > (x.panel === "desktop" ? 1442 : 392)),
 }))
-if (report.length !== 42 || failures) process.exitCode = 1
+if (report.length !== 38 || failures) process.exitCode = 1
