@@ -11,17 +11,20 @@ export const EXPERIENCE_SLUGS = [
 ] as const
 
 function Monogram({ name }: { name: string }) {
-  const letters = name.split(/[\s/]+/).filter(Boolean).slice(0, 2).map((word) => word[0]).join("")
-  return <span className="experience-monogram" aria-hidden="true">{letters}</span>
+  const letters = name
+    .split(/[\s/]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+  return (
+    <span className="experience-monogram" aria-hidden="true">
+      {letters}
+    </span>
+  )
 }
 
-function CompanyMark({
-  section,
-  small = false,
-}: {
-  section: PortfolioSection
-  small?: boolean
-}) {
+function CompanyMark({ section, small = false }: { section: PortfolioSection; small?: boolean }) {
   const { logo, logoAlt } = section.experienceMedia ?? {}
   return (
     <span className={small ? "company-mark company-mark-small" : "company-mark"}>
@@ -44,7 +47,9 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
 
   return (
     <div className="experience-gallery" aria-label={`Galeria de projetos: ${section.title}`}>
-      <div className={hasImage ? "experience-media-frame" : "experience-media-frame media-awaiting"}>
+      <div
+        className={hasImage ? "experience-media-frame" : "experience-media-frame media-awaiting"}
+      >
         {hasImage ? (
           <img src={slide!.image} alt={slide!.alt} loading="lazy" decoding="async" />
         ) : (
@@ -70,7 +75,9 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
             >
               <span aria-hidden="true">←</span>
             </button>
-            <span aria-live="polite">{index + 1} / {count}</span>
+            <span aria-live="polite">
+              {index + 1} / {count}
+            </span>
             <button
               type="button"
               aria-label={`Próxima foto de ${section.title}`}
@@ -99,14 +106,11 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
   )
 }
 
-function ExperienceCard({
-  section,
-  order,
-}: {
-  section: PortfolioSection
-  order: number
-}) {
-  const items = [...(section.desktopPanelA ?? section.panelA), ...(section.desktopPanelB ?? section.panelB)]
+function ExperienceCard({ section, order }: { section: PortfolioSection; order: number }) {
+  const items = [
+    ...(section.desktopPanelA ?? section.panelA),
+    ...(section.desktopPanelB ?? section.panelB),
+  ]
   return (
     <section
       id={section.slug}
@@ -135,7 +139,11 @@ function ExperienceCard({
         <PhotoGallery section={section} />
       </div>
       <div className="mobile-panels">
-        <div id={`${section.slug}-a`} className="mobile-panel experience-mobile-copy" data-panel="a">
+        <div
+          id={`${section.slug}-a`}
+          className="mobile-panel experience-mobile-copy"
+          data-panel="a"
+        >
           <header className="experience-heading">
             <CompanyMark section={section} />
             <h2>{section.title}</h2>
@@ -154,7 +162,11 @@ function ExperienceCard({
             ))}
           </div>
         </div>
-        <div id={`${section.slug}-b`} className="mobile-panel experience-mobile-gallery" data-panel="b">
+        <div
+          id={`${section.slug}-b`}
+          className="mobile-panel experience-mobile-gallery"
+          data-panel="b"
+        >
           <PhotoGallery section={section} />
         </div>
       </div>
