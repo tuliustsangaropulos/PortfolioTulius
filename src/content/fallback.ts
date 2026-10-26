@@ -1,4 +1,5 @@
 import type { DesignTokens, PortfolioSection } from "../types/content"
+import { resultThemeContent } from "./resultThemes"
 
 export const defaultTokens: DesignTokens = {
   orange: "#FF5414",
@@ -183,36 +184,34 @@ export const sections: PortfolioSection[] = [
     panelA: [
       {
         title: "Mídia e Estratégia",
-        label: "01",
+        metricIcon: "chart",
+        relatedThemeKeys: ["marketing"],
         value: "R$ 12 milhões",
         text: "Orçamento anual de mídia paga gerido na Vale, com campanhas orientadas por indicadores.",
       },
       {
         title: "Comunicação Pública",
-        label: "02",
+        metricIcon: "trending",
+        relatedThemeKeys: ["marketing"],
         value: "+48% · +225%",
         text: "Crescimento de seguidores e alcance em seis meses na Prefeitura de São Paulo.",
       },
       {
         title: "Jornalismo Internacional",
-        label: "03",
+        metricIcon: "newspaper",
+        relatedThemeKeys: ["imprensa"],
         value: "~8 mil",
         text: "Candidatos no processo que selecionou oito repórteres para a TV Globo/SporTV.",
       },
       {
         title: "Relações Públicas e Imprensa",
-        label: "04",
+        metricIcon: "megaphone",
+        relatedThemeKeys: ["eventos", "imprensa"],
         value: "+30",
         text: "Veiculações em veículos como TV Globo, Folha, Veja, Exame e Forbes.",
       },
     ],
-    panelB: [
-      { title: "Comunicação Corporativa" },
-      { title: "Gestão e execução de projetos" },
-      { title: "Relações Públicas e Gestão de Eventos" },
-      { title: "Marketing Digital, Branding e Performance" },
-      { title: "Imprensa e Influenciadores" },
-    ],
+    panelB: resultThemeContent,
   },
   {
     id: "seed-competencias",
@@ -222,7 +221,7 @@ export const sections: PortfolioSection[] = [
     theme: "cream",
     layout: "editorial",
     status: "published",
-    visible: true,
+    visible: false,
     panelA: [
       {
         title: "Habilidades",
