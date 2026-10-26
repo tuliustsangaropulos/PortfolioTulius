@@ -227,7 +227,9 @@ function ProfileDesktop({
               item={item}
               index={i}
               layout="hero"
-              targetSlug={publishedSlugs.includes(item.targetSlug ?? "") ? item.targetSlug : undefined}
+              targetSlug={
+                publishedSlugs.includes(item.targetSlug ?? "") ? item.targetSlug : undefined
+              }
             />
           ))}
         </div>
@@ -682,7 +684,13 @@ function Section({
             onSelectTheme={onSelectTheme}
           />
         ) : (
-          <div className={section.slug === "ferramentas" ? "desktop-editorial tools-editorial" : "desktop-editorial"}>
+          <div
+            className={
+              section.slug === "ferramentas"
+                ? "desktop-editorial tools-editorial"
+                : "desktop-editorial"
+            }
+          >
             <header className="section-heading">
               <h2>{section.title}</h2>
               {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
