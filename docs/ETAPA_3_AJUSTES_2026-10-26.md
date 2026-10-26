@@ -38,3 +38,8 @@ A documentação das etapas 1 e 2 foi incorporada ao repositório e o índice [E
 ## Reauditoria após conciliação documental — 26/10/2026
 
 Após a inclusão dos relatórios das etapas 1 e 2 e do índice de estado vigente, o [CI 40288148955](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148955) e o [P3 Lighthouse 40288148755](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148755) passaram no SHA `d3acbed`. O P3 validou o novo teste de consistência entre navegação e seções públicas (13 links / 13 seções, 0 inválidos); Lighthouse mobile performance 80, accessibility 100, desktop performance 98, accessibility 100, 38 capturas e 8 viewports. As medições anteriores 70/96 e 75/100 foram preservadas em seus relatos históricos. O rótulo do artefato P4 foi corrigido de 42 para 38 capturas; a tabela `section_panels` do Supabase continua possuindo 42 registros.
+
+
+## Limpeza final verificada do painel
+
+Na revisão cruzada posterior, as implementações legadas `MediaLibrary()` e `NavigationEditor()` foram confirmadas sem chamadas em `AdminApp.tsx` e removidas. O painel em uso mantém `EnhancedMediaLibrary` e `NavigationStudio`. A remoção descarta uma variante antiga de upload sem compensação e textos estáticos de 14 destinos, sem alterar dados, rotas ou o módulo ativo. Testes de uso do Storage com JWT real continuam pendentes.

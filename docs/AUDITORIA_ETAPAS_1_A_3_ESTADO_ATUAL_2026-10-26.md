@@ -25,7 +25,7 @@
 ## O que permanece comprovadamente pendente
 
 1. **Admin com JWT real:** não encontrada execução do workflow manual `P5 Admin Read-Only E2E`; login, prévia, logout e CRUD/rollback em sessão real não estão homologados. Configurar somente Secrets do GitHub; nunca expor senha em documentação/chat.
-2. **Storage real:** não há upload/download binário testado com autenticação; helper compensatório testado por mocks, sem transação distribuída; `MediaLibrary` legada existe no código mas o editor ativo usa `EnhancedMediaLibrary`.
+2. **Storage real:** não há upload/download binário testado com autenticação; helper compensatório testado por mocks, sem transação distribuída; o editor ativo usa `EnhancedMediaLibrary`.
 3. **Performance mobile:** LCP ~4,51 s; avaliar imagem responsiva e custo de JS com medição causal. Passar nos budgets de regressão não comprova Core Web Vitals de campo.
 4. **Ativos visuais:** imagens e logotipos profissionais aprovados permanecem ausentes. Não substituir por fotos ilustrativas ou logos não autorizados.
 5. **Segurança:** seis warnings de `SECURITY DEFINER`, concessões do schema `private` a revisar antes de DDL, 19 `multiple_permissive_policies`, 10 `unused_index` informativos. PAT histórico e leaked-password protection são riscos aceitos pelo proprietário, não corrigidos.
@@ -51,3 +51,7 @@ O commit `d3acbedb7dd3c91ce9b5aba77dadf2f705a9a130` foi publicado na Vercel como
 O arquivo de workflow ainda denominava o artefato de screenshots `p4-editorial-42-panels`, embora o conteúdo atual tenha 38 capturas. O nome foi corrigido para `p4-editorial-38-panels`; não confundir **42 registros `section_panels` no CMS** (incluem seção oculta) com **38 capturas visíveis** no website. Os artefatos antigos permanecem sob seus nomes originais nos runs históricos.
 
 **Limite de rastreabilidade:** o workflow `Audit P3 Lighthouse` consulta o domínio `https://tulius.work/` e não um artefato imutável do commit. Antes de vincular futuros scores a alterações, conferir SHA do deployment `READY` e instante de execução. Nem este resultado substitui login JWT administrativo e upload/download real de mídias.
+
+## Complemento de limpeza não funcional
+
+Foi comprovado no arquivo `AdminApp.tsx` que `MediaLibrary()` e `NavigationEditor()` eram funções legadas sem referências de chamada (o roteamento usa `EnhancedMediaLibrary` e `NavigationStudio`). Ambas foram removidas nesta revisão, eliminando implementação antiga de upload sem compensação e rótulos antigos de 14 destinos. **Sem alteração do comportamento do painel em uso**: a validação por TypeScript, Vitest e build confirma a integridade estática; JWT real e upload de bytes seguem pendentes de teste de integração.
