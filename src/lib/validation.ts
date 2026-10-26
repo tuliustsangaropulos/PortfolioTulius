@@ -41,10 +41,21 @@ export function isSafePublicUrl(value: string) {
   return false
 }
 
+/** Resolve a CMS-controlled anchor only against section slugs actually published. */
+export function resolveHeroCardDestination(
+  requested: string | undefined,
+  publishedSlugs: readonly string[],
+): string | undefined {
+  if (requested && publishedSlugs.includes(requested)) return requested
+  return publishedSlugs.includes("resultados") ? "resultados" : undefined
+}
+
 export function validateContentItems(items: ContentItem[]) {
   const errors: string[] = []
   items.forEach((item, index) => {
     if (!item.title.trim()) errors.push(`Item ${index + 1}: título obrigatório.`)
+    if (item.targetSlug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.targetSlug))
+      errors.push(`Item ${index + 1}: destino de seção inválido.`)
     if (item.image && !item.alt?.trim())
       errors.push(`Item ${index + 1}: imagem informativa exige texto alternativo.`)
     if (
