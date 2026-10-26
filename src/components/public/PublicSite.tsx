@@ -425,9 +425,7 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
         {introductoryItem && (
           <img
             src={desktopImage}
-            alt={
-              introductoryItem.aboutDesktopAlt || "Tulius Tsangaropulos segurando um tablet"
-            }
+            alt={introductoryItem.aboutDesktopAlt || "Tulius Tsangaropulos segurando um tablet"}
             loading="lazy"
             decoding="async"
           />
