@@ -89,6 +89,19 @@ export type ContentItem = {
   hero?: HeroVisualConfig
 }
 
+export type ExperienceSlide = {
+  title: string
+  image?: string
+  alt?: string
+  caption?: string
+}
+
+export type ExperienceMedia = {
+  logo?: string
+  logoAlt?: string
+  slides?: ExperienceSlide[]
+}
+
 export type PortfolioSection = {
   id: string
   slug: string
@@ -102,6 +115,7 @@ export type PortfolioSection = {
   status: "draft" | "in_review" | "published" | "archived"
   visible: boolean
   navLabel?: string
+  experienceMedia?: ExperienceMedia
   panelA: ContentItem[]
   panelB: ContentItem[]
   desktopPanelA?: ContentItem[]
