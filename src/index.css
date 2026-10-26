@@ -590,7 +590,7 @@
 @media (max-width: 767px) {
  .experience-index { display: flex; overflow-x: auto; gap: .4rem; padding-inline: 1rem; scrollbar-width: thin; }
  .experience-index a { flex: 0 0 auto; min-height: 2.4rem; font-size: .68rem; padding: .3rem .45rem; }
- .experience-card { min-height: 100svh; }
+ .experience-card { position: relative; top: auto; min-height: 100svh; }
  .experience-desktop { display: none; }
  .experience-card .mobile-panels { display: block; }
  .experience-mobile-copy { padding-top: calc(var(--header) + 4.3rem); }
