@@ -82,17 +82,21 @@ describe("section 02 desktop portrait", () => {
 
 describe("validação do conteúdo interativo de resultados", () => {
   it("aceita ícones e temas autorizados", () => {
-    expect(validateContentItems([
-      { title: "Indicador", metricIcon: "chart", relatedThemeKeys: ["marketing"] },
-      { title: "Tema", themeKey: "corporativa", themeAxis: "Liderança" },
-    ])).toHaveLength(0)
+    expect(
+      validateContentItems([
+        { title: "Indicador", metricIcon: "chart", relatedThemeKeys: ["marketing"] },
+        { title: "Tema", themeKey: "corporativa", themeAxis: "Liderança" },
+      ]),
+    ).toHaveLength(0)
   })
 
   it("rejeita ícones inválidos e identificadores de temas repetidos", () => {
-    expect(validateContentItems([
-      { title: "Indicador", metricIcon: "invalid" as "chart" },
-      { title: "Tema 1", themeKey: "corporativa" },
-      { title: "Tema 2", themeKey: "corporativa" },
-    ])).toHaveLength(2)
+    expect(
+      validateContentItems([
+        { title: "Indicador", metricIcon: "invalid" as "chart" },
+        { title: "Tema 1", themeKey: "corporativa" },
+        { title: "Tema 2", themeKey: "corporativa" },
+      ]),
+    ).toHaveLength(2)
   })
 })
