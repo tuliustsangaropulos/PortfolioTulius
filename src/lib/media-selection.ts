@@ -40,13 +40,15 @@ export function getPublishedImageChoices(
         return []
       }
       return isSafeEditorialImage(url)
-        ? [{
-            id: row.id,
-            title: row.title?.trim() || row.storage_path,
-            alt: row.alt_text?.trim() || "",
-            url,
-            path: row.storage_path,
-          }]
+        ? [
+            {
+              id: row.id,
+              title: row.title?.trim() || row.storage_path,
+              alt: row.alt_text?.trim() || "",
+              url,
+              path: row.storage_path,
+            },
+          ]
         : []
     })
 }

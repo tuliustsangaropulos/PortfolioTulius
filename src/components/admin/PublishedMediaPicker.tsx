@@ -50,8 +50,10 @@ export function PublishedMediaPicker({
           setAssets([])
         } else {
           setAssets(
-            getPublishedImageChoices(data as MediaLibraryRow[], (path) =>
-              supabase!.storage.from("portfolio-public").getPublicUrl(path).data.publicUrl,
+            getPublishedImageChoices(
+              data as MediaLibraryRow[],
+              (path) =>
+                supabase!.storage.from("portfolio-public").getPublicUrl(path).data.publicUrl,
             ),
           )
         }
@@ -71,7 +73,8 @@ export function PublishedMediaPicker({
   }, [open])
 
   const filtered = assets.filter((asset) =>
-    `${asset.title} ${asset.path} ${asset.alt}`.toLocaleLowerCase("pt-BR")
+    `${asset.title} ${asset.path} ${asset.alt}`
+      .toLocaleLowerCase("pt-BR")
       .includes(query.toLocaleLowerCase("pt-BR").trim()),
   )
 
