@@ -55,7 +55,7 @@
 .drawer-foot { color: #aaa; }
 .nav-open { overflow: hidden; }
 
-.portfolio-section { position: relative; min-height: 100vh; min-height: 100svh; scroll-snap-align: start; scroll-margin-top: var(--header); }
+.portfolio-section { position: relative; min-height: 100vh; min-height: 100svh; scroll-snap-align: start; scroll-margin-top: 0; }
 .desktop-panel { min-height: 100vh; min-height: 100svh; }
 .mobile-panels { display: none; }
 .theme-paper { background: var(--paper); color: var(--ink); }
@@ -112,7 +112,7 @@
 .badge-360 svg { width: 100%; height: 100%; overflow: visible; }
 .badge-360 text { font-family: var(--font-display); font-size: 17px; font-weight: 800; letter-spacing: 2.5px; }
 .badge-360 > svg > path { fill: none; stroke: currentColor; stroke-width: 2; }
-.profile-portrait .badge-360 { position: absolute; left: var(--hero-desktop-badge-x, 55%); top: var(--hero-desktop-badge-y, 74%); width: max(var(--hero-desktop-badge-size, 34%), 42%); transform: translateY(-50%); }
+.profile-portrait .badge-360 { position: absolute; left: var(--hero-desktop-badge-x, 55%); top: calc(var(--hero-desktop-badge-y, 74%) - clamp(2rem, 6dvh, 3.25rem)); width: max(var(--hero-desktop-badge-size, 34%), 42%); transform: translateY(-50%); }
 .profile-sidebar-content { min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); align-content: start; gap: clamp(.7rem, 1.5dvh, 1.25rem); padding: clamp(1rem, 2.2dvh, 1.65rem) clamp(1rem, 2.2vw, 2rem) clamp(1rem, 2dvh, 1.6rem); overflow: hidden; }
 .profile-intro { margin: var(--hero-desktop-intro-spacing, 0) auto 0; max-width: 26rem; color: var(--hero-intro-color, white); font-family: Georgia, serif; font-size: var(--hero-desktop-intro-size, clamp(.85rem, 1.05vw, 1.1rem)); font-style: italic; font-weight: 700; line-height: 1.3; text-align: var(--hero-desktop-intro-align, center); }
 .profile-highlights { min-height: 0; display: grid; align-content: space-around; gap: clamp(.25rem, .7dvh, .65rem); }
@@ -125,6 +125,8 @@
 .profile-main { position: relative; padding: clamp(5.5rem, 9vh, 8rem) var(--gutter) 2rem clamp(2rem, 3vw, 4rem); }
 .profile-next-section { position: absolute; left: 50%; bottom: clamp(1.25rem, 3.5dvh, 2.5rem); transform: translateX(-50%); display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border: 1.5px solid currentColor; border-radius: 50%; background: var(--paper); color: var(--ink); transition: background .2s ease, transform .2s ease; }
 .profile-next-section:hover { background: var(--orange); transform: translate(-50%, 4px); }
+.profile-next-section svg { animation: profile-scroll-hint 1.7s ease-in-out infinite; }
+@keyframes profile-scroll-hint { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(4px); } }
 .name-lockup { display: flex; align-items: stretch; width: max-content; max-width: 100%; font-family: var(--font-display); font-weight: 900; font-size: clamp(3.4rem, 5.6vw, 7rem); line-height: .82; letter-spacing: -.055em; text-transform: uppercase; }
 .name-lockup span { padding: .18em .12em .1em; background: var(--paper); }
 .name-lockup span:first-child { background: var(--orange); }
@@ -132,6 +134,10 @@
 .area-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
 .area-grid .content-item { display: block; background: var(--ink); color: white; padding: 1rem; border: 1px solid #ffffff22; }
 .area-grid .content-item h3 { font-size: clamp(1rem, 1.25vw, 1.4rem); }
+.area-grid .area-card-link, .profile-b-items .area-card-link { color: inherit; text-decoration: none; cursor: pointer; transition: background-color .22s ease, color .22s ease, transform .22s ease; }
+.area-grid .area-card-link:hover, .area-grid .area-card-link:focus-visible, .profile-b-items .area-card-link:hover, .profile-b-items .area-card-link:focus-visible { background: var(--orange); color: var(--ink); transform: translateY(-2px); }
+.area-grid .area-card-link:hover .item-label, .area-grid .area-card-link:focus-visible .item-label, .profile-b-items .area-card-link:hover .item-label, .profile-b-items .area-card-link:focus-visible .item-label { color: var(--ink); }
+.area-grid .area-card-link:focus-visible, .profile-b-items .area-card-link:focus-visible { outline: 3px solid var(--ink); outline-offset: -5px; }
 .profile-main > h2 { margin: 1.5rem 0 .5rem; padding-top: .6rem; border-top: 2px solid var(--orange); font: 800 clamp(1.3rem, 2vw, 2rem) var(--font-display); text-transform: uppercase; }
 .career-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
 .career-grid .content-item { padding: .65rem 0; }
