@@ -1,3 +1,20 @@
+export type ToolIconName =
+  | "analytics"
+  | "search"
+  | "meta"
+  | "growth"
+  | "salesforce"
+  | "hubspot"
+  | "sprinklr"
+  | "asana"
+  | "notion"
+  | "adobe"
+  | "figma"
+  | "wordpress"
+  | "social"
+  | "video"
+  | "megaphone"
+
 export type MetricIconName =
   | "chart"
   | "trending"
@@ -74,6 +91,7 @@ export type ContentItem = {
   targetSlug?: string
   metricIcon?: MetricIconName
   relatedThemeKeys?: string[]
+  toolIcons?: ToolIconName[]
   themeKey?: string
   themeAxis?: string
   themeTitle?: string
