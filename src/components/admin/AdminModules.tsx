@@ -2371,8 +2371,7 @@ export function EnhancedMediaLibrary() {
           .select("id")
           .single(),
       undoStage: () => client.storage.from("portfolio-private").remove([newPath]),
-      cleanupOld: () =>
-        client.storage.from("portfolio-private").remove([asset.storage_path]),
+      cleanupOld: () => client.storage.from("portfolio-private").remove([asset.storage_path]),
     })
     setMessage(
       result.ok
