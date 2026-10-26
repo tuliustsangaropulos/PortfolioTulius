@@ -5,7 +5,7 @@
 3. Vale: confirmar contextos de 6 pessoas e 14 países.
 4. Diferenciar viagens a 34 países e articulação com 14 países.
 5. Confirmar cargos/descrições de InPress e CDI.
-6. Resolver X/Y/Z/XXXXX da seção Resultados.
+6. ~~Resolver X/Y/Z/XXXXX da seção Resultados.~~ Resolvido em 26/10/2026: lista do painel B substituída pelos cinco temas da abertura, com registro editorial preservado.
 7. Substituir mídias temporárias da Invest RS.
 8. Confirmar licenças/créditos finais de mídias.
 9. Confirmar licença web da Neue Montreal; Heading Now Trial permanece excluída.
