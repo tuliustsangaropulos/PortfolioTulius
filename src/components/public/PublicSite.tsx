@@ -3,6 +3,7 @@ import { usePortfolio } from "../../hooks/usePortfolio"
 import type { ContentItem, HeroVisualConfig, PortfolioSection } from "../../types/content"
 import { Icon } from "../ui/Icons"
 import { Navigation } from "./Navigation"
+import { ExperienceStack, EXPERIENCE_SLUGS } from "./ExperienceStack"
 import { placementMotionVariables } from "../../lib/placement-motion"
 import { resolveHeroCardDestination } from "../../lib/validation"
 
@@ -832,18 +833,31 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
           </div>
         )}
         <h1 className="sr-only">Tulius Tsangaropulos — Comunicação e Estratégia</h1>
-        {visible.map((section, index) => (
-          <Section
-            key={section.id}
-            section={section}
-            nextSectionSlug={visible[index + 1]?.slug}
-            publishedSlugs={visible
-              .filter((entry) => entry.status === "published" && entry.visible)
-              .map((entry) => entry.slug)}
-            selectedTheme={selectedTheme}
-            onSelectTheme={setSelectedTheme}
-          />
-        ))}
+        {visible.map((section, index) => {
+          if (EXPERIENCE_SLUGS.includes(section.slug as (typeof EXPERIENCE_SLUGS)[number])) {
+            if (visible.slice(0, index).some((entry) => EXPERIENCE_SLUGS.includes(entry.slug as (typeof EXPERIENCE_SLUGS)[number]))) return null
+            return (
+              <ExperienceStack
+                key="experience-stack"
+                sections={visible.filter((entry) =>
+                  EXPERIENCE_SLUGS.includes(entry.slug as (typeof EXPERIENCE_SLUGS)[number]),
+                )}
+              />
+            )
+          }
+          return (
+            <Section
+              key={section.id}
+              section={section}
+              nextSectionSlug={visible[index + 1]?.slug}
+              publishedSlugs={visible
+                .filter((entry) => entry.status === "published" && entry.visible)
+                .map((entry) => entry.slug)}
+              selectedTheme={selectedTheme}
+              onSelectTheme={setSelectedTheme}
+            />
+          )
+        })}
       </main>
     </div>
   )
