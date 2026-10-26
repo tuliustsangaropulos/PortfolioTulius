@@ -42,4 +42,12 @@
 - [Pendências e histórico](OPEN_ISSUES.md)
 - [Deploy e SHAs de produção](DEPLOYMENT.md)
 
-**Nota sobre novas execuções:** o workflow `Audit P3 Lighthouse` analisa `https://tulius.work/`, não uma build isolada por SHA; em alterações futuras, confirmar se o deployment `READY` já incorpora o código pretendido antes de atribuir os scores ao push. O novo teste de coerência de navegação em `scripts/p5-public-rls.mjs` precisa de resultado no workflow P3 após esta revisão. Documentar esse resultado somente depois de confirmado.
+## Verificação posterior do índice — auditoria automatizada de 26/10/2026
+
+O commit `d3acbedb7dd3c91ce9b5aba77dadf2f705a9a130` foi publicado na Vercel como deployment `dpl_8byFb5ssDMgQW1RrVrWMeM4TrqRU` (`READY`) e teve [CI 40288148955](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148955) **aprovado**. O [Audit P3 Lighthouse 40288148755](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148755) também terminou **SUCCESS**, incluindo a checagem nova de navegação pública: **13 seções, 13 links publicados e visíveis, 0 destinos inválidos**, 0 registros administrativos lidos como visitante e nenhuma mutação. Interações de teclado/menu/Resultados/experiências e inspeção automatizada de 8 viewports e **38 capturas** passaram, sem `badPanels`.
+
+**Lighthouse 13.5.0 desta execução:** mobile Performance **80**, Acessibilidade **100**, Boas Práticas **100**, SEO **100**, LCP **3.859,72 ms**; desktop Performance **98**, Acessibilidade **100**, Boas Práticas **100**, SEO **100**, LCP **1.155,70 ms**. Scores de laboratório podem variar; a melhora não comprova causalidade da revisão documental. O LCP mobile ainda requer otimização.
+
+O arquivo de workflow ainda denominava o artefato de screenshots `p4-editorial-42-panels`, embora o conteúdo atual tenha 38 capturas. O nome foi corrigido para `p4-editorial-38-panels`; não confundir **42 registros `section_panels` no CMS** (incluem seção oculta) com **38 capturas visíveis** no website. Os artefatos antigos permanecem sob seus nomes originais nos runs históricos.
+
+**Limite de rastreabilidade:** o workflow `Audit P3 Lighthouse` consulta o domínio `https://tulius.work/` e não um artefato imutável do commit. Antes de vincular futuros scores a alterações, conferir SHA do deployment `READY` e instante de execução. Nem este resultado substitui login JWT administrativo e upload/download real de mídias.

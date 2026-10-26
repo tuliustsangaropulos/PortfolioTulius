@@ -125,3 +125,6 @@ No Contato, os títulos e valores clicáveis ganham contraste branco em hover/fo
 ### Atualização operacional da etapa 3 — 26/10/2026
 
 Textos atualmente publicados em `resultados/A`, `invest-rs/A` e `invest-rs/B` foram consolidados editorialmente no Supabase sem reescrever o JSONB. O item **Ativos visuais** continua pendente de fotografias aprovadas, e os 18 slides profissionais seguem sem fotos. O CSS de contraste da Formação e a biblioteca privada de mídia receberam correções pontuais e testes unitários. Consulte [Etapa 3](docs/ETAPA_3_AJUSTES_2026-10-26.md); o aceite visual e administrativo autenticado ainda requer provas separadas.
+
+
+**Última revalidação (26/10/2026):** [CI do índice consolidado aprovado](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148955) e [Lighthouse/QA públicos aprovados](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148755) no SHA `d3acbed`: Performance **80 mobile / 98 desktop** e Acessibilidade **100/100** nos dois; 13 links públicos válidos, 8 viewports sem falhas e 38 capturas. A medição é de laboratório e o LCP mobile (3,86 s) ainda deve melhorar. O índice consolidado em `docs/` reúne as versões mais recentes de todas as verificações.

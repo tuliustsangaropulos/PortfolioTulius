@@ -48,3 +48,8 @@ O commit final de documentação `main` e o commit publicado podem continuar dif
 - [Auditoria Lighthouse da correção pública](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40286141852): SHA `9ac8eb5`, mobile Performance 75/Accessibility 100 e desktop Performance 96/Accessibility 100. LCP mobile ~4,51 s permanece melhoria pendente.
 - Auditorias acionadas por `push` na `main` podem avaliar o domínio **antes** de um deployment automático terminar. Conferir o SHA do deployment `READY` e o horário do teste antes de relacionar resultados a uma versão.
 - Veja o [índice vigente de auditoria](AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md) para as três etapas, inclusive limites de autenticação real e imagens.
+
+
+### Conferência do deploy da reconciliação — 26/10/2026
+
+O deployment de produção `dpl_8byFb5ssDMgQW1RrVrWMeM4TrqRU` estava `READY` com SHA `d3acbedb7dd3c91ce9b5aba77dadf2f705a9a130`, com [CI](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148955) e [auditoria pública P3](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148755) aprovados. O P3 encontrou 13 links públicos válidos, 38 capturas editoriais e Lighthouse 80/100 Performance mobile, 100/100 Acessibilidade, 98/100 Performance desktop. A nova revisão apenas de nomenclatura de artefato e documentação não modifica a interface, mas deve preservar logs e SHAs separados para não confundir medição com publicação.
