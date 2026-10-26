@@ -338,6 +338,7 @@
   .profile-b-items { grid-template-columns: repeat(6, 1fr); }
   .profile-b-items .content-item:nth-child(-n+5) { grid-column: span 2; display: block; padding: .8rem; background: var(--ink); color: white; border: 0; }
   .profile-b-items .content-item.area-card-link:nth-child(-n+5):hover, .profile-b-items .content-item.area-card-link:nth-child(-n+5):focus-visible { background: var(--orange); color: var(--ink); }
+  .profile-b-items .content-item.area-card-link:nth-child(-n+5):hover .item-label, .profile-b-items .content-item.area-card-link:nth-child(-n+5):focus-visible .item-label { color: var(--ink); }
   .profile-b-items .content-item:nth-child(4) { grid-column: 2 / span 2; }
   .profile-b-items .content-item:nth-child(5) { grid-column: 4 / span 2; }
   .profile-b-items .content-item:nth-child(-n+5) h3 { font-size: clamp(.8rem, 3.3vw, 1rem); }
