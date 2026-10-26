@@ -19,11 +19,7 @@ function Badge360({ config }: { config?: HeroVisualConfig }) {
   if (config?.badgeVisible === false) return null
   return (
     <div className="badge-360">
-      <svg
-        viewBox="0 0 160 160"
-        role="img"
-        aria-label="Visão 360 graus da comunicação e marketing"
-      >
+      <svg viewBox="0 0 160 160" role="img" aria-label="Visão 360 graus da comunicação e marketing">
         <defs>
           <path id={pathId} d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0" />
         </defs>
@@ -416,8 +412,7 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
   const itemsA = section.desktopPanelA ?? section.panelA
   const itemsB = section.desktopPanelB ?? section.panelB
   const introductoryItem = itemsA[0]
-  const desktopImage =
-    introductoryItem?.aboutDesktopImage?.trim() || "/media/tulius-contact.jpg"
+  const desktopImage = introductoryItem?.aboutDesktopImage?.trim() || "/media/tulius-contact.jpg"
 
   return (
     <div className="about-desktop">
