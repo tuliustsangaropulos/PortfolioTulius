@@ -871,7 +871,8 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         onChange={(event) => updateItem(index, { meta: event.target.value })}
                       />
                     </label>
-                    {sections.find((entry) => entry.id === draft.section_id)?.slug === "resultados" &&
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug ===
+                      "resultados" &&
                       draft.mobile_panel === "a" && (
                         <div className="field-wide">
                           <label>
@@ -879,7 +880,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             <select
                               value={item.metricIcon ?? "chart"}
                               onChange={(event) =>
-                                updateItem(index, { metricIcon: event.target.value as MetricIconName })
+                                updateItem(index, {
+                                  metricIcon: event.target.value as MetricIconName,
+                                })
                               }
                             >
                               {[
@@ -894,15 +897,27 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                                 ["award", "Destaque"],
                                 ["layers", "Estratégia"],
                               ].map(([value, label]) => (
-                                <option key={value} value={value}>{label}</option>
+                                <option key={value} value={value}>
+                                  {label}
+                                </option>
                               ))}
                             </select>
                           </label>
                           <fieldset>
                             <legend>Exibir este indicador nos temas</legend>
-                            {(blocks.find((entry) => entry.section_id === draft.section_id &&
-                              entry.mobile_panel === "b")?.content_json.items ?? []).map((theme, themeIndex) => {
-                              const key = theme.themeKey || ["corporativa", "projetos", "eventos", "marketing", "imprensa"][themeIndex] || `tema-${themeIndex + 1}`
+                            {(
+                              blocks.find(
+                                (entry) =>
+                                  entry.section_id === draft.section_id &&
+                                  entry.mobile_panel === "b",
+                              )?.content_json.items ?? []
+                            ).map((theme, themeIndex) => {
+                              const key =
+                                theme.themeKey ||
+                                ["corporativa", "projetos", "eventos", "marketing", "imprensa"][
+                                  themeIndex
+                                ] ||
+                                `tema-${themeIndex + 1}`
                               return (
                                 <label key={key} className="toggle-field">
                                   <input
@@ -924,14 +939,17 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           </fieldset>
                         </div>
                       )}
-                    {sections.find((entry) => entry.id === draft.section_id)?.slug === "resultados" &&
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug ===
+                      "resultados" &&
                       draft.mobile_panel === "b" && (
                         <div className="field-wide">
                           <label>
                             Identificador do tema (para os links da abertura)
                             <input
                               value={item.themeKey ?? ""}
-                              onChange={(event) => updateItem(index, { themeKey: event.target.value })}
+                              onChange={(event) =>
+                                updateItem(index, { themeKey: event.target.value })
+                              }
                               placeholder="corporativa, projetos, eventos, marketing ou imprensa"
                             />
                           </label>
@@ -939,35 +957,45 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             Eixo central
                             <input
                               value={item.themeAxis ?? ""}
-                              onChange={(event) => updateItem(index, { themeAxis: event.target.value })}
+                              onChange={(event) =>
+                                updateItem(index, { themeAxis: event.target.value })
+                              }
                             />
                           </label>
                           <label>
                             Título do conteúdo central
                             <input
                               value={item.themeTitle ?? ""}
-                              onChange={(event) => updateItem(index, { themeTitle: event.target.value })}
+                              onChange={(event) =>
+                                updateItem(index, { themeTitle: event.target.value })
+                              }
                             />
                           </label>
                           <label>
                             Subtítulo do conteúdo central
                             <textarea
                               value={item.themeSubtitle ?? ""}
-                              onChange={(event) => updateItem(index, { themeSubtitle: event.target.value })}
+                              onChange={(event) =>
+                                updateItem(index, { themeSubtitle: event.target.value })
+                              }
                             />
                           </label>
                           <label>
                             Temas relacionados
                             <textarea
                               value={item.themeTopics ?? ""}
-                              onChange={(event) => updateItem(index, { themeTopics: event.target.value })}
+                              onChange={(event) =>
+                                updateItem(index, { themeTopics: event.target.value })
+                              }
                             />
                           </label>
                           <label>
                             Texto curto
                             <textarea
                               value={item.themeSummary ?? ""}
-                              onChange={(event) => updateItem(index, { themeSummary: event.target.value })}
+                              onChange={(event) =>
+                                updateItem(index, { themeSummary: event.target.value })
+                              }
                             />
                           </label>
                           <label>
@@ -976,7 +1004,10 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                               value={(item.inheritedHighlights ?? []).join("\n")}
                               onChange={(event) =>
                                 updateItem(index, {
-                                  inheritedHighlights: event.target.value.split("\n").map((value) => value.trim()).filter(Boolean),
+                                  inheritedHighlights: event.target.value
+                                    .split("\n")
+                                    .map((value) => value.trim())
+                                    .filter(Boolean),
                                 })
                               }
                             />
