@@ -122,3 +122,29 @@ describe("formação e experiência profissional em camadas", () => {
     }
   })
 })
+
+describe("links de experiência e ícones de ferramentas", () => {
+  const profile = sections.find((section) => section.slug === "perfil")
+  const tools = sections.find((section) => section.slug === "ferramentas")
+
+  it("liga as seis experiências às seções públicas correspondentes", () => {
+    expect(profile?.panelB.slice(5).map((item) => item.targetSlug)).toEqual([
+      "invest-rs", "prefeitura-sp", "vale", "inpress", "globo-sportv", "cdi",
+    ])
+    expect(profile?.panelB.slice(5).every((item) =>
+      sections.some((section) => section.slug === item.targetSlug && section.visible)
+    )).toBe(true)
+  })
+
+  it("apresenta seis conjuntos de pictogramas sobre o tema escuro", () => {
+    expect(tools?.theme).toBe("ink")
+    expect([...tools!.panelA, ...tools!.panelB].map((item) => item.toolIcons)).toEqual([
+      ["analytics", "search"],
+      ["meta", "growth"],
+      ["salesforce", "hubspot", "sprinklr"],
+      ["asana", "notion"],
+      ["adobe", "figma", "wordpress"],
+      ["social", "video", "megaphone"],
+    ])
+  })
+})
