@@ -156,7 +156,7 @@ function ExperienceCard({ section, order }: { section: PortfolioSection; order: 
             {items.map((item, index) => (
               <article className="experience-project" key={`${item.title}-${index}`}>
                 {item.meta && <span className="experience-project-meta">{item.meta}</span>}
-              <h4>{item.title}</h4>
+                <h4>{item.title}</h4>
                 {item.value && <strong className="experience-value">{item.value}</strong>}
                 {item.text && <p>{item.text}</p>}
                 {item.tags && <p>{item.tags.join(" · ")}</p>}
