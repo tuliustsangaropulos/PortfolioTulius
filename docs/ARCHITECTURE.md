@@ -43,3 +43,11 @@ A edição de JSONB pelo admin utiliza a RPC `save_content_block_atomic`. O ajus
 `src/components/ui/Icons.tsx` fornece o conjunto fixo de SVGs; `ContentItem` em `src/types/content.ts` ganhou campos opcionais. O CMS usa `content_json.items` existente com `save_content_block_atomic`. `src/content/resultThemes.ts` mantém o fallback editorial dos cinco dossiês, sem criar fonte paralela no banco. O teste público foi atualizado para 13 seções e 25 painéis mobile, refletindo a seção `competencias` escondida (`is_visible=false`) e a composição única mobile em `resultados`. O menu mostra índices sequenciais somente dos itens visíveis.
 
 Não foram alterados schema, papéis, policies RLS, Storage ou segredos. As mudanças de conteúdo e visibilidade no Supabase foram transacionais/guardadas e precisam ser documentadas separadamente da aprovação de CI.
+
+## Experiências sobrepostas e galeria editável — 26/10/2026
+
+Em `PublicSite`, os seis slugs contíguos de experiências profissionais são agrupados por `ExperienceStack` (`src/components/public/ExperienceStack.tsx`), renderizados uma vez na posição da primeira empresa. Os painéis possuem `position:sticky;top:0` com `z-index` crescente: a nova experiência desliza sobre a anterior. A barra `experience-index` usa `position:sticky;top:var(--header)` com camada mais elevada que os painéis e mais baixa que o header global; os links usam âncoras existentes das seções, preservando URL/hash/navegação e lógica do menu.
+
+A composição desktop tem título/identidade à esquerda, conteúdos A+B no centro com overflow controlado e galeria de projeto à direita. No mobile o mesmo conteúdo ocupa dois painéis por empresa, preservando o contrato de navegação da auditoria. Botões Anterior/Próximo e pontos permitem selecionar slides; imagens são condicionais à existência de URL e texto alternativo. A ausência de mídia exibe estado explícito de pendência e não impede navegação. A seção Formação utiliza o sistema de componentes anterior, apenas com tema `ink`.
+
+O contrato `ExperienceMedia` tipado é armazenado em `content_json.experienceMedia` do bloco A, carregado pelo hook e editado no `ContentStudio` pelo mesmo salvamento atômico. Não há novo endpoint, migration ou modificação de roles. Os slugs do grupo são estáveis e documentados; adição/reordenação de empresas exigirá reavaliar ordem de stacking.
