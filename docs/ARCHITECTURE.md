@@ -23,3 +23,7 @@ O fallback só é usado quando a consulta falha ou o schema ainda não existe. E
 - Edição de layout/motion usa catálogo allowlisted, não CSS/JS arbitrário.
 - O painel lista revisões e pendências; restauração granular permanece evolução futura.
 - O admin é carregado em chunk separado. O bundle público ainda recebe aviso de tamanho e pode ser dividido adicionalmente.
+
+## Navegação editorial configurável da abertura
+
+`src/components/public/PublicSite.tsx` transforma os primeiros cinco itens do bloco `perfil` / painel B em links internos (<a href="#slug">) no desktop e no painel B mobile. `src/lib/validation.ts` resolve `targetSlug` exclusivamente contra seções efetivamente publicadas/visíveis; na ausência de campo, usa `resultados`. Os demais `ItemCard` e links de contato mantêm comportamento anterior. O CMS administra `targetSlug` dentro do conteúdo JSONB com `save_content_block_atomic`; não há chamada SQL nova nem alteração em `navigation_items`. A navegação por âncora usa o scroll nativo/suave (com suporte a movimento reduzido).
