@@ -106,6 +106,42 @@
 .tags li, .draft-chip { border: 1px solid var(--line); padding: .35rem .55rem; font-size: .72rem; }
 .draft-chip { display: inline-block; margin-top: .75rem; background: #ffe174; color: #332800; }
 .layout-metrics .desktop-content { grid-template-columns: 1.4fr .8fr; }
+
+/* Section 03 — thematic results; overview preserves all four documented metrics. */
+.results-editorial .desktop-content { grid-template-columns: minmax(0, 1.4fr) minmax(16rem, .8fr); gap: clamp(1rem, 1.6vw, 2rem); }
+.results-center { min-width: 0; max-height: calc(100dvh - 8rem); overflow-y: auto; scrollbar-width: thin; }
+.results-metrics-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.65rem, 1.6vw, 1.2rem); }
+.results-metrics-grid .content-item { display: block; width: 100%; padding: .8rem 0; }
+.results-metrics-grid .item-copy { display: block; }
+.result-metric-icon { display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem; margin-bottom: .35rem; border: 1px solid var(--orange-dark); border-radius: 50%; color: var(--orange-dark); }
+.results-metrics-grid .content-item .item-value { display: block; }
+.results-theme-list { display: grid; align-content: center; }
+.results-theme-list button { width: 100%; min-height: 3.35rem; padding: .85rem .25rem; border: 0; border-top: 1px solid var(--line); text-align: left; background: transparent; color: var(--ink); font-family: var(--font-display); text-transform: uppercase; font-size: clamp(1.16rem, 1.45vw, 1.65rem); font-weight: 800; line-height: 1.08; cursor: pointer; transition: background .18s ease, color .18s ease, padding-left .18s ease; }
+.results-theme-list button:hover, .results-theme-list button:focus-visible { background: var(--ink); color: var(--paper); padding-left: .7rem; }
+.results-theme-list button.is-active { color: var(--orange-dark); box-shadow: inset 3px 0 0 var(--orange-dark); padding-left: .7rem; }
+.results-theme-list button.is-active:hover, .results-theme-list button.is-active:focus-visible { background: var(--ink); color: var(--paper); }
+.results-theme-list button:focus-visible { outline: 2px solid var(--orange-dark); outline-offset: -2px; }
+.results-topic { border-top: 1px solid var(--line); padding: .6rem 0 1.2rem; }
+.results-topic .results-axis { margin: 0 0 .7rem; color: var(--orange-dark); text-transform: uppercase; font-size: .7rem; letter-spacing: .12em; font-weight: 800; }
+.results-topic h3 { font-family: var(--font-display); font-size: clamp(2rem, 3vw, 3.3rem); line-height: 1; text-transform: uppercase; }
+.results-topic .results-subtitle { font-size: clamp(.95rem, 1.15vw, 1.15rem); font-weight: 600; margin: .45rem 0 .9rem; }
+.results-topic .results-related { padding: .7rem 0; border-top: 1px solid var(--line); }
+.results-topic .results-related strong, .results-inherited strong { display: block; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.results-topic .results-related p { margin: .3rem 0 0; font-size: .9rem; }
+.results-topic .results-summary { font-size: clamp(.95rem, 1.08vw, 1.08rem); line-height: 1.5; margin: .7rem 0; }
+.results-inherited { border-top: 1px solid var(--line); margin-top: .65rem; padding-top: .65rem; }
+.results-inherited ul { margin: .45rem 0 0; padding-left: 1rem; font-size: .85rem; line-height: 1.5; }
+.results-inherited li + li { margin-top: .3rem; }
+@media (max-width: 767px) {
+  .results-mobile-panel { scroll-snap-align: start; }
+  .results-mobile-panel .results-theme-list { margin: .5rem 0 1.35rem; }
+  .results-mobile-panel .results-theme-list button { min-height: 3rem; font-size: clamp(1.1rem, 4.8vw, 1.5rem); }
+  .results-mobile-panel .results-center { max-height: none; overflow: visible; }
+  .results-mobile-panel .results-metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .results-mobile-panel .results-metrics-grid .content-item { border: 0; border-top: 1px solid var(--line); padding: .65rem .2rem; }
+}
+@media (max-width: 420px) { .results-mobile-panel .results-metrics-grid { grid-template-columns: 1fr; } }
+
 .layout-metrics .desktop-content > div:first-child { grid-template-columns: repeat(2, 1fr); }
 .layout-quotes .desktop-content { grid-template-columns: 1.5fr .75fr; }
 .layout-quotes .desktop-content > div:first-child { grid-template-columns: repeat(2, 1fr); }
