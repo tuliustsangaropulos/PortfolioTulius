@@ -4,9 +4,10 @@ import type { ContentItem, HeroVisualConfig, PortfolioSection } from "../../type
 import { Icon } from "../ui/Icons"
 import { Navigation } from "./Navigation"
 import { placementMotionVariables } from "../../lib/placement-motion"
+import { resolveHeroCardDestination } from "../../lib/validation"
 
 const heroDefaults = {
-  badgeText: "VISÃO 360° DA COMUNICAÇÃO ·",
+  badgeText: "VISÃO 360° DA COMUNICAÇÃO E MARKETING ·",
   panelBackground: "#171617",
   badgeBackground: "#FF5414",
   badgeColor: "#171617",
@@ -18,11 +19,11 @@ function Badge360({ config }: { config?: HeroVisualConfig }) {
   if (config?.badgeVisible === false) return null
   return (
     <div className="badge-360">
-      <svg viewBox="0 0 160 160" role="img" aria-label="Visão 360 graus da comunicação">
+      <svg viewBox="0 0 160 160" role="img" aria-label="Visão 360 graus da comunicação e marketing">
         <defs>
           <path id={pathId} d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0" />
         </defs>
-        <text>
+        <text textLength="350" lengthAdjust="spacingAndGlyphs">
           <textPath href={`#${pathId}`}>{config?.badgeText || heroDefaults.badgeText}</textPath>
         </text>
         <path d="M55 100 102 53M70 53h32v32" />
@@ -36,11 +37,13 @@ function ItemCard({
   index,
   layout,
   showArrow = false,
+  targetSlug,
 }: {
   item: ContentItem
   index: number
   layout: PortfolioSection["layout"]
   showArrow?: boolean
+  targetSlug?: string
 }) {
   const contact = layout === "contact" && item.meta?.match(/^(https|mailto)/)
   const presentation = item.placement
@@ -70,6 +73,7 @@ function ItemCard({
     item.image ? "has-image" : "",
     item.desktop?.visible === false ? "item-hidden-desktop" : "",
     item.mobile?.visible === false ? "item-hidden-mobile" : "",
+    targetSlug ? "area-card-link" : "",
   ]
     .filter(Boolean)
     .join(" ")
@@ -107,14 +111,14 @@ function ItemCard({
       )}
     </>
   )
-  return contact ? (
+  return contact || targetSlug ? (
     <a
-      className={`${className} contact-link`}
+      className={`${className}${contact ? " contact-link" : ""}`}
       data-motion-once={presentation?.motionConfig?.once === false ? "false" : undefined}
       style={style}
-      href={item.meta}
-      target={item.meta?.startsWith("http") ? "_blank" : undefined}
-      rel="noreferrer"
+      href={targetSlug ? `#${targetSlug}` : item.meta}
+      target={contact && item.meta?.startsWith("http") ? "_blank" : undefined}
+      rel={contact ? "noreferrer" : undefined}
     >
       {content}
     </a>
@@ -132,9 +136,11 @@ function ItemCard({
 function ProfileDesktop({
   section,
   nextSectionSlug,
+  publishedSlugs,
 }: {
   section: PortfolioSection
   nextSectionSlug?: string
+  publishedSlugs: string[]
 }) {
   const panelA = section.desktopPanelA ?? section.panelA
   const panelB = section.desktopPanelB ?? section.panelB
@@ -184,7 +190,13 @@ function ProfileDesktop({
         <p className="profile-role">{section.eyebrow}</p>
         <div className="area-grid">
           {areas.map((item) => (
-            <ItemCard key={item.label} item={item} index={0} layout="hero" />
+            <ItemCard
+              key={item.label}
+              item={item}
+              index={0}
+              layout="hero"
+              targetSlug={resolveHeroCardDestination(item.targetSlug, publishedSlugs)}
+            />
           ))}
         </div>
         <h2>Experiência e atuação</h2>
@@ -380,9 +392,11 @@ function toDvh(value?: number) {
 function Section({
   section,
   nextSectionSlug,
+  publishedSlugs,
 }: {
   section: PortfolioSection
   nextSectionSlug?: string
+  publishedSlugs: string[]
 }) {
   return (
     <section
@@ -392,7 +406,11 @@ function Section({
     >
       <div className="desktop-panel">
         {section.slug === "perfil" ? (
-          <ProfileDesktop section={section} nextSectionSlug={nextSectionSlug} />
+          <ProfileDesktop
+            section={section}
+            nextSectionSlug={nextSectionSlug}
+            publishedSlugs={publishedSlugs}
+          />
         ) : (
           <div className="desktop-editorial">
             <header className="section-heading">
@@ -539,6 +557,9 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
             key={section.id}
             section={section}
             nextSectionSlug={visible[index + 1]?.slug}
+            publishedSlugs={visible
+              .filter((entry) => entry.status === "published" && entry.visible)
+              .map((entry) => entry.slug)}
           />
         ))}
       </main>
