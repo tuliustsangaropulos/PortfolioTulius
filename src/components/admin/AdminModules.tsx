@@ -1034,7 +1034,8 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                               ))}
                           </select>
                           <small>Padrão: seção 03. O clique funciona em toda a área do card.</small>
-                          <label>
+                        </label>
+                        <label className="field-wide">
                             Tema selecionado na seção 03
                             <select
                               value={
@@ -1051,7 +1052,6 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                               <option value="marketing">Marketing Digital, Branding e Performance</option>
                               <option value="imprensa">Imprensa e Influenciadores</option>
                             </select>
-                          </label>
                         </label>
                       )}
                     <label>
