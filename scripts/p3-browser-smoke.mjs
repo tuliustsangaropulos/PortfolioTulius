@@ -159,16 +159,16 @@ try {
       stage = "slide controls"
       const before = await page.evaluate(() => {
         const btn = document.querySelector("#prefeitura-sp .desktop-panel .experience-gallery-controls button:last-child")
-        const counter = document.querySelector("#prefeitura-sp .desktop-panel .experience-gallery-controls span")
+        const counter = document.querySelector("#prefeitura-sp .desktop-panel .experience-gallery-controls > span")
         const rect = btn?.getBoundingClientRect()
         return { counter: counter?.textContent, rect: rect ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null,
           covering: rect ? document.elementFromPoint(rect.x + rect.width/2, rect.y + rect.height/2)?.closest(".experience-card")?.id : null }
       })
       await page.click("#prefeitura-sp .desktop-panel .experience-gallery-controls button:last-child")
-      const after = await page.$eval("#prefeitura-sp .desktop-panel .experience-gallery-controls span", (node) => node.textContent)
+      const after = await page.$eval("#prefeitura-sp .desktop-panel .experience-gallery-controls > span", (node) => node.textContent)
       console.log("P3_EXPERIENCE_SLIDE_CLICK " + JSON.stringify({ before, after }))
       await page.waitForFunction(() =>
-        document.querySelector("#prefeitura-sp .desktop-panel .experience-gallery-controls span")?.textContent?.includes("2 / 3"),
+        document.querySelector("#prefeitura-sp .desktop-panel .experience-gallery-controls > span")?.textContent?.includes("2 / 3"),
         { timeout: 10000 },
       )
       console.log("P3_EXPERIENCE_STACK " + JSON.stringify({ companies: 6, fixedSelector: true, galleryNavigation: true, result: "PASS" }))
