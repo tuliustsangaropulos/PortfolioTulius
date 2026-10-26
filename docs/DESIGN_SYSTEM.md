@@ -39,3 +39,11 @@ A apresentação conserva a coluna de título **Resultados e projetos em destaqu
 O mobile apresenta títulos/filtros e conteúdo central em sequência em um único painel. Em desktop de altura reduzida, a área central poderá rolar independentemente para manter o bloco temático acessível; validar legibilidade e ausência de cortes. Preservar as cores, fontes, proporções dos cards, contrastes e `prefers-reduced-motion` já definidos.
 
 Os textos originais de **Habilidades**, **Gestão**, **Competências**, **Relações** e **Destaques** da antiga seção 04 estão agora visíveis como destaques de apoio nos dossiês pertinentes. Os registros da seção 04 continuam conservados no CMS e a seção não aparece mais no site público.
+
+## Direção visual — Formação e seis experiências (26/10/2026)
+
+**Formação:** fundo cinza-escuro da identidade `#171617`; títulos e corpo brancos, elementos de destaque laranja. Mesmos conteúdos e tipografia.
+
+**Experiências:** fundo branco uniforme, seis painéis com sobreposição por rolagem vertical (o seguinte fica acima do anterior). Cabeçalho geral permanece; abaixo, uma barra de seleção fixa contém marca pequena + título de cada empresa e estado ativo. Na ausência da logomarca real, usar monograma **identificado como provisório**. Conteúdo do painel: pequeno logo acima do título; lista de projetos e realizações; galeria visual à direita com enquadramento consistente, legenda, contador, navegação por setas e indicadores clicáveis.
+
+Os 18 slots de mídia representam temas de projeto reais, mas **as imagens ainda não existem no acervo aprovado**. O componente mantém placeholders textuais com contraste e não exibe imagens de bancos de imagens como prova do trabalho. O CMS define URLs e descrições acessíveis para futura substituição. Mobile usa nav horizontal rolável, conteúdo textual seguido da galeria; respeitar `prefers-reduced-motion`. Validar a experiência sticky em navegadores móveis e telas baixas para evitar bloqueios de scroll.
