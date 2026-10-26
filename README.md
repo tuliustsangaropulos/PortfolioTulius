@@ -92,3 +92,9 @@ Edição: **Seções → Olá!** gerencia os textos da esquerda; **Blocos e pain
 - **Seção 03:** a lista do painel B agora contém os cinco títulos das especialidades dos cards clicáveis da seção 01, na mesma ordem; os quatro indicadores de resultados do painel A permanecem intactos. O antigo placeholder `XXXXX · X/Y/Z` foi substituído e sua pendência editorial registrada como resolvida no Supabase.
 
 O Supabase e o fallback versionado foram sincronizados sem alterar schema/RLS. Ver [continuidade das seções 02 e 03](docs/CONTINUIDADE_CONTEUDO_SECOES_02_03_2026-10-26.md).
+
+## Seção 03 — resultados interativos (26/10/2026)
+
+A seção `#resultados` oferece uma **visão geral com quatro indicadores preservados**, agora identificados por ícones, e cinco filtros temáticos clicáveis. Selecionar um tema revela seu eixo central, título, subtítulo, temas relacionados, texto curto e conhecimentos reaproveitados da antiga seção 04, além dos indicadores associados quando houver evidência. Os cinco cards da seção 01 mantêm o destino configurável no CMS e, ao direcionar à seção 03, selecionam o tema correspondente. Layout mobile possui seleção temática própria.
+
+Os ícones dos indicadores, suas associações aos temas e os textos temáticos são editáveis em `/admin` → **Blocos e painéis** → **Resultados e projetos em destaque**: painel A (indicadores) e painel B (temas). Os cinco cards da abertura possuem seletor de tema associado em **Perfil / painel B**. A antiga seção 04 (`competencias`) foi **ocultada**, não apagada: seu conteúdo permanece no CMS e foi reaproveitado editorialmente na seção 03. O menu apresenta 13 seções visíveis com numeração sequencial. Consulte `docs/CONTINUIDADE_INTERATIVIDADE_SECAO_03_2026-10-26.md`.
