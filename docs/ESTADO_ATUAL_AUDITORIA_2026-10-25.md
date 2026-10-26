@@ -140,3 +140,21 @@ O modelo usa `themeKey` estável no hero e nos dossiês de Resultados/B, `metric
 O Supabase foi atualizado com transação protegida por checagem dos valores anteriores, e uma segunda operação acrescentou `themeKey` aos cinco cards da seção 01. O registro `sections.slug='competencias'` está com `is_visible=false` sem exclusão, e os seus dois blocos continuam intactos. Os cinco conteúdos de Habilidades, Gestão, Competências, Relações e Destaques foram reaproveitados nos dossiês. O menu público usa índices contíguos para 13 seções exibidas. A seção de Resultados usa um único painel mobile de seleção e conteúdo, totalizando 25 painéis mobile.
 
 A validação `Validate PortfolioTulius` passou após ajustes de TypeScript, testes e formatação; a auditoria de navegador necessitou atualizar expectativas de 14/28/42 para 13/25/38 sem relaxar as verificações de segurança/overflow. **A homologação do admin com sessão real e o aceite visual seguem pendentes**, assim como eventuais ajustes de consistência de atribuição de métricas por tema. Ver `docs/CONTINUIDADE_INTERATIVIDADE_SECAO_03_2026-10-26.md`.
+
+## 12. Continuidade de 26/10/2026 — Formação escura e seis empresas sobrepostas
+
+Novo pedido do proprietário: Formação em cinza-escuro da identidade e textos brancos; seis seções de experiências profissionais uniformemente brancas com efeito de painéis sobrepostos na rolagem, seletor superior fixo por empresa com marca/título, logotipo pequeno acima do título individual e galeria de projetos à direita com slides e gerenciamento no CMS.
+
+Alterações implementadas:
+- `formacao` passou a `theme=ink`. `invest-rs`, `prefeitura-sp`, `vale`, `globo-sportv`, `inpress`, `cdi` receberam `theme=paper`.
+- Novo `ExperienceStack` agrupa seis seções contíguas como painéis sticky com ordem de sobreposição crescente e menu de empresas sticky abaixo do cabeçalho. Desktop divide título, projetos e galeria; mobile divide texto e galeria em dois painéis por empresa.
+- Os dados A/B existentes dos seis blocos foram mantidos. `content_json.experienceMedia` adicionado ao bloco A de cada empresa, com três títulos de projetos por empresa, configuráveis como slides. Editor administra logo/alt, URL/alt/legenda de cada slide, inclusão/exclusão/reordenação; validação de URLs segura (`/media/` ou HTTPS) e texto alternativo obrigatório.
+- Não havia fotografias ou logotipos de projetos no catálogo `media_assets`, no Storage ou nos seis ativos fotográficos privados de `public/media`. **NÃO existem fotos/logos verdadeiros publicados nesta etapa.** O site usa estado de ausência de mídia identificado e monograma temporário, sem ilustrações disfarçadas de experiência profissional.
+- Supabase atualizado em transação guardada, sem DDL, migrações, Auth/RLS/Storage ou modificações das demais seções. Fallback e testes unitários sincronizados. O cliente preserva SEO e menu global.
+- CI `Validate PortfolioTulius` passou após aplicação do formato do repositório. O teste de navegação browser da pilha foi acrescido ao P3; um erro de seletor no teste inicial (span da seta esquerda, em vez do contador) foi corrigido em commit posterior. Confirmar resultado final da auditoria.
+
+**Bloqueador de publicação:** tentativa de deployment manual na Vercel retornou `402 api-deployments-free-per-day`. A produção Vercel observada estava `READY` no commit `f8bc345c`, que já continha os componentes visuais e CMS principais; o SHA final de documentação/testes é posterior, e não foi declarado publicado. Não modificar billing sem autorização.
+
+**Pendências principais:** providenciar/autorizar marcas e fotografias reais de projetos; homologar uploads/URLs e CRUD CMS com JWT real; testar camada sticky, slides, navegação de empresas e responsividade manualmente; confirmar a publicação da versão final quando a quota da Vercel permitir.
+
+Consultar `docs/CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md`.
