@@ -77,16 +77,33 @@ export function validateContentItems(items: ContentItem[]) {
     "layers",
   ]
   const allowedToolIcons = [
-    "analytics", "search", "meta", "growth", "salesforce", "hubspot",
-    "sprinklr", "asana", "notion", "adobe", "figma", "wordpress",
-    "social", "video", "megaphone",
+    "analytics",
+    "search",
+    "meta",
+    "growth",
+    "salesforce",
+    "hubspot",
+    "sprinklr",
+    "asana",
+    "notion",
+    "adobe",
+    "figma",
+    "wordpress",
+    "social",
+    "video",
+    "megaphone",
   ]
   const usedThemeKeys = new Set<string>()
   items.forEach((item, index) => {
     if (item.toolIcons) {
-      if (item.toolIcons.length > 3 || new Set(item.toolIcons).size !== item.toolIcons.length ||
-        item.toolIcons.some((icon) => !allowedToolIcons.includes(icon)))
-        errors.push(`Item ${index + 1}: ícones de ferramentas inválidos (máximo três e sem repetições).`)
+      if (
+        item.toolIcons.length > 3 ||
+        new Set(item.toolIcons).size !== item.toolIcons.length ||
+        item.toolIcons.some((icon) => !allowedToolIcons.includes(icon))
+      )
+        errors.push(
+          `Item ${index + 1}: ícones de ferramentas inválidos (máximo três e sem repetições).`,
+        )
     }
     if (item.metricIcon && !metricIcons.includes(item.metricIcon))
       errors.push(`Item ${index + 1}: ícone de indicador inválido.`)
