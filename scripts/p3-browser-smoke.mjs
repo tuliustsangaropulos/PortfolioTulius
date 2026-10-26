@@ -91,6 +91,46 @@ try {
     }
   }
 
+  // Cross-section selection: a card in section 01 opens its corresponding theme in section 03.
+  {
+    const page = await browser.newPage()
+    let stage = "load"
+    try {
+      await page.setViewport({ width: 1440, height: 900 })
+      await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
+      stage = "click opening marketing card"
+      await page.click("#perfil .area-grid .area-card-link:nth-child(4)")
+      await page.waitForFunction(() => location.hash === "#resultados", { timeout: 10000 })
+      stage = "assert selected topic"
+      await page.waitForFunction(() => {
+        const active = document.querySelector('#resultados .desktop-panel .results-theme-list button[aria-pressed="true"]')
+        const text = document.querySelector("#resultados .desktop-panel .results-topic h3")
+        return active?.textContent?.includes("MARKETING") &&
+          text?.textContent?.toLocaleLowerCase("pt-BR").includes("resultados que orientam decisões")
+      }, { timeout: 10000 })
+      stage = "switch topic"
+      await page.click("#resultados .desktop-panel .results-theme-list button:nth-child(6)")
+      await page.waitForFunction(() => {
+        const title = document.querySelector("#resultados .desktop-panel .results-topic h3")
+        const metrics = document.querySelectorAll("#resultados .desktop-panel .results-metrics-grid .content-item")
+        return title?.textContent?.toLowerCase().includes("visão editorial") && metrics.length === 2
+      }, { timeout: 10000 })
+      stage = "restore overview"
+      await page.click("#resultados .desktop-panel .results-theme-list button:first-child")
+      await page.waitForFunction(() =>
+        document.querySelectorAll("#resultados .desktop-panel .results-metrics-grid .result-metric-icon").length === 4,
+        { timeout: 10000 },
+      )
+      console.log("P3_RESULTS_THEMES " + JSON.stringify({ fromHero: true, switchTheme: true, overviewIcons: 4, result: "PASS" }))
+      await page.screenshot({ path: path.join(shots, "p3-results-overview-1440.png") })
+    } catch (error) {
+      failures++
+      console.log("P3_RESULTS_THEMES " + JSON.stringify({ result: "FAIL", stage, error: String(error).slice(0, 350) }))
+    } finally {
+      await page.close()
+    }
+  }
+
   const viewports = [
     [1920, 1080],
     [1440, 900],
