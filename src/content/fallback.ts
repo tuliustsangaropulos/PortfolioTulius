@@ -37,7 +37,7 @@ export const sections: PortfolioSection[] = [
         alt: "Retrato em preto e branco de Tulius Tsangaropulos",
         hero: {
           panelBackground: "#171617",
-          badgeText: "VISÃO 360° DA COMUNICAÇÃO ·",
+          badgeText: "VISÃO 360° DA COMUNICAÇÃO E MARKETING ·",
           badgeVisible: true,
           badgeBackground: "#FF5414",
           badgeColor: "#171617",
