@@ -35,3 +35,8 @@ Validar antes de cada publicação: `pnpm check`, `pnpm smoke:build`, domínio, 
 
 Os documentos `docs/OPEN_ISSUES.md` e `docs/ESTADO_ATUAL_AUDITORIA_2026-10-25.md` reúnem as pendências e a separação entre código, conteúdo e produção. Este registro é uma fotografia de 26/10/2026: futuros deployments devem acrescentar nova evidência em vez de substituir o histórico.
 
+### Conferência posterior do domínio — 26/10/2026
+
+Após os registros de quota acima, o conector Vercel confirmou um novo deployment de produção **READY**: `dpl_DEAtJaZsRybM7HRV84TbYkZpT8gX`, commit `1f528b9560a062a5a0459de88516fd56ee9fc6b8`, com aliases **`tulius.work`** e **`www.tulius.work`** e `aliasError=null`. Essa revisão descende da implementação das interações de Ferramentas, cartões de carreira, Contato e da correção mobile, portanto **os componentes do código dessa etapa estão incluídos no bundle desse deployment**. O erro HTTP 402 foi um bloqueio de uma tentativa anterior e não representa mais o estado da última publicação confirmada.
+
+O commit final de documentação `main` e o commit publicado podem continuar diferentes: alterações posteriores somente em Markdown/workflows não mudam a aplicação visual, mas devem ser rastreadas. Ainda permanecem pendentes a homologação manual do layout em aparelhos reais, as fotografias/logotipos autorizados e a edição/rollback do CMS com JWT administrativo.
