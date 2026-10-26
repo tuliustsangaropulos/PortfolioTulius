@@ -224,10 +224,12 @@ function MobilePanel({
   section,
   panel,
   items,
+  publishedSlugs,
 }: {
   section: PortfolioSection
   panel: "a" | "b"
   items: ContentItem[]
+  publishedSlugs: string[]
 }) {
   const isProfile = section.slug === "perfil"
   const profile = items[0]
@@ -295,7 +297,17 @@ function MobilePanel({
           </header>
           <div className={`mobile-items ${isProfile && panel === "b" ? "profile-b-items" : ""}`}>
             {items.map((item, i) => (
-              <ItemCard key={`${item.title}-${i}`} item={item} index={i} layout={section.layout} />
+              <ItemCard
+                key={`${item.title}-${i}`}
+                item={item}
+                index={i}
+                layout={section.layout}
+                targetSlug={
+                  isProfile && panel === "b" && i < 5
+                    ? resolveHeroCardDestination(item.targetSlug, publishedSlugs)
+                    : undefined
+                }
+              />
             ))}
           </div>
         </>
@@ -444,8 +456,18 @@ function Section({
         )}
       </div>
       <div className="mobile-panels">
-        <MobilePanel section={section} panel="a" items={section.panelA} />
-        <MobilePanel section={section} panel="b" items={section.panelB} />
+        <MobilePanel
+          section={section}
+          panel="a"
+          items={section.panelA}
+          publishedSlugs={publishedSlugs}
+        />
+        <MobilePanel
+          section={section}
+          panel="b"
+          items={section.panelB}
+          publishedSlugs={publishedSlugs}
+        />
       </div>
     </section>
   )
