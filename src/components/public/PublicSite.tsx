@@ -412,7 +412,8 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
   const itemsA = section.desktopPanelA ?? section.panelA
   const itemsB = section.desktopPanelB ?? section.panelB
   const introductoryItem = itemsA[0]
-  const desktopImage = introductoryItem?.aboutDesktopImage?.trim() || "/media/tulius-contact.jpg"
+  const customDesktopImage = introductoryItem?.aboutDesktopImage?.trim()
+  const desktopImage = customDesktopImage || "/media/tulius-contact.jpg"
 
   return (
     <div className="about-desktop">
@@ -421,7 +422,7 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
         {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
         {section.intro && <p className="section-intro">{section.intro}</p>}
       </header>
-      <div className="about-portrait">
+      <div className={`about-portrait${customDesktopImage ? " has-custom-image" : ""}`}>
         {introductoryItem && (
           <img
             src={desktopImage}
