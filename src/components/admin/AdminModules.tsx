@@ -1034,6 +1034,24 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                               ))}
                           </select>
                           <small>Padrão: seção 03. O clique funciona em toda a área do card.</small>
+                          <label>
+                            Tema selecionado na seção 03
+                            <select
+                              value={
+                                item.themeKey ||
+                                ["corporativa", "projetos", "eventos", "marketing", "imprensa"][index]
+                              }
+                              onChange={(event) =>
+                                updateItem(index, { themeKey: event.target.value })
+                              }
+                            >
+                              <option value="corporativa">Comunicação Corporativa</option>
+                              <option value="projetos">Gestão e execução de projetos</option>
+                              <option value="eventos">Relações Públicas e Gestão de Eventos</option>
+                              <option value="marketing">Marketing Digital, Branding e Performance</option>
+                              <option value="imprensa">Imprensa e Influenciadores</option>
+                            </select>
+                          </label>
                         </label>
                       )}
                     <label>
