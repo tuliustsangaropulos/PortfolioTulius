@@ -63,3 +63,35 @@ describe("conteúdo da seção 02 e especialidades da seção 03", () => {
     expect(results?.panelB.some((item) => item.placeholder)).toBe(false)
   })
 })
+
+describe("interação da seção 03 e remoção da seção 04", () => {
+  const profile = sections.find((section) => section.slug === "perfil")
+  const results = sections.find((section) => section.slug === "resultados")
+  const hidden = sections.find((section) => section.slug === "competencias")
+
+  it("preserva cinco vínculos temáticos estáveis na abertura e nos resultados", () => {
+    const heroKeys = profile?.panelB.slice(0, 5).map((item) => item.themeKey)
+    const themeKeys = results?.panelB.map((item) => item.themeKey)
+    expect(heroKeys).toEqual(["corporativa", "projetos", "eventos", "marketing", "imprensa"])
+    expect(themeKeys).toEqual(heroKeys)
+    expect(results?.panelB.every((item) => Boolean(item.themeTitle && item.themeSummary))).toBe(true)
+  })
+
+  it("preserva quatro métricas com ícones editáveis e associação temática", () => {
+    expect(results?.panelA).toHaveLength(4)
+    expect(results?.panelA.map((item) => item.metricIcon)).toEqual([
+      "chart",
+      "trending",
+      "newspaper",
+      "megaphone",
+    ])
+    expect(results?.panelA.every((item) => !item.label && Boolean(item.relatedThemeKeys))).toBe(true)
+  })
+
+  it("aproveita a seção 04 e a oculta sem apagar seu conteúdo histórico", () => {
+    expect(hidden?.visible).toBe(false)
+    expect(hidden?.panelA).toHaveLength(2)
+    expect(hidden?.panelB).toHaveLength(3)
+    expect(results?.panelB.some((item) => Boolean(item.inheritedHighlights?.length))).toBe(true)
+  })
+})
