@@ -7,6 +7,7 @@ import type {
   DeviceItemStyle,
   HeroDeviceStyle,
   HeroVisualConfig,
+  MetricIconName,
 } from "../../types/content"
 import { Icon } from "../ui/Icons"
 
@@ -870,6 +871,118 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         onChange={(event) => updateItem(index, { meta: event.target.value })}
                       />
                     </label>
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug === "resultados" &&
+                      draft.mobile_panel === "a" && (
+                        <div className="field-wide">
+                          <label>
+                            Ícone do indicador (substitui o número)
+                            <select
+                              value={item.metricIcon ?? "chart"}
+                              onChange={(event) =>
+                                updateItem(index, { metricIcon: event.target.value as MetricIconName })
+                              }
+                            >
+                              {[
+                                ["chart", "Gráfico de barras"],
+                                ["trending", "Crescimento"],
+                                ["users", "Públicos / pessoas"],
+                                ["newspaper", "Imprensa"],
+                                ["target", "Meta / objetivo"],
+                                ["megaphone", "Comunicação"],
+                                ["briefcase", "Projetos"],
+                                ["calendar", "Eventos"],
+                                ["award", "Destaque"],
+                                ["layers", "Estratégia"],
+                              ].map(([value, label]) => (
+                                <option key={value} value={value}>{label}</option>
+                              ))}
+                            </select>
+                          </label>
+                          <fieldset>
+                            <legend>Exibir este indicador nos temas</legend>
+                            {(blocks.find((entry) => entry.section_id === draft.section_id &&
+                              entry.mobile_panel === "b")?.content_json.items ?? []).map((theme, themeIndex) => {
+                              const key = theme.themeKey || ["corporativa", "projetos", "eventos", "marketing", "imprensa"][themeIndex] || `tema-${themeIndex + 1}`
+                              return (
+                                <label key={key} className="toggle-field">
+                                  <input
+                                    type="checkbox"
+                                    checked={(item.relatedThemeKeys ?? []).includes(key)}
+                                    onChange={(event) => {
+                                      const selected = item.relatedThemeKeys ?? []
+                                      updateItem(index, {
+                                        relatedThemeKeys: event.target.checked
+                                          ? [...selected, key]
+                                          : selected.filter((value) => value !== key),
+                                      })
+                                    }}
+                                  />
+                                  {theme.title}
+                                </label>
+                              )
+                            })}
+                          </fieldset>
+                        </div>
+                      )}
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug === "resultados" &&
+                      draft.mobile_panel === "b" && (
+                        <div className="field-wide">
+                          <label>
+                            Identificador do tema (para os links da abertura)
+                            <input
+                              value={item.themeKey ?? ""}
+                              onChange={(event) => updateItem(index, { themeKey: event.target.value })}
+                              placeholder="corporativa, projetos, eventos, marketing ou imprensa"
+                            />
+                          </label>
+                          <label>
+                            Eixo central
+                            <input
+                              value={item.themeAxis ?? ""}
+                              onChange={(event) => updateItem(index, { themeAxis: event.target.value })}
+                            />
+                          </label>
+                          <label>
+                            Título do conteúdo central
+                            <input
+                              value={item.themeTitle ?? ""}
+                              onChange={(event) => updateItem(index, { themeTitle: event.target.value })}
+                            />
+                          </label>
+                          <label>
+                            Subtítulo do conteúdo central
+                            <textarea
+                              value={item.themeSubtitle ?? ""}
+                              onChange={(event) => updateItem(index, { themeSubtitle: event.target.value })}
+                            />
+                          </label>
+                          <label>
+                            Temas relacionados
+                            <textarea
+                              value={item.themeTopics ?? ""}
+                              onChange={(event) => updateItem(index, { themeTopics: event.target.value })}
+                            />
+                          </label>
+                          <label>
+                            Texto curto
+                            <textarea
+                              value={item.themeSummary ?? ""}
+                              onChange={(event) => updateItem(index, { themeSummary: event.target.value })}
+                            />
+                          </label>
+                          <label>
+                            Conteúdo reaproveitado da antiga seção 04 (uma linha por item)
+                            <textarea
+                              value={(item.inheritedHighlights ?? []).join("\n")}
+                              onChange={(event) =>
+                                updateItem(index, {
+                                  inheritedHighlights: event.target.value.split("\n").map((value) => value.trim()).filter(Boolean),
+                                })
+                              }
+                            />
+                          </label>
+                        </div>
+                      )}
                     {sections.find((entry) => entry.id === draft.section_id)?.slug === "perfil" &&
                       draft.mobile_panel === "b" &&
                       index < 5 && (
