@@ -858,6 +858,31 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         onChange={(event) => updateItem(index, { meta: event.target.value })}
                       />
                     </label>
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug ===
+                      "perfil" &&
+                      draft.mobile_panel === "b" &&
+                      index < 5 && (
+                        <label className="field-wide">
+                          Destino do card (seção interna)
+                          <select
+                            value={item.targetSlug ?? "resultados"}
+                            onChange={(event) =>
+                              updateItem(index, { targetSlug: event.target.value })
+                            }
+                          >
+                            {sections
+                              .filter((entry) => entry.slug !== "perfil")
+                              .map((entry) => (
+                                <option key={entry.id} value={entry.slug}>
+                                  {entry.title} (#{entry.slug})
+                                </option>
+                              ))}
+                          </select>
+                          <small>
+                            Padrão: seção 03. O clique funciona em toda a área do card.
+                          </small>
+                        </label>
+                      )}
                     <label>
                       Imagem
                       <input
