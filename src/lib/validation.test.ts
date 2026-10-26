@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { clampNumber, isSafePublicUrl, validateContentItems } from "./validation"
+import {
+  clampNumber,
+  isSafePublicUrl,
+  resolveHeroCardDestination,
+  validateContentItems,
+} from "./validation"
 
 describe("clampNumber", () => {
   it("limita valores configuráveis", () => {
@@ -25,5 +30,24 @@ describe("validateContentItems", () => {
       { title: "Contato", meta: "javascript:alert(1)" },
     ])
     expect(errors).toHaveLength(3)
+  })
+})
+
+
+describe("resolveHeroCardDestination", () => {
+  const published = ["perfil", "sobre", "resultados", "contato"]
+
+  it("usa a seção 03 por padrão e aceita destino configurado no admin", () => {
+    expect(resolveHeroCardDestination(undefined, published)).toBe("resultados")
+    expect(resolveHeroCardDestination("contato", published)).toBe("contato")
+  })
+
+  it("não navega para slug inexistente ou seção 03 despublicada", () => {
+    expect(resolveHeroCardDestination("sem-secao", published)).toBe("resultados")
+    expect(resolveHeroCardDestination("sem-secao", ["perfil", "sobre"])).toBeUndefined()
+  })
+
+  it("rejeita destinos inválidos antes de salvar", () => {
+    expect(validateContentItems([{ title: "Card", targetSlug: "javascript:alert(1)" }])).toHaveLength(1)
   })
 })
