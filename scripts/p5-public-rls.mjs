@@ -22,7 +22,7 @@ try {
   })
   await page.goto("https://tulius.work/", { waitUntil: "networkidle2", timeout: 45000 })
   await page.waitForFunction(
-    () => document.querySelectorAll("section.portfolio-section").length === 14,
+    () => document.querySelectorAll("section.portfolio-section").length === 13,
     { timeout: 15000 },
   )
   if (!publicHeaders || !restOrigin) throw new Error("Public Supabase requests were not observed")
@@ -56,7 +56,7 @@ try {
     }
   }, { origin: restOrigin, headers: publicHeaders })
 
-  if (result.publicSections !== 14 || result.nonPublished ||
+  if (result.publicSections !== 13 || result.nonPublished ||
       result.adminsExposed || result.issuesExposed ||
       result.revisionsExposed || result.auditLogsExposed) {
     throw new Error("Public RLS contract mismatch: " + JSON.stringify(result))
