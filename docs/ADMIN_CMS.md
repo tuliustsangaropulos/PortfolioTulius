@@ -28,12 +28,20 @@ Em `/admin`, abra **Blocos e painéis**, escolha **Perfil** e selecione o bloco 
 
 Os destinos são selecionados entre slugs do CMS. O renderer aceita somente slugs que correspondam a seções visíveis e publicadas; um alvo ausente/não publicado cai para `#resultados` (ou apresenta card sem link se também faltar a seção 03). Não usar `meta` para configurar esses links: `meta` permanece reservado ao conteúdo/metadado existente. A gravação do editor com JWT administrativo real ainda exige homologação manual; a disponibilização do campo no código não prova o teste de gravação em produção.
 
-## Seção 02: foto central e conteúdo lateral (26/10/2026)
+## Seção 02 — gestão completa dos cinco textos (26/10/2026)
 
-O layout desktop de **Olá!** é especial e mantém o conteúdo CMS centralizado em dois blocos existentes:
+Em `/admin` → **Blocos e painéis**, escolha **Olá!** e o **painel B**. Os cinco títulos e respectivos textos da coluna direita estão no mesmo bloco, em `content_json.items`, podendo ser:
+- **Adicionados** por **Adicionar item**;
+- **Editados** nos campos **Título** e **Texto**;
+- **Reordenados** pelas setas para cima/baixo;
+- **Excluídos** pelo botão de remoção, sujeito a confirmação.
 
-- **Esquerda:** `/admin` → módulo **Seções**, selecionar **Olá!** (`sobre`). Campos **título**, **subtítulo/eyebrow** e **introdução** alimentam a coluna esquerda.
-- **Centro:** módulo **Blocos e painéis** → seção **Olá!** → bloco do **painel A** → item 01: **Imagem central da seção 02 (desktop)** (`aboutDesktopImage`) e **Descrição da imagem central (desktop)** (`aboutDesktopAlt`). Ao deixar a imagem desktop vazia, a página usa `/media/tulius-contact.jpg` e o alt `Tulius Tsangaropulos segurando um tablet`. A **Imagem** convencional do mesmo item segue sendo usada no painel mobile e não muda por editar a imagem desktop.
-- **Direita:** os **dois itens do painel B** aparecem primeiro, na ordem do CMS; **título e texto do item 01 do painel A** aparecem em terceiro, sem repetir sua miniatura. Altere os mesmos campos `Título` e `Texto` que já existem no editor. O conteúdo não é clonado para painel B.
+Use **Salvar alterações** para gravar via RPC `save_content_block_atomic`. A quantidade não fica limitada a cinco: cinco é o conteúdo inicial solicitado. Não remova o único item do **painel A**, que armazena a fotografia e seus campos desktop, inclusive `aboutDesktopImage` e `aboutDesktopAlt`. A coluna esquerda continua sendo editada em **Seções → Olá!** (título, subtítulo e introdução).
 
-O editor salva as chaves opcionais no `content_json.items` por `save_content_block_atomic`. A nova imagem aceita URL HTTPS ou arquivo de `/media/` com nome seguro; quando personalizada exige descrição alternativa própria. Não foi criada coluna/tabela/migration. **Ainda não foi testada a alteração real com JWT administrativo**, permanecendo pendente a homologação de gravação/publicação e a conferência visual posterior.
+**Renderização:** no desktop, toda a lista B aparece à direita na mesma ordem. No mobile, a foto do painel A é acompanhada pelo título/texto do primeiro item B; os demais itens B aparecem no painel mobile B. Nenhuma cópia textual é mantida no item de foto. Se todos os textos forem excluídos, permanece apenas a fotografia no mobile A.
+
+## Seção 03 — lista de especialidades
+
+Em **Blocos e painéis → Resultados e projetos em destaque → painel B**, estão os cinco temas iguais aos cards 01–05 da seção 01. Podem ser editados pelo CMS, mas **não são ligados automaticamente** aos títulos da seção 01 após futuras alterações; para manter a equivalência editorial, modificar ambos os blocos ou solicitar a implantação de sincronização automatizada. O painel A da seção 03 contém os quatro indicadores de resultados e não foi alterado nesta rodada.
+
+**Aceite pendente:** salvar/adicionar/excluir/reordenar com JWT administrativo real ainda requer teste autenticado de navegador; o sucesso do SQL e os testes unitários não demonstram o fluxo UI completo.
