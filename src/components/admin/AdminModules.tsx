@@ -920,7 +920,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             Descrição da imagem central (desktop)
                             <input
                               value={item.aboutDesktopAlt ?? ""}
-                              placeholder={item.alt || "Tulius Tsangaropulos"}
+                              placeholder="Tulius Tsangaropulos segurando um tablet"
                               onChange={(event) =>
                                 updateItem(index, { aboutDesktopAlt: event.target.value })
                               }
