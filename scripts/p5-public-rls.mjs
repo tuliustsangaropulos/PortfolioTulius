@@ -38,16 +38,21 @@ try {
       if (!Array.isArray(rows)) throw new Error(table + ": response is not an array")
       return { status: response.status, rows }
     }
-    const [sections, admins, issues, revisions, logs] = await Promise.all([
+    const [sections, navigation, admins, issues, revisions, logs] = await Promise.all([
       read("sections", "slug,status,is_visible"),
+      read("navigation_items", "target_slug,status,is_visible"),
       read("admin_users", "user_id"),
       read("editorial_issues", "id"),
       read("content_revisions", "id"),
       read("audit_logs", "id"),
     ])
+    const publicSlugs = new Set(sections.rows.map(x => x.slug))
     return {
       publicSections: sections.rows.length,
       nonPublished: sections.rows.filter(x => x.status !== "published" || !x.is_visible).length,
+      publicNavigation: navigation.rows.length,
+      invalidNavigation: navigation.rows.filter(x => x.status !== "published" || !x.is_visible ||
+        !publicSlugs.has(x.target_slug)).length,
       adminsExposed: admins.rows.length,
       issuesExposed: issues.rows.length,
       revisionsExposed: revisions.rows.length,
@@ -57,6 +62,7 @@ try {
   }, { origin: restOrigin, headers: publicHeaders })
 
   if (result.publicSections !== 13 || result.nonPublished ||
+      result.publicNavigation !== result.publicSections || result.invalidNavigation ||
       result.adminsExposed || result.issuesExposed ||
       result.revisionsExposed || result.auditLogsExposed) {
     throw new Error("Public RLS contract mismatch: " + JSON.stringify(result))

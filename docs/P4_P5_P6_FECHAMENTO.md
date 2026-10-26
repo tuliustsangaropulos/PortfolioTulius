@@ -1,5 +1,7 @@
 # P4 / P5 / P6 — Encerramento das ações automatizáveis
 
+> **Registro histórico de 25/10/2026.** Este documento não substitui o [estado auditado após as etapas 1–3 de 26/10/2026](AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md). As referências a 14 seções, 42 capturas e a escores Lighthouse mais antigos são medições válidas apenas para seus próprios SHAs.
+
 Data: **25/10/2026** · Branch: **`main`** · Produção: https://tulius.work/
 
 ## Escopo e critério

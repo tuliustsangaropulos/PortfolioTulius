@@ -58,6 +58,12 @@ Configure as duas variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KE
 
 `.gitignore` protege `.env.local`, `.env.*`, `.vercel/`, `node_modules/` e `dist/`, mantendo `.env.example` disponível para versionamento. Nunca versione tokens ou chaves privadas. Revise `git status` e o diff antes de qualquer commit; este README não autoriza commits, push, alterações na Vercel ou deploy.
 
+## Auditoria consolidada — etapas 1, 2 e 3 (26/10/2026)
+
+A referência técnica **vigente** para estado, evidências, dados e pendências é [`docs/AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md`](docs/AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md). Os relatórios [Etapa 1](docs/ETAPA_1_HOMOLOGACAO_PUBLICA_2026-10-26.md), [Etapa 2](docs/ETAPA_2_AUDITORIA_CMS_SUPABASE_2026-10-26.md) e [Etapa 3](docs/ETAPA_3_AJUSTES_2026-10-26.md) preservam o contexto de cada execução. Datas, SHAs, números de painéis e Lighthouse em documentos anteriores são **fotografias históricas**, não o estado técnico corrente.
+
+**Resumo após a etapa 3:** 13 seções e 13 destinos de navegação públicos, 42 painéis cadastrados (incluem seção oculta), 28 blocos (0 com `is_placeholder=true`), 56 placements, 8 pendências editoriais abertas. Existe **um item interno ainda marcado `placeholder=true`**, referente a imagens da Invest RS; os 18 títulos de slides profissionais não têm fotos aprovadas. CI final validado: 46 testes, build, TypeScript e formatação aprovados. Auditoria Lighthouse posterior à correção CSS: acessibilidade 100 em mobile/desktop, performance mobile 75 e desktop 96, com LCP mobile ~4,51 s. E2E com JWT administrativo e transferência real de arquivos continuam sem comprovação.
+
 ## Estado atual
 
 O portfólio está publicado em **https://tulius.work/** na Vercel, com deploy automático da branch `main` e CMS conectado ao Supabase. A página `/` usa os conteúdos publicados do banco; quando Supabase está configurado e falha, a interface indica erro, sem substituir silenciosamente conteúdo por fallback. As rotas de administração têm carregamento separado e autenticação obrigatória.

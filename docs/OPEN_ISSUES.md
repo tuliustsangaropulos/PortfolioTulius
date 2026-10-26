@@ -1,5 +1,7 @@
 # Pendências abertas
 
+> **Índice vigente (26/10/2026):** consulte [Auditoria consolidada das etapas 1–3](AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md). As notas abaixo são um **log histórico acumulado** e contêm SHAs, status de quota e contagens anteriores às últimas correções. Para tomar decisões use o relatório consolidado, o último CI e o banco atual, não frases antigas isoladas.
+
 1. Invest RS: cargo divergente entre PDF e Canva.
 2. Idiomas: rótulos fluente/avançado versus C1/B2.
 3. Vale: confirmar contextos de 6 pessoas e 14 países.
