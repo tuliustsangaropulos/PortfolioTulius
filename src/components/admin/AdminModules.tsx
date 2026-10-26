@@ -858,8 +858,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         onChange={(event) => updateItem(index, { meta: event.target.value })}
                       />
                     </label>
-                    {sections.find((entry) => entry.id === draft.section_id)?.slug ===
-                      "perfil" &&
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug === "perfil" &&
                       draft.mobile_panel === "b" &&
                       index < 5 && (
                         <label className="field-wide">
@@ -878,9 +877,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                                 </option>
                               ))}
                           </select>
-                          <small>
-                            Padrão: seção 03. O clique funciona em toda a área do card.
-                          </small>
+                          <small>Padrão: seção 03. O clique funciona em toda a área do card.</small>
                         </label>
                       )}
                     <label>
@@ -897,8 +894,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         onChange={(event) => updateItem(index, { alt: event.target.value })}
                       />
                     </label>
-                    {sections.find((entry) => entry.id === draft.section_id)?.slug ===
-                      "sobre" &&
+                    {sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
                       draft.mobile_panel === "a" &&
                       index === 0 && (
                         <>
@@ -927,10 +923,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             />
                           </label>
                           <p className="field-wide">
-                            O título e o texto deste item aparecem como terceiro bloco da
-                            coluna direita no desktop. Os outros dois blocos são gerenciados
-                            no painel B. A coluna esquerda usa título, subtítulo e introdução
-                            da seção.
+                            O título e o texto deste item aparecem como terceiro bloco da coluna
+                            direita no desktop. Os outros dois blocos são gerenciados no painel B. A
+                            coluna esquerda usa título, subtítulo e introdução da seção.
                           </p>
                         </>
                       )}
@@ -991,7 +986,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           <label className="field-wide">
                             Texto do selo circular
                             <input
-                              value={item.hero?.badgeText ?? "VISÃO 360° DA COMUNICAÇÃO E MARKETING ·"}
+                              value={
+                                item.hero?.badgeText ?? "VISÃO 360° DA COMUNICAÇÃO E MARKETING ·"
+                              }
                               onChange={(event) =>
                                 updateHero(index, {
                                   badgeText: event.target.value,
