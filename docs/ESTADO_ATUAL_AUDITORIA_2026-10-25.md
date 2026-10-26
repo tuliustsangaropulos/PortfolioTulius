@@ -173,3 +173,21 @@ O proprietário solicitou: Ferramentas com fundo cinza-escuro da identidade, fon
 **CI e deployment:** testes Vitest adicionais verificam os seis destinos, conjuntos de ícones e validação de duplicidades. O workflow de build deve ser conferido no SHA final desta rodada. A Vercel anteriormente atingiu cota diária (`api-deployments-free-per-day`); confirmar produção em `tulius.work` por SHA, pois atualizar `main` não prova publicação da última versão. Documento completo: `docs/CONTINUIDADE_FERRAMENTAS_CARDS_CONTATO_2026-10-26.md`.
 
 **Estado verificado em 26/10/2026 (ferramentas/cards/contato):** `Validate PortfolioTulius` passou no SHA `9294fa2e` (run `40277247507`). A Vercel recusou novo deployment com HTTP 402 `api-deployments-free-per-day`, com indicação de limite por 1 dia. Último deployment de produção `READY` então observado: `382ec95f`, anterior ao código completo desta rodada. Portanto, elementos editados via Supabase já estão salvos, mas ícones/links/hover no bundle de produção **não estão confirmados**; não declarar publicação final. Requer novo deployment após liberação da cota e homologação visual/funcional.
+
+## 14. Auditoria documental cruzada — 26/10/2026
+
+**Objetivo:** sincronizar a documentação após todas as alterações deste chat, sem substituir o histórico acumulado.
+
+**Ajustes documentais desta rodada:**
+- `README.md`: corrigida a contradição interna sobre a seção 02. **Estado vigente:** texto e introdução do lado esquerdo em `sections`; retrato e metadados no painel A; **cinco declarações dinâmicas exclusivamente em `sobre/B`**, com CRUD e ordenação via CMS. A antiga divisão de três declarações A/B permanece descrita apenas no relatório de continuidade da etapa anterior, identificado como histórico.
+- `docs/RESPONSIVE_LAYOUT.md`: substituídas contagens obsoletas **14/28** pelo contrato **13 seções públicas, 25 painéis mobile e 38 capturas**. Documentadas as seis empresas em sobreposição sticky a partir de 768 px, barra superior fixa e correção para fluxo sequencial no mobile até 767 px. A seção `competencias` está oculta, mas não excluída do CMS.
+- `docs/DEPLOYMENT.md`: incluídos os SHAs distintos de CI e produção, o erro de quota Vercel e uma lista objetiva para retomar deploy/validar a UI sem alterar billing ou DNS.
+- `docs/OPEN_ISSUES.md`: atualizadas as pendências e evidências, inclusive necessidade de homologação mobile/admin e fotos/logomarcas reais.
+
+**Estado técnico verificado imediatamente antes das alterações de documentação:** repositório `main` em `52a5b61bfde881c05a67bc3d7fa665eb26f1182f`; GitHub Actions **Validate PortfolioTulius** aprovado no run [40277484553](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40277484553). Vercel produção último `READY` observado em `382ec95f41fe35452602a7327e75a57565caeebf`, deployment `dpl_frYDWCnqoMqeKHt3BjVBwQc7Z9FP`, portanto **anterior às mudanças completas mais recentes do front-end**. Persistiu erro `api-deployments-free-per-day` (HTTP 402) ao tentar um novo deployment. A aprovação de CI não garante que os efeitos de Ferramentas, seis cards e Contato estejam em produção.
+
+**Fontes permanentes do projeto ChatGPT a sincronizar:** substituir as cópias antigas de `ESTADO_ATUAL_AUDITORIA_2026-10-25.md`, `CONTINUIDADE_INTERATIVIDADE_SECAO_03_2026-10-26.md`, `CONTINUIDADE_CONTEUDO_SECOES_02_03_2026-10-26.md` e `CONTINUIDADE_FERRAMENTAS_CARDS_CONTATO_2026-10-26.md`; adicionar `CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md` e `CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md` se não estiverem cadastrados como Fontes. Os demais arquivos de contexto, ambiente e planejamento P3 permanecem fontes históricas. Os nomes devem ser comparados com o conteúdo do GitHub, e não apenas com o nome do anexo.
+
+**Pendências de aceite inalteradas:** implantação final e validação visual, especialmente o correção de stacking mobile; envio/autorização das fotografias e seis logomarcas; E2E do admin autenticado para mídias, temas e navegação; revisão de riscos explicitamente aceitos sem reabrir decisões por conta desta documentação.
+
+Esta seção é um adendo de continuidade, não substitui a auditoria técnica inicial nem afirma que arquivos históricos sobre 14 seções foram falsos na época em que foram produzidos.
