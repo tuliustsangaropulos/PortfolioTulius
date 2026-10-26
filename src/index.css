@@ -602,3 +602,67 @@
 @media (prefers-reduced-motion: reduce) {
  .experience-index a, .experience-gallery-controls button { transition: none; }
 }
+
+/* Ferramentas: original typography preserved with local platform pictograms. */
+#ferramentas { background: var(--ink); color: var(--paper); }
+#ferramentas .content-item p, #ferramentas .section-intro,
+#ferramentas .panel-heading p { color: var(--paper); }
+#ferramentas .content-item h3 { color: var(--paper); }
+#ferramentas .desktop-content > div .content-item:nth-child(odd) h3,
+#ferramentas .mobile-items .content-item:nth-child(odd) h3 { color: var(--orange); }
+.tools-editorial { grid-template-columns: minmax(15rem, 3fr) minmax(0, 9fr); gap: clamp(1rem, 2.5vw, 3rem); }
+.tools-editorial .desktop-content { gap: clamp(.8rem, 1.3vw, 1.6rem); }
+.tools-editorial .desktop-content > div { gap: .35rem; }
+.tools-editorial .content-item { min-height: 8rem; grid-template-columns: 7rem minmax(0, 1fr); align-items: center; gap: clamp(.65rem, 1vw, 1rem); padding: .65rem 0; }
+.tools-editorial .content-item h3 { font-size: clamp(1.12rem, 1.45vw, 1.7rem); }
+.tools-editorial .content-item p { font-size: clamp(.8rem, .87vw, .95rem); }
+.tools-icon-cluster { position: relative; width: 7rem; height: 6.8rem; flex: none; }
+.tools-icon-badge { position: absolute; display: grid; place-items: center; color: white; background: var(--orange); border-radius: 50%; width: 3.75rem; height: 3.75rem; }
+.tools-icon-badge-1 { top: .1rem; left: .15rem; width: 4.1rem; height: 4.1rem; }
+.tools-icon-badge-2 { right: 0; bottom: .1rem; width: 3.2rem; height: 3.2rem; }
+.tools-icon-badge-3 { left: .4rem; bottom: .05rem; width: 2.35rem; height: 2.35rem; }
+.tools-icon-cluster svg { overflow: visible; }
+/* Opening-page experience links keep their full-card hit area and gain strong focus. */
+.career-grid .area-card-link, .profile-b-items .content-item.area-card-link:nth-child(n+6) {
+  text-decoration: none; cursor: pointer; border-radius: 2px;
+  transition: background-color .2s ease, padding-left .2s ease, box-shadow .2s ease;
+}
+.career-grid .area-card-link:hover, .career-grid .area-card-link:focus-visible,
+.profile-b-items .content-item.area-card-link:nth-child(n+6):hover,
+.profile-b-items .content-item.area-card-link:nth-child(n+6):focus-visible {
+  background: color-mix(in srgb, var(--orange) 13%, var(--paper));
+  box-shadow: inset 3px 0 0 var(--orange);
+  padding-left: .8rem;
+}
+.career-grid .area-card-link:focus-visible,
+.profile-b-items .content-item.area-card-link:nth-child(n+6):focus-visible {
+  outline: 2px solid var(--orange-dark); outline-offset: 2px;
+}
+.career-grid .area-card-link:hover h3,
+.profile-b-items .content-item.area-card-link:nth-child(n+6):hover h3 { color: var(--orange-dark); }
+/* Contact link titles and large values change together; keyboard focus mirrors hover. */
+#contato .contact-link h3, #contato .contact-link .item-value {
+  transition: color .2s ease;
+}
+#contato .contact-link:hover h3, #contato .contact-link:focus-visible h3,
+#contato .contact-link:hover .item-value, #contato .contact-link:focus-visible .item-value {
+  color: var(--paper);
+}
+@media (max-width: 1100px) and (min-width: 768px) {
+ .tools-editorial { grid-template-columns: minmax(12rem, 2.5fr) minmax(0, 9.5fr); }
+ .tools-editorial .content-item { grid-template-columns: 5.2rem minmax(0, 1fr); }
+ .tools-editorial .tools-icon-cluster { transform: scale(.76); transform-origin: left center; }
+}
+@media (max-width: 767px) {
+ #ferramentas .mobile-items .content-item { display: grid; grid-template-columns: minmax(5.2rem, 7rem) minmax(0, 1fr); align-items: center; gap: .85rem; min-height: 8rem; }
+ #ferramentas .mobile-items .content-item h3 { font-size: clamp(1.2rem, 5.2vw, 1.6rem); }
+ #ferramentas .mobile-items .content-item p { font-size: .87rem; }
+}
+@media (max-width: 360px) {
+ #ferramentas .mobile-items .content-item { grid-template-columns: 5rem minmax(0, 1fr); gap: .5rem; }
+ #ferramentas .tools-icon-cluster { transform: scale(.73); transform-origin: left center; }
+}
+@media (prefers-reduced-motion: reduce) {
+ .career-grid .area-card-link, .profile-b-items .content-item.area-card-link:nth-child(n+6),
+ #contato .contact-link h3, #contato .contact-link .item-value { transition: none; }
+}
