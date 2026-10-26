@@ -289,6 +289,24 @@
 .media-preview > img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .media-preview-fallback { display: grid; justify-items: center; gap: .5rem; padding: 1rem; text-align: center; }
 .media-preview-fallback small { max-width: 28ch; overflow-wrap: anywhere; }
+/* Public-asset picker in Blocks: legible thumbnails without cropping logos. */
+.published-media-picker { display: grid; gap: .6rem; min-width: 0; margin: .8rem 0; align-content: start; }
+.published-media-picker-label { font-size: .8rem; color: #504a47; }
+.published-media-current { display: flex; align-items: center; gap: .75rem; min-width: 0; padding: .55rem; border: 1px solid #e3dfdc; background: #faf9f7; font-size: .76rem; color: #504a47; }
+.published-media-current img { display: block; width: 5rem; height: 5rem; flex: none; object-fit: contain; background: #ece8e5; }
+.published-media-current-note { color: #716b67; font-size: .78rem; }
+.published-media-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.published-media-panel { display: grid; gap: .75rem; min-width: 0; padding: .75rem; border: 1px solid #d7d2ce; background: #faf9f7; }
+.published-media-panel > p { font-size: .78rem; color: #504a47; }
+.published-media-panel > label { display: grid; gap: .35rem; font-size: .78rem; font-weight: 700; color: #504a47; }
+.published-media-panel input { width: 100%; min-width: 0; padding: .65rem; border: 1px solid #d7d2ce; }
+.published-media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr)); gap: .6rem; max-height: 23rem; overflow-y: auto; }
+.published-media-option { display: grid; align-content: start; gap: .4rem; min-width: 0; min-height: 9.5rem; padding: .45rem; border: 1px solid #cbc5c0; background: white; color: #171617; text-align: left; cursor: pointer; }
+.published-media-option[aria-pressed="true"] { border: 2px solid #bc390c; }
+.published-media-option:hover, .published-media-option:focus-visible { outline: 2px solid #bc390c; outline-offset: 1px; }
+.published-media-option img { width: 100%; height: 6.5rem; object-fit: contain; background: #ece8e5; }
+.published-media-option span { font-size: .72rem; font-weight: 700; overflow-wrap: anywhere; }
+.published-media-option small { color: #8c3c1e; }
 .empty-state { grid-column: 1 / -1; text-align: center; justify-items: center; padding: 4rem; }
 .navigation-editor > div { display: grid; grid-template-columns: 3rem 1fr 1fr auto; gap: 1rem; align-items: center; padding: .8rem 0; border-top: 1px solid #ece8e5; }
 .navigation-editor > div > span:first-child { color: #c44718; font-weight: 700; }
