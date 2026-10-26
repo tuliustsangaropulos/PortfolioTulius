@@ -128,7 +128,7 @@ export function Navigation({
                   className={current === item.slug ? "active" : ""}
                   onClick={() => go(item.slug)}
                 >
-                  <span>{String(item.number).padStart(2, "0")}</span>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
                   {item.label}
                   <Icon name="arrow" size={18} />
                 </button>
