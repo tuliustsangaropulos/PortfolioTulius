@@ -252,7 +252,7 @@ export const sections: PortfolioSection[] = [
     slug: "formacao",
     number: 5,
     title: "Formação",
-    theme: "paper",
+    theme: "ink",
     layout: "timeline",
     status: "published",
     visible: true,
@@ -293,10 +293,17 @@ export const sections: PortfolioSection[] = [
     title: "Invest RS",
     eyebrow: "Gestão de eventos, comunicação institucional e projetos digitais",
     intro: "Analista Executivo · Julho/2026 – atual · Porto Alegre, RS",
-    theme: "ink",
+    theme: "paper",
     layout: "timeline",
     status: "published",
     visible: true,
+    experienceMedia: {
+      slides: [
+        { title: "Guia de Boas-Vindas" },
+        { title: "Organização de eventos" },
+        { title: "Plataforma de eventos e relacionamento" },
+      ],
+    },
     panelA: [
       {
         title: "Competências aplicadas",
@@ -349,6 +356,13 @@ export const sections: PortfolioSection[] = [
     layout: "metrics",
     status: "published",
     visible: true,
+    experienceMedia: {
+      slides: [
+        { title: "Planejamento de comunicação" },
+        { title: "Conteúdo institucional e executivo" },
+        { title: "Plataforma SUBPI" },
+      ],
+    },
     panelA: [
       {
         title: "Planejamento de comunicação",
@@ -388,10 +402,17 @@ export const sections: PortfolioSection[] = [
     title: "Vale",
     eyebrow: "Comunicação corporativa global e estratégia digital",
     intro: "Analista Sênior de Comunicação · Jun/2020 – out/2024",
-    theme: "cream",
+    theme: "paper",
     layout: "metrics",
     status: "published",
     visible: true,
+    experienceMedia: {
+      slides: [
+        { title: "Projetos digitais de ponta a ponta" },
+        { title: "Comunicação executiva e reputação" },
+        { title: "Mídia paga e inteligência de dados" },
+      ],
+    },
     panelA: [
       { title: "Orçamento anual de mídia sob gestão", value: "R$ 12 milhões" },
       {
@@ -429,10 +450,17 @@ export const sections: PortfolioSection[] = [
     title: "TV Globo / SporTV",
     eyebrow: "Correspondente internacional",
     intro: "Trainee, Repórter, Produtor, Editor e Correspondente · 2015–2019",
-    theme: "ink",
+    theme: "paper",
     layout: "timeline",
     status: "published",
     visible: true,
+    experienceMedia: {
+      slides: [
+        { title: "Produção de ponta a ponta" },
+        { title: "Jornalista em Pequim" },
+        { title: "Reportagens e entradas ao vivo" },
+      ],
+    },
     panelA: [
       {
         title: "Seleção nacional e formação",
@@ -475,10 +503,17 @@ export const sections: PortfolioSection[] = [
     title: "Grupo InPress",
     eyebrow: "Assessoria de imprensa, relações públicas e gestão de contas",
     intro: "Analista de Comunicação e Atendimento Sênior · Nov/2019 – jun/2020",
-    theme: "cream",
+    theme: "paper",
     layout: "timeline",
     status: "published",
     visible: true,
+    experienceMedia: {
+      slides: [
+        { title: "Assessoria de imprensa" },
+        { title: "Relações públicas" },
+        { title: "Campanhas integradas" },
+      ],
+    },
     panelA: [
       {
         title: "Assessoria de imprensa",
@@ -515,6 +550,13 @@ export const sections: PortfolioSection[] = [
     layout: "timeline",
     status: "published",
     visible: true,
+    experienceMedia: {
+      slides: [
+        { title: "Planejamento estratégico" },
+        { title: "Comunicação institucional" },
+        { title: "Gestão de stakeholders" },
+      ],
+    },
     panelA: [
       {
         title: "Planejamento estratégico",
