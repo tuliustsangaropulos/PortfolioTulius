@@ -57,7 +57,7 @@ Uma consulta posterior confirmou: `sobre/A = 1` item técnico de imagem, `sobre/
 - `src/components/admin/AdminModules.tsx`: orientação contextual para gerir toda a lista de textos.
 - `src/content/fallback.test.ts`: testes dos cinco textos, da imagem do painel A, das quatro métricas e da correspondência editorial dos cinco temas entre as seções 01 e 03.
 
-Verificações realizadas: GitHub Actions `Validate PortfolioTulius` em execução após commits individuais; builds anteriores bem-sucedidos. O SHA final e os checks correspondentes devem ser confirmados no momento do encerramento deste ciclo. O deployment da Vercel é disparado automaticamente pela integração GitHub/main; verificar se `READY` aponta para o SHA final.
+Verificações realizadas: **GitHub Actions `Validate PortfolioTulius` aprovado** no commit documental `29551f6ec74077da6aff195e779ab355b3c289b8`, run [40267290567](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40267290567), após passagem de formatação, TypeScript, testes unitários, build e smoke. O deployment de produção da Vercel desse mesmo commit foi confirmado como `READY` (`dpl_AnruK2ENPPDoozk24qWA31DrJTdx`). As alterações documentais posteriores devem ter CI/deploy conferidos separadamente; esses checks não substituem homologação real dos controles administrativos.
 
 **Pendências de homologação:** fluxo real de adição, edição, exclusão, reordenação e gravação via navegador com JWT administrativo; inspeção visual em desktop e mobile com a lista de cinco itens; overflow em altura de tela reduzida. Não confundir sucesso dos testes unitários ou gravação direta em banco com teste autenticado do admin.
 
