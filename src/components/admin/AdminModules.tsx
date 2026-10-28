@@ -858,14 +858,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                 </label>
               </div>
             </fieldset>
-            {[
-                    "invest-rs",
-                    "prefeitura-sp",
-                    "vale",
-                    "globo-sportv",
-                    "inpress",
-                    "cdi",
-                  ].includes(
+            {["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(
               sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
             ) &&
               draft.mobile_panel === "a" && (
@@ -1097,7 +1090,14 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                       </button>
                     </div>
                   </div>
-                  {["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(
+                  {[
+                    "invest-rs",
+                    "prefeitura-sp",
+                    "vale",
+                    "globo-sportv",
+                    "inpress",
+                    "cdi",
+                  ].includes(
                     sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
                   ) && (
                     <label className="toggle-field admin-visibility-toggle">
