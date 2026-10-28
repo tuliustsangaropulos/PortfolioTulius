@@ -64,3 +64,6 @@ O volume da coluna de experiências é editorialmente controlado: até seis iten
 
 Contato passa a ter três colunas: chamada à esquerda, retrato central de altura disponível, links à direita; assinatura e localização compõem faixa de rodapé. As setas dos links ocupam coluna própria, sem cobrir URLs. No mobile a foto, os links e o rodapé permanecem acessíveis em fluxo vertical.
 
+## Media framing contextual — revisão manual (28/10/2026)
+
+O CMS exibe dimensões esperadas **como referência de composição**, não como redimensionamento automático: herói e foto de Contato aproximadamente 900×1200 (3:4), miniquadros 600×600 (1:1), foto central de Olá! aproximadamente 900×1200 (3:4), logos quadrados aproximadamente 400×400, slides de experiência 900×1000 (9:10) e Open Graph 1200×630. Uma janela com prévia de proporção, X, Y e zoom aplica apenas o recorte de apresentação por área. Fotos e logos originais preservados; arquivos do Storage não são processados. As seções editoriais especiais mantêm composição/efeitos fixos; os controles correspondentes permanecem desabilitados na UI em vez de produzir alterações falsas.

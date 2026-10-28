@@ -73,3 +73,8 @@ Sem DDL, migrations, Auth, RLS ou Storage; mudanças do banco limitaram-se a cam
 - **Contato:** `sections.intro` e `contato/a.items[0].text` permanecem editáveis no CMS e são exibidos no rodapé; a imagem do item A ocupa exclusivamente a coluna central. Links permanecem no bloco B e são apresentados sem colisão da seta com URLs.
 - **Menu:** rótulos e visibilidade são gerenciados por `navigation_items`; há 13 seções públicas, mas **8 entradas visíveis no menu**. Cinco entradas individuais de empregadores ficam ocultas, preservadas no banco; `invest-rs` recebe o rótulo "Experiência Profissional". A navegação horizontal interna entre empregadores continua independente do menu lateral.
 
+## Enquadramento por placement e identificação de mídias — 28/10/2026
+
+Sem alterar tabela, migration ou Storage, `ContentItem.mediaFraming?: {x,y,zoom}`, `ContentItem.aboutDesktopFraming`, `ExperienceMedia.logoFraming` e `ExperienceSlide.framing` são campos JSONB opcionais definidos em `content_blocks.content_json`. Padrões: `x=50`, `y=50`, `zoom=1`; x/y limitados a 0–100% e zoom a 1–3. Somente a **apresentação** recebe `object-position`/`scale`. Mídias legadas sem configuração preservam o enquadramento e o layout anteriores.
+
+`media_assets.title` é o nome final de `storage_path` com extensão (basename). Os 21 registros existentes foram sincronizados. O campo histórico `media_assets.credit` permanece no banco apenas por preservação de dados, mas não é usado pelo CMS em novas atualizações nem renderizado. Não houve deleção, mudança de esquema, política RLS, alterações de conteúdo editorial ou substituição de bytes.
