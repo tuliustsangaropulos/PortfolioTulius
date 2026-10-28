@@ -119,13 +119,7 @@ export function usePortfolio(includeDrafts = false) {
         .order("sort_order"),
     ])
       .then(
-        async ([
-          sectionsResult,
-          panelsResult,
-          placementsResult,
-          tokenResult,
-          navigationResult,
-        ]) => {
+        async ([sectionsResult, panelsResult, placementsResult, tokenResult, navigationResult]) => {
           if (cancelled) return
           if (!includeDrafts) performance.mark("p3:portfolio-primary-ready")
           const contentError = sectionsResult.error ?? panelsResult.error ?? placementsResult.error
