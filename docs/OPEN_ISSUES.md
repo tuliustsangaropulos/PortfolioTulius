@@ -41,3 +41,7 @@ A decisão anterior de **não revogar o token pessoal Supabase historicamente ex
 ## P3 — ensaio de carregamento inicial (28/10/2026)
 
 Experimento com consultas SEO fora da barreira de renderização, preservando as cinco dependências editoriais de `usePortfolio` e registrando marcos `P3_FIRST_FOLD_TIMING`. **Pendente verificação de Lighthouse no novo SHA**, sem assumir redução de LCP; [detalhes](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+## P3 — estabilidade do LCP em laboratório
+
+A primeira dobra renderizada separadamente reduziu o LCP num run, mas elevou o TBT mobile: [run #40755835498](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40755835498) (LCP 3,97 s, TBT 1.086 ms, Performance 60). Essa alteração foi **revertida**, preservando a separação assíncrona de SEO. A auditoria foi ampliada para **três medições mobile** e mediana; a meta LCP ≤2,5 s continua aberta. Ver [P3](P3_QUALIDADE_ACEITE_2026-10-28.md).

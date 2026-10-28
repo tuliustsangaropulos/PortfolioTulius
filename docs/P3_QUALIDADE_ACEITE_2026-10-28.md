@@ -89,3 +89,11 @@ Performance Lighthouse é **dado de laboratório**, variável entre execuções 
 O componente público originalmente montava todas as **13 seções** (com o stack de seis experiências) em uma única atualização React após carregar dados. O teste desta rodada preserva a primeira seção na primeira pintura e monta o restante **dois quadros de animação depois**; URLs com hash inicial e prévia autenticada começam com árvore completa, e a restauração de hash é reexecutada quando o conteúdo restante é liberado. O conteúdo final é idêntico, sem mudanças em HTML/CSS, fotografia, fontes ou textos. O novo marcador `p3:below-fold-render-start` permite inspecionar a ordem.
 
 **Hipótese:** reduzir trabalho de layout/reconciliação antes de apresentar o retrato (LCP). **Critério:** CI, 13 seções/25 painéis/38 screenshots, acessibilidade, SEO e Lighthouse no deployment do mesmo SHA; se houver regressão funcional ou de LCP em laboratório comparável, reverter. O desempenho **não está homologado como melhorado** até a coleta.
+## Resultado do ensaio de dobra isolada — descartado após medição (28/10/2026)
+
+No [run P3 #40755835498](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40755835498), SHA `ddd21464a5144aa7980c7707e35d99a048990bee`, Vercel `READY`, os testes de navegador, 13 seções, 25 painéis, 38 capturas, SEO e A11y passaram. Mobile: **Performance 60, LCP 3.969,67 ms, TBT 1.086 ms, FCP 2.509 ms**; desktop Performance 97, LCP 1.302 ms. Embora o LCP individual tenha caído em comparação ao último run de 4,22 s, a piora potencial de TBT e score mobile **impede aceite sem mais amostras**.
+
+**Medida tomada:** reverter exclusivamente o estado `belowFoldReady` no componente público, restaurando a montagem normal de todas as seções. A separação anterior das duas consultas opcionais de SEO continua, pois passou nos gates e não mostrou efeito visual/regressão comprovado. Sem alteração de CSS, design ou conteúdo.
+
+**Melhoria do método:** a auditoria agora coleta três execuções Lighthouse mobile no mesmo SHA/deployment e informa mediana, amplitude, TBT e FCP. Não declarar redução até haver baseline repetido e uma alteração independente com comparação equivalente.
+

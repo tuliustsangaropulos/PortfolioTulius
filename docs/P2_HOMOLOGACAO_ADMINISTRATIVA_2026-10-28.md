@@ -124,3 +124,7 @@ Até esses testes, a classificação correta é **“P2 parcialmente verificada,
 ## Nota de encerramento de escopo antes do P3 — 28/10/2026
 
 O P5 autenticado de **leitura** permanece integralmente homologado (4/4, [#40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770)). Não foram produzidas provas de **escrita/publicação/restauração pela interface** ou **transferência binária do Storage com JWT real e cleanup de fixture**. Esses pontos não foram declarados aprovados e continuam como **pendências residuais P2**, exigindo ambiente/fixture isolados, plano de reversão e execução autorizada. **O P3 público pode prosseguir independentemente, mas seu sucesso não encerra os testes transacionais P2.** A auditoria P3 está registrada em [`P3_QUALIDADE_ACEITE_2026-10-28.md`](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+## Preparação adicional — suíte P2 isolada
+
+Consulte [`P2_TRANSACIONAL_STAGING_2026-10-28.md`](P2_TRANSACIONAL_STAGING_2026-10-28.md). A suíte está no GitHub mas **não foi executada**, pois não existe staging e a criação de branch Supabase exige aprovação do custo. O workflow manual exige ref isolado, URL correspondente, contas Auth de homologação e seis Secrets próprios. Nenhum CRUD nem byte de produção foi alterado nesta preparação.

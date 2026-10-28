@@ -60,3 +60,9 @@ Consultar [**`OPEN_ISSUES.md` (somente pendências atuais)**](OPEN_ISSUES.md). O
 ## Regras de proteção
 
 Preservar layout, fontes, fotografias, textos e conteúdo aprovado. Não criar branch/PR, não executar migrations, seed, alterações RLS, exclusão Storage, contas administrativas ou limpeza de histórico sem autorização específica. Não revogar o token histórico nem ativar Leaked Password Protection sem nova decisão do proprietário: constam como **riscos anteriormente aceitos, não resolvidos**. Não considerar screenshots automatizados equivalentes a homologação visual humana.
+
+## Acompanhamento operacional P2/P3 — 28/10/2026
+
+**P2:** suíte transacional isolada preparada em [`P2_TRANSACIONAL_STAGING_2026-10-28.md`](P2_TRANSACIONAL_STAGING_2026-10-28.md); **não executada**. Não havia branch Supabase de homologação e a criação exigiu confirmação de custo. O script falha fechado se receber ref de produção, testa JWT real de admin e não admin, CMS/Storage com fixture, sem excluir dados aprovados. Não reaplicar a baseline do GitHub no remoto sem revisão específica.
+
+**P3:** após P5 e auditoria inicial, foram ensaiadas a separação de consultas SEO e renderização isolada da primeira dobra. O segundo experimento foi revertido por potencial regressão de TBT; o workflow agora coleta **três amostras mobile** no mesmo SHA para mediana/variância antes de novos ajustes. Nenhuma meta LCP ≤2,5 s foi alcançada ou declarada. [Evidências P3](P3_QUALIDADE_ACEITE_2026-10-28.md).

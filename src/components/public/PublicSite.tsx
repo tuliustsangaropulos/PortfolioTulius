@@ -759,24 +759,6 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
   )
   const [current, setCurrent] = useState("perfil")
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
-  // Show the public first fold before composing the offscreen sections. Direct
-  // hash links and authenticated previews still render their full tree at once.
-  const [belowFoldReady, setBelowFoldReady] = useState(() => preview || Boolean(location.hash))
-
-  useEffect(() => {
-    if (belowFoldReady || loading || visible.length < 2) return
-    let secondFrame = 0
-    const firstFrame = requestAnimationFrame(() => {
-      secondFrame = requestAnimationFrame(() => {
-        performance.mark("p3:below-fold-render-start")
-        setBelowFoldReady(true)
-      })
-    })
-    return () => {
-      cancelAnimationFrame(firstFrame)
-      if (secondFrame) cancelAnimationFrame(secondFrame)
-    }
-  }, [belowFoldReady, loading, visible])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -828,7 +810,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       removeEventListener("popstate", restoreHash)
       removeEventListener("hashchange", restoreHash)
     }
-  }, [loading, visible, belowFoldReady])
+  }, [loading, visible])
 
   const style = {
     "--orange": tokens.orange,
@@ -872,7 +854,6 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
         )}
         <h1 className="sr-only">Tulius Tsangaropulos — Comunicação e Estratégia</h1>
         {visible.map((section, index) => {
-          if (!belowFoldReady && index > 0) return null
           if (EXPERIENCE_SLUGS.includes(section.slug as (typeof EXPERIENCE_SLUGS)[number])) {
             if (
               visible

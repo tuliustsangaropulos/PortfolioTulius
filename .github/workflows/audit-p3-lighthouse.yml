@@ -7,6 +7,7 @@ on:
       - .github/workflows/audit-p3-lighthouse.yml
       - scripts/p3-browser-smoke.mjs
       - scripts/p3-lcp-triage.mjs
+      - scripts/p3-lcp-repeats.mjs
       - scripts/p4-visual-audit.mjs
       - scripts/p5-public-rls.mjs
       - scripts/p6-lighthouse-guard.mjs
@@ -27,7 +28,7 @@ permissions:
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -151,6 +152,14 @@ jobs:
           }
           if (missing) process.exitCode = 1
           NODE
+      - name: Repeat mobile Lighthouse to measure laboratory variance
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 2 3; do
+            npx --yes lighthouse@13.5.0 https://tulius.work/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$RUNNER_TEMP/lighthouse-mobile-$attempt.json"
+          done
+          node scripts/p3-lcp-repeats.mjs "$RUNNER_TEMP"
       - name: Mobile LCP bottleneck triage
         run: node scripts/p3-lcp-triage.mjs "$RUNNER_TEMP"
       - name: Preserve Lighthouse JSON reports
