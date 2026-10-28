@@ -956,3 +956,15 @@
 .media-frame-zoom button { border: 1px solid #d7d2ce; background: white; min-height: 2.5rem; }
 .media-frame-dialog footer { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
 @media (max-width: 767px) { .media-frame-zoom { grid-template-columns: 1fr 2.5rem 2.5rem; } .media-frame-zoom span { grid-column: 1 / -1; } .admin-toast { bottom: .75rem; right: .75rem; } }
+
+/* Library stays compact; only the selected asset opens an editable form. */
+.media-library-card { display: grid; align-content: start; gap: .65rem; width: 100%; min-width: 0; padding: 1rem; background: white; border: 1px solid #e3dfdc; text-align: left; }
+.media-library-card[aria-pressed="true"] { outline: 3px solid var(--orange); outline-offset: -3px; }
+.media-library-card strong { font-size: .82rem; overflow-wrap: anywhere; }
+.media-library-detail { display: grid; gap: .8rem; max-width: 48rem; margin-top: 1rem; }
+.media-library-detail .card-heading { margin-bottom: 0; }
+.media-library-detail .card-heading h2 { overflow-wrap: anywhere; }
+.media-library-detail > label { display: grid; gap: .4rem; font-size: .8rem; font-weight: 700; }
+.media-library-detail input, .media-library-detail textarea, .media-library-detail select { padding: .7rem; border: 1px solid #d7d2ce; background: white; color: var(--ink); }
+.media-library-detail textarea { min-height: 5rem; resize: vertical; }
+@media (max-width: 767px) { .media-library-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
