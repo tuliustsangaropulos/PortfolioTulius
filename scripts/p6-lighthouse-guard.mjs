@@ -17,9 +17,11 @@ const median = (values) => {
 }
 const errors = []
 for (const device of ["mobile", "desktop"]) {
-  const names = device === "mobile"
-    ? ["lighthouse-mobile.json", "lighthouse-mobile-2.json", "lighthouse-mobile-3.json"]
-    : ["lighthouse-desktop.json"]
+  const names = [
+    "lighthouse-" + device + ".json",
+    "lighthouse-" + device + "-2.json",
+    "lighthouse-" + device + "-3.json",
+  ]
   const reports = []
   for (const name of names) {
     const file = path.join(directory, name)
@@ -47,7 +49,7 @@ for (const device of ["mobile", "desktop"]) {
   console.log("P6_PERFORMANCE_BUDGET " + JSON.stringify({
     device, result: errors.some((x) => x.startsWith(device + ":")) ? "FAIL" : "PASS",
     sampleCount: reports.length, performance: performance === null ? null : Math.round(performance * 100),
-    lcpMs, cls, statistic: device === "mobile" ? "median_mobile_worst_a11y" : "desktop_single",
+    lcpMs, cls, statistic: "median_three_runs_worst_a11y",
   }))
 }
 if (errors.length) {

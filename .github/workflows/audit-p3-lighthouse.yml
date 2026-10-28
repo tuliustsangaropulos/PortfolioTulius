@@ -68,13 +68,27 @@ jobs:
       - name: Lighthouse mobile and desktop
         shell: bash
         run: |
-          set +e
-          npx --yes lighthouse@13.5.0 https://tulius.work/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$RUNNER_TEMP/lighthouse-mobile.json"
-          mobile_status=$?
-          npx --yes lighthouse@13.5.0 https://tulius.work/ --preset=desktop --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$RUNNER_TEMP/lighthouse-desktop.json"
-          desktop_status=$?
-          set -e
-          echo "Lighthouse CLI status: mobile=$mobile_status desktop=$desktop_status"
+          set -euo pipefail
+          capture() {
+            local name="$1"
+            local preset="$2"
+            local output="$RUNNER_TEMP/lighthouse-$name.json"
+            for retry in 1 2 3; do
+              rm -f "$output"
+              if npx --yes lighthouse@13.5.0 https://tulius.work/ $preset --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$output"; then
+                if node -e 'const fs=require("fs");const report=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));if(!report.categories)process.exit(1)' "$output"; then
+                  echo "P3_CHROME_CAPTURE name=$name attempt=$retry result=PASS"
+                  return 0
+                fi
+              fi
+              echo "P3_CHROME_CAPTURE name=$name attempt=$retry result=RETRY"
+              sleep 4
+            done
+            echo "Unable to capture Lighthouse report for $name" >&2
+            return 1
+          }
+          capture mobile ""
+          capture desktop "--preset=desktop"
           node <<'NODE'
           const fs = require("node:fs")
           const path = require("node:path")
@@ -157,7 +171,23 @@ jobs:
         run: |
           set -euo pipefail
           for attempt in 2 3; do
-            npx --yes lighthouse@13.5.0 https://tulius.work/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$RUNNER_TEMP/lighthouse-mobile-$attempt.json"
+            for preset in mobile desktop; do
+              extra=""
+              if [ "$preset" = desktop ]; then extra="--preset=desktop"; fi
+              output="$RUNNER_TEMP/lighthouse-$preset-$attempt.json"
+              completed=0
+              for retry in 1 2 3; do
+                rm -f "$output"
+                if npx --yes lighthouse@13.5.0 https://tulius.work/ $extra --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --output=json --output-path="$output"; then
+                  if node -e 'const fs=require("fs");const report=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));if(!report.categories)process.exit(1)' "$output"; then
+                    completed=1
+                    break
+                  fi
+                fi
+                sleep 4
+              done
+              if [ "$completed" -ne 1 ]; then echo "Lighthouse capture failed: $preset-$attempt" >&2; exit 1; fi
+            done
           done
           node scripts/p3-lcp-repeats.mjs "$RUNNER_TEMP"
       - name: Mobile LCP bottleneck triage
@@ -171,6 +201,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
       - name: Browser routes and responsive viewports
+        if: always()
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/p3-browser"
@@ -180,6 +211,7 @@ jobs:
           set +e
           node audit.mjs
       - name: P5 anonymous Supabase RLS integration
+        if: always()
         shell: bash
         run: |
           cd "$RUNNER_TEMP/p3-browser"
