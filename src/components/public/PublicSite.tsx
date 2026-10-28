@@ -6,6 +6,7 @@ import { Navigation } from "./Navigation"
 import { ExperienceStack, EXPERIENCE_SLUGS } from "./ExperienceStack"
 import { ToolIcons } from "./ToolIcons"
 import { placementMotionVariables } from "../../lib/placement-motion"
+import { imageFramingStyle } from "../../lib/media-framing"
 import { resolveHeroCardDestination } from "../../lib/validation"
 
 const heroDefaults = {
@@ -96,6 +97,7 @@ function ItemCard({
         <img
           src={item.image}
           alt={item.alt ?? ""}
+          style={imageFramingStyle(item.mediaFraming)}
           loading="lazy"
           decoding="async"
           fetchPriority={index === 0 ? "auto" : "low"}
@@ -177,6 +179,7 @@ function ProfileDesktop({
           <img
             src={profile.image}
             alt={profile.alt}
+            style={imageFramingStyle(profile.mediaFraming)}
             loading="eager"
             fetchPriority="high"
             decoding="async"
@@ -283,7 +286,7 @@ function MobilePanel({
       ) : section.slug === "contato" && panel === "a" ? (
         <>
           <div className="contact-mobile-photo">
-            {profile?.image && <img src={profile.image} alt={profile.alt ?? ""} loading="lazy" />}
+            {profile?.image && <img src={profile.image} alt={profile.alt ?? ""} style={imageFramingStyle(profile.mediaFraming)} loading="lazy" />
           </div>
         </>
       ) : isProfile && panel === "a" && profile ? (
@@ -494,6 +497,7 @@ function AboutDesktop({ section }: { section: PortfolioSection }) {
         {introductoryItem && (
           <img
             src={desktopImage}
+            style={imageFramingStyle(introductoryItem.aboutDesktopFraming)}
             alt={introductoryItem.aboutDesktopAlt || "Tulius Tsangaropulos segurando um tablet"}
             loading="lazy"
             decoding="async"
@@ -682,7 +686,7 @@ function TestimonialCards({ items }: { items: ContentItem[] }) {
             onClick={() => setExpanded(isExpanded ? null : key)}
           >
             <div className="testimonial-person">
-              {item.image && <img src={item.image} alt={item.alt ?? ""} loading="lazy" />}
+              {item.image && <img src={item.image} alt={item.alt ?? ""} style={imageFramingStyle(item.mediaFraming)} loading="lazy" />}
               <div>
                 <h3>{item.title}</h3>
                 {item.meta && <span>{item.meta}</span>}
@@ -735,7 +739,7 @@ function ContactDesktop({ section }: { section: PortfolioSection }) {
       </header>
       <div className="contact-portrait">
         {portrait?.image && (
-          <img src={portrait.image} alt={portrait.alt ?? ""} loading="lazy" decoding="async" />
+          <img src={portrait.image} alt={portrait.alt ?? ""} style={imageFramingStyle(portrait.mediaFraming)} loading="lazy" decoding="async" />
         )}
       </div>
       <div className="contact-links">

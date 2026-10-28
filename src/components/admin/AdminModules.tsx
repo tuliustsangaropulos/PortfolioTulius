@@ -868,6 +868,14 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                   <div className="field-grid">
                     <PublishedMediaPicker
                       label="Logotipo da empresa"
+                      guidance="Logo quadrado 1:1; referência 400 × 400 px ou SVG."
+                      ratio="1 / 1"
+                      framing={draft.content_json.experienceMedia?.logoFraming}
+                      onFramingChange={(logoFraming) => setDraft({
+                        ...draft, content_json: { ...draft.content_json, experienceMedia: {
+                          ...draft.content_json.experienceMedia, logoFraming,
+                        } },
+                      })}
                       value={draft.content_json.experienceMedia?.logo ?? ""}
                       onChange={(logo, alt) =>
                         setDraft({
@@ -1013,6 +1021,15 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         ))}
                         <PublishedMediaPicker
                           label="Fotografia do slide"
+                          guidance="Galeria vertical 9:10; referência 900 × 1000 px."
+                          ratio="9 / 10"
+                          framing={slide.framing}
+                          onFramingChange={(framing) => {
+                            const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
+                            slides[slideIndex] = { ...slide, framing }
+                            setDraft({ ...draft, content_json: { ...draft.content_json,
+                              experienceMedia: { ...draft.content_json.experienceMedia, slides } } })
+                          }}
                           value={slide.image ?? ""}
                           onChange={(image, alt) => {
                             const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
@@ -1401,6 +1418,15 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     )}
                     <PublishedMediaPicker
                       label="Imagem do item"
+                      guidance={["perfil", "contato"].includes(
+                        sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
+                      ) ? "Retrato vertical 3:4; sugestão 900 × 1200 px."
+                        : "Miniatura editorial 1:1; sugestão 600 × 600 px."}
+                      ratio={["perfil", "contato"].includes(
+                        sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
+                      ) ? "3 / 4" : "1 / 1"}
+                      framing={item.mediaFraming}
+                      onFramingChange={(mediaFraming) => updateItem(index, { mediaFraming })}
                       value={item.image ?? ""}
                       onChange={(image, alt) => updateItem(index, { image, alt })}
                     />
@@ -1418,6 +1444,10 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           <div className="field-wide">
                             <PublishedMediaPicker
                               label="Imagem central da seção 02 (desktop)"
+                              guidance="Retrato vertical 3:4; sugestão 900 × 1200 px."
+                              ratio="3 / 4"
+                              framing={item.aboutDesktopFraming}
+                              onFramingChange={(aboutDesktopFraming) => updateItem(index, { aboutDesktopFraming })}
                               value={item.aboutDesktopImage ?? ""}
                               onChange={(aboutDesktopImage, alt) =>
                                 updateItem(index, { aboutDesktopImage, aboutDesktopAlt: alt })
@@ -2151,6 +2181,8 @@ export function SeoStudio() {
             <div className="field-wide">
               <PublishedMediaPicker
                 label="Imagem Open Graph (compartilhamento)"
+                guidance="1200 × 630 px (1,91:1). Redes sociais usam o arquivo original; prepare o recorte antes do upload."
+                ratio="1200 / 630"
                 value={settings.seo_json?.ogImage ?? ""}
                 onChange={(ogImage) =>
                   setSettings({
