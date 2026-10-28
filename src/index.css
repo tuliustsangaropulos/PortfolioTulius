@@ -968,3 +968,25 @@
 .media-library-detail input, .media-library-detail textarea, .media-library-detail select { padding: .7rem; border: 1px solid #d7d2ce; background: white; color: var(--ink); }
 .media-library-detail textarea { min-height: 5rem; resize: vertical; }
 @media (max-width: 767px) { .media-library-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+/* CMS section variants: all supported generic motion presets have visible effects. */
+.motion-stagger .desktop-content .content-item:nth-child(2),
+.motion-stagger .mobile-items .content-item:nth-child(2) { transition-delay: 90ms; }
+.motion-stagger .desktop-content .content-item:nth-child(3),
+.motion-stagger .mobile-items .content-item:nth-child(3) { transition-delay: 180ms; }
+.motion-stagger .desktop-content .content-item:nth-child(n+4),
+.motion-stagger .mobile-items .content-item:nth-child(n+4) { transition-delay: 270ms; }
+.motion-metric-count .item-value { animation: metric-entrance .5s both; }
+@keyframes metric-entrance { from { opacity: 0; transform: translateY(.35rem); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .motion-metric-count .item-value { animation: none; }
+  .motion-stagger .desktop-content .content-item, .motion-stagger .mobile-items .content-item { transition-delay: 0ms; }
+}
+/* Employer card backgrounds follow the explicit CMS theme; the selector bar stays neutral. */
+.experience-card.theme-cream { background: var(--cream); color: var(--ink); }
+.experience-card.theme-ink { background: var(--ink); color: var(--paper); }
+.experience-card.theme-orange { background: var(--orange); color: var(--ink); }
+.experience-card.theme-ink .experience-project { border-color: #ffffff44; }
+.experience-card.theme-ink .experience-eyebrow,
+.experience-card.theme-ink .experience-value,
+.experience-card.theme-ink .experience-gallery-kicker { color: var(--orange); }
