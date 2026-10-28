@@ -1,0 +1,65 @@
+# PortfolioTulius — P2: homologação administrativa e Storage
+
+**Execução:** 28/10/2026 · **Branch:** `main` · **Base antes desta documentação:** [`3bb35a912565046e61605c9e7ce90c214c8640ea`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/3bb35a912565046e61605c9e7ce90c214c8640ea) · **Supabase:** `zfnrhzplwpjpdljraypt`.  
+**Status:** **PARCIAL — gates SQL de leitura e autorização simulada aprovados; E2E com JWT real, CRUD pela interface e Storage binário ainda NÃO executados.** Este status não deve ser convertido em "P2 aprovado" sem evidências futuras.
+
+## 1. Escopo efetivamente executado
+
+1. Leitura do workflow GitHub [`P5 Admin Read-Only E2E`](../.github/workflows/p5-admin-readonly.yml), da suíte [`scripts/p5-admin-readonly.mjs`](../scripts/p5-admin-readonly.mjs), da interface [`AdminApp.tsx`](../src/components/admin/AdminApp.tsx) e do cliente de Auth [`src/lib/supabase.ts`](../src/lib/supabase.ts). Os seletores de login, rótulos dos oito módulos, prévia e logout foram conferidos contra a implementação versionada; **não houve teste de browser autenticado**.
+2. Leitura das policies reais do PostgreSQL (`public`, `storage.objects`), privilégios e definições das RPCs `SECURITY DEFINER`. Todas as **22/22 tabelas públicas** estão com RLS ativo. As **6 RPCs públicas administrativas** expostas a `authenticated` chamam `private.require_portfolio_admin()` no corpo, com erro `portfolio_admin_required` (`42501`) para identidade não administradora.
+3. **Três transações SQL independentes e não destrutivas** com `BEGIN READ ONLY` e `ROLLBACK`, simulando papéis de acesso pelo banco. O usuário administrador foi obtido internamente de `admin_users` **sem imprimir qualquer UID ou credencial**; o usuário comum recebeu um UUID artificial sem cadastro administrativo. Não houve uso de JWT real ou senha.
+4. Captura agregada de contagens antes/depois dos testes para detectar mudanças acidentais. As contagens permaneceram iguais. Nenhuma API de mutação, operação de Storage de bytes ou escrita de dados editoriais foi realizada.
+
+## 2. Resultado dos gates executados
+
+| Caso | Mecanismo | Resultado | Asserções principais |
+|---|---|---|---|
+| P2-SQL-01 — visitante `anon` | Transação `READ ONLY`, `SET LOCAL ROLE anon`, `DO` com asserções e `ROLLBACK` | **PASS** | 13 seções visíveis, 21 mídias públicas; 0 `storage.objects` privados, 0 `admin_users`, 0 `editorial_issues`, 0 `audit_logs`, 0 `content_revisions` acessíveis. |
+| P2-SQL-02 — `authenticated` comum | Mesmo isolamento, `request.jwt.claim.sub` **simulado** com UUID não administrador | **PASS** | Mesmo isolamento de leitura; `private.require_portfolio_admin()` negou acesso com `SQLSTATE 42501`, mensagem `portfolio_admin_required`. |
+| P2-SQL-03 — `authenticated` admin | Mesmo isolamento, UID existente usado apenas como claim **simulada em sessão SQL** | **PASS** | 14 seções, 2 objetos privados, 1 associação em `admin_users`, 9 questões editoriais, 12 revisões e 12 auditorias acessíveis; guarda administrativa liberada. |
+| P2-DB-04 — integridade antes/depois | Consultas agregadas `SELECT`, sem role switching | **PASS** | 14 seções (13 públicas), 42 painéis, 28 blocos, 56 placements, 21 mídias com 0 referência física ausente, 23 objetos Storage (21 públicos/2 privados), 8 pendências abertas, 12 revisões, 12 auditorias, 1 usuário Auth e 1 admin. |
+| P2-WF-05 — capacidade de CI | Inspeção estática do YAML e suíte de navegador, conferência da listagem GitHub Actions | **PREPARADO, NÃO EXECUTADO** | Workflow manual usa `P5_ADMIN_EMAIL` e `P5_ADMIN_PASSWORD` via `secrets.*`; 0 execuções de evento `workflow_dispatch` retornadas pelo GitHub em 28/10. |
+| P2-E2E-06 — login/8 módulos/prévia/logout com JWT real | `P5 Admin Read-Only E2E` via Actions | **PENDENTE** | Necessita secrets previamente configurados e execução manual. A conexão atual permite consultar runs, **não** configurar/ler secrets nem disparar `workflow_dispatch`. |
+| P2-E2E-07 — CMS CRUD/publicação/revisão | Sessão Auth real, fixture isolada, restore/check | **PENDENTE** | Não usar conteúdo real; backup, escopo de fixture e limpeza devem ser definidos antes de qualquer escrita. |
+| P2-E2E-08 — Storage binário | Upload, leitura privada/signed URL, promoção pública, substituição, conferência de bytes e cleanup | **PENDENTE** | Consultas a metadados de `storage.objects` **não** comprovam download/upload de bytes nem autorização JWT pelo endpoint Storage. |
+
+**Limite metodológico:** `SET LOCAL ROLE` + `request.jwt.claim.sub` não é token assinado pelo Supabase Auth. Os resultados SQL confirmam o comportamento de RLS/guarda nessas sessões simuladas, não o fluxo HTTPS, sessão persistente, renovação de token, navegador, CORS, permissões de Storage API ou UI. `ROLLBACK` de uma transação SQL não comprova restauração de uma revisão editorial pela interface.
+
+## 3. Revisão das proteções efetivas
+
+- **Tabelas:** RLS ativo nas 22 tabelas públicas. Consultas SQL simuladas não visualizaram dados administrativos, histórico, issues ou Storage privado como anon e não admin.
+- **Storage:** `storage.objects` tem política de `SELECT` para `portfolio-public` (`anon`/`authenticated`) e política `ALL` para `portfolio-public`/`portfolio-private` condicionada a `private.is_portfolio_admin(auth.uid())` para `authenticated`. Testar o endpoint binário com JWT real continua necessário.
+- **Guardas:** `private.require_portfolio_admin()` consulta `private.is_portfolio_admin(auth.uid())` e lança `portfolio_admin_required` em falha. As RPCs públicas administrativas `create_section_with_panels`, `duplicate_section`, `publish_section`, `save_content_block_atomic`, `save_home_seo_atomic` e `swap_section_order` contêm chamada à guarda. Esta é **inspeção do código SQL** e **teste direto da guarda**, não execução de todas as RPCs por API.
+- **Auth frontend:** `isAdmin()` exige sessão `supabase.auth.getUser()` e correspondência em `admin_users`; o formulário usa `signInWithPassword`. O teste de integração com credenciais não ocorreu.
+- **Decisões preservadas:** não revogar o token Supabase histórico e não habilitar Leaked Password Protection, conforme decisão expressa registrada em [`docs/SECURITY_RLS.md`](SECURITY_RLS.md). São riscos aceitos e **não corrigidos**, não medidas tecnicamente aprovadas.
+
+## 4. Como concluir o P5 com JWT real, sem expor segredos
+
+1. Na conta proprietária do GitHub, acessar **Settings → Secrets and variables → Actions** do repositório e configurar os dois nomes exatos `P5_ADMIN_EMAIL` e `P5_ADMIN_PASSWORD` com uma conta administrativa já autorizada no Supabase. **Nunca** colar os valores em issues, commits, logs, chat ou documentação. Não criar novo administrador para teste sem autorização.
+2. Abrir [Actions → P5 Admin Read-Only E2E](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/workflows/p5-admin-readonly.yml), selecionar **Run workflow**, branch `main`. Se os secrets estiverem ausentes, o script sinaliza explicitamente `P5_ADMIN_NOT_RUN`; não interpretar essa falha como teste de autenticação.
+3. Conferir **quatro gates** no log do run: `P5_ADMIN_LOGIN`, `P5_ADMIN_MODULES`, `P5_ADMIN_PREVIEW`, `P5_ADMIN_LOGOUT` e o resumo `P5_READONLY_RESULT` com `passed=4`, `expected=4`, `contentMutations=0`. Se houver falha, preservar URL e logs sem compartilhar dados pessoais/sessões.
+4. Ao obter o run, registrar **URL, ID, SHA da execução, data, conclusão e gates** neste índice. `success` do workflow é evidência de seu escopo **somente leitura**, não de CRUD, Storage real ou rollback.
+
+**Motivo de não ter sido executado nesta rodada:** a integração GitHub disponível fornece leitura de workflows/runs e reexecução de jobs existentes, mas não oferece operação de `workflow_dispatch` inicial ou gestão de Secrets. A conexão Supabase fornece SQL administrativo, não a senha do usuário Auth. Buscar senhas, tokens ou simular login por acesso SQL privilegiado não é método válido nem seguro para validar JWT real.
+
+## 5. Matriz segura para ensaios de escrita e Storage (não executada)
+
+**Gate de pré-execução:** ambiente de staging ou fixture inequivocamente isolada, destino e nomenclatura explícitos (ex.: `p2-fixture-<UUID>`), responsável/escopo e janela autorizados, snapshot lógico antes de gravar, procedimento de restauração testado, possibilidade de remover **metadado e objetos em ambos os buckets** e evidência das contagens anteriores. Em produção, **não criar conteúdo público efêmero** sem aceite específico; RLS e triggers podem gerar revisões/auditorias irreversíveis mesmo após arquivar um item.
+
+| Sequência proposta | Critério de PASS futuro |
+|---|---|
+| Login real e isolamento | JWT Auth admin válido abre oito módulos/prévia; JWT não admin e anon não acessam admin/Storage privado, sem tokens nos logs. |
+| CMS em fixture | Criar rascunho isolado, editar bloco, validar ordem e preview, publicar somente com autorização, testar retorno do site e reverter estado sem atingir seções reais. |
+| Storage em fixture | Upload privado de arquivo de bytes conhecidos, download admin, bloqueio anônimo; promover, verificar integridade da cópia, testar substituição e apagar **somente** os objetos da fixture; no código atual `promote()` deixa a origem privada após publicação. |
+| Revisão/restauração | Confirmar gravação dos triggers e reconstituição de conteúdo na UI; **listagem de `content_revisions` não demonstra rollback funcional**. |
+| Encerramento | Confirmar ausência de objetos/linhas de fixture órfãs, IDs removidos ou arquivados conforme o procedimento, contagens finais e ausência de alteração das 21 mídias e dos 23 objetos anteriores. |
+
+Até esses testes, a classificação correta é **“P2 parcialmente verificada, aceite integral pendente”**. O P3 visual/performance pode ser planejado separadamente, mas não deve atribuir à P2 uma homologação que não ocorreu.
+
+## 6. Evidências de referência
+
+- Workflow: [`p5-admin-readonly.yml`](../.github/workflows/p5-admin-readonly.yml) e [suíte `p5-admin-readonly.mjs`](../scripts/p5-admin-readonly.mjs).
+- Código: [`AdminApp.tsx`](../src/components/admin/AdminApp.tsx), [`supabase.ts`](../src/lib/supabase.ts) e [`AdminModules.tsx`](../src/components/admin/AdminModules.tsx).
+- Histórico do teste anterior: [`P4_P5_EXECUCAO.md`](P4_P5_EXECUCAO.md) e [`SECURITY_RLS.md`](SECURITY_RLS.md).
+- [P1 — proveniência/duplicação de Storage](P1_INVESTIGACAO_HIGIENE_2026-10-28.md).
+- Fonte de verdade: consultas ao [projeto Supabase](https://supabase.com/dashboard/project/zfnrhzplwpjpdljraypt) e metadados GitHub Actions em 28/10/2026. Nenhuma credencial foi consultada ou divulgada.

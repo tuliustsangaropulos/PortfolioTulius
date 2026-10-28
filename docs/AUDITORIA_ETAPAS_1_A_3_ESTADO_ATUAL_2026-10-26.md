@@ -39,6 +39,10 @@
 
 A leitura dos objetos, código do CMS, versões SVG, Edge Function, logs e branches foi concluída sem exclusões. O [relatório de higiene técnica P1](P1_INVESTIGACAO_HIGIENE_2026-10-28.md) registra os dois PNGs privados com cópias públicas correspondentes, a retenção pelo algoritmo de promoção, a divergência **19/19** de tamanhos entre SVGs do GitHub e do Storage, duas mídias de marca sem créditos, a função v2 que responde 410 e os quatro commits exclusivos revisados. **O parecer é conservar os recursos até validação editorial e autorização de limpeza.** Isto não altera os números do quadro P0 nem constitui homologação P2/P3.
 
+## Complemento P2 — testes SQL e aceites ainda não realizados (28/10/2026)
+
+Ver [`P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md`](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md). Foram aprovadas 3 transações `READ ONLY` + `ROLLBACK` com `anon`, `authenticated` não administrador e admin, **todos simulados no SQL**, incluindo verificação da guarda `portfolio_admin_required`. A integridade dos 14 registros de seção, 21 mídias e 23 objetos Storage permaneceu intacta. **Não houve login com JWT real, navegação autenticada, transferência binária ou CRUD do CMS**. O workflow P5 exige Secrets do GitHub e `workflow_dispatch` manual; nenhuma execução foi registrada nesta conferência. Portanto, P2 permanece **parcial** até a prova E2E autenticada e o teste de fixture isolada.
+
 ## Matriz de implantação e comprovação
 
 | Entrega | Implementação | Evidência e limite |

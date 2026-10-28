@@ -140,3 +140,7 @@ Textos atualmente publicados em `resultados/A`, `invest-rs/A` e `invest-rs/B` fo
 ## P1 — investigação de higiene técnica (28/10/2026)
 
 A investigação read-only de objetos privados, mídias publicadas, função de importação e branches históricas está documentada em [`docs/P1_INVESTIGACAO_HIGIENE_2026-10-28.md`](docs/P1_INVESTIGACAO_HIGIENE_2026-10-28.md). Dois PNGs privados são origens retidas de cópias públicas; as 19 ilustrações do Storage não são byte a byte iguais às 19 versões editoriais do GitHub. **Nenhuma exclusão, substituição de mídia, merge ou alteração funcional foi executada**; direitos e decisões de limpeza exigem aprovação separada.
+
+## P2 — segurança do CMS e Storage (28/10/2026; parcial)
+
+Três gates SQL `READ ONLY` com `ROLLBACK` passaram para `anon`, usuário `authenticated` comum e admin, **simulando** papéis e claims. As 22 tabelas públicas continuam com RLS; a guarda administrativa negou acesso ao não admin e aceitou o admin simulado. **Isso não é JWT real.** O workflow manual [P5 Admin Read-Only E2E](.github/workflows/p5-admin-readonly.yml) ainda depende de Secrets configurados fora do repositório e disparo manual, e os testes reais de CMS/Storage binário ainda requerem fixture isolada. Detalhes em [`docs/P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md`](docs/P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md).

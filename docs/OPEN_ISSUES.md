@@ -136,3 +136,11 @@ A análise técnica foi documentada em [`P1_INVESTIGACAO_HIGIENE_2026-10-28.md`]
 - **Branches:** quatro commits exclusivos da branch de navegação revisados; características principais já aparecem na `main`, sem justificativa comprovada para cherry-pick. Branch de motion sem commits exclusivos. Ambas preservadas, aguardando decisão de arquivamento/exclusão.
 
 **Status P1:** investigação read-only encerrada; **limpeza física/operacional pendente de autorização e condições técnicas**. P2 segue pendente e não foi confundida com testes de Storage real ou JWT admin.
+
+## P2 — verificação administrativa parcial (28/10/2026)
+
+Consultar [`P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md`](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md). Três transações **`READ ONLY`/`ROLLBACK`** passaram: `anon` enxerga 13 seções e 21 mídias públicas (0 dados administrativos/Storage privado); usuário comum `authenticated` **simulado** recebe `portfolio_admin_required`; admin **simulado** acessa 14 seções, 2 objetos privados, 9 questões editoriais e 12/12 históricos. 22/22 tabelas públicas possuem RLS; todas as seis RPCs públicas administrativas verificadas chamam a guarda `private.require_portfolio_admin()`. Contagens antes/depois inalteradas.
+
+**Não homologado:** JWT administrativo emitido pelo Auth, login/preview/logout no navegador real, upload/download binário do Storage, gravação/publicação/rollback de fixture pela UI. O workflow manual [`P5 Admin Read-Only E2E`](../.github/workflows/p5-admin-readonly.yml) requer `P5_ADMIN_EMAIL` e `P5_ADMIN_PASSWORD` configurados exclusivamente em GitHub Actions Secrets e execução `workflow_dispatch` por usuário autorizado. A consulta GitHub retornou **0 execuções `workflow_dispatch`** no repositório. Os conectores desta sessão não fornecem gestão de Secrets ou despacho inicial do workflow; não pedir senha no chat.
+
+**Próximo gate P2:** execução autenticada em Actions e registro de run/SHA; depois, ambiente de ensaio isolado e autorização para escrita/Storage de bytes em fixture reversível. **Não declarar P2 concluída** nem criar dados/mídias de teste em produção sem salvaguardas.
