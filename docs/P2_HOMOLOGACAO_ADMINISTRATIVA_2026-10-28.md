@@ -1,7 +1,7 @@
 # PortfolioTulius — P2: homologação administrativa e Storage
 
 **Execução:** 28/10/2026 · **Branch:** `main` · **Base antes desta documentação:** [`3bb35a912565046e61605c9e7ce90c214c8640ea`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/3bb35a912565046e61605c9e7ce90c214c8640ea) · **Supabase:** `zfnrhzplwpjpdljraypt`.  
-**Status atualizado:** **PARCIAL — gates SQL aprovados; login administrativo com JWT real e navegação pelos 8 módulos aprovados na tentativa 2 do P5. Prévia falhou por contagem prematura de DOM; logout ainda não testado. CRUD pela interface e Storage binário permanecem não executados.** Não converter em "P2 aprovado" sem executar integralmente o P5 e os demais gates.
+**Status atualizado:** **PARCIAL — gates SQL aprovados; login administrativo real, navegação pelos 8 módulos e prévia com 14 seções aprovados na execução #40745002663 (SHA `c4f0358`). A suíte falhou no clique físico do botão de logout em viewport padrão de 800×600; logout/reacesso não homologados. CRUD pela interface e Storage binário continuam não executados.** Não considerar P2 aprovada sem execução completa.
 
 ## Atualização de execução real — P5 Admin Read-Only E2E, 28/10/2026
 
@@ -21,6 +21,24 @@ A execução [#40743655591](https://github.com/tuliustsangaropulos/PortfolioTuli
 **Próxima execução:** criar **novo** `Run workflow` na branch `main` depois que o commit desta correção estiver publicado e a Vercel corresponder ao novo SHA. **Não usar `Re-run jobs` da execução #40743655591**, que permanece associada ao script antigo no SHA `d28c5b2`. Após o run, conferir `P5_ADMIN_PREVIEW`, `P5_ADMIN_LOGOUT`, `P5_READONLY_RESULT passed=4/4` e `contentMutations=0`. Mesmo aprovado, isso não substitui testes de escrita, publicação e Storage binário em fixture.
 
 As demais seções abaixo registram a **primeira conferência P2 anterior ao disparo manual**, válida como histórico do estágio naquela hora.
+
+## Nova evidência — P5 nº 40745002663, 28/10/2026
+
+A execução [#40745002663](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745002663) usou **`c4f0358c66ba1cc14d57f15643884e3d74350ea3`** (script corrigido da prévia), mas terminou `failure` no gate de logout.
+
+| Gate executado | Log do run | Resultado |
+|---|---|---|
+| Login real | `P5_ADMIN_LOGIN {"result":"PASS","authenticated":true}` | **PASS** |
+| Oito módulos do CMS | `P5_ADMIN_MODULES {"result":"PASS","modules":8}` | **PASS** |
+| Prévia do CMS | `P5_ADMIN_PREVIEW {"result":"PASS","sectionCount":14,"hiddenSectionPresent":true}` | **PASS**; confirma `competencias` em prévia autenticada, apesar de oculta na publicação |
+| Logout | Puppeteer `Node is either not clickable or not an Element` na linha 102, em `page.click(".logout-button")` | **FAIL do driver**, não comprova falha funcional do Auth |
+| Proteção pós-logout | Não alcançada | **PENDENTE** |
+
+**Diagnóstico:** a suíte Puppeteer usa por padrão viewport **800×600**. O layout administrativo tem `.admin-sidebar` com `height: 100vh`, 10 controles de menu e botão `.logout-button` após eles (CSS `margin-top:auto`). Nessa viewport baixa, o botão pode ficar fora da área clicável; o seletor existe e é encontrado, mas `page.click` falha. Não atribuir a erro de sessão ou do Supabase sem teste.
+
+**Correção de ensaio:** fixar viewport desktop em **1440×900** logo após criar a página, esperar botão de logout visível, asserir sua posição dentro do retângulo da janela e usar **clique físico do Puppeteer**, não `HTMLElement.click()` nem chamada direta a `signOut`. Nenhum componente do produto, stylesheet, política ou dado foi alterado. A suíte continua exigindo `P5_READONLY_RESULT passed=4, expected=4, contentMutations=0`.
+
+**Ação futura necessária:** depois de validar o novo commit pela CI e Vercel, disparar **um novo `Run workflow` na `main`**, e não `Re-run jobs` do run anterior. Sem nova execução, logout e bloqueio pós-logout permanecem **não homologados**. CRUD do CMS, restauração editorial e upload/download binário real do Storage continuam **fora do escopo da suíte read-only**.
 
 ## 1. Escopo efetivamente executado
 

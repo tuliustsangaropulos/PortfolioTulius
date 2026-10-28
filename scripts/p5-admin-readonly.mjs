@@ -21,6 +21,9 @@ let passed = 0
 const mutations = []
 try {
   const page = await browser.newPage()
+  // Puppeteer's 800×600 default viewport can put "Sair" outside the fixed-height
+  // desktop admin sidebar. Use a normal desktop viewport for pointer interaction.
+  await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 })
   // Login/logout Auth POSTs are allowed. Writes to CMS data/Storage are never allowed.
   page.on("request", (request) => {
     const method = request.method()
@@ -98,7 +101,16 @@ try {
   }))
 
   await page.goto(new URL("/admin", base).href, { waitUntil: "domcontentloaded", timeout: 30000 })
-  await page.waitForSelector(".logout-button", { timeout: 15000 })
+  await page.waitForSelector(".logout-button", { visible: true, timeout: 15000 })
+  const logoutClickable = await page.$eval(".logout-button", (button) => {
+    const rect = button.getBoundingClientRect()
+    return rect.width > 0 && rect.height > 0 &&
+      rect.top >= 0 && rect.bottom <= window.innerHeight &&
+      rect.left >= 0 && rect.right <= window.innerWidth
+  })
+  if (!logoutClickable) {
+    throw new Error("Botão Sair fora da viewport desktop; falha de layout de navegador.")
+  }
   await page.click(".logout-button")
   await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
   await page.goto(new URL("/admin/preview", base).href, { waitUntil: "domcontentloaded", timeout: 30000 })

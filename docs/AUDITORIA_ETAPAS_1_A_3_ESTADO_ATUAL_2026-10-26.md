@@ -47,6 +47,10 @@ Ver [`P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md`](P2_HOMOLOGACAO_ADMINISTRATIV
 
 O [run manual #40743655591, segunda tentativa](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40743655591) produziu **`P5_ADMIN_LOGIN PASS`** e **`P5_ADMIN_MODULES PASS (8)`** com credenciais em GitHub Secrets, antes de falhar na etapa de prévia. A causa técnica provável foi uma leitura do DOM antes do término de `usePortfolio(preview)`; a suíte foi corrigida para aguardar as **14 seções** (incluindo `competencias`), detectar erro de carregamento e registrar diagnóstico sem dados sensíveis. **Não há aprovação ainda** para prévia, logout nem `contentMutations=0`; exige novo despacho na `main` no SHA corrigido. O CRUD e Storage binário continuam pendentes. Ver [relatório P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md).
 
+## P5 — prévia autenticada aprovada; logout pendente de nova execução (28/10/2026)
+
+No [run manual #40745002663](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745002663), os marcadores **`P5_ADMIN_LOGIN PASS`, `P5_ADMIN_MODULES PASS` e `P5_ADMIN_PREVIEW PASS`** foram registrados. A prévia contém 14 seções, incluindo `competencias`; o site público permanece com 13. O Puppeteer falhou ao clicar em `Sair`, potencialmente fora da viewport padrão de 800×600. Foi preparada correção para testar clique físico numa viewport 1440×900; **logout/reacesso e ausência de mutações ainda não homologados**. P2 continua parcial. Detalhes em [relatório P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md).
+
 ## Matriz de implantação e comprovação
 
 | Entrega | Implementação | Evidência e limite |
