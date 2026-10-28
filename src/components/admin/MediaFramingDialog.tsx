@@ -107,7 +107,14 @@ export function MediaFramingDialog({
           >
             Restaurar
           </button>
-          <button type="button" className="primary-button" onClick={() => { onChange(current); onClose() }}>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={() => {
+              onChange(current)
+              onClose()
+            }}
+          >
             Aplicar ao formulário
           </button>
         </footer>

@@ -10,7 +10,9 @@ describe("Enquadramento editorial por uso", () => {
   it("padroniza valores, sem alterar a imagem original", () => {
     expect(normalizeMediaFraming()).toEqual(defaultMediaFraming)
     expect(normalizeMediaFraming({ x: -9, y: 120, zoom: 10 })).toEqual({
-      x: 0, y: 100, zoom: 3,
+      x: 0,
+      y: 100,
+      zoom: 3,
     })
   })
   it("aplica posição X/Y e zoom na apresentação", () => {
