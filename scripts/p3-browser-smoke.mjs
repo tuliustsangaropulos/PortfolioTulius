@@ -171,7 +171,8 @@ try {
       await page.waitForFunction(() => {
         const bar = document.querySelector(".experience-index")?.getBoundingClientRect()
         const panel = document.querySelector("#prefeitura-sp")?.getBoundingClientRect()
-        return !!bar && !!panel && bar.top >= 65 && bar.top < 90 && panel.top <= 3
+        const header = document.querySelector(".site-header")?.getBoundingClientRect()
+        return !!bar && !!panel && !!header && Math.abs(bar.top - header.bottom) <= 3 && panel.top <= 3
       }, { timeout: 10000 })
       stage = "slide controls"
       const before = await page.evaluate(() => {
