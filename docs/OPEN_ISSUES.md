@@ -37,3 +37,7 @@ A decisão anterior de **não revogar o token pessoal Supabase historicamente ex
 - P5 admin read-only: [#40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770), login/8 módulos/prévia/logout **4/4 PASS**, `contentMutations=0`. Falhas de execuções antigas pertencem ao histórico.
 - P3 público automatizado: [#40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980), 13 seções/25 painéis/38 screenshots, SEO e a11y 100, sem falhas de viewport; ainda há as ressalvas acima.
 - Infraestrutura anterior à consolidação: [CI `40747847554`](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747847554) e [Vercel `dpl_GAgdukRpirZ8j3foDFB4E5FKEtNk`](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/GAgdukRpirZ8j3foDFB4E5FKEtNk) no mesmo SHA `56cce265`. A nova consolidação também dispara CI/deploy próprio.
+
+## P3 — ensaio de carregamento inicial (28/10/2026)
+
+Experimento com consultas SEO fora da barreira de renderização, preservando as cinco dependências editoriais de `usePortfolio` e registrando marcos `P3_FIRST_FOLD_TIMING`. **Pendente verificação de Lighthouse no novo SHA**, sem assumir redução de LCP; [detalhes](P3_QUALIDADE_ACEITE_2026-10-28.md).

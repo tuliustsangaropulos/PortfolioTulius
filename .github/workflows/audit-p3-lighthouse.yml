@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/audit-p3-lighthouse.yml
       - scripts/p3-browser-smoke.mjs
+      - scripts/p3-lcp-triage.mjs
       - scripts/p4-visual-audit.mjs
       - scripts/p5-public-rls.mjs
       - scripts/p6-lighthouse-guard.mjs

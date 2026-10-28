@@ -36,6 +36,23 @@ try {
       stage = "page loaded"
       await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
       await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
+      const firstFold = await page.evaluate(() => {
+        const marks = Object.fromEntries(
+          performance.getEntriesByType("mark")
+            .filter((entry) => entry.name.startsWith("p3:portfolio-"))
+            .map((entry) => [entry.name, Math.round(entry.startTime)]),
+        )
+        const resources = performance.getEntriesByType("resource")
+          .filter((entry) => entry.name.includes(".supabase.co/rest/v1/"))
+          .map((entry) => {
+            const url = new URL(entry.name)
+            return { table: url.pathname.split("/").at(-1), startMs: Math.round(entry.startTime), durationMs: Math.round(entry.duration) }
+          })
+        return { marks, resources,
+          portraitComplete: document.querySelector(".mobile-profile-hero img")?.complete ?? false,
+          publicSections: document.querySelectorAll("section.portfolio-section").length }
+      })
+      console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
       stage = "menu initial focus"

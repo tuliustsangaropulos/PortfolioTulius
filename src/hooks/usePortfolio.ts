@@ -79,6 +79,21 @@ export function usePortfolio(includeDrafts = false) {
     const supabaseClient = supabase
     let cancelled = false
     setLoading(true)
+    if (!includeDrafts) performance.mark("p3:portfolio-fetch-start")
+    // SEO metadata is not required to compose the first fold. Request it in
+    // parallel but do not make the initial visible content wait for those calls.
+    const pageRequest = supabase
+      .from("pages")
+      .select("seo_title,seo_description")
+      .eq("slug", "home")
+      .eq("status", "published")
+      .maybeSingle()
+    const settingsRequest = supabase
+      .from("site_settings")
+      .select("site_title,description,seo_json,locale")
+      .eq("status", "published")
+      .limit(1)
+      .maybeSingle()
     let query = supabase
       .from("sections")
       .select(
@@ -102,18 +117,6 @@ export function usePortfolio(includeDrafts = false) {
         .eq("status", "published")
         .eq("is_visible", true)
         .order("sort_order"),
-      supabase
-        .from("pages")
-        .select("seo_title,seo_description")
-        .eq("slug", "home")
-        .eq("status", "published")
-        .maybeSingle(),
-      supabase
-        .from("site_settings")
-        .select("site_title,description,seo_json,locale")
-        .eq("status", "published")
-        .limit(1)
-        .maybeSingle(),
     ])
       .then(
         async ([
@@ -122,10 +125,9 @@ export function usePortfolio(includeDrafts = false) {
           placementsResult,
           tokenResult,
           navigationResult,
-          pageResult,
-          settingsResult,
         ]) => {
           if (cancelled) return
+          if (!includeDrafts) performance.mark("p3:portfolio-primary-ready")
           const contentError = sectionsResult.error ?? panelsResult.error ?? placementsResult.error
           if (contentError) {
             // Fail closed: never substitute stale fallback content when
@@ -225,36 +227,7 @@ export function usePortfolio(includeDrafts = false) {
             })
             setTokens(next)
           }
-          const title = pageResult.data?.seo_title ?? settingsResult.data?.site_title
-          const description = pageResult.data?.seo_description ?? settingsResult.data?.description
-          if (title) {
-            document.title = title
-            setMeta("og:title", title, "property")
-          }
-          if (description) {
-            setMeta("description", description)
-            setMeta("og:description", description, "property")
-            setMeta("twitter:description", description)
-          }
-          const seo = settingsResult.data?.seo_json as
-            | {
-                ogImage?: string
-                canonical?: string
-                robots?: string
-              }
-            | undefined
-          if (seo?.ogImage?.startsWith("https://")) {
-            setMeta("og:image", seo.ogImage, "property")
-            setMeta("twitter:image", seo.ogImage)
-            setMeta("twitter:card", "summary_large_image")
-          }
-          if (/^(index|noindex),(follow|nofollow)$/.test(seo?.robots ?? ""))
-            setMeta("robots", seo!.robots!)
-          if (settingsResult.data?.locale?.match(/^[a-z]{2}-[A-Z]{2}$/))
-            setMeta("og:locale", settingsResult.data.locale.replace("-", "_"), "property")
-          setCanonical(
-            seo?.canonical?.startsWith("https://") ? seo.canonical : "https://tulius.work/",
-          )
+          if (!includeDrafts) performance.mark("p3:portfolio-compose-finished")
           setLoading(false)
         },
       )
@@ -265,6 +238,44 @@ export function usePortfolio(includeDrafts = false) {
         setSource("supabase")
         setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
         setLoading(false)
+      })
+    void Promise.all([pageRequest, settingsRequest])
+      .then(([pageResult, settingsResult]) => {
+        if (cancelled) return
+        const title = pageResult.data?.seo_title ?? settingsResult.data?.site_title
+        const description = pageResult.data?.seo_description ?? settingsResult.data?.description
+        if (title) {
+          document.title = title
+          setMeta("og:title", title, "property")
+        }
+        if (description) {
+          setMeta("description", description)
+          setMeta("og:description", description, "property")
+          setMeta("twitter:description", description)
+        }
+        const seo = settingsResult.data?.seo_json as
+          | {
+              ogImage?: string
+              canonical?: string
+              robots?: string
+            }
+          | undefined
+        if (seo?.ogImage?.startsWith("https://")) {
+          setMeta("og:image", seo.ogImage, "property")
+          setMeta("twitter:image", seo.ogImage)
+          setMeta("twitter:card", "summary_large_image")
+        }
+        if (/^(index|noindex),(follow|nofollow)$/.test(seo?.robots ?? ""))
+          setMeta("robots", seo!.robots!)
+        if (settingsResult.data?.locale?.match(/^[a-z]{2}-[A-Z]{2}$/))
+          setMeta("og:locale", settingsResult.data.locale.replace("-", "_"), "property")
+        setCanonical(
+          seo?.canonical?.startsWith("https://") ? seo.canonical : "https://tulius.work/",
+        )
+      })
+      .catch(() => {
+        // The pre-rendered HTML already contains safe canonical/SEO defaults.
+        // Optional metadata failure must never block the public content.
       })
     return () => {
       cancelled = true

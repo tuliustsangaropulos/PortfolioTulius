@@ -75,3 +75,11 @@ O gate `P6_PERFORMANCE_BUDGET` reprovou mobile (score 51 inferior ao mínimo de 
 ## Interpretação
 
 Performance Lighthouse é **dado de laboratório**, variável entre execuções e distinta dos Core Web Vitals de campo. Para comparar antes/depois de uma alteração de LCP, obter execução do mesmo SHA e depois uma medição no SHA novo, preservando a configuração e o tipo de dispositivo. Manter artefatos JSON e screenshots do run (retenção limitada do GitHub Actions).
+
+## Experimento P3 — consulta SEO fora do caminho crítico (28/10/2026)
+
+**Hipótese derivada do código:** `usePortfolio` faz sete consultas em `Promise.all` e só libera o conteúdo depois que **todas** terminam; `pages` e `site_settings` alimentam título/canonical/OG, mas **não** a composição da primeira seção. O experimento move essas duas leituras para uma promessa independente, iniciada imediatamente, sem aguardar seu resultado para liberar a renderização. As outras cinco consultas (seções, painéis, placements, tokens e navegação) e suas regras de erro permanecem no bloqueio crítico. Os metadados estáticos do HTML seguem como fallback seguro.
+
+**Instrumentação:** `performance.mark` para início da requisição, chegada das cinco dependências principais e composição dos dados; a suíte de navegador registra tempos e nomes de tabelas das requisições Supabase, sem parâmetros, JWT ou conteúdo editorial. A alteração é **funcional somente na ordem de liberação de SEO**, sem redimensionamento de imagem, alteração de layout, tema ou conteúdo.
+
+**Aceite necessário:** verificar CI, Vercel `READY` no mesmo SHA, P3 completo (13/25/38, A11y/SEO), LCP mobile e TBT. **Não declarar ganho de performance até medir.** Caso SEO regressione, reverter pontualmente a separação. O baseline comprovado segue [P3 #40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980): LCP mobile 4,38 s, score 82.
