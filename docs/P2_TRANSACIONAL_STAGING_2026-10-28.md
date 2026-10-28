@@ -2,6 +2,14 @@
 
 **Preparação:** 28/10/2026 · **Status:** infraestrutura de teste preparada, execução transacional ainda pendente.
 
+## Decisão do proprietário — 28/10/2026: custo NÃO aprovado
+
+A cotação recebida para uma branch de homologação na organização do projeto `portfolio` foi **US$ 0,01344 por hora**, além de eventuais valores de consumo. **O proprietário decidiu não aprovar custos neste momento.** Nenhum custo foi confirmado, nenhuma branch foi criada e nenhum teste transacional foi executado.
+
+**Status vinculante: P2 transacional SUSPENSO, por decisão do proprietário.** O workflow abaixo é apenas uma preparação técnica. **Não executar**, não criar/provisionar ambiente pago, não cadastrar usuários de teste, não configurar Secrets de staging e não tentar testes de escrita na produção como alternativa. **Não há data prevista para retomar.**
+
+**Condições para reabertura:** pedido explícito do proprietário; revisão da cotação ou oferta de ambiente isolado já existente e autorizado; aprovação específica de qualquer cobrança; validação de schema/policies e contas JWT; plano de reversão/limpeza. P5 de leitura, já aprovado, não precisa ser refeito. [Índice operacional](ESTADO_ATUAL_VIGENTE.md).
+
 ## Situação do ambiente
 
 A consulta Supabase retornou **zero branches de homologação** do projeto portfolio. A tentativa de criar uma branch foi bloqueada pelo requisito de **confirmação de custo**; nenhum recurso, objeto ou dado foi criado. Não substituir a produção por homologação sem autorização expressa.

@@ -4,6 +4,8 @@ Site público e CMS editorial em **React 19, TypeScript, Vite, Tailwind CSS v4 e
 
 > **Fonte operacional única:** [docs/ESTADO_ATUAL_VIGENTE.md](docs/ESTADO_ATUAL_VIGENTE.md). Contém o snapshot de dados mais recente, evidências P0–P3, o estado real de homologação e as pendências atuais. **Confirme GitHub, Supabase e Vercel ao vivo antes de cada alteração:** este arquivo não atualiza automaticamente contagens/SHAs.
 
+> **P2 transacional suspenso por decisão do proprietário (28/10/2026):** não foram aprovados custos para criar uma branch Supabase de homologação (cotação **US$ 0,01344/h**, mais possível consumo). Não provisionar ambiente pago, não disparar a suíte manual de escrita e não testar em produção. O P5 read-only permanece aprovado; as pendências transacionais ficam abertas, sem prazo, até nova autorização expressa. [Detalhes](docs/P2_TRANSACIONAL_STAGING_2026-10-28.md).
+
 ## Leitura obrigatória antes de qualquer ajuste
 
 1. [`AGENTS.md`](AGENTS.md) — regras de preservação, segurança, branches e escopo.

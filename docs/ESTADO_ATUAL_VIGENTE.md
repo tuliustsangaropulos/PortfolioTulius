@@ -4,6 +4,14 @@
 
 > **Regra de atualização:** o snapshot de Git/CI/Vercel abaixo é **anterior ao commit desta consolidação documental**. Para o estado em qualquer novo chat, verificar [HEAD da `main`](https://github.com/tuliustsangaropulos/PortfolioTulius/commits/main), [runs do GitHub Actions](https://github.com/tuliustsangaropulos/PortfolioTulius/actions), [deployments da Vercel](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius) e, quando a tarefa pedir, o banco Supabase. **Não reutilizar SHA congelado como se fosse o HEAD futuro.**
 
+## Decisão vigente — P2 transacional suspenso por custo (28/10/2026)
+
+**Decisão expressa do proprietário:** **não aprovar custos adicionais neste momento** para a branch de homologação Supabase. A cotação consultada foi **US$ 0,01344 por hora** para uma branch, sujeita a eventuais custos adicionais de uso. **Cotação não é aprovação de cobrança.**
+
+**P2-TRANS: BLOQUEADO / AGUARDANDO NOVA DECISÃO DO PROPRIETÁRIO, sem prazo.** Não criar ou provisionar branch/projeto pago, não confirmar custo, não configurar ou usar credenciais de homologação, não disparar o [workflow transacional](../.github/workflows/p2-transactional-staging.yml) e **não substituir staging por escrita na produção**. A suíte está preparada no repositório, porém **não foi executada**; CRUD, publicação/restauração e Storage binário com JWT real seguem sem homologação. O [P5 read-only aprovado](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770) continua válido.
+
+**Retomada somente mediante solicitação e aprovação explícitas futuras**, com nova revisão de preço/alternativa sem cobrança, equivalência de schema, contas de teste e plano de limpeza. A auditoria e otimização **P3 podem prosseguir separadamente**; o LCP mobile mediano de 4,32 s ainda está acima da meta de 2,5 s. [Pendências](OPEN_ISSUES.md) e [plano P2](P2_TRANSACIONAL_STAGING_2026-10-28.md).
+
 ## Identidade e fonte de verdade
 
 - Repositório público: [`tuliustsangaropulos/PortfolioTulius`](https://github.com/tuliustsangaropulos/PortfolioTulius), branch de trabalho **somente `main`**, seguindo [`AGENTS.md`](../AGENTS.md).

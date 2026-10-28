@@ -2,6 +2,12 @@
 
 **Última revisão documental:** 28/10/2026. Este arquivo contém **somente itens abertos**, com escopo, evidência e próxima decisão. O [histórico acumulado até esta revisão](historico/OPEN_ISSUES_ACUMULADO_ATE_2026-10-28.md) preserva todas as notas de 25–28/10, inclusive falhas P5 já resolvidas e antigas cotas/deployments Vercel. A referência principal de estado é o [índice operacional](ESTADO_ATUAL_VIGENTE.md).
 
+## Bloqueio deliberado — P2 transacional (28/10/2026)
+
+**P2-TRANS-00 — SUSPENSO POR DECISÃO DO PROPRIETÁRIO.** O proprietário **não aprovou despesas neste momento**. Cotação consultada para uma branch Supabase de homologação: **US$ 0,01344/h**, mais possíveis cobranças por consumo. Não houve confirmação de custo nem criação de branch; o ambiente isolado inexiste.
+
+**Não executar até nova autorização expressa:** criação de projeto/branch de homologação, confirmação de custo, provisionamento de usuários ou Secrets de staging, execução manual do workflow P2 ou qualquer substituição por CRUD/Storage na produção. Os itens **P2-TRANS-01 a P2-TRANS-04 permanecem abertos e bloqueados por P2-TRANS-00**, não reprovados nem concluídos. P5 administrativo read-only continua **PASS 4/4**. A [suíte preparada](P2_TRANSACIONAL_STAGING_2026-10-28.md) fica versionada, sem execução. **Não reapresentar aprovação de custo por rotina**; somente se o proprietário retomar a frente ou trouxer alternativa isolada autorizada. P3 performance segue como frente independente.
+
 ## Prioridade alta
 
 | Código | Frente | Evidência atual | Critério para encerrar |
