@@ -21,7 +21,7 @@ describe("getPublishedImageChoices", () => {
     expect(getPublishedImageChoices([base], url)).toEqual([
       {
         id: "a",
-        title: "Logo Vale",
+        title: "vale.png",
         alt: "Logotipo da Vale",
         url: "https://assets.example/logos/vale.png",
         path: "logos/vale.png",
@@ -61,7 +61,7 @@ describe("getPublishedImageChoices", () => {
   it("handles missing metadata without inventing text", () => {
     const rows = [{ ...base, title: null, alt_text: null }]
     expect(getPublishedImageChoices(rows, url)[0]).toMatchObject({
-      title: "logos/vale.png",
+      title: "vale.png",
       alt: "",
     })
   })

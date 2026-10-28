@@ -311,6 +311,10 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
 
   async function save() {
     if (!draft || !supabase) return
+    if (draft.status === "published" && selected?.status !== "published") {
+      setMessage("Para publicar uma seção use o botão Publicar seção.")
+      return
+    }
     setMessage("Salvando…")
     const { error } = await supabase
       .from("sections")
@@ -367,13 +371,11 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
   async function publish() {
     if (!selected || !supabase) return
     if (!confirm(`Publicar “${selected.title}” e seus blocos?`)) return
-    const allowPlaceholders = confirm(
-      "Há placeholders? OK permite a publicação mesmo com placeholders; Cancelar impede placeholders.",
-    )
+    // Publication validates editorial placeholders; Save must never bypass this RPC.
     setMessage("Publicando seção…")
     const { error } = await supabase.rpc("publish_section", {
       section_to_publish: selected.id,
-      allow_placeholders: allowPlaceholders,
+      allow_placeholders: false,
     })
     setMessage(error?.message ?? "Seção e blocos publicados.")
     if (!error) reload()

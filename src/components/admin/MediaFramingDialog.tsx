@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import {
   defaultMediaFraming,
   imageFramingStyle,
@@ -22,7 +22,7 @@ export function MediaFramingDialog({
   onChange: (value: MediaFraming) => void
   onClose: () => void
 }) {
-  const current = normalizeMediaFraming(value)
+  const [current, setCurrent] = useState(() => normalizeMediaFraming(value))
   useEffect(() => {
     const key = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose()
@@ -31,7 +31,7 @@ export function MediaFramingDialog({
     return () => window.removeEventListener("keydown", key)
   }, [onClose])
   const set = (field: keyof MediaFraming, n: number) =>
-    onChange(normalizeMediaFraming({ ...current, [field]: n }))
+    setCurrent((before) => normalizeMediaFraming({ ...before, [field]: n }))
   return (
     <div
       className="media-frame-overlay"
@@ -103,11 +103,11 @@ export function MediaFramingDialog({
           <button
             type="button"
             className="secondary-button"
-            onClick={() => onChange(defaultMediaFraming)}
+            onClick={() => setCurrent(defaultMediaFraming)}
           >
             Restaurar
           </button>
-          <button type="button" className="primary-button" onClick={onClose}>
+          <button type="button" className="primary-button" onClick={() => { onChange(current); onClose() }}>
             Aplicar ao formulário
           </button>
         </footer>
