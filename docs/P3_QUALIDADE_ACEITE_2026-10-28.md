@@ -2,6 +2,8 @@
 
 **Início:** 28/10/2026. **Critério:** verificar a mesma implementação publicada, sem alterar conteúdo editorial, licenças, dados do CMS ou identidade visual.
 
+> **Aceite automatizado final (28/10/2026): APROVADO.** A [reexecução #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) confirmou **13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas**. Veja o [termo específico de aceite automatizado](P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). A conferência visual humana será realizada em nova frente/novo chat; **LCP mobile ≤2,5 s ainda não alcançado**.
+
 ## Resultado P3 automatizado — 28/10/2026, deployment correto
 
 **Situação:** **PASS nos gates automatizados; aceite humano e meta de LCP mobile continuam pendentes.** Execução [Audit P3 Lighthouse #40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980), `workflow_dispatch` não utilizado: disparo por `push` de `main` no commit [`e3bfccf467c730cc0a869f2db6addaaf7f65ca14`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/e3bfccf467c730cc0a869f2db6addaaf7f65ca14), status final **`success`**. O deployment [`dpl_C1YFn6m9iE2Jc5cVjjL1VoKHTydk`](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/C1YFn6m9iE2Jc5cVjjL1VoKHTydk) foi confirmado `READY`, mesmo SHA, aliases `tulius.work` e `www.tulius.work`.

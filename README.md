@@ -2,6 +2,8 @@
 
 Site público e CMS editorial em **React 19, TypeScript, Vite, Tailwind CSS v4 e Supabase**, publicado em [tulius.work](https://tulius.work/) pela Vercel a partir de `main`.
 
+> **Etapa 5 — aceite automatizado aprovado:** [reexecução #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085), 13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas. [Relatório de aceite](docs/P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). **Aceite manual: nova frente em novo chat; LCP mobile ainda aberto.**
+
 > **Fonte operacional única:** [docs/ESTADO_ATUAL_VIGENTE.md](docs/ESTADO_ATUAL_VIGENTE.md). Contém o snapshot de dados mais recente, evidências P0–P3, o estado real de homologação e as pendências atuais. **Confirme GitHub, Supabase e Vercel ao vivo antes de cada alteração:** este arquivo não atualiza automaticamente contagens/SHAs.
 
 > **P2 transacional suspenso por decisão do proprietário (28/10/2026):** não foram aprovados custos para criar uma branch Supabase de homologação (cotação **US$ 0,01344/h**, mais possível consumo). Não provisionar ambiente pago, não disparar a suíte manual de escrita e não testar em produção. O P5 read-only permanece aprovado; as pendências transacionais ficam abertas, sem prazo, até nova autorização expressa. [Detalhes](docs/P2_TRANSACIONAL_STAGING_2026-10-28.md).

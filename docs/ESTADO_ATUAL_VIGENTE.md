@@ -1,10 +1,17 @@
 # PortfolioTulius — estado operacional vigente
 
+## Etapa 5 — Aceite automatizado concluído; manual em nova frente (28/10/2026)
+
+**PASS — 13 seções públicas, 25 painéis mobile, 38 capturas (13 desktop + 25 mobile), 8 viewports, zero falhas de navegador ou painéis inadequados.** Evidência: [GitHub Actions #40757162085 — tentativa 2](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085), no SHA funcional `50a66f8`; até o SHA documental prévio `5db5fd7`, apenas README/`docs/` mudaram. [Relatório final do aceite automatizado](P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md).
+
+**Não houve aceite manual:** a revisão estética, dispositivos físicos, zoom nativo e leitor de tela serão tratados **no novo chat e em uma nova frente**, mediante achados do proprietário. **P3 LCP mobile ainda aberto** (meta ≤2,5 s); **P2 transacional suspenso por custo**, sem criação de staging ou escrita em produção. Este registro se limita ao aceite automatizado estrutural.
+
 **Conferência:** 28/10/2026, somente leitura em GitHub, Vercel e Supabase. **Entrada operacional única:** este documento substitui a função de índice vigente de relatórios cumulativos de 24–26/10. Os documentos originais e os backups permanecem históricos.
 
 > **Regra de atualização:** o snapshot de Git/CI/Vercel abaixo é **anterior ao commit desta consolidação documental**. Para o estado em qualquer novo chat, verificar [HEAD da `main`](https://github.com/tuliustsangaropulos/PortfolioTulius/commits/main), [runs do GitHub Actions](https://github.com/tuliustsangaropulos/PortfolioTulius/actions), [deployments da Vercel](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius) e, quando a tarefa pedir, o banco Supabase. **Não reutilizar SHA congelado como se fosse o HEAD futuro.**
 
 ## Decisão vigente — P2 transacional suspenso por custo (28/10/2026)
+
 
 **Decisão expressa do proprietário:** **não aprovar custos adicionais neste momento** para a branch de homologação Supabase. A cotação consultada foi **US$ 0,01344 por hora** para uma branch, sujeita a eventuais custos adicionais de uso. **Cotação não é aprovação de cobrança.**
 
@@ -13,6 +20,7 @@
 **Retomada somente mediante solicitação e aprovação explícitas futuras**, com nova revisão de preço/alternativa sem cobrança, equivalência de schema, contas de teste e plano de limpeza. A auditoria e otimização **P3 podem prosseguir separadamente**; o LCP mobile mediano de 4,32 s ainda está acima da meta de 2,5 s. [Pendências](OPEN_ISSUES.md) e [plano P2](P2_TRANSACIONAL_STAGING_2026-10-28.md).
 
 ## Identidade e fonte de verdade
+
 
 - Repositório público: [`tuliustsangaropulos/PortfolioTulius`](https://github.com/tuliustsangaropulos/PortfolioTulius), branch de trabalho **somente `main`**, seguindo [`AGENTS.md`](../AGENTS.md).
 - Site: [`https://tulius.work/`](https://tulius.work/), Vercel projeto `portfolio-tulius`, equipe `tuliustsangaropulos-creates-projects`. O push na `main` pode disparar deploy automático.

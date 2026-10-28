@@ -1,8 +1,15 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Etapa 5 — Aceite automatizado concluído; manual separado (28/10/2026)
+
+A [reexecução GitHub Actions #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) confirmou **13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas**. [Termo de aceite automatizado](P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). **Não é pendência repetir essa auditoria automaticamente** sem nova alteração relevante do site.
+
+**Aberto em frente distinta / novo chat:** aceite manual visual e funcional em dispositivos reais, zoom 200% nativo, leitor de tela e ajustes decorrentes da análise do proprietário. **Aberto no P3:** meta LCP mobile ≤2,5 s. **Bloqueado no P2:** ensaios transacionais, por decisão de não aprovar custos adicionais.
+
 **Última revisão documental:** 28/10/2026. Este arquivo contém **somente itens abertos**, com escopo, evidência e próxima decisão. O [histórico acumulado até esta revisão](historico/OPEN_ISSUES_ACUMULADO_ATE_2026-10-28.md) preserva todas as notas de 25–28/10, inclusive falhas P5 já resolvidas e antigas cotas/deployments Vercel. A referência principal de estado é o [índice operacional](ESTADO_ATUAL_VIGENTE.md).
 
 ## Bloqueio deliberado — P2 transacional (28/10/2026)
+
 
 **P2-TRANS-00 — SUSPENSO POR DECISÃO DO PROPRIETÁRIO.** O proprietário **não aprovou despesas neste momento**. Cotação consultada para uma branch Supabase de homologação: **US$ 0,01344/h**, mais possíveis cobranças por consumo. Não houve confirmação de custo nem criação de branch; o ambiente isolado inexiste.
 

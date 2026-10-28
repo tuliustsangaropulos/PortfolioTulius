@@ -2,6 +2,8 @@
 
 **Data:** 28/10/2026. **Entrada de estado operacional:** [`ESTADO_ATUAL_VIGENTE.md`](ESTADO_ATUAL_VIGENTE.md). Este arquivo é um mapa, não é sincronização automática dos anexos do ChatGPT.
 
+> **Handoff para novo chat:** [aceite automatizado P3](P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md) aprovado em 13 seções/25 painéis/38 capturas; a **verificação manual está separada e depende dos achados do proprietário**. P2 transacional segue suspenso por custo e o alvo de LCP mobile ≤2,5 s continua aberto. Consultar o GitHub `main` vivo, não apenas a Fonte anexada em data fixa.
+
 ## Ordem obrigatória
 
 1. Consultar [repositório `main`](https://github.com/tuliustsangaropulos/PortfolioTulius/commits/main), [Vercel](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius) e Supabase quando a tarefa exigir. **Confirmar SHA e conteúdo atual; não reutilizar o SHA de 28/10 como vigente para sempre.**
