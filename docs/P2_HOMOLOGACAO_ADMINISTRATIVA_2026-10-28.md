@@ -118,3 +118,7 @@ Até esses testes, a classificação correta é **“P2 parcialmente verificada,
 - Histórico do teste anterior: [`P4_P5_EXECUCAO.md`](P4_P5_EXECUCAO.md) e [`SECURITY_RLS.md`](SECURITY_RLS.md).
 - [P1 — proveniência/duplicação de Storage](P1_INVESTIGACAO_HIGIENE_2026-10-28.md).
 - Fonte de verdade: consultas ao [projeto Supabase](https://supabase.com/dashboard/project/zfnrhzplwpjpdljraypt) e metadados GitHub Actions em 28/10/2026. Nenhuma credencial foi consultada ou divulgada.
+
+## Nota de encerramento de escopo antes do P3 — 28/10/2026
+
+O P5 autenticado de **leitura** permanece integralmente homologado (4/4, [#40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770)). Não foram produzidas provas de **escrita/publicação/restauração pela interface** ou **transferência binária do Storage com JWT real e cleanup de fixture**. Esses pontos não foram declarados aprovados e continuam como **pendências residuais P2**, exigindo ambiente/fixture isolados, plano de reversão e execução autorizada. **O P3 público pode prosseguir independentemente, mas seu sucesso não encerra os testes transacionais P2.** A auditoria P3 está registrada em [`P3_QUALIDADE_ACEITE_2026-10-28.md`](P3_QUALIDADE_ACEITE_2026-10-28.md).

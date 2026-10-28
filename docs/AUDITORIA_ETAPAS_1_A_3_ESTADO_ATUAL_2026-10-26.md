@@ -57,6 +57,10 @@ No [run manual #40745002663](https://github.com/tuliustsangaropulos/PortfolioTul
 
 **Status correto:** **P5 administrativo read-only homologado; P2 total permanece parcialmente homologada** até a execução controlada de fixture CMS/Storage e teste de restauração editorial. O quadro P0 acima reflete uma data anterior ao P5 e deve ser lido como snapshot histórico da conferência original. [Relatório P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md) registra os quatro gates e limites.
 
+## P3 — aceite automatizado aprovado, LCP mobile ainda pendente (28/10/2026)
+
+[Audit P3 Lighthouse #40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980) **SUCCESS**, no SHA `e3bfccf467c730cc0a869f2db6addaaf7f65ca14`, com [Vercel READY correspondente](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/C1YFn6m9iE2Jc5cVjjL1VoKHTydk) antes do Lighthouse. Foram validados **13 seções públicas, 25 painéis mobile, 38 screenshots, oito viewports, RLS anônimo, acessibilidade/boas práticas/SEO=100**. Mobile **Performance 82, LCP 4,38 s**, desktop **97, LCP 1,26 s**. O orçamento de regressão passou, mas **LCP mobile permanece superior à meta de 2,5 s**; pendem aceites humanos de fidelidade visual, zoom 200% e leitor de tela. [Relatório P3 e prioridade LCP](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
 ## Matriz de implantação e comprovação
 
 | Entrega | Implementação | Evidência e limite |

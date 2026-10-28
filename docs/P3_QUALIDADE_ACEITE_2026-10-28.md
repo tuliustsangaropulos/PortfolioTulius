@@ -2,6 +2,44 @@
 
 **Início:** 28/10/2026. **Critério:** verificar a mesma implementação publicada, sem alterar conteúdo editorial, licenças, dados do CMS ou identidade visual.
 
+## Resultado P3 automatizado — 28/10/2026, deployment correto
+
+**Situação:** **PASS nos gates automatizados; aceite humano e meta de LCP mobile continuam pendentes.** Execução [Audit P3 Lighthouse #40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980), `workflow_dispatch` não utilizado: disparo por `push` de `main` no commit [`e3bfccf467c730cc0a869f2db6addaaf7f65ca14`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/e3bfccf467c730cc0a869f2db6addaaf7f65ca14), status final **`success`**. O deployment [`dpl_C1YFn6m9iE2Jc5cVjjL1VoKHTydk`](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/C1YFn6m9iE2Jc5cVjjL1VoKHTydk) foi confirmado `READY`, mesmo SHA, aliases `tulius.work` e `www.tulius.work`.
+
+**Prova de vinculação do SHA:** o workflow aguardou no GitHub a aprovação do status `Vercel=success` para `e3bfccf` às **18:39:04 UTC**. A medição Lighthouse **mobile** iniciou às **18:39:15.948 UTC** e a **desktop** às **18:39:29.675 UTC**, ambas **depois** do aceite do deployment. Os resultados abaixo pertencem ao site neste deployment; qualquer novo commit documental tem SHA distinto e deve preservar esta referência temporal.
+
+| Indicador Lighthouse 13.5.0 | Mobile | Desktop |
+|---|---:|---:|
+| Performance | **82** | **97** |
+| Acessibilidade | **100** | **100** |
+| Boas Práticas | **100** | **100** |
+| SEO | **100** | **100** |
+| FCP | **2.317,66 ms** | **562,51 ms** |
+| LCP | **4.376,20 ms** | **1.262,24 ms** |
+| TBT | **57 ms** | **0 ms** |
+| CLS | **0,000629** | **0,000126** |
+
+**Contrato público e evidências (PASS):**
+
+- `P3_BROWSER_AUDIT {"failures":0}`: oito viewports, navegação/hash, menu, foco e ausência de overflow; **13 seções e 25 painéis mobile**.
+- `P4_EDITORIAL_SUMMARY {"captures":38,"desktop":13,"mobile":25,"failures":0,"badPanels":[]}`: 38 screenshots de painéis inteiros, imagens decodificadas, sem painéis vazios e sem imagens quebradas. A checagem de Contato a 320 px preservou três valores em uma linha.
+- `P5_PUBLIC_RLS {"result":"PASS","publicSections":13,"publicNavigation":13,"adminsExposed":0,"issuesExposed":0,"revisionsExposed":0,"auditLogsExposed":0}`: acesso público/anon sem dados de administração. Não equivale a homologação de escrita/Storage do P2.
+- `P6_PERFORMANCE_BUDGET`: **PASS** mobile e desktop, com limites conservadores de regressão; o orçamento mobile é `Performance >=55`, `LCP <=6,5 s`, **não** a meta de Web Vitals `LCP <=2,5 s`.
+- Artefatos GitHub Actions: `p4-editorial-38-panels` e `p3-viewport-screenshots` (retenção até **04/11/2026**); `p6-lighthouse-json` (até **11/11/2026**). Preservar cópias permanentes antes do vencimento, se necessárias.
+
+**Inspeção visual de revisão:** mosaicos gerados a partir das 38 capturas, incluindo 13 desktop/25 mobile, sem painel vazio ou quebra visual evidente na amostra. A inspeção em escala reduzida **não comprova** fidelidade pixel a pixel ao Figma/Canva, leitor de tela, ergonomia em dispositivo físico nem zoom nativo 200%. Essas verificações continuam no aceite humano.
+
+### Prioridade máxima de performance: LCP mobile (não resolvido)
+
+- Elemento real identificado: **retrato da seção Perfil mobile**, `/media/tulius-portrait-dark.jpg`, arquivo local de **13.198 bytes**, com preload HTML, `loading=eager`, `fetchpriority=high` e `decoding=async`. Portanto, otimizar **apenas compressão/download desse JPEG** tem pouco suporte causal.
+- Na rodada válida, o insight de LCP informa subpartes de **81 ms** TTFB, **60 ms** de atraso de requisição, **45 ms** de carregamento e **749 ms** de renderização do elemento. Estas subpartes vêm do modelo específico de Lighthouse e **não devem ser somadas como se explicassem sozinhas os 4,38 s totais**; são úteis como ordem de grandeza da etapa de render.
+- FCP **2,32 s** e diferença até o LCP de aproximadamente **2,06 s**. A página pública é montada pelo React depois das consultas do Supabase; deve-se instrumentar a linha do tempo `navigation → resposta(s) Supabase → commit React → imagem exibida` antes de alterar o renderizador.
+- `render-blocking-insight` encontrou CSS principal e Google Fonts; estima economia **~550 ms em FCP**, **0 ms em LCP** nessa rodada. Ensaios históricos de carga não bloqueante de fontes foram revertidos por falta de ganho consistente. Não modificar tipografia licenciada, cores ou composição sem A/B sustentado.
+- Long tasks e vendor JavaScript variam: na primeira tentativa de P3, com medição **não vinculada ao deployment novo**, houve **TBT 1.003 ms/Performance 51**; na rodada válida, **TBT 57 ms/Performance 82**, **sem mudança funcional no site**. Tratar a grande variação de TBT como sinal para repetir o laboratório (ao menos três execuções comparáveis) e olhar a distribuição/mediana, não prova de regressão nem de melhora causal.
+- Próximos experimentos priorizados: **(1)** marcar os instantes de render de Perfil e respostas CMS/Supabase, procurando espera por dados não críticos para a dobra inicial; **(2)** rastrear custo inicial de React/vendor e eventual preload desnecessário do chunk `admin-router` no público, sem desabilitar proteção do admin; **(3)** comparar três medições mobile no mesmo ambiente e analisar FCP/LCP/TBT/CLS; **(4)** testar uma mudança pequena por vez, com rollback se prejudicar composição ou Core Web Vitals. **Não foi aplicada alteração funcional de performance nesta etapa**.
+
+**Decisão P3:** contrato de renderização e qualidade automatizada **APROVADO**, preservando **ressalva aberta de LCP mobile >2,5 s** e **aprovação visual humana pendente**. O relatório Lighthouse do SHA anterior de 26/10 (Performance 72/LCP 4,60 s) permanece histórico; comparações entre SHAs/ambientes não são demonstração de causalidade.
+
 ## Fonte de verdade e versões
 
 A auditoria histórica de 26/10, [run #40299848896](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40299848896), foi executada no commit `9d118da8108181664867835f09ca93f55fe63218` e registrou mobile Performance **72**, LCP **4.604,02 ms**, FCP **2.423,68 ms**, TBT **347 ms**, CLS **0,0004**; desktop Performance **97**, LCP **1.244,08 ms**; Acessibilidade, Boas Práticas e SEO **100/100** nos dois. O mesmo job registrou `P3_BROWSER_AUDIT failures=0` e `P4_EDITORIAL_SUMMARY captures=38 desktop=13 mobile=25 failures=0`. **Não atribuir essas medições ao deployment atual.**
@@ -20,7 +58,7 @@ A auditoria histórica de 26/10, [run #40299848896](https://github.com/tuliustsa
 | Performance | Lighthouse JSON completos do run atual. | Registrar FCP, LCP, TBT, CLS e scores; não confundir gate tolerante `mobile LCP <=6500 ms` com meta ideal `LCP <=2500 ms`. |
 | LCP mobile | `scripts/p3-lcp-triage.mjs`, dados do Lighthouse 13, imagens/fontes e renderização. | Identificar elemento causador e gargalo prioritário; propor alteração mínima baseada em evidência, não otimizar somente a pontuação. |
 
-**Status deste arquivo na criação:** preparação e novo gate de diagnóstico LCP. A nova rodada automatizada, os valores de Lighthouse e os artifacts deverão ser adicionados **depois** da execução real. Não declarar aceite P3 antes disso.
+**Registro histórico da preparação:** este arquivo inicialmente continha apenas o plano e a solicitação de nova execução. Os resultados efetivos e a ressalva de LCP estão documentados no início do arquivo.
 
 ## P2 antes de P3
 
