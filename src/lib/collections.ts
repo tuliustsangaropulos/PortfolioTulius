@@ -131,7 +131,7 @@ export function resolveCollectionBlocks(
     if (!isCollectionSource(source)) return block
     const records = sources.get(source) ?? []
     const start = Number.isInteger(block.content_json?.collection_start)
-      ? Math.max(0, block.content_json.collection_start ?? 0)
+      ? Math.max(0, block.content_json?.collection_start ?? 0)
       : 0
     const limit =
       Number.isInteger(block.content_json?.collection_limit) &&
