@@ -2,6 +2,14 @@
 
 Site pessoal, currículo e CMS editorial em React, TypeScript, Vite e Tailwind CSS v4. O conteúdo pode ser exibido pelo fallback local ou sincronizado com o projeto Supabase existente (`zfnrhzplwpjpdljraypt`). O projeto roda localmente no VS Code e pode ser publicado na Vercel.
 
+## Situação vigente — conferência P0 de 28/10/2026
+
+**Fonte operacional para decisões:** [Índice consolidado, atualizado com consultas diretas](docs/AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md). A conferência anterior às alterações documentais encontrou `main` no SHA [`dcb8831221a54fb713031011c8da8b20fe157b38`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/dcb8831221a54fb713031011c8da8b20fe157b38), [CI aprovado](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40301041397) e [deployment de produção READY correspondente](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/FEJWKVLYi69qqFmg1da71H82Sue4). Este commit documental pode gerar novo CI/deploy; sua conclusão deve ser verificada separadamente.
+
+O Supabase foi reconferido em somente leitura: **14 seções cadastradas / 13 públicas, 42 painéis cadastrados / 25 painéis mobile públicos, 28 blocos, 56 placements, 13 destinos de navegação públicos, 9 pendências editoriais (8 abertas), 21 mídias publicadas, 23 objetos Storage, 12 revisões e 12 auditorias**. As 21 mídias são **19 SVGs ilustrativos e 2 PNGs**; há **2 objetos privados sem cadastro em `media_assets`**, ainda não avaliados para exclusão. Não tratar os SVGs como fotografias reais ou marcas oficiais.
+
+A homologação administrativa com JWT real, gravação/rollback pelo CMS e transferência binária pelo Storage segue pendente. O Lighthouse de **80 mobile / LCP 3,86 s** é uma medição histórica de 26/10, **não do SHA atual**. Consulte [reconciliação das Fontes ChatGPT](docs/RECONCILIACAO_FONTES_CHATGPT_2026-10-28.md) e a [incorporação editorial de mídias](docs/CONTINUIDADE_INCORPORACAO_CONTEUDO_2026-10-26.md). Documentos mais antigos são snapshots válidos de suas datas, não inventários vigentes.
+
 ## Requisitos
 
 - Node.js compatível com Vite 8
@@ -60,9 +68,9 @@ Configure as duas variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KE
 
 ## Auditoria consolidada — etapas 1, 2 e 3 (26/10/2026)
 
-A referência técnica **vigente** para estado, evidências, dados e pendências é [`docs/AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md`](docs/AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md). Os relatórios [Etapa 1](docs/ETAPA_1_HOMOLOGACAO_PUBLICA_2026-10-26.md), [Etapa 2](docs/ETAPA_2_AUDITORIA_CMS_SUPABASE_2026-10-26.md) e [Etapa 3](docs/ETAPA_3_AJUSTES_2026-10-26.md) preservam o contexto de cada execução. Datas, SHAs, números de painéis e Lighthouse em documentos anteriores são **fotografias históricas**, não o estado técnico corrente.
+A referência técnica **consolidada, atualizada em 28/10/2026**, para estado, evidências, dados e pendências é [`docs/AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md`](docs/AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md). Os relatórios [Etapa 1](docs/ETAPA_1_HOMOLOGACAO_PUBLICA_2026-10-26.md), [Etapa 2](docs/ETAPA_2_AUDITORIA_CMS_SUPABASE_2026-10-26.md) e [Etapa 3](docs/ETAPA_3_AJUSTES_2026-10-26.md) preservam o contexto de cada execução. Datas, SHAs, números de painéis e Lighthouse em documentos anteriores são **fotografias históricas**, não o estado técnico corrente.
 
-**Resumo após a etapa 3:** 13 seções e 13 destinos de navegação públicos, 42 painéis cadastrados (incluem seção oculta), 28 blocos (0 com `is_placeholder=true`), 56 placements, 8 pendências editoriais abertas. Existe **um item interno ainda marcado `placeholder=true`**, referente a imagens da Invest RS; os 18 títulos de slides profissionais não têm fotos aprovadas. CI final validado: 46 testes, build, TypeScript e formatação aprovados. Auditoria Lighthouse posterior à correção CSS: acessibilidade 100 em mobile/desktop, performance mobile 75 e desktop 96, com LCP mobile ~4,51 s. E2E com JWT administrativo e transferência real de arquivos continuam sem comprovação.
+**Resumo histórico após a etapa 3 (antes da incorporação de mídias):** 13 seções e 13 destinos de navegação públicos, 42 painéis cadastrados (incluem seção oculta), 28 blocos (0 com `is_placeholder=true`), 56 placements, 8 pendências editoriais abertas. Existe **um item interno ainda marcado `placeholder=true`**, referente a imagens da Invest RS; os 18 títulos de slides profissionais não têm fotos aprovadas. CI final validado: 46 testes, build, TypeScript e formatação aprovados. Auditoria Lighthouse posterior à correção CSS: acessibilidade 100 em mobile/desktop, performance mobile 75 e desktop 96, com LCP mobile ~4,51 s. E2E com JWT administrativo e transferência real de arquivos continuam sem comprovação.
 
 ## Estado atual
 
@@ -109,9 +117,9 @@ Os ícones dos indicadores, suas associações aos temas e os textos temáticos 
 
 A seção **Formação** utiliza agora o fundo escuro `#171617` e tipografia branca/laranja. As experiências **Invest RS, Prefeitura de São Paulo, Vale, TV Globo/SporTV, Grupo InPress e CDI Comunicação** utilizam fundo branco e são exibidas em uma **pilha vertical sobreposta** via `position: sticky`: ao rolar, o painel seguinte sobe e cobre o anterior. Um seletor horizontal de seis empresas, fixado abaixo do cabeçalho, facilita a navegação direta.
 
-Cada experiência possui logotipo opcional, título, lista de realizações existente e galeria de slides associada a projetos reais, editável no CMS. Os 18 slides editoriais iniciais contêm títulos de projetos, **mas não fotografias**: não havia imagens de portfólio ou marcas aprovadas no GitHub, em `public/media`, em `media_assets` nem no Storage. O frontend mostra espaços reservados explicitamente identificados e monogramas temporários, sem simular fotografias do trabalho. As URLs aprovadas, descrições alternativas e legendas podem ser cadastradas em `/admin` → **Blocos e painéis** → empresa → **Painel A**.
+Cada experiência possui logotipo opcional, título, lista de realizações existente e galeria de slides associada a projetos reais, editável no CMS. **Histórico e atualização:** inicialmente, os 18 slides profissionais tinham títulos, sem fotografias ou logotipos aprovados. Em 26/10 foram incorporados **19 SVGs de síntese editorial**, versionados em `public/media/editorial-*.svg` e referenciados em galerias; o Storage passou a conter também **2 PNGs catalogados**. Esses ativos **não** substituem a comprovação de fotografias profissionais, marcas oficiais, fontes e licenças. URLs, alt e legendas continuam editáveis no CMS, sem homologação de salvamento com JWT real.
 
-Ver `docs/CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md`. Verificar validação de deployment em `docs/OPEN_ISSUES.md`; a API Vercel apresentou limite diário de implantações, portanto o SHA publicado deve ser conferido antes do aceite visual.
+Ver `docs/CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md` (snapshot histórico) e `docs/CONTINUIDADE_INCORPORACAO_CONTEUDO_2026-10-26.md` (incorporação posterior). O limite diário Vercel foi um evento transitório documentado; o deployment do SHA `dcb8831` foi posteriormente confirmado `READY`.
 
 ## Ferramentas, experiências clicáveis e hover de contato — 26/10/2026
 
@@ -122,9 +130,9 @@ Os seis itens de **Experiência e atuação** na seção 01 agora apontam, respe
 No Contato, os títulos e valores clicáveis ganham contraste branco em hover/foco, mantendo a base laranja. Não foram alterados números, e-mails, URLs, empresas ou conteúdos. Ver `docs/CONTINUIDADE_FERRAMENTAS_CARDS_CONTATO_2026-10-26.md`.
 
 
-### Atualização operacional da etapa 3 — 26/10/2026
+### Atualização operacional histórica da etapa 3 — 26/10/2026
 
 Textos atualmente publicados em `resultados/A`, `invest-rs/A` e `invest-rs/B` foram consolidados editorialmente no Supabase sem reescrever o JSONB. O item **Ativos visuais** continua pendente de fotografias aprovadas, e os 18 slides profissionais seguem sem fotos. O CSS de contraste da Formação e a biblioteca privada de mídia receberam correções pontuais e testes unitários. Consulte [Etapa 3](docs/ETAPA_3_AJUSTES_2026-10-26.md); o aceite visual e administrativo autenticado ainda requer provas separadas.
 
 
-**Última revalidação (26/10/2026):** [CI do índice consolidado aprovado](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148955) e [Lighthouse/QA públicos aprovados](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148755) no SHA `d3acbed`: Performance **80 mobile / 98 desktop** e Acessibilidade **100/100** nos dois; 13 links públicos válidos, 8 viewports sem falhas e 38 capturas. A medição é de laboratório e o LCP mobile (3,86 s) ainda deve melhorar. O índice consolidado em `docs/` reúne as versões mais recentes de todas as verificações.
+**Última revalidação do ciclo histórico (26/10/2026, não do SHA de 28/10):** [CI do índice consolidado aprovado](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148955) e [Lighthouse/QA públicos aprovados](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148755) no SHA `d3acbed`: Performance **80 mobile / 98 desktop** e Acessibilidade **100/100** nos dois; 13 links públicos válidos, 8 viewports sem falhas e 38 capturas. A medição é de laboratório e o LCP mobile (3,86 s) ainda deve melhorar. O índice consolidado em `docs/` reúne as versões mais recentes de todas as verificações.
