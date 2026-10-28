@@ -116,7 +116,7 @@ function ExperienceCard({ section, order }: { section: PortfolioSection; order: 
     <section
       id={section.slug}
       data-section={section.slug}
-      className="portfolio-section experience-card theme-paper"
+      className={`portfolio-section experience-card theme-${section.theme} motion-${section.animation ?? "fade-up"}`}
       style={{ zIndex: order + 1 }}
     >
       <div className="desktop-panel experience-desktop">

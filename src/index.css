@@ -532,12 +532,12 @@
 }
 
 /* Formation — identity dark gray with white supporting copy. */
-#formacao { background: var(--ink); color: var(--paper); }
-#formacao .item-meta, #formacao .content-item p, #formacao .section-intro,
-#formacao .panel-heading p { color: var(--paper); }
+#formacao.theme-ink { background: var(--ink); color: var(--paper); }
+#formacao.theme-ink .item-meta, #formacao.theme-ink .content-item p, #formacao.theme-ink .section-intro,
+#formacao.theme-ink .panel-heading p { color: var(--paper); }
 /* Override the globally important metadata color on the dark Formation surface. */
-#formacao .item-meta { color: var(--paper) !important; }
-#formacao .item-label { color: var(--orange); }
+#formacao.theme-ink .item-meta { color: var(--paper) !important; }
+#formacao.theme-ink .item-label { color: var(--orange); }
 
 /* Six white company panels rise over the preceding panel as the page scrolls. */
 .experience-stack { position: relative; isolation: isolate; background: var(--paper); }

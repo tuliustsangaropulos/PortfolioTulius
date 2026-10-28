@@ -291,6 +291,12 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
   const selected = sections.find((s) => s.id === selectedId)
   const [draft, setDraft] = useState<SectionRow | null>(selected ?? null)
   const [message, setMessage] = useState("")
+  const fixedLayouts: Record<string, string> = {
+    perfil: "hero", sobre: "editorial", resultados: "metrics",
+    "invest-rs": "timeline", "prefeitura-sp": "timeline", vale: "timeline",
+    "globo-sportv": "timeline", inpress: "timeline", cdi: "timeline",
+    depoimentos: "quotes", contato: "contact",
+  }
   useEffect(() => setDraft(selected ?? null), [selectedId, selected])
   useEffect(() => {
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
@@ -353,9 +359,11 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
 
   async function publish() {
     if (!selected || !supabase) return
+    if (!confirm(`Publicar “${selected.title}” e seus blocos?`)) return
     const allowPlaceholders = confirm(
-      "Publicar mesmo se a seção contiver placeholders editoriais? OK permite; Cancelar bloqueia placeholders.",
+      "Há placeholders? OK permite a publicação mesmo com placeholders; Cancelar impede placeholders.",
     )
+    setMessage("Publicando seção…")
     const { error } = await supabase.rpc("publish_section", {
       section_to_publish: selected.id,
       allow_placeholders: allowPlaceholders,
@@ -370,7 +378,7 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
       .update({ status: "archived", is_visible: false })
       .eq("id", selected.id)
     setMessage(error ? error.message : "Seção arquivada.")
-    reload()
+    if (!error) reload()
   }
   return (
     <>
@@ -475,18 +483,24 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
                 Layout
                 <select
                   value={draft.layout_variant}
+                  disabled={Boolean(fixedLayouts[draft.slug])}
                   onChange={(e) => setDraft({ ...draft, layout_variant: e.target.value })}
                 >
+                  <option value="hero">Abertura especial</option>
                   <option value="editorial">Editorial</option>
                   <option value="metrics">Métricas</option>
                   <option value="timeline">Timeline</option>
                   <option value="quotes">Depoimentos</option>
                   <option value="contact">Contato</option>
                 </select>
+                {fixedLayouts[draft.slug] && (
+                  <small>Composição exclusiva desta seção. O layout é fixo para preservar o design aprovado.</small>
+                )}
               </label>
               <label>
                 Animação
                 <select
+                  disabled={Boolean(fixedLayouts[draft.slug])}
                   value={draft.animation_preset}
                   onChange={(e) => setDraft({ ...draft, animation_preset: e.target.value })}
                 >
@@ -497,6 +511,9 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
                   <option value="image-reveal">Reveal de imagem</option>
                   <option value="metric-count">Métricas</option>
                 </select>
+                {fixedLayouts[draft.slug] && (
+                  <small>Movimentos desta composição são definidos pelo design editorial; esta opção não altera seus componentes especiais.</small>
+                )}
               </label>
               <label className="toggle-field">
                 <input
