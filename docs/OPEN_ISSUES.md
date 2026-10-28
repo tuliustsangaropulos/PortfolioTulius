@@ -124,3 +124,15 @@ Esta atualização **não fecha automaticamente as oito pendências editoriais**
 - **Fontes ChatGPT:** consultar [reconciliação documental](RECONCILIACAO_FONTES_CHATGPT_2026-10-28.md), preservar as cinco referências históricas, anexar cópias correntes quando necessário e manter as duas variantes históricas do relatório da seção 01 sem escolher uma silenciosamente. A exportação Actions retém o artifact por apenas 7 dias.
 
 **Escopo desta P0:** somente documentação GitHub; sem alterações em aplicação, migrations, Auth, RLS, Storage, CMS, DNS ou direitos/risco previamente aceitos.
+
+## Resultado da investigação P1 — 28/10/2026
+
+A análise técnica foi documentada em [`P1_INVESTIGACAO_HIGIENE_2026-10-28.md`](P1_INVESTIGACAO_HIGIENE_2026-10-28.md), **sem excluir nem modificar** objetos, Edge Functions, branches, migrations, CMS ou dados aprovados.
+
+- **2 objetos privados:** cada PNG corresponde, em path, tamanho e `eTag`, a uma versão pública catalogada. O código do CMS deixa a origem privada após promover a cópia pública, explicando os órfãos aparentes. **Manter** até política de retenção e homologação JWT/Storage com recuperação.
+- **19 SVGs:** as versões publicadas no Storage não são byte a byte iguais às 19 versões `public/media/editorial-*.svg` no GitHub (19 tamanhos diferentes). Preservar ambas, validar qual versão editorial é aprovada e corrigir proveniência/alt/créditos só com informação comprovada.
+- **2 PNGs de logotipo:** usados por InPress/Vale, com `credit` nulo. Direitos/origem precisam de decisão humana; não declarar logotipo oficial licenciado sem confirmação.
+- **Função de importação:** status `ACTIVE` v2, código HTTP 410 sem rotina de importação; log histórico v1 HTTP 200 em 26/10 e nenhuma chamada identificada na janela consultada de 27/10. **Não remover** até checar dependências externas e obter autorização.
+- **Branches:** quatro commits exclusivos da branch de navegação revisados; características principais já aparecem na `main`, sem justificativa comprovada para cherry-pick. Branch de motion sem commits exclusivos. Ambas preservadas, aguardando decisão de arquivamento/exclusão.
+
+**Status P1:** investigação read-only encerrada; **limpeza física/operacional pendente de autorização e condições técnicas**. P2 segue pendente e não foi confundida com testes de Storage real ou JWT admin.

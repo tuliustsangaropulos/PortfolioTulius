@@ -35,6 +35,10 @@
 
 
 
+## Complemento P1 — investigação técnica de 28/10/2026
+
+A leitura dos objetos, código do CMS, versões SVG, Edge Function, logs e branches foi concluída sem exclusões. O [relatório de higiene técnica P1](P1_INVESTIGACAO_HIGIENE_2026-10-28.md) registra os dois PNGs privados com cópias públicas correspondentes, a retenção pelo algoritmo de promoção, a divergência **19/19** de tamanhos entre SVGs do GitHub e do Storage, duas mídias de marca sem créditos, a função v2 que responde 410 e os quatro commits exclusivos revisados. **O parecer é conservar os recursos até validação editorial e autorização de limpeza.** Isto não altera os números do quadro P0 nem constitui homologação P2/P3.
+
 ## Matriz de implantação e comprovação
 
 | Entrega | Implementação | Evidência e limite |

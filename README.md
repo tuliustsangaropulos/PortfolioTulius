@@ -136,3 +136,7 @@ Textos atualmente publicados em `resultados/A`, `invest-rs/A` e `invest-rs/B` fo
 
 
 **Última revalidação do ciclo histórico (26/10/2026, não do SHA de 28/10):** [CI do índice consolidado aprovado](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148955) e [Lighthouse/QA públicos aprovados](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40288148755) no SHA `d3acbed`: Performance **80 mobile / 98 desktop** e Acessibilidade **100/100** nos dois; 13 links públicos válidos, 8 viewports sem falhas e 38 capturas. A medição é de laboratório e o LCP mobile (3,86 s) ainda deve melhorar. O índice consolidado em `docs/` reúne as versões mais recentes de todas as verificações.
+
+## P1 — investigação de higiene técnica (28/10/2026)
+
+A investigação read-only de objetos privados, mídias publicadas, função de importação e branches históricas está documentada em [`docs/P1_INVESTIGACAO_HIGIENE_2026-10-28.md`](docs/P1_INVESTIGACAO_HIGIENE_2026-10-28.md). Dois PNGs privados são origens retidas de cópias públicas; as 19 ilustrações do Storage não são byte a byte iguais às 19 versões editoriais do GitHub. **Nenhuma exclusão, substituição de mídia, merge ou alteração funcional foi executada**; direitos e decisões de limpeza exigem aprovação separada.
