@@ -89,3 +89,14 @@ Preservar layout, fontes, fotografias, textos e conteúdo aprovado. Não criar b
 - **P2:** [suíte de homologação isolada](P2_TRANSACIONAL_STAGING_2026-10-28.md) versionada e protegida contra uso no ref de produção, mas **não executada**: falta projeto/branch staging, confirmação de eventual custo, verificação de baseline e contas JWT de teste. P5 read-only 4/4 segue aprovado.
 
 Este é o snapshot funcional antes do commit exclusivamente documental que registra a auditoria; sempre consultar o HEAD/deployment reais.
+
+## Adendo de continuidade — ajustes solicitados na verificação manual (28/10/2026)
+
+Esta atualização sucede o aceite automatizado histórico descrito no início do documento. As alterações solicitadas pelo proprietário foram implementadas no site público e no painel administrativo, com modificação editorial controlada no projeto Supabase de produção, **não** como execução da suíte P2 transacional suspensa. Nenhum staging pago, migration, alteração RLS ou exclusão foi realizado.
+
+- **Experiências:** 13 itens de projetos excedentes marcados `isHidden=true` em três blocos (Invest RS 2, Prefeitura SP 3, Globo/SporTV 8), mantendo os originais no JSONB. Todos os empregadores têm até seis itens visíveis por padrão; a barra de navegação de seis empregadores permanece. O CMS permite alternar a visibilidade de cada item sem removê-lo.
+- **Depoimentos:** cinco registros `published` em `public.testimonials`, sendo **três originais preservados** e **dois exemplos fictícios/ilustrativos identificados**, nunca apresentados como endossos reais. Dois blocos `depoimentos` vinculados à coleção com distribuição 2+3 entre os dois painéis mobile; a grade desktop usa três colunas e duas linhas, com expansão acessível.
+- **Contato:** texto da assinatura já existente em `sections.intro` e localização já existente em `contato/a.items[0].text` são reaproveitados como rodapé; sem duplicar conteúdo no CMS. Coluna central reservada à fotografia; ícones dos links sem sobreposição.
+- **Menu:** rótulos Início, Projetos em Destaque, Graduação e Experiência Profissional (destino `invest-rs`). Cinco entradas individuais de empregadores passaram a `is_visible=false`, preservadas no banco. **Menu público 8 entradas; estrutura pública continua 13 seções/25 painéis mobile**.
+
+**Limites:** não declarar aceite visual humano nem homologação P2 transacional. A conferência em aparelhos físicos, zoom 200% e leitor de tela, assim como a meta LCP mobile ≤2,5 s, permanecem pendentes. Para o SHA de CI/Vercel mais recente consultar as plataformas ao vivo; o snapshot anterior continua histórico.

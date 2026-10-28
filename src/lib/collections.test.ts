@@ -72,4 +72,52 @@ describe("fontes de coleção editoriais", () => {
         ?.items,
     ).toEqual([])
   })
+  it("distribui os depoimentos em dois painéis preservando fotos e blocos manuais", () => {
+    const records: ContentItem[] = [
+      { title: "Pessoa A", text: "A" },
+      { title: "Pessoa B", text: "B" },
+      { title: "Pessoa C", text: "C" },
+      { title: "Exemplo fictício 01", text: "D" },
+      { title: "Exemplo fictício 02", text: "E" },
+    ]
+    const a: ContentBlockRow = {
+      id: "a",
+      section_id: "depoimentos",
+      sort_order: 1,
+      mobile_panel: "a",
+      status: "published",
+      content_json: {
+        source_collection: "testimonials",
+        collection_start: 0,
+        collection_limit: 2,
+        items: [{ title: "Pessoa A", image: "/media/pessoa-a.jpg", alt: "Pessoa A" }],
+      },
+    }
+    const b: ContentBlockRow = {
+      ...a,
+      id: "b",
+      mobile_panel: "b",
+      content_json: {
+        source_collection: "testimonials",
+        collection_start: 2,
+        items: [{ title: "Pessoa C", image: "/media/pessoa-c.jpg", alt: "Pessoa C" }],
+      },
+    }
+    const result = resolveCollectionBlocks(
+      [a, b],
+      new Map<CollectionSource, ContentItem[]>([["testimonials", records]]),
+    )
+    expect(result[0].content_json?.items?.map((item) => item.title)).toEqual([
+      "Pessoa A",
+      "Pessoa B",
+    ])
+    expect(result[1].content_json?.items?.map((item) => item.title)).toEqual([
+      "Pessoa C",
+      "Exemplo fictício 01",
+      "Exemplo fictício 02",
+    ])
+    expect(result[0].content_json?.items?.[0].image).toBe("/media/pessoa-a.jpg")
+    expect(result[1].content_json?.items?.[0].image).toBe("/media/pessoa-c.jpg")
+    expect(a.content_json?.items).toHaveLength(1)
+  })
 })

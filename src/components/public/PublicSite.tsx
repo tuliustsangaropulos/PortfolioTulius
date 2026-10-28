@@ -273,7 +273,14 @@ function MobilePanel({
       data-panel={panel}
       className={`mobile-panel panel-${panel}`}
     >
-      {section.slug === "contato" && panel === "a" ? (
+      {section.slug === "depoimentos" ? (
+        <>
+          <header className="panel-heading">
+            <h2>{section.title}</h2>
+          </header>
+          <TestimonialCards items={items} />
+        </>
+      ) : section.slug === "contato" && panel === "a" ? (
         <>
           <div className="contact-mobile-photo">
             {profile?.image && <img src={profile.image} alt={profile.alt ?? ""} loading="lazy" />}
@@ -657,47 +664,53 @@ function ResultsMobile({
   )
 }
 
+function TestimonialCards({ items }: { items: ContentItem[] }) {
+  const [expanded, setExpanded] = useState<string | null>(null)
+
+  return (
+    <div className="testimonials-grid">
+      {items.map((item, index) => {
+        const key = item.title + "-" + index
+        const isExpanded = expanded === key
+        return (
+          <button
+            type="button"
+            key={key}
+            className={`testimonial-card${isExpanded ? " is-expanded" : ""}`}
+            aria-expanded={isExpanded}
+            aria-label={`${isExpanded ? "Recolher" : "Expandir"} depoimento de ${item.title}`}
+            onClick={() => setExpanded(isExpanded ? null : key)}
+          >
+            <div className="testimonial-person">
+              {item.image && <img src={item.image} alt={item.alt ?? ""} loading="lazy" />}
+              <div>
+                <h3>{item.title}</h3>
+                {item.meta && <span>{item.meta}</span>}
+              </div>
+            </div>
+            <p className="testimonial-quote">{item.text}</p>
+            <span className="testimonial-action">
+              {isExpanded ? "Recolher −" : "Ler depoimento completo +"}
+            </span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 function TestimonialsDesktop({ section }: { section: PortfolioSection }) {
   const items = [
     ...(section.desktopPanelA ?? section.panelA),
     ...(section.desktopPanelB ?? section.panelB),
   ]
-  const [expanded, setExpanded] = useState<string | null>(null)
-
   return (
     <div className="desktop-editorial testimonials-editorial">
       <header className="section-heading">
         <h2>{section.title}</h2>
         {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
       </header>
-      <div className="testimonials-grid">
-        {items.map((item, index) => {
-          const key = item.title + "-" + index
-          const isExpanded = expanded === key
-          return (
-            <button
-              type="button"
-              key={key}
-              className={`testimonial-card${isExpanded ? " is-expanded" : ""}`}
-              aria-expanded={isExpanded}
-              aria-label={`${isExpanded ? "Recolher" : "Expandir"} depoimento de ${item.title}`}
-              onClick={() => setExpanded(isExpanded ? null : key)}
-            >
-              <div className="testimonial-person">
-                {item.image && <img src={item.image} alt={item.alt ?? ""} loading="lazy" />}
-                <div>
-                  <h3>{item.title}</h3>
-                  {item.meta && <span>{item.meta}</span>}
-                </div>
-              </div>
-              <p className="testimonial-quote">{item.text}</p>
-              <span className="testimonial-action">
-                {isExpanded ? "Recolher −" : "Ler depoimento completo +"}
-              </span>
-            </button>
-          )
-        })}
-      </div>
+      <TestimonialCards items={items} />
     </div>
   )
 }

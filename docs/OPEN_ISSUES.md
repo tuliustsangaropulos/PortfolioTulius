@@ -68,3 +68,9 @@ A primeira dobra renderizada separadamente reduziu o LCP num run, mas elevou o T
 [Audit #40757162085](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) passou no SHA `50a66f8`, com **3 mobile + 3 desktop**. Mediana mobile **82/100 e LCP 4,32 s**, desktop **98/100 e 1,16 s**; A11y, SEO e boas práticas 100; **13/25/38 PASS**. Primeira amostra mobile Performance 53 e TBT 1.479 ms, outras duas 82 e 0–1 ms: manter monitoramento de variância, não declarar performance estável em dispositivo real. O **LCP mobile ≤2,5 s permanece pendente**; [P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
 
 **P2 transacional:** [workflow isolado preparado](P2_TRANSACIONAL_STAGING_2026-10-28.md), sem execução de fixture até criar staging e aprovar custo/credenciais de teste. Não usar produção.
+
+## Acompanhar após esta rodada manual (28/10/2026)
+
+Alterações implementadas conforme pedido: listas públicas de experiência com flag `isHidden` (sem apagar 13 itens), cinco depoimentos na coleção (dois **fictícios explicitamente sinalizados**), grade de cards expansíveis, rodapé/foto/setas de Contato e menu lateral de oito entradas. Não reabrir como pendências de implementação se CI e auditoria estiverem aprovados, mas **validar manualmente** a aparência nas resoluções reais, truncamento e expansão dos depoimentos, links da barra das seis experiências, legibilidade do rodapé e ausência de sobreposição no LinkedIn. Confirmar que o CMS exibe o rótulo **Ocultado** para os 13 itens, e que os novos depoimentos estão editáveis em **Coleções → Depoimentos**. Não confundir os dois exemplos fictícios com recomendações profissionais reais; decidir posteriormente se serão substituídos por depoimentos autênticos.
+
+Permanece o bloqueio deliberado do P2 transacional e a meta LCP mobile ≤2,5 s; o acréscimo de conteúdo via SQL solicitado pelo proprietário não equivale a homologar fluxos de CRUD com JWT pela interface.
