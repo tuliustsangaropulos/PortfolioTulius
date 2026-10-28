@@ -27,10 +27,14 @@ export function MediaFramingDialog({
   const closeRef = useRef(onClose)
   closeRef.current = onClose
   useEffect(() => {
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const previousFocus =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null
     const dialog = dialogRef.current
     const focusables = () =>
-      Array.from(dialog?.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled])') ?? [])
+      Array.from(
+        dialog?.querySelectorAll<HTMLElement>("button:not([disabled]), input:not([disabled])") ??
+          [],
+      )
     focusables()[0]?.focus()
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {

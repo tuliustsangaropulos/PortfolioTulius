@@ -200,7 +200,9 @@ function Dashboard({
   loadStatus: "loading" | "ready" | "error"
 }) {
   const published = sections.filter((section) => section.status === "published").length
-  const visible = sections.filter((section) => section.status === "published" && section.is_visible).length
+  const visible = sections.filter(
+    (section) => section.status === "published" && section.is_visible,
+  ).length
   const sourceStatus = { loading: "Carregando", ready: "Online", error: "Erro" }[loadStatus]
   const [issueCount, setIssueCount] = useState<number | null>(null)
   useEffect(() => {
@@ -252,7 +254,10 @@ function Dashboard({
             <span className="check done">✓</span>
             <div>
               <strong>Estrutura editorial</strong>
-              <p>{visible} seções exibidas no site, de {sections.length} cadastradas. Os painéis mobile seguem a composição aprovada.</p>
+              <p>
+                {visible} seções exibidas no site, de {sections.length} cadastradas. Os painéis
+                mobile seguem a composição aprovada.
+              </p>
             </div>
           </li>
           <li>
