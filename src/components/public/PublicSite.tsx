@@ -691,7 +691,9 @@ function TestimonialsDesktop({ section }: { section: PortfolioSection }) {
                 </div>
               </div>
               <p className="testimonial-quote">{item.text}</p>
-              <span className="testimonial-action">{isExpanded ? "Recolher −" : "Ler depoimento completo +"}</span>
+              <span className="testimonial-action">
+                {isExpanded ? "Recolher −" : "Ler depoimento completo +"}
+              </span>
             </button>
           )
         })}
@@ -719,10 +721,14 @@ function ContactDesktop({ section }: { section: PortfolioSection }) {
         {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
       </header>
       <div className="contact-portrait">
-        {portrait?.image && <img src={portrait.image} alt={portrait.alt ?? ""} loading="lazy" decoding="async" />}
+        {portrait?.image && (
+          <img src={portrait.image} alt={portrait.alt ?? ""} loading="lazy" decoding="async" />
+        )}
       </div>
       <div className="contact-links">
-        {links.map((item, i) => <ItemCard key={item.title + i} item={item} index={i} layout="contact" />)}
+        {links.map((item, i) => (
+          <ItemCard key={item.title + i} item={item} index={i} layout="contact" />
+        ))}
       </div>
       <ContactFooter section={section} location={portrait?.text} />
     </div>

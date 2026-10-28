@@ -133,9 +133,11 @@ export function resolveCollectionBlocks(
     const start = Number.isInteger(block.content_json?.collection_start)
       ? Math.max(0, block.content_json.collection_start ?? 0)
       : 0
-    const limit = Number.isInteger(block.content_json?.collection_limit) && (block.content_json?.collection_limit ?? 0) > 0
-      ? block.content_json!.collection_limit!
-      : undefined
+    const limit =
+      Number.isInteger(block.content_json?.collection_limit) &&
+      (block.content_json?.collection_limit ?? 0) > 0
+        ? block.content_json!.collection_limit!
+        : undefined
     const selection = records.slice(start, limit == null ? undefined : start + limit)
     const originals = block.content_json?.items ?? []
     return {
@@ -144,9 +146,7 @@ export function resolveCollectionBlocks(
         ...block.content_json,
         items: selection.map((record) => {
           const original = originals.find((item) => item.title === record.title)
-          return original?.image
-            ? { ...record, image: original.image, alt: original.alt }
-            : record
+          return original?.image ? { ...record, image: original.image, alt: original.alt } : record
         }),
       },
     }

@@ -684,8 +684,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                   {draft.content_json.source_collection && (
                     <>
                       <small>
-                        Fonte vinculada: edite e publique registros na aba Coleções. Os cards manuais
-                        abaixo continuam armazenados e voltam a aparecer quando o vínculo for removido.
+                        Fonte vinculada: edite e publique registros na aba Coleções. Os cards
+                        manuais abaixo continuam armazenados e voltam a aparecer quando o vínculo
+                        for removido.
                       </small>
                       {draft.content_json.source_collection === "testimonials" && (
                         <div className="field-grid compact-grid">
@@ -694,20 +695,24 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                             value={draft.content_json.collection_start ?? 0}
                             min={0}
                             max={500}
-                            onChange={(collection_start) => setDraft({
-                              ...draft,
-                              content_json: { ...draft.content_json, collection_start },
-                            })}
+                            onChange={(collection_start) =>
+                              setDraft({
+                                ...draft,
+                                content_json: { ...draft.content_json, collection_start },
+                              })
+                            }
                           />
                           <NumericField
                             label="Quantidade neste painel (vazio = todos os restantes)"
                             value={draft.content_json.collection_limit}
                             min={1}
                             max={100}
-                            onChange={(collection_limit) => setDraft({
-                              ...draft,
-                              content_json: { ...draft.content_json, collection_limit },
-                            })}
+                            onChange={(collection_limit) =>
+                              setDraft({
+                                ...draft,
+                                content_json: { ...draft.content_json, collection_limit },
+                              })
+                            }
                           />
                         </div>
                       )}
@@ -853,7 +858,14 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                 </label>
               </div>
             </fieldset>
-            {["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(
+            {[
+                    "invest-rs",
+                    "prefeitura-sp",
+                    "vale",
+                    "globo-sportv",
+                    "inpress",
+                    "cdi",
+                  ].includes(
               sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
             ) &&
               draft.mobile_panel === "a" && (
@@ -1069,7 +1081,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                   <div className="block-item-head">
                     <strong>
                       Item {String(index + 1).padStart(2, "0")}
-                      {item.isHidden === true && <span className="admin-hidden-label"> · Ocultado</span>}
+                      {item.isHidden === true && (
+                        <span className="admin-hidden-label"> · Ocultado</span>
+                      )}
                     </strong>
                     <div className="order-buttons">
                       <button onClick={() => moveItem(index, -1)} aria-label="Mover item para cima">
@@ -1092,7 +1106,8 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                         checked={item.isHidden !== true}
                         onChange={(event) => updateItem(index, { isHidden: !event.target.checked })}
                       />
-                      Exibir este item em Projetos e realizações (desmarcado = ocultado, sem excluir)
+                      Exibir este item em Projetos e realizações (desmarcado = ocultado, sem
+                      excluir)
                     </label>
                   )}
                   <div className="field-grid">
