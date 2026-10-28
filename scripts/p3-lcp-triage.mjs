@@ -50,6 +50,12 @@ for (const device of ["mobile", "desktop"]) {
       lcpElement: nodeSummary(details.items),
     }]
   }))
+  const breakdownParts = audits["lcp-breakdown-insight"]?.details?.items
+    ?.find((item) => item.type === "table")?.items ?? []
+  const longTasks = audits["long-tasks"]?.details?.items ?? []
+  const mainThread = audits["mainthread-work-breakdown"]?.details?.items ?? []
+  const blockers = audits["render-blocking-insight"]?.details?.items ?? []
+  const bootup = audits["bootup-time"]?.details?.items ?? []
   console.log("P3_LCP_DIAGNOSTICS " + JSON.stringify({
     device,
     fetchTime: report.fetchTime,
@@ -63,5 +69,21 @@ for (const device of ["mobile", "desktop"]) {
       nodeSummary(audits["lcp-breakdown-insight"]?.details?.items) ??
       nodeSummary(audits["lcp-discovery-insight"]?.details?.items),
     diagnostics,
+    breakdown: breakdownParts.map((item) => ({
+      phase: item.subpart, durationMs: item.duration,
+    })),
+    topLongTasks: longTasks.slice(0,5).map((item) => ({
+      resource: item.url?.split("/").at(-1), durationMs: item.duration,
+    })),
+    mainThread: mainThread.slice(0,4).map((item) => ({
+      group: item.group, durationMs: item.duration,
+    })),
+    renderBlocking: blockers.slice(0,4).map((item) => ({
+      resource: item.url?.split("/").at(-1)?.slice(0,90), wastedMs: item.wastedMs,
+    })),
+    bootup: bootup.slice(0,4).map((item) => ({
+      resource: item.url?.split("/").at(-1), totalMs: item.total,
+      scriptingMs: item.scripting,
+    })),
   }))
 }

@@ -36,6 +36,31 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "24.16.0"
+      - name: Confirm Vercel production deployment status for audit SHA
+        shell: bash
+        env:
+          GH_STATUS_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/status"
+          for attempt in $(seq 1 30); do
+            status=$(curl --fail --silent --show-error --max-time 15 \
+              -H "Authorization: Bearer ${GH_STATUS_TOKEN}" \
+              -H "Accept: application/vnd.github+json" "$api" | \
+              node -e 'let s=""; process.stdin.on("data",c=>s+=c).on("end",()=>{const x=JSON.parse(s);const v=(x.statuses??[]).find(z=>z.context==="Vercel");process.stdout.write(v?.state??"missing")})')
+            echo "P3_DEPLOYMENT_CHECK attempt=${attempt} sha=${GITHUB_SHA} vercel=${status}"
+            if [ "$status" = "success" ]; then
+              echo "P3_DEPLOYMENT_GATE sha=${GITHUB_SHA} vercel=success"
+              exit 0
+            fi
+            if [ "$status" = "failure" ] || [ "$status" = "error" ]; then
+              echo "Vercel reported a terminal deployment failure" >&2
+              exit 1
+            fi
+            sleep 5
+          done
+          echo "Timed out awaiting Vercel success for audit SHA" >&2
+          exit 1
       - name: Production HTTP and SEO smoke
         run: node scripts/smoke-production.mjs
       - name: Lighthouse mobile and desktop
@@ -127,9 +152,6 @@ jobs:
           NODE
       - name: Mobile LCP bottleneck triage
         run: node scripts/p3-lcp-triage.mjs "$RUNNER_TEMP"
-      - name: Enforce conservative P6 Lighthouse regression budgets
-        shell: bash
-        run: node "$GITHUB_WORKSPACE/scripts/p6-lighthouse-guard.mjs" "$RUNNER_TEMP"
       - name: Preserve Lighthouse JSON reports
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -175,3 +197,7 @@ jobs:
           path: ${{ runner.temp }}/p3-screenshots/*.png
           if-no-files-found: warn
           retention-days: 7
+      - name: Enforce conservative P6 Lighthouse regression budgets
+        if: always()
+        shell: bash
+        run: node "$GITHUB_WORKSPACE/scripts/p6-lighthouse-guard.mjs" "$RUNNER_TEMP"
