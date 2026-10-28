@@ -88,7 +88,9 @@ A execução [#40745002663](https://github.com/tuliustsangaropulos/PortfolioTuli
 - **Auth frontend:** `isAdmin()` exige sessão `supabase.auth.getUser()` e correspondência em `admin_users`; o formulário usa `signInWithPassword`. O teste de integração com credenciais não ocorreu.
 - **Decisões preservadas:** não revogar o token Supabase histórico e não habilitar Leaked Password Protection, conforme decisão expressa registrada em [`docs/SECURITY_RLS.md`](SECURITY_RLS.md). São riscos aceitos e **não corrigidos**, não medidas tecnicamente aprovadas.
 
-## 4. Como concluir o P5 com JWT real, sem expor segredos
+## 4. Procedimento histórico para preparar P5 — já executado com sucesso em 28/10/2026
+
+> **Não repetir por rotina:** o P5 foi aprovado na execução [#40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770). Os passos seguintes permanecem apenas para reexecução autorizada, por exemplo após uma mudança relevante do login; não são pendências P2. O que falta é CMS/Storage transacional, conforme [pendências vigentes](OPEN_ISSUES.md).
 
 1. Na conta proprietária do GitHub, acessar **Settings → Secrets and variables → Actions** do repositório e configurar os dois nomes exatos `P5_ADMIN_EMAIL` e `P5_ADMIN_PASSWORD` com uma conta administrativa já autorizada no Supabase. **Nunca** colar os valores em issues, commits, logs, chat ou documentação. Não criar novo administrador para teste sem autorização.
 2. Abrir [Actions → P5 Admin Read-Only E2E](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/workflows/p5-admin-readonly.yml), selecionar **Run workflow**, branch `main`. Se os secrets estiverem ausentes, o script sinaliza explicitamente `P5_ADMIN_NOT_RUN`; não interpretar essa falha como teste de autenticação.

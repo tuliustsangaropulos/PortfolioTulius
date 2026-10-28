@@ -1,4 +1,6 @@
-# PortfolioTulius — verificação consolidada das etapas 1, 2 e 3
+# PortfolioTulius — verificação consolidada das etapas 1, 2 e 3 (histórico acumulado)
+
+> **AVISO (28/10/2026):** este documento preserva snapshots com SHAs, CI, mídias e status P5 anteriores. **Não é mais o índice operacional vigente.** Consulte [`ESTADO_ATUAL_VIGENTE.md`](ESTADO_ATUAL_VIGENTE.md) e [`OPEN_ISSUES.md`](OPEN_ISSUES.md) para o estado e pendências atuais. As afirmações históricas abaixo não devem ser interpretadas como tarefas ainda abertas.
 
 **Referência original:** 26/10/2026, branch `main`. **Atualização operacional:** 28/10/2026 (P0). O quadro novo abaixo prevalece para estado atual; o relato original das etapas 1–3 continua preservado como snapshot histórico.
 

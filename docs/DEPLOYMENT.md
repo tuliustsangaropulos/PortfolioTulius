@@ -1,5 +1,17 @@
 # Deploy
 
+## Estado operacional conferido em 28/10/2026
+
+**Índice atual:** [`ESTADO_ATUAL_VIGENTE.md`](ESTADO_ATUAL_VIGENTE.md). Antes da presente consolidação, GitHub `main` estava em [`56cce2658731d6db29a2cf60cb326f0fd908ef01`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/56cce2658731d6db29a2cf60cb326f0fd908ef01), CI [`40747847554`](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747847554) **success**, Vercel [`dpl_GAgdukRpirZ8j3foDFB4E5FKEtNk`](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/GAgdukRpirZ8j3foDFB4E5FKEtNk) **READY** no mesmo SHA, aliases `tulius.work` e `www.tulius.work`. Este SHA é o **pré-commit de consolidação**, não o valor que futuros chats devem assumir sem conferir.
+
+- **Publicação real:** pushes na branch `main` disparam automaticamente builds Vercel; alterações documentais também podem gerar deployment. `CI success` isolado não comprova deploy.
+- **Rastreabilidade:** antes de executar Lighthouse/screenshot, confirmar `READY` e status Vercel `success` vinculados ao **SHA auditado**. Exemplo válido: [P3 #40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980), SHA `e3bfccf`, deployment [`dpl_C1YFn6m9iE2Jc5cVjjL1VoKHTydk`](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/C1YFn6m9iE2Jc5cVjjL1VoKHTydk) `READY` antes da medição.
+- **Segurança:** nunca registrar chaves, Secrets, senhas ou tokens; não recriar admin, migrations, buckets ou baseline por conta de um deploy.
+- **Homologação:** P5 read-only autenticado **PASS**; P2 transacional **pendente** de fixture isolada; P3 automatizado **PASS**, mas LCP mobile **4,38 s** acima da meta.
+- **SEO estático:** canonical, robots e sitemap devem ser verificados na saída do build. Alterações no SEO do CMS podem exigir novo build para se refletirem no HTML estático.
+
+As seções a seguir são **registros históricos datados de 25–26/10**; os incidentes de quota, estados divergentes de CI e deploys antigos **não** representam bloqueios correntes.
+
 ## Vercel
 
 1. Importe o repositório.
@@ -8,7 +20,7 @@
 4. O arquivo `vercel.json` já configura rewrite SPA e cache de assets.
 5. Valide `/`, `/admin/login`, `/admin/preview`, 404, assets e deep links.
 
-## Situação atual (25/10/2026)
+## Registro histórico — situação de 25/10/2026
 
 O projeto já está publicado em **https://tulius.work/** na Vercel, sob `portfolio-tulius` na equipe `tuliustsangaropulos-creates-projects`, com integração GitHub `main` → production. O deployment automático foi verificado no P3.
 

@@ -1,36 +1,32 @@
-# PortfolioTulius — reconciliação de Fontes do ChatGPT e documentos GitHub
+# PortfolioTulius — reconciliação atual das Fontes ChatGPT
 
-**Conferência:** 28/10/2026 · **Natureza:** inventário documental, sem modificações das Fontes anexadas no ChatGPT ou dos arquivos históricos originais.  
-**Estado técnico de referência:** [índice vigente](AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md); GitHub `main` em `dcb8831221a54fb713031011c8da8b20fe157b38` na conferência anterior a esta publicação documental.
+**Conferência:** 28/10/2026. **Estado vigente:** [`ESTADO_ATUAL_VIGENTE.md`](ESTADO_ATUAL_VIGENTE.md). O [registro inicial de reconciliação](historico/RECONCILIACAO_FONTES_CHATGPT_INICIAL_2026-10-28.md) é histórico. Esta página é um inventário de fontes **anexadas ao projeto ChatGPT**, não um substituto para o banco, repositório ou arquivos originais.
 
-## Critério de precedência e preservação
+## Fontes permanentes observadas antes desta atualização — 8
 
-1. Para estado atual, consultar **GitHub, CI, deployment e Supabase na data da verificação**; um arquivo histórico não é um inventário vivo.
-2. Preservar os **cinco arquivos de base/história** das Fontes ChatGPT como retratos históricos: `CONTEXTO_PRODUTO_DESIGN_PORTFOLIOTULIUS.md`, `CONFIGURACAO_AMBIENTE_PORTFOLIOTULIUS.md`, `HISTORICO_CORRECOES_EVOLUCAO_PORTFOLIOTULIUS.md`, `CONTINUIDADE_P3_APRENDIZADOS_PLANO_PORTFOLIOTULIUS.md` e `INVENTARIO_GITHUB_ESTADO_ATUAL_PORTFOLIOTULIUS.md`. O inventário de **86 arquivos** e SHA `9fac3c0` eram corretos no seu momento; não representam o HEAD atual.
-3. Preservar também os **sete relatos de continuidade/auditoria** anexados ao projeto que possuem equivalentes em `docs/`: `ESTADO_ATUAL_AUDITORIA_2026-10-25.md`, `CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md`, `CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md`, `CONTINUIDADE_FORMACAO_EXPERIENCIAS_2026-10-26.md`, `CONTINUIDADE_FERRAMENTAS_CARDS_CONTATO_2026-10-26.md`, `CONTINUIDADE_CONTEUDO_SECOES_02_03_2026-10-26.md` e `CONTINUIDADE_INTERATIVIDADE_SECAO_03_2026-10-26.md`.
-4. A auditoria anexada em conversa `AUDITORIA_GERAL_PORTFOLIOTULIUS_2026-10-26.md` acrescenta snapshot cross-service de 26/10; continua como evidência temporal. A verificação de 28/10 atualiza suas contagens, não a transforma em documento editável do GitHub.
+1. `GUIA_FONTES_VIGENTES_PORTFOLIOTULIUS_2026-10-28.md` — **manter até substituir por guia atualizado** com este índice, depois retirar a versão antiga.
+2. `CONTEXTO_PRODUTO_DESIGN_PORTFOLIOTULIUS.md` — **manter** como contexto de produto/design histórico, com precedência do código e documentos atuais.
+3. `INVENTARIO_GITHUB_ESTADO_ATUAL_PORTFOLIOTULIUS.md` — **retirar das Fontes ativas após backup**; inventário antigo do GitHub não representa o estado corrente.
+4. `CONTINUIDADE_P3_APRENDIZADOS_PLANO_PORTFOLIOTULIUS.md` — **retirar após backup**, plano antigo.
+5. `HISTORICO_CORRECOES_EVOLUCAO_PORTFOLIOTULIUS.md` — **arquivar após backup**, história importante, não situação operacional.
+6. `ESTADO_ATUAL_AUDITORIA_2026-10-25.md` — **retirar após backup**, snapshot superado; versão idêntica no GitHub.
+7. `CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md` — **retirar após backup**, idêntica ao equivalente no GitHub.
+8. `CONTINUIDADE_AJUSTES_SECAO_01_PORTFOLIOTULIUS_2026-10-25.md` — **preservar integralmente antes de retirar**; Fonte de **80 linhas**, enquanto [GitHub](CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md) tem **53**.
 
-## Divergência específica da seção 01
+## Backups e preservação
 
-A auditoria de 26/10 identificou **80 linhas na fonte do projeto ChatGPT** `CONTINUIDADE_AJUSTES_SECAO_01_PORTFOLIOTULIUS_2026-10-25.md` versus **53 linhas no arquivo versionado** [`docs/CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md`](CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md). Não são cópias byte a byte, mas ambas se referem à fase histórica de 25/10 e documentam cards 01–05, selo, seta, âncora, MENU e teste JWT pendente.
+Neste atendimento foram preparados **dois ZIPs locais para download** (8 Fontes ativas, 6 documentos históricos disponíveis na sessão), ambos com `MANIFESTO_SHA256.json`; também uma cópia `.md` da variante de 80 linhas. O SHA-256 da Fonte original seção 01 é `67db85f1cc497e6f51625f19472f76a753707cb0c7b34407af73d7f23b4ff288`. Esses anexos são **de uso privado do proprietário**, e **não foram publicados no repositório público**. Arquivar os ZIPs em local seguro antes de remover Fontes. O repositório GitHub preserva sua variante de 53 linhas e os snapshots das outras seis continuidades sem modificações.
 
-**Revisão sem perda:** a fonte mais extensa detalha separadamente implementação, caminhos de código, checklist de homologação, bloqueios de prova e encaminhamento. A versão Git organiza esses pontos mais concisamente. **Não substituir nenhuma delas automaticamente**: mantê-las como duas redações históricas. O código e as validações de commits posteriores têm precedência para comportamento atual; uma eventual fusão textual requer comparar minuciosamente as duas variantes, não apagar informação.
+## Seleção ativa recomendada depois da reorganização
 
-## Estado da reconciliação
+- **Obrigatórias:** guia atualizado das Fontes e `CONTEXTO_PRODUTO_DESIGN_PORTFOLIOTULIUS.md`.
+- **Altamente úteis sem conector:** cópia atual de [índice operacional](ESTADO_ATUAL_VIGENTE.md), [DESIGN_SYSTEM](DESIGN_SYSTEM.md), [RESPONSIVE_LAYOUT](RESPONSIVE_LAYOUT.md), [CONTENT_MODEL](CONTENT_MODEL.md) e [ADMIN_CMS](ADMIN_CMS.md).
+- **Por necessidade:** [P1](P1_INVESTIGACAO_HIGIENE_2026-10-28.md), [P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md), [P3](P3_QUALIDADE_ACEITE_2026-10-28.md). Consultar preferencialmente pelo conector GitHub para evitar anexos congelados.
 
-A auditoria de 26/10 verificou que **seis dos sete pares** com equivalentes em `docs/` coincidiam byte a byte naquela data; a seção 01 era a exceção. Este registro não afirma nova comparação integral dos bytes dos 12 anexos na data de 28/10.
+**Atenção:** o conector GitHub não remove nem substitui as Fontes do projeto ChatGPT. Até a troca manual, o guia antigo continua anexado. Não duplicar versões sem indicar qual é a vigente.
 
-As **Fontes do projeto ChatGPT não são modificadas por um commit no GitHub**. Para mantê-las operacionais, adicionar como novas fontes correntes, **sem retirar as antigas**, pelo menos:
+## Precedência
 
-- [Índice consolidado atualizado](AUDITORIA_ETAPAS_1_A_3_ESTADO_ATUAL_2026-10-26.md) — entrada de estado atual e limites por SHA.
-- [Incorporação de conteúdo e 19 SVGs](CONTINUIDADE_INCORPORACAO_CONTEUDO_2026-10-26.md) — posterior aos snapshots que mencionam Storage vazio.
-- [Este mapa de reconciliação](RECONCILIACAO_FONTES_CHATGPT_2026-10-28.md) — precedência, lacunas e variantes.
-- Manter o relatório de auditoria de 26/10 como fonte histórica, identificado pela data.
-
-O workflow [`Export PortfolioTulius Documentation`](../.github/workflows/export-docs-snapshot.yml) publica `README.md` e `docs/*.md` em artifact com **retenção de apenas 7 dias**; não exporta as cinco bases exclusivas do projeto ChatGPT. A exportação temporária não substitui repositório, histórico Git ou cópias permanentes do proprietário.
-
-## Limites
-
-- A reconciliação documental **não equivale** ao histórico integral de chats, PDFs, Canva, capturas visuais e anexos não inventariados.
-- Esta etapa não altera mídia, autorização, schema, secrets, branches, código ou conteúdo editorial.
-- A próxima auditoria deverá registrar o SHA e o deployment **após** o commit documental, pois um push na `main` pode disparar nova publicação.
+1. GitHub `main` + Vercel `READY` no SHA correto + Supabase atual (somente quando pertinente).
+2. [AGENTS](../AGENTS.md), [índice](ESTADO_ATUAL_VIGENTE.md), [pendências](OPEN_ISSUES.md) e documentação do módulo.
+3. Fontes históricas somente para recuperar decisões; não inferir contagens, status P5 ou proveniência real dos ativos a partir delas.

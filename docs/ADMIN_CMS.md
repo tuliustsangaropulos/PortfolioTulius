@@ -1,5 +1,7 @@
 # CMS administrativo
 
+> **Estado operacional em 28/10/2026:** confira [índice vigente](ESTADO_ATUAL_VIGENTE.md) e [pendências P2](OPEN_ISSUES.md). O [P5 de leitura autenticada #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770) **passou 4/4** (login, 8 módulos, prévia, logout, zero requisições de escrita CMS/Storage detectadas). **Não testou salvar, publicar, alterar, promover upload ou restaurar via UI.** Os fluxos descritos abaixo são funcionalidades do código, não provas de homologação transacional. A restauração de snapshots pela interface **não está implementada**. A seção antiga de 26/10 deve ser lida como histórico das alterações; não criar usuário administrativo adicional sem pedido explícito.
+
 ## Capacidades implementadas
 
 - Login Supabase Auth e verificação adicional em `admin_users`.
@@ -16,9 +18,9 @@
 
 Nenhuma configuração executa JS/CSS do banco. Slugs publicados são bloqueados no editor.
 
-## Primeiro administrador
+## Conta administrativa e provisionamento excepcional
 
-Crie a conta no Supabase Auth e insira o UID em `admin_users` usando o SQL Editor com privilégios de operador. Não existe autopromoção, signup administrativo público ou autorização baseada apenas em `authenticated`.
+Já existe **uma conta Auth associada a um registro em `admin_users`** no snapshot verificado de 28/10. Não criar ou substituir contas durante homologação documental. **Somente se for solicitada expressamente uma nova conta**, provisionar via Supabase Auth e inserir seu UID em `admin_users` pelo operador autorizado. Não existe autopromoção, signup administrativo público ou autorização baseada apenas em `authenticated`.
 
 Revisões e auditoria são gravadas por trigger. Restauração de snapshots pela interface permanece evolução futura.
 
