@@ -1,7 +1,26 @@
 # PortfolioTulius — P2: homologação administrativa e Storage
 
 **Execução:** 28/10/2026 · **Branch:** `main` · **Base antes desta documentação:** [`3bb35a912565046e61605c9e7ce90c214c8640ea`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/3bb35a912565046e61605c9e7ce90c214c8640ea) · **Supabase:** `zfnrhzplwpjpdljraypt`.  
-**Status:** **PARCIAL — gates SQL de leitura e autorização simulada aprovados; E2E com JWT real, CRUD pela interface e Storage binário ainda NÃO executados.** Este status não deve ser convertido em "P2 aprovado" sem evidências futuras.
+**Status atualizado:** **PARCIAL — gates SQL aprovados; login administrativo com JWT real e navegação pelos 8 módulos aprovados na tentativa 2 do P5. Prévia falhou por contagem prematura de DOM; logout ainda não testado. CRUD pela interface e Storage binário permanecem não executados.** Não converter em "P2 aprovado" sem executar integralmente o P5 e os demais gates.
+
+## Atualização de execução real — P5 Admin Read-Only E2E, 28/10/2026
+
+A execução [#40743655591](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40743655591), vinculada ao SHA `d28c5b2400c1332cb2e3faf706f613a43e0fb7de`, foi disparada manualmente e reexecutada (**attempt 2**) depois da criação dos Secrets do repositório. O resultado continua `failure`, mas a causa foi isolada nos logs:
+
+| Marco | Log da segunda tentativa | Julgamento |
+|---|---|---|
+| Primeiro disparo, sem Secrets | `P5_ADMIN_NOT_RUN`, exit code 2 | Configuração ausente; não é resultado negativo de login. |
+| Autenticação real | `P5_ADMIN_LOGIN {"result":"PASS","authenticated":true}` | **PASS**: login com credenciais em Secrets no fluxo de navegador. |
+| Oito módulos | `P5_ADMIN_MODULES {"result":"PASS","modules":8}` | **PASS**: navegação pelos módulos do CMS. |
+| Prévia com 14 seções | `Error: Prévia administrativa incompleta`, exit code 1 | **NÃO HOMOLOGADA**. O script aguardava apenas a faixa `.preview-banner`, exibida mesmo durante `loading`, e verificava imediatamente o DOM. Evidência insuficiente para concluir perda real de seções. |
+| Logout e reentrada bloqueada | Não houve linha `P5_ADMIN_LOGOUT` | **NÃO EXECUTADO** por falha anterior. |
+| Auditoria de mutações | Suíte interrompida antes da verificação final | **NÃO HOMOLOGADA**; o teste não reportou escrita, mas não completou o gate final. |
+
+**Correção aplicada à suíte nesta atualização:** aguardar a conclusão da leitura do conteúdo até `section.portfolio-section` = **14**, incluindo `#competencias` (seção cadastrada e oculta no site público); reconhecer `.data-error` como falha real; e emitir apenas diagnósticos estruturais (`sectionCount`, `loading`, `failed`, `hiddenSectionPresent`) em eventual falha. Não imprimir credenciais, UID, conteúdo editorial ou tokens. O teste continua read-only, com os mesmos quatro gates e mesma proteção de mutações. **Correção do script não equivale a execução aprovada.**
+
+**Próxima execução:** criar **novo** `Run workflow` na branch `main` depois que o commit desta correção estiver publicado e a Vercel corresponder ao novo SHA. **Não usar `Re-run jobs` da execução #40743655591**, que permanece associada ao script antigo no SHA `d28c5b2`. Após o run, conferir `P5_ADMIN_PREVIEW`, `P5_ADMIN_LOGOUT`, `P5_READONLY_RESULT passed=4/4` e `contentMutations=0`. Mesmo aprovado, isso não substitui testes de escrita, publicação e Storage binário em fixture.
+
+As demais seções abaixo registram a **primeira conferência P2 anterior ao disparo manual**, válida como histórico do estágio naquela hora.
 
 ## 1. Escopo efetivamente executado
 

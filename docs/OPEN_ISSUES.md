@@ -144,3 +144,9 @@ Consultar [`P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md`](P2_HOMOLOGACAO_ADMINIS
 **Não homologado:** JWT administrativo emitido pelo Auth, login/preview/logout no navegador real, upload/download binário do Storage, gravação/publicação/rollback de fixture pela UI. O workflow manual [`P5 Admin Read-Only E2E`](../.github/workflows/p5-admin-readonly.yml) requer `P5_ADMIN_EMAIL` e `P5_ADMIN_PASSWORD` configurados exclusivamente em GitHub Actions Secrets e execução `workflow_dispatch` por usuário autorizado. A consulta GitHub retornou **0 execuções `workflow_dispatch`** no repositório. Os conectores desta sessão não fornecem gestão de Secrets ou despacho inicial do workflow; não pedir senha no chat.
 
 **Próximo gate P2:** execução autenticada em Actions e registro de run/SHA; depois, ambiente de ensaio isolado e autorização para escrita/Storage de bytes em fixture reversível. **Não declarar P2 concluída** nem criar dados/mídias de teste em produção sem salvaguardas.
+ 
+## P5 — tentativa autenticada real e correção do teste (28/10/2026)
+
+Na execução manual [#40743655591, tentativa 2](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40743655591), o workflow **passou no login administrativo com JWT real e no acesso aos 8 módulos**; falhou depois na prévia por verificar as 14 seções imediatamente após aparecer a faixa de pré-visualização, antes de aguardar o carregamento do Supabase. O logout e o resumo final de ausência de mutações não foram executados. A suíte `scripts/p5-admin-readonly.mjs` foi ajustada para aguardar 14 seções e capturar apenas diagnósticos estruturais, sem tokens ou conteúdo.
+
+**Pendente:** disparar um **novo** `Run workflow` na `main` após a publicação do commit corrigido (não reexecutar o SHA histórico), verificar os quatro gates completos e, separadamente, testar CRUD/Storage binário somente com fixture reversível. Relatório [P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md).

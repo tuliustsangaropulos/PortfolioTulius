@@ -63,10 +63,39 @@ try {
 
   await page.goto(new URL("/admin/preview", base).href, { waitUntil: "networkidle2", timeout: 30000 })
   await page.waitForSelector(".preview-banner", { timeout: 15000 })
-  const sectionCount = await page.$$eval("section.portfolio-section", nodes => nodes.length)
-  if (sectionCount < 14) throw new Error("Prévia administrativa incompleta")
+  // The preview banner renders before Supabase finishes loading. Wait for the
+  // 14 registered sections (including the intentionally hidden "competencias").
+  // Do not treat an early DOM count of zero as an incomplete admin preview.
+  let previewTimedOut = false
+  try {
+    await page.waitForFunction(
+      () => {
+        const count = document.querySelectorAll("section.portfolio-section").length
+        const loading = !!document.querySelector(".public-site .data-status")
+        const failed = !!document.querySelector(".public-site .data-error")
+        return failed || (!loading && count === 14)
+      },
+      { timeout: 20000 },
+    )
+  } catch {
+    previewTimedOut = true
+  }
+  const previewState = await page.evaluate(() => ({
+    sectionCount: document.querySelectorAll("section.portfolio-section").length,
+    loading: !!document.querySelector(".public-site .data-status"),
+    failed: !!document.querySelector(".public-site .data-error"),
+    hiddenSectionPresent: !!document.querySelector("section#competencias"),
+  }))
+  if (previewTimedOut || previewState.failed || previewState.sectionCount !== 14 ||
+      !previewState.hiddenSectionPresent) {
+    throw new Error("Prévia administrativa incompleta: " + JSON.stringify(previewState))
+  }
   passed++
-  console.log("P5_ADMIN_PREVIEW " + JSON.stringify({ result: "PASS", sectionCount }))
+  console.log("P5_ADMIN_PREVIEW " + JSON.stringify({
+    result: "PASS",
+    sectionCount: previewState.sectionCount,
+    hiddenSectionPresent: previewState.hiddenSectionPresent,
+  }))
 
   await page.goto(new URL("/admin", base).href, { waitUntil: "domcontentloaded", timeout: 30000 })
   await page.waitForSelector(".logout-button", { timeout: 15000 })

@@ -43,6 +43,10 @@ A leitura dos objetos, código do CMS, versões SVG, Edge Function, logs e branc
 
 Ver [`P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md`](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md). Foram aprovadas 3 transações `READ ONLY` + `ROLLBACK` com `anon`, `authenticated` não administrador e admin, **todos simulados no SQL**, incluindo verificação da guarda `portfolio_admin_required`. A integridade dos 14 registros de seção, 21 mídias e 23 objetos Storage permaneceu intacta. **Não houve login com JWT real, navegação autenticada, transferência binária ou CRUD do CMS**. O workflow P5 exige Secrets do GitHub e `workflow_dispatch` manual; nenhuma execução foi registrada nesta conferência. Portanto, P2 permanece **parcial** até a prova E2E autenticada e o teste de fixture isolada.
 
+## Atualização P5 — autenticação JWT real parcialmente comprovada em 28/10/2026
+
+O [run manual #40743655591, segunda tentativa](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40743655591) produziu **`P5_ADMIN_LOGIN PASS`** e **`P5_ADMIN_MODULES PASS (8)`** com credenciais em GitHub Secrets, antes de falhar na etapa de prévia. A causa técnica provável foi uma leitura do DOM antes do término de `usePortfolio(preview)`; a suíte foi corrigida para aguardar as **14 seções** (incluindo `competencias`), detectar erro de carregamento e registrar diagnóstico sem dados sensíveis. **Não há aprovação ainda** para prévia, logout nem `contentMutations=0`; exige novo despacho na `main` no SHA corrigido. O CRUD e Storage binário continuam pendentes. Ver [relatório P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md).
+
 ## Matriz de implantação e comprovação
 
 | Entrega | Implementação | Evidência e limite |
