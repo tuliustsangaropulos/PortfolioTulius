@@ -51,6 +51,12 @@ O [run manual #40743655591, segunda tentativa](https://github.com/tuliustsangaro
 
 No [run manual #40745002663](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745002663), os marcadores **`P5_ADMIN_LOGIN PASS`, `P5_ADMIN_MODULES PASS` e `P5_ADMIN_PREVIEW PASS`** foram registrados. A prévia contém 14 seções, incluindo `competencias`; o site público permanece com 13. O Puppeteer falhou ao clicar em `Sair`, potencialmente fora da viewport padrão de 800×600. Foi preparada correção para testar clique físico numa viewport 1440×900; **logout/reacesso e ausência de mutações ainda não homologados**. P2 continua parcial. Detalhes em [relatório P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md).
 
+## Fechamento P5 de leitura autenticada — 28/10/2026
+
+**PASS** em [GitHub Actions #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770), commit `af95b5daac2032b10ff1b5962918618a417dd862`. Os quatro gates de navegador foram aprovados: **login Auth real**, **oito módulos**, **prévia 14 seções (incluindo `competencias`)**, **logout e reacesso bloqueado**. Resumo literal: `{"passed":4,"expected":4,"contentMutations":0}`. O observador de rede da suíte não encontrou requisições de escrita CMS/Storage; não se trata de uma verificação de transferência binária ou CRUD.
+
+**Status correto:** **P5 administrativo read-only homologado; P2 total permanece parcialmente homologada** até a execução controlada de fixture CMS/Storage e teste de restauração editorial. O quadro P0 acima reflete uma data anterior ao P5 e deve ser lido como snapshot histórico da conferência original. [Relatório P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md) registra os quatro gates e limites.
+
 ## Matriz de implantação e comprovação
 
 | Entrega | Implementação | Evidência e limite |

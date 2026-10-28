@@ -1,9 +1,27 @@
 # PortfolioTulius — P2: homologação administrativa e Storage
 
 **Execução:** 28/10/2026 · **Branch:** `main` · **Base antes desta documentação:** [`3bb35a912565046e61605c9e7ce90c214c8640ea`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/3bb35a912565046e61605c9e7ce90c214c8640ea) · **Supabase:** `zfnrhzplwpjpdljraypt`.  
-**Status atualizado:** **PARCIAL — gates SQL aprovados; login administrativo real, navegação pelos 8 módulos e prévia com 14 seções aprovados na execução #40745002663 (SHA `c4f0358`). A suíte falhou no clique físico do botão de logout em viewport padrão de 800×600; logout/reacesso não homologados. CRUD pela interface e Storage binário continuam não executados.** Não considerar P2 aprovada sem execução completa.
+**Estado vigente da P2 (28/10/2026): PARCIAL.** **P5 Admin Read-Only E2E concluído com sucesso** no [run #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770), commit `af95b5daac2032b10ff1b5962918618a417dd862`: login Auth real, 8 módulos, prévia com 14 seções (incluindo `competencias`), logout e bloqueio de reacesso. Log final `passed=4`, `expected=4`, `contentMutations=0` (nenhuma requisição de escrita de CMS/Storage **detectada pela suíte**). **P2 integral ainda não homologada:** faltam CRUD/publicação/restauração de conteúdo pela UI e upload/download/substituição binária real de Storage com fixture isolada.
 
-## Atualização de execução real — P5 Admin Read-Only E2E, 28/10/2026
+## Fechamento P5 autenticado de leitura — 28/10/2026
+
+**Resultado: PASS**, confirmado nos logs do GitHub Actions [P5 Admin Read-Only E2E #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770), em `main` no commit [`af95b5daac2032b10ff1b5962918618a417dd862`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/af95b5daac2032b10ff1b5962918618a417dd862). Workflow `workflow_dispatch`, tentativa 1, execução `completed/success`; job `admin-readonly` e passo `Run authenticated read-only browser checks` aprovados.
+
+| Gate | Saída registrada | Situação |
+|---|---|---|
+| P5-01 Login | `P5_ADMIN_LOGIN {"result":"PASS","authenticated":true}` | **PASS — sessão real Supabase Auth** |
+| P5-02 Navegação | `P5_ADMIN_MODULES {"result":"PASS","modules":8}` | **PASS — oito módulos** |
+| P5-03 Prévia | `P5_ADMIN_PREVIEW {"result":"PASS","sectionCount":14,"hiddenSectionPresent":true}` | **PASS — 14 seções no editor, incluindo `competencias` oculta do site público** |
+| P5-04 Logout | `P5_ADMIN_LOGOUT {"result":"PASS","reaccessBlocked":true}` | **PASS — sessão encerrada e acesso de prévia redirecionado ao login** |
+| Resumo de proteção | `P5_READONLY_RESULT {"passed":4,"expected":4,"contentMutations":0}` | **PASS — nenhuma requisição `POST/PUT/PATCH/DELETE` a `/rest/v1/` ou `/storage/v1/object/` detectada durante a suíte** |
+
+**O que isto homologa:** login administrativo com credenciais existentes nos Secrets do GitHub, abertura dos oito módulos, exibição da prévia de rascunhos, encerramento da sessão e bloqueio de prévia sem sessão, exatamente no escopo do script. Não valida edição ou publicação de conteúdo, não testa um JWT não administrador emitido pelo Auth, e não comprova operações binárias ou restauração editorial de revisão. A verificação `contentMutations=0` usa observação de requisições pelo navegador, não é uma auditoria de todas as alterações possíveis ao banco.
+
+**Evolução dos ensaios:** a tentativa inicial #40743655591 (sem Secrets) não executou login; a reexecução passou em login/módulos e falhou na prévia por sincronismo; #40745002663 passou também na prévia e falhou no clique de logout em viewport pequena. A suíte foi estabilizada em `af95b5d` com viewport 1440×900, espera por 14 seções e clique físico de logout. **As falhas anteriores são históricas e não devem prevalecer sobre o run final aprovado.**
+
+**Pendências P2 após P5:** (1) fixture editorial isolada para CRUD, publicação/retorno e restauração via UI; (2) fixture binária no Storage para upload, download, bloqueios e compensação/limpeza; (3) testes negativos HTTP/JWT com usuário comum real quando houver ambiente e conta de ensaio autorizados. Não inserir segredos em relatórios e não alterar dados publicados sem plano reversível.
+
+## Histórico: tentativa P5 anterior — 28/10/2026
 
 A execução [#40743655591](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40743655591), vinculada ao SHA `d28c5b2400c1332cb2e3faf706f613a43e0fb7de`, foi disparada manualmente e reexecutada (**attempt 2**) depois da criação dos Secrets do repositório. O resultado continua `failure`, mas a causa foi isolada nos logs:
 
@@ -22,7 +40,7 @@ A execução [#40743655591](https://github.com/tuliustsangaropulos/PortfolioTuli
 
 As demais seções abaixo registram a **primeira conferência P2 anterior ao disparo manual**, válida como histórico do estágio naquela hora.
 
-## Nova evidência — P5 nº 40745002663, 28/10/2026
+## Histórico: terceira execução P5 nº 40745002663, 28/10/2026
 
 A execução [#40745002663](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745002663) usou **`c4f0358c66ba1cc14d57f15643884e3d74350ea3`** (script corrigido da prévia), mas terminou `failure` no gate de logout.
 

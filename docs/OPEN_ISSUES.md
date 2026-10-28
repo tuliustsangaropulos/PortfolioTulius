@@ -154,3 +154,9 @@ Na execução manual [#40743655591, tentativa 2](https://github.com/tuliustsanga
 ## P5 — terceira execução e ajuste de viewport (28/10/2026)
 
 A [execução manual #40745002663](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745002663), no SHA `c4f0358`, **aprovou login JWT real, 8 módulos e prévia com 14 seções**. Falhou somente ao tentar clicar em `Sair` via Puppeteer (`Node is either not clickable or not an Element`); logout e bloqueio pós-logout não foram verificados. A suíte foi atualizada para viewport desktop 1440×900, verificação do botão na área clicável e clique físico. **Novo Run workflow** ainda necessário. Não confundir `FAIL` do driver com um teste negativo de Auth. Ver [relatório P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md); CRUD/Storage real seguem pendentes.
+
+## P5 — aceite autenticado read-only concluído (28/10/2026)
+
+**Concluído:** [P5 Admin Read-Only E2E #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770), SHA `af95b5daac2032b10ff1b5962918618a417dd862`, **SUCCESS**. Nos logs: `P5_ADMIN_LOGIN PASS`, `P5_ADMIN_MODULES PASS` (8), `P5_ADMIN_PREVIEW PASS` (14, incluindo `competencias`), `P5_ADMIN_LOGOUT PASS` (reacesso bloqueado) e `P5_READONLY_RESULT {"passed":4,"expected":4,"contentMutations":0}`. **Não é mais uma pendência configurar Secrets, iniciar workflow ou validar logout deste P5.** As tentativas falhas acima permanecem como histórico.
+
+**P2 ainda pendente:** testes reais de CRUD/publicação/restauração pela UI e upload/download/substituição de bytes no Storage com fixture isolada e limpeza autorizada; teste negativo JWT de usuário não admin real não foi executado. Ver [relatório P2 atualizado](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md). Não fechar as 8 pendências editoriais de produção com base neste aceite read-only.
