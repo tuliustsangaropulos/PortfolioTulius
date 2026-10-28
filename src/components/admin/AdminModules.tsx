@@ -471,6 +471,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
       }
     })
 
+    setMessage("Salvando bloco e painéis…")
     const { error } = await supabase.rpc("save_content_block_atomic", {
       p_block_id: draft.id,
       p_block_type: draft.block_type,
@@ -1820,6 +1821,7 @@ export function CollectionsStudio() {
 
   async function save() {
     if (!supabase || !draft) return
+    setMessage("Salvando registro…")
     const payload = { ...draft }
     delete payload.id
     delete payload.updated_at
@@ -2001,6 +2003,7 @@ export function NavigationStudio() {
   }
   async function save() {
     if (!supabase) return
+    setMessage("Salvando navegação…")
     const rows = items.map(
       ({ id, label, target_slug, group_name, sort_order, is_visible, status }) => ({
         id,
@@ -2123,6 +2126,7 @@ export function SeoStudio() {
     if (!supabase || !page || !settings) return
     if (!page.id || !settings.id)
       return setMessage("Página ou configurações de SEO ausentes. Nada foi alterado.")
+    setMessage("Salvando SEO…")
     const { error } = await supabase.rpc("save_home_seo_atomic", {
       p_page_id: page.id,
       p_settings_id: settings.id,
@@ -2273,6 +2277,7 @@ export function EditorialStudio() {
   }, [])
   async function resolve(id: string, resolution: string) {
     if (!supabase || !resolution.trim()) return setMessage("Informe a resolução editorial.")
+    setMessage("Registrando resolução…")
     const { error } = await supabase
       .from("editorial_issues")
       .update({ status: "resolved", resolution, reviewed_at: new Date() })
@@ -2405,6 +2410,7 @@ export function EnhancedMediaLibrary() {
   }
   async function save(asset: Record<string, any>) {
     if (!supabase) return
+    setMessage("Salvando mídia…")
     if (asset.storage_bucket === "portfolio-public" && asset.status !== "published")
       return setMessage(
         "Arquivos públicos não podem virar rascunho apenas alterando o status. Faça um novo upload privado.",
@@ -2455,6 +2461,8 @@ export function EnhancedMediaLibrary() {
     if (!supabase || !asset.alt_text.trim())
       return setMessage("Preencha o alt text antes de publicar.")
     if (asset.storage_bucket === "portfolio-public") return save(asset)
+    if (!confirm(`Publicar mídia “${mediaFileName(asset.storage_path)}” no site público?`)) return
+    setMessage("Publicando mídia…")
     const { data, error } = await supabase.storage
       .from("portfolio-private")
       .download(asset.storage_path)

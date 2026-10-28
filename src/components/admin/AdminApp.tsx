@@ -311,6 +311,10 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
 
   async function save() {
     if (!draft || !supabase) return
+    if (draft.status === "archived" && selected?.status !== "archived") {
+      setMessage("Para arquivar uma seção use o botão Arquivar.")
+      return
+    }
     if (draft.status === "published" && selected?.status !== "published") {
       setMessage("Para publicar uma seção use o botão Publicar seção.")
       return
