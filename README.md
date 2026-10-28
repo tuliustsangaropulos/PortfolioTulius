@@ -77,3 +77,7 @@ Dados alterados em produção somente sob pedido expresso do proprietário, sem 
 - **Posicionamento da mídia:** seletores exibem área e dimensão de referência; janela permite regular X, Y, zoom e restaurar. Configuração por uso é salva junto ao bloco JSONB e refletida nas imagens públicas após salvar; arquivo Storage original nunca é recortado nem alterado. Para imagem Open Graph, a proporção 1200×630 px é orientativa: a mídia usada pelo crawler continua sendo o arquivo original, que deve ser preparado antes do upload.
 
 **Limite do aceite:** inspeção de caminhos de dados, TypeScript, testes unitários, build, P3/P5 e leitura Supabase não substituem homologação de gravações com sessão administrativa real. P2 transacional segue suspenso sem gastos adicionais.
+
+### Auditoria dos módulos administrativos
+
+Ver [auditoria das dez abas](docs/AUDITORIA_ADMIN_MANUAL_2026-10-28.md), incluindo limites de homologação P2, registros SQL preservados e evidências de CI/P3.

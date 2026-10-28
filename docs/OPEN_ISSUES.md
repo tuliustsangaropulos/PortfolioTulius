@@ -84,3 +84,7 @@ Permanece o bloqueio deliberado do P2 transacional e a meta LCP mobile ≤2,5 s;
 A inspeção de todos os módulos e os ajustes de UI de Seções/Mídia não substituem testes transacionais com autenticação administrativa: permanece pendente validar em ambiente seguro, com autorização, o ciclo **editar → salvar → reler → publicar/arquivar → verificar no público** em Seções, Blocos, Coleções, Identidade, Mídia, Navegação, SEO e Revisões, além de upload/substituição e RLS efetiva. Revisão de enquadramento por área: verificar também recortes reais em desktop/mobile e zoom nativo. Não executar esses testes em produção por conveniência enquanto P2 estiver suspenso.
 
 O formato Open Graph depende dos pixels reais do arquivo compartilhado: CSS do portfólio não recorta imagens de terceiros. Os 19 créditos legados permanecem retidos, embora não apresentados/editados; eventual limpeza exigiria decisão separada, pois o pedido atual foi remover o **campo da interface** e não apagar dados históricos.
+
+### Evidências da auditoria administrativa integral — 28/10/2026
+
+[Relatório por aba](AUDITORIA_ADMIN_MANUAL_2026-10-28.md): auditoria de código de dez áreas, sem mutações P2. CI #40776321190 aprovado; auditoria pública P3 #40776111312 aprovada; 21/21 títulos de mídia sincronizados com nome de arquivo no Supabase e 19 créditos históricos preservados sem uso. O LCP mobile e o teste real de gravação do CMS permanecem pendentes.

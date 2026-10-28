@@ -137,3 +137,7 @@ Não foram alterados imagens existentes, conteúdo editorial, banco de dados, Au
 **Seletores de mídia em Blocos:** orientações indicam dimensões e proporções de referência antes da escolha; botão **Ajustar posição e zoom** abre janela com controles X/Y (0–100%), zoom (100–300%) e prévia do recorte. **Aplicar ao formulário** só altera o rascunho em memória; **Salvar bloco** persiste JSONB, sem editar o arquivo original. O cancelamento/fechamento da janela não grava o enquadramento. Campos contemplados: imagem do item, imagem desktop da seção Olá!, logomarca e slides de experiência. O seletor SEO orienta 1200×630 px, mas não aplica crop HTML/CSS a uma mídia de compartilhamento de terceiros: prepare os pixels do próprio arquivo se desejar recorte OG.
 
 **Homologação real ainda aberta:** não executar CRUD transacional com JWT administrativo em produção só para teste. Confirmação funcional de upload/download, autorização de gravação, RPCs, RLS e restauração depende de reabrir P2 com ambiente seguro e autorização expressa. A verificação estática e testes automatizados não são prova dessas mutações.
+
+### Evidências da auditoria administrativa integral — 28/10/2026
+
+[Relatório por aba](AUDITORIA_ADMIN_MANUAL_2026-10-28.md): auditoria de código de dez áreas, sem mutações P2. CI #40776321190 aprovado; auditoria pública P3 #40776111312 aprovada; 21/21 títulos de mídia sincronizados com nome de arquivo no Supabase e 19 créditos históricos preservados sem uso. O LCP mobile e o teste real de gravação do CMS permanecem pendentes.

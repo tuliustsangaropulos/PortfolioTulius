@@ -112,3 +112,7 @@ A nova frente manual solicitou tradução de status, confirmação e feedback de
 **Supabase leitura/gravação editorial autorizada:** 21/21 títulos `media_assets.title` ajustados para o nome do arquivo final com extensão; 19 valores de `credit` anteriores **não foram apagados** para preservar histórico, mas estão excluídos do editor e de novas gravações. Nenhum arquivo Storage, RLS, schema, conta administrativa ou custo foi alterado. Configuração X/Y/zoom usa propriedades opcionais JSONB somente em usos escolhidos; nenhuma mídia existente recebeu crop automático.
 
 **Aceite:** a compilação e os testes automatizados validam código, não o fluxo de escrita com JWT real. O P2 transacional continua deliberadamente suspenso; requer autorização expressa para homologação autenticada. O aceite manual estético permanece aberto.
+
+### Evidências da auditoria administrativa integral — 28/10/2026
+
+[Relatório por aba](AUDITORIA_ADMIN_MANUAL_2026-10-28.md): auditoria de código de dez áreas, sem mutações P2. CI #40776321190 aprovado; auditoria pública P3 #40776111312 aprovada; 21/21 títulos de mídia sincronizados com nome de arquivo no Supabase e 19 créditos históricos preservados sem uso. O LCP mobile e o teste real de gravação do CMS permanecem pendentes.
