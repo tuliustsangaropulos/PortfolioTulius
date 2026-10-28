@@ -30,7 +30,13 @@ function CompanyMark({ section, small = false }: { section: PortfolioSection; sm
   return (
     <span className={small ? "company-mark company-mark-small" : "company-mark"}>
       {logo && logoAlt ? (
-        <img src={logo} alt={logoAlt} style={imageFramingStyle(section.experienceMedia?.logoFraming)} loading="lazy" decoding="async" />
+        <img
+          src={logo}
+          alt={logoAlt}
+          style={imageFramingStyle(section.experienceMedia?.logoFraming)}
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <Monogram name={section.title} />
       )}
@@ -52,7 +58,13 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
         className={hasImage ? "experience-media-frame" : "experience-media-frame media-awaiting"}
       >
         {hasImage ? (
-          <img src={slide!.image} alt={slide!.alt} style={imageFramingStyle(slide!.framing)} loading="lazy" decoding="async" />
+          <img
+            src={slide!.image}
+            alt={slide!.alt}
+            style={imageFramingStyle(slide!.framing)}
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <div className="experience-image-pending">
             <span>REGISTRO VISUAL</span>

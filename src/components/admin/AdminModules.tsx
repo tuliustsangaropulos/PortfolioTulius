@@ -872,11 +872,18 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                       guidance="Logo quadrado 1:1; referência 400 × 400 px ou SVG."
                       ratio="1 / 1"
                       framing={draft.content_json.experienceMedia?.logoFraming}
-                      onFramingChange={(logoFraming) => setDraft({
-                        ...draft, content_json: { ...draft.content_json, experienceMedia: {
-                          ...draft.content_json.experienceMedia, logoFraming,
-                        } },
-                      })}
+                      onFramingChange={(logoFraming) =>
+                        setDraft({
+                          ...draft,
+                          content_json: {
+                            ...draft.content_json,
+                            experienceMedia: {
+                              ...draft.content_json.experienceMedia,
+                              logoFraming,
+                            },
+                          },
+                        })
+                      }
                       value={draft.content_json.experienceMedia?.logo ?? ""}
                       onChange={(logo, alt) =>
                         setDraft({
@@ -1028,8 +1035,13 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                           onFramingChange={(framing) => {
                             const slides = [...(draft.content_json.experienceMedia?.slides ?? [])]
                             slides[slideIndex] = { ...slide, framing }
-                            setDraft({ ...draft, content_json: { ...draft.content_json,
-                              experienceMedia: { ...draft.content_json.experienceMedia, slides } } })
+                            setDraft({
+                              ...draft,
+                              content_json: {
+                                ...draft.content_json,
+                                experienceMedia: { ...draft.content_json.experienceMedia, slides },
+                              },
+                            })
                           }}
                           value={slide.image ?? ""}
                           onChange={(image, alt) => {
@@ -1419,13 +1431,20 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     )}
                     <PublishedMediaPicker
                       label="Imagem do item"
-                      guidance={["perfil", "contato"].includes(
-                        sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
-                      ) ? "Retrato vertical 3:4; sugestão 900 × 1200 px."
-                        : "Miniatura editorial 1:1; sugestão 600 × 600 px."}
-                      ratio={["perfil", "contato"].includes(
-                        sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
-                      ) ? "3 / 4" : "1 / 1"}
+                      guidance={
+                        ["perfil", "contato"].includes(
+                          sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
+                        )
+                          ? "Retrato vertical 3:4; sugestão 900 × 1200 px."
+                          : "Miniatura editorial 1:1; sugestão 600 × 600 px."
+                      }
+                      ratio={
+                        ["perfil", "contato"].includes(
+                          sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
+                        )
+                          ? "3 / 4"
+                          : "1 / 1"
+                      }
                       framing={item.mediaFraming}
                       onFramingChange={(mediaFraming) => updateItem(index, { mediaFraming })}
                       value={item.image ?? ""}
@@ -1448,7 +1467,9 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                               guidance="Retrato vertical 3:4; sugestão 900 × 1200 px."
                               ratio="3 / 4"
                               framing={item.aboutDesktopFraming}
-                              onFramingChange={(aboutDesktopFraming) => updateItem(index, { aboutDesktopFraming })}
+                              onFramingChange={(aboutDesktopFraming) =>
+                                updateItem(index, { aboutDesktopFraming })
+                              }
                               value={item.aboutDesktopImage ?? ""}
                               onChange={(aboutDesktopImage, alt) =>
                                 updateItem(index, { aboutDesktopImage, aboutDesktopAlt: alt })
@@ -2357,7 +2378,9 @@ export function EnhancedMediaLibrary() {
       .order("created_at", { ascending: false })
     const nextAssets = data ?? []
     setAssets(nextAssets)
-    setSelectedMediaId((current) => nextAssets.some((item) => item.id === current) ? current : null)
+    setSelectedMediaId((current) =>
+      nextAssets.some((item) => item.id === current) ? current : null,
+    )
     setFailedImages({})
     if (error) {
       setPreviews({})
@@ -2445,7 +2468,11 @@ export function EnhancedMediaLibrary() {
     if (upload.error) return setMessage(upload.error.message)
     const update = await supabase
       .from("media_assets")
-      .update({ storage_bucket: "portfolio-public", status: "published", title: mediaFileName(asset.storage_path) })
+      .update({
+        storage_bucket: "portfolio-public",
+        status: "published",
+        title: mediaFileName(asset.storage_path),
+      })
       .eq("id", asset.id)
     if (update.error) {
       const cleanup = await supabase.storage.from("portfolio-public").remove([asset.storage_path])
@@ -2523,20 +2550,32 @@ export function EnhancedMediaLibrary() {
       <StatusMessage>{message}</StatusMessage>
       <div className="media-grid media-library-grid" aria-label="Arquivos da biblioteca">
         {assets.map((asset) => (
-          <button key={asset.id} type="button" className="media-library-card"
+          <button
+            key={asset.id}
+            type="button"
+            className="media-library-card"
             aria-pressed={selectedMediaId === asset.id}
-            onClick={() => setSelectedMediaId((current) => current === asset.id ? null : asset.id)}>
+            onClick={() =>
+              setSelectedMediaId((current) => (current === asset.id ? null : asset.id))
+            }
+          >
             <div className="media-placeholder media-preview">
               {previews[asset.id]?.url && !failedImages[asset.id] ? (
-                <img src={previews[asset.id].url}
+                <img
+                  src={previews[asset.id].url}
                   alt={asset.alt_text?.trim() || mediaFileName(asset.storage_path)}
-                  loading="lazy" decoding="async"
-                  onError={() => setFailedImages((current) => ({ ...current, [asset.id]: true }))} />
+                  loading="lazy"
+                  decoding="async"
+                  onError={() => setFailedImages((current) => ({ ...current, [asset.id]: true }))}
+                />
               ) : (
                 <div className="media-preview-fallback">
                   <Icon name="image" size={32} />
-                  <small>{failedImages[asset.id] ? "Imagem indisponível" :
-                    (previews[asset.id]?.error ?? "Carregando prévia…")}</small>
+                  <small>
+                    {failedImages[asset.id]
+                      ? "Imagem indisponível"
+                      : (previews[asset.id]?.error ?? "Carregando prévia…")}
+                  </small>
                 </div>
               )}
             </div>
@@ -2544,41 +2583,68 @@ export function EnhancedMediaLibrary() {
           </button>
         ))}
       </div>
-      {assets.map((asset, index) => selectedMediaId === asset.id ? (
-        <section className="admin-card media-library-detail" key={asset.id}
-          aria-label={`Editar mídia ${mediaFileName(asset.storage_path)}`}>
-          <div className="card-heading">
-            <div><p>Mídia selecionada</p><h2>{mediaFileName(asset.storage_path)}</h2></div>
-            <button type="button" className="secondary-button"
-              onClick={() => setSelectedMediaId(null)}>Fechar detalhes</button>
-          </div>
-          <label>Nome do arquivo (título)
-            <input value={mediaFileName(asset.storage_path)} readOnly />
-          </label>
-          <label>Texto alternativo
-            <textarea value={asset.alt_text ?? ""}
-              onChange={(event) => patch(index, { alt_text: event.target.value })} />
-          </label>
-          <label>Status
-            <select value={asset.status}
-              onChange={(event) => patch(index, { status: event.target.value })}>
-              <option value="draft">Rascunho</option>
-              <option value="in_review">Em revisão</option>
-              <option value="published">Publicado</option>
-              <option value="archived">Arquivado</option>
-            </select>
-          </label>
-          <div className="media-actions">
-            <label className="secondary-button replace-button">
-              Substituir arquivo
-              <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml"
-                onChange={(event) => replace(event, asset)} />
+      {assets.map((asset, index) =>
+        selectedMediaId === asset.id ? (
+          <section
+            className="admin-card media-library-detail"
+            key={asset.id}
+            aria-label={`Editar mídia ${mediaFileName(asset.storage_path)}`}
+          >
+            <div className="card-heading">
+              <div>
+                <p>Mídia selecionada</p>
+                <h2>{mediaFileName(asset.storage_path)}</h2>
+              </div>
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => setSelectedMediaId(null)}
+              >
+                Fechar detalhes
+              </button>
+            </div>
+            <label>
+              Nome do arquivo (título)
+              <input value={mediaFileName(asset.storage_path)} readOnly />
             </label>
-            <button type="button" className="secondary-button" onClick={() => save(asset)}>Salvar</button>
-            <button type="button" className="primary-button" onClick={() => promote(asset)}>Publicar</button>
-          </div>
-        </section>
-      ) : null)}
+            <label>
+              Texto alternativo
+              <textarea
+                value={asset.alt_text ?? ""}
+                onChange={(event) => patch(index, { alt_text: event.target.value })}
+              />
+            </label>
+            <label>
+              Status
+              <select
+                value={asset.status}
+                onChange={(event) => patch(index, { status: event.target.value })}
+              >
+                <option value="draft">Rascunho</option>
+                <option value="in_review">Em revisão</option>
+                <option value="published">Publicado</option>
+                <option value="archived">Arquivado</option>
+              </select>
+            </label>
+            <div className="media-actions">
+              <label className="secondary-button replace-button">
+                Substituir arquivo
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                  onChange={(event) => replace(event, asset)}
+                />
+              </label>
+              <button type="button" className="secondary-button" onClick={() => save(asset)}>
+                Salvar
+              </button>
+              <button type="button" className="primary-button" onClick={() => promote(asset)}>
+                Publicar
+              </button>
+            </div>
+          </section>
+        ) : null,
+      )}
     </>
   )
 }

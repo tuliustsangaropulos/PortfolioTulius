@@ -287,8 +287,12 @@ function MobilePanel({
         <>
           <div className="contact-mobile-photo">
             {profile?.image && (
-              <img src={profile.image} alt={profile.alt ?? ""}
-                style={imageFramingStyle(profile.mediaFraming)} loading="lazy" />
+              <img
+                src={profile.image}
+                alt={profile.alt ?? ""}
+                style={imageFramingStyle(profile.mediaFraming)}
+                loading="lazy"
+              />
             )}
           </div>
         </>
@@ -689,7 +693,14 @@ function TestimonialCards({ items }: { items: ContentItem[] }) {
             onClick={() => setExpanded(isExpanded ? null : key)}
           >
             <div className="testimonial-person">
-              {item.image && <img src={item.image} alt={item.alt ?? ""} style={imageFramingStyle(item.mediaFraming)} loading="lazy" />}
+              {item.image && (
+                <img
+                  src={item.image}
+                  alt={item.alt ?? ""}
+                  style={imageFramingStyle(item.mediaFraming)}
+                  loading="lazy"
+                />
+              )}
               <div>
                 <h3>{item.title}</h3>
                 {item.meta && <span>{item.meta}</span>}
@@ -742,7 +753,13 @@ function ContactDesktop({ section }: { section: PortfolioSection }) {
       </header>
       <div className="contact-portrait">
         {portrait?.image && (
-          <img src={portrait.image} alt={portrait.alt ?? ""} style={imageFramingStyle(portrait.mediaFraming)} loading="lazy" decoding="async" />
+          <img
+            src={portrait.image}
+            alt={portrait.alt ?? ""}
+            style={imageFramingStyle(portrait.mediaFraming)}
+            loading="lazy"
+            decoding="async"
+          />
         )}
       </div>
       <div className="contact-links">

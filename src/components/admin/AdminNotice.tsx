@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 const labels: Record<string, string> = {
-  draft: "Rascunho", in_review: "Em revisão", published: "Publicado",
-  archived: "Arquivado", open: "Aberto", resolved: "Resolvido",
+  draft: "Rascunho",
+  in_review: "Em revisão",
+  published: "Publicado",
+  archived: "Arquivado",
+  open: "Aberto",
+  resolved: "Resolvido",
 }
 export const statusPt = (status: string) => labels[status] ?? status
 export function AdminNotice({ message }: { message: string }) {
@@ -15,7 +19,9 @@ export function AdminNotice({ message }: { message: string }) {
   return visible && message ? (
     <div className="admin-toast" role="status" aria-live="polite">
       <span>{message}</span>
-      <button type="button" onClick={() => setVisible(false)} aria-label="Fechar aviso">×</button>
+      <button type="button" onClick={() => setVisible(false)} aria-label="Fechar aviso">
+        ×
+      </button>
     </div>
   ) : null
 }

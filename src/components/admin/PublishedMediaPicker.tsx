@@ -132,8 +132,15 @@ export function PublishedMediaPicker({
         )}
       </div>
       {framingOpen && value && onFramingChange && (
-        <MediaFramingDialog src={value} label={label} guidance={guidance} ratio={ratio}
-          value={framing} onChange={onFramingChange} onClose={() => setFramingOpen(false)} />
+        <MediaFramingDialog
+          src={value}
+          label={label}
+          guidance={guidance}
+          ratio={ratio}
+          value={framing}
+          onChange={onFramingChange}
+          onClose={() => setFramingOpen(false)}
+        />
       )}
       {open && (
         <div className="published-media-panel" role="region" aria-label={`Biblioteca: ${label}`}>

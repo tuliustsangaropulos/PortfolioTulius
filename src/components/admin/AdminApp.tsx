@@ -292,10 +292,17 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
   const [draft, setDraft] = useState<SectionRow | null>(selected ?? null)
   const [message, setMessage] = useState("")
   const fixedLayouts: Record<string, string> = {
-    perfil: "hero", sobre: "editorial", resultados: "metrics",
-    "invest-rs": "timeline", "prefeitura-sp": "timeline", vale: "timeline",
-    "globo-sportv": "timeline", inpress: "timeline", cdi: "timeline",
-    depoimentos: "quotes", contato: "contact",
+    perfil: "hero",
+    sobre: "editorial",
+    resultados: "metrics",
+    "invest-rs": "timeline",
+    "prefeitura-sp": "timeline",
+    vale: "timeline",
+    "globo-sportv": "timeline",
+    inpress: "timeline",
+    cdi: "timeline",
+    depoimentos: "quotes",
+    contato: "contact",
   }
   useEffect(() => setDraft(selected ?? null), [selectedId, selected])
   useEffect(() => {
@@ -494,7 +501,10 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
                   <option value="contact">Contato</option>
                 </select>
                 {fixedLayouts[draft.slug] && (
-                  <small>Composição exclusiva desta seção. O layout é fixo para preservar o design aprovado.</small>
+                  <small>
+                    Composição exclusiva desta seção. O layout é fixo para preservar o design
+                    aprovado.
+                  </small>
                 )}
               </label>
               <label>
@@ -512,7 +522,10 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
                   <option value="metric-count">Métricas</option>
                 </select>
                 {fixedLayouts[draft.slug] && (
-                  <small>Movimentos desta composição são definidos pelo design editorial; esta opção não altera seus componentes especiais.</small>
+                  <small>
+                    Movimentos desta composição são definidos pelo design editorial; esta opção não
+                    altera seus componentes especiais.
+                  </small>
                 )}
               </label>
               <label className="toggle-field">
