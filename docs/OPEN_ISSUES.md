@@ -45,3 +45,7 @@ Experimento com consultas SEO fora da barreira de renderização, preservando as
 ## P3 — estabilidade do LCP em laboratório
 
 A primeira dobra renderizada separadamente reduziu o LCP num run, mas elevou o TBT mobile: [run #40755835498](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40755835498) (LCP 3,97 s, TBT 1.086 ms, Performance 60). Essa alteração foi **revertida**, preservando a separação assíncrona de SEO. A auditoria foi ampliada para **três medições mobile** e mediana; a meta LCP ≤2,5 s continua aberta. Ver [P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+## P3 — primeira mediana Lighthouse de 3 amostras (28/10/2026)
+
+[Run #40756305871](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40756305871), mesmo SHA/Vercel: amostras mobile **54/83/83** em Performance; **4,89/4,31/4,23 s** LCP. **Mediana 83 e 4,31 s**, TBT mediano 47 ms, Accessibility/SEO 100; todos os 13/25/38 testes de browser passaram. Run saiu `failure` porque o gate anterior olhava somente a primeira amostra 54. Gate atualizado para mediana, sem relaxar limites; ainda exige nova execução. **Meta 2,5 s continua não atendida.**

@@ -97,3 +97,17 @@ No [run P3 #40755835498](https://github.com/tuliustsangaropulos/PortfolioTulius/
 
 **Melhoria do método:** a auditoria agora coleta três execuções Lighthouse mobile no mesmo SHA/deployment e informa mediana, amplitude, TBT e FCP. Não declarar redução até haver baseline repetido e uma alteração independente com comparação equivalente.
 
+## Três amostras mobile no mesmo deployment — #40756305871 (28/10/2026)
+
+A [auditoria #40756305871](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40756305871), SHA `d8a45559be05febe23c1b6167aacf5de0c5ba47c`, deployment Vercel `READY` confirmado pelo workflow, registrou os seguintes números mobile:
+
+| Amostra | Performance | LCP | FCP | TBT |
+|---|---:|---:|---:|---:|
+| 1 | 54 | 4,89 s | 3,51 s | 821 ms |
+| 2 | 83 | 4,31 s | 2,31 s | 7 ms |
+| 3 | 83 | 4,23 s | 2,31 s | 47 ms |
+| **Mediana** | **83** | **4,31 s** | **2,31 s** | **47 ms** |
+
+Todos os relatórios tiveram Accessibility/SEO/Best Practices 100/100; desktop Performance 97/LCP 1,23 s, e 13 seções, 25 painéis, 38 capturas e testes públicos passaram. **O run foi marcado FAILURE por avaliação do orçamento apenas na primeira amostra** (54 abaixo de 55), embora a mediana passasse. A alteração do gate P6 passa a usar **mediana das três amostras mobile** (mesmos limites 55 e LCP 6,5 s), verifica A11y/SEO/boas práticas em **cada amostra**, e CLS máximo, mantendo desktop como antes. Não esconder os resultados individuais: a alta dispersão confirma variância do laboratório.
+
+**Decisão técnica:** o LCP mediano **4,31 s** ainda excede o objetivo **2,5 s**. Não houve ganho causal demonstrável em relação ao baseline de 4,38 s; manter o trabalho de performance aberto, mesmo que o orçamento conservador do CI passe. O teste transacional P2 continua sem ambiente autorizado.
