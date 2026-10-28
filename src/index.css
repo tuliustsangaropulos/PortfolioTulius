@@ -474,7 +474,7 @@
   .layout-metrics .mobile-items .content-item:last-child:nth-child(odd) { grid-column: auto; }
 }
 
-@media (max-height: 760px) and (min-width: 768px) {
+@media (max-height: 760px) and (min-width: 768px) and (max-width: 1100px) {
   .desktop-editorial { align-items: start; padding-top: 5.5rem; }
   .section-heading h2 { font-size: clamp(3rem, 5vw, 5.5rem); }
   .content-item { padding: .65rem 0; }
@@ -489,7 +489,7 @@
   .profile-highlights .content-item p { font-size: var(--item-desktop-text-size, clamp(.63rem, .7vw, .75rem)); }
 }
 
-@media (max-height: 640px) and (min-width: 768px) {
+@media (max-height: 640px) and (min-width: 768px) and (max-width: 1100px) {
   .profile-desktop { height: auto; min-height: 100dvh; overflow: visible; }
   .profile-sidebar { min-height: 100dvh; overflow: visible; }
   .profile-next-section { position: static; transform: none; margin: 1rem auto 0; }
@@ -760,4 +760,73 @@
   .experience-media-frame {
     max-height: calc(57svh / var(--desktop-visual-scale));
   }
+}
+
+/* Preserve viewport-relative typography under the desktop visual scale. */
+/*
+ * Real browser zoom enlarges the CSS viewport: vw-based dimensions keep
+ * their physical proportions, while rem-based spacing becomes denser.
+ * Compensate vw rules here without changing admin or mobile declarations.
+ */
+@media (min-width: 1101px) {
+  .public-site {
+    --gutter: clamp(1.25rem, calc(4vw / var(--desktop-visual-scale)), 6rem);
+  }
+  .nav-drawer { padding: clamp(1.25rem, calc(3vw / var(--desktop-visual-scale)), 2.5rem); }
+  .desktop-editorial { gap: clamp(2rem, calc(5vw / var(--desktop-visual-scale)), 7rem); }
+  .about-desktop { gap: clamp(1rem, calc(2.7vw / var(--desktop-visual-scale)), 3.75rem); }
+  .about-heading { padding-left: clamp(1.5rem, calc(5vw / var(--desktop-visual-scale)), 5rem); }
+  .about-statements .content-item h3 { font-size: clamp(1.25rem, calc(1.6vw / var(--desktop-visual-scale)), 1.85rem); }
+  .about-statements .content-item p { font-size: clamp(.86rem, calc(1vw / var(--desktop-visual-scale)), 1rem); }
+  .section-heading h2 { font-size: clamp(3.2rem, calc(6vw / var(--desktop-visual-scale)), 7.8rem); }
+  .section-intro { font-size: clamp(1rem, calc(1.2vw / var(--desktop-visual-scale)), 1.15rem); }
+  .desktop-content .content-item h3 {
+    font-size: var(--item-desktop-title-size, clamp(1.25rem, calc(1.6vw / var(--desktop-visual-scale)), 1.75rem));
+  }
+  .desktop-content .content-item p {
+    font-size: var(--item-desktop-text-size, clamp(.83rem, calc(.9vw / var(--desktop-visual-scale)), 1rem));
+  }
+  .item-value { font-size: clamp(2rem, calc(3vw / var(--desktop-visual-scale)), 4rem); }
+  .results-editorial .desktop-content { gap: clamp(1rem, calc(1.6vw / var(--desktop-visual-scale)), 2rem); }
+  .results-metrics-grid { gap: clamp(.65rem, calc(1.6vw / var(--desktop-visual-scale)), 1.2rem); }
+  .results-theme-list button { font-size: clamp(1.16rem, calc(1.45vw / var(--desktop-visual-scale)), 1.65rem); }
+  .results-topic h3 { font-size: clamp(2rem, calc(3vw / var(--desktop-visual-scale)), 3.3rem); }
+  .results-topic .results-subtitle { font-size: clamp(.95rem, calc(1.15vw / var(--desktop-visual-scale)), 1.15rem); }
+  .results-topic .results-summary { font-size: clamp(.95rem, calc(1.08vw / var(--desktop-visual-scale)), 1.08rem); }
+  .years strong { font-size: clamp(3.2rem, calc(4vw / var(--desktop-visual-scale)), 5.2rem); }
+  .years span { font-size: clamp(.75rem, calc(1vw / var(--desktop-visual-scale)), 1rem); }
+  .profile-sidebar-content { padding-inline: clamp(1rem, calc(2.2vw / var(--desktop-visual-scale)), 2rem); }
+  .profile-intro {
+    font-size: var(--hero-desktop-intro-size, clamp(.85rem, calc(1.05vw / var(--desktop-visual-scale)), 1.1rem));
+  }
+  .profile-highlights .content-item h3 {
+    font-size: var(--item-desktop-title-size, clamp(.72rem, calc(.92vw / var(--desktop-visual-scale)), .92rem));
+  }
+  .profile-highlights .content-item p {
+    font-size: var(--item-desktop-text-size, clamp(.72rem, calc(.85vw / var(--desktop-visual-scale)), .94rem));
+  }
+  .profile-main { padding-left: clamp(2rem, calc(3vw / var(--desktop-visual-scale)), 4rem); }
+  .name-lockup { font-size: clamp(3.4rem, calc(5.6vw / var(--desktop-visual-scale)), 7rem); }
+  .profile-role { font-size: clamp(.75rem, calc(1vw / var(--desktop-visual-scale)), 1rem); }
+  .area-grid .content-item h3 { font-size: clamp(1rem, calc(1.25vw / var(--desktop-visual-scale)), 1.4rem); }
+  .profile-main > h2 { font-size: clamp(1.3rem, calc(2vw / var(--desktop-visual-scale)), 2rem); }
+  .career-grid .content-item h3 { font-size: clamp(1rem, calc(1.25vw / var(--desktop-visual-scale)), 1.35rem); }
+  .career-grid .content-item p { font-size: clamp(.72rem, calc(.75vw / var(--desktop-visual-scale)), .88rem); }
+
+  .experience-index a { font-size: clamp(.55rem, calc(.72vw / var(--desktop-visual-scale)), .78rem); }
+  .experience-desktop { gap: clamp(1.15rem, calc(3vw / var(--desktop-visual-scale)), 3.25rem); }
+  .experience-heading h2 { font-size: clamp(3.2rem, calc(5vw / var(--desktop-visual-scale)), 6.8rem); }
+  .experience-heading p { font-size: clamp(.79rem, calc(.95vw / var(--desktop-visual-scale)), 1rem); }
+  .experience-projects > h3 { font-size: clamp(1.3rem, calc(1.6vw / var(--desktop-visual-scale)), 1.9rem); }
+  .experience-project h4 { font-size: clamp(1.1rem, calc(1.3vw / var(--desktop-visual-scale)), 1.5rem); }
+  .experience-project p { font-size: clamp(.74rem, calc(.87vw / var(--desktop-visual-scale)), .95rem); }
+  .experience-image-pending { padding: clamp(1.25rem, calc(2.5vw / var(--desktop-visual-scale)), 2.5rem); }
+  .experience-image-pending strong { font-size: clamp(1.8rem, calc(3vw / var(--desktop-visual-scale)), 3rem); }
+
+  .tools-editorial { gap: clamp(2rem, calc(3.5vw / var(--desktop-visual-scale)), 4rem); }
+  .tools-editorial > .section-heading h2 { font-size: clamp(3.2rem, calc(5.5vw / var(--desktop-visual-scale)), 7.2rem); }
+  .tools-editorial .desktop-content { gap: clamp(1rem, calc(1.7vw / var(--desktop-visual-scale)), 2rem); }
+  .tools-editorial .content-item { gap: clamp(.65rem, calc(1vw / var(--desktop-visual-scale)), 1rem); }
+  .tools-editorial .content-item h3 { font-size: clamp(1.12rem, calc(1.45vw / var(--desktop-visual-scale)), 1.7rem); }
+  .tools-editorial .content-item p { font-size: clamp(.8rem, calc(.87vw / var(--desktop-visual-scale)), .95rem); }
 }
