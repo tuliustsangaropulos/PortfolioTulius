@@ -1,0 +1,45 @@
+name: P2 Transactional Staging (manual only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      staging_ref:
+        description: "Ref do projeto Supabase ISOLADO, não produção"
+        required: true
+        type: string
+      acknowledgement:
+        description: "Digite CONFIRMO-HOMOLOGACAO-ISOLADA"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  p2-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      P2_STAGE_REF: ${{ inputs.staging_ref }}
+      P2_STAGE_CONFIRM: ${{ inputs.acknowledgement }}
+      P2_STAGE_URL: ${{ secrets.P2_STAGE_URL }}
+      P2_STAGE_PUBLISHABLE_KEY: ${{ secrets.P2_STAGE_PUBLISHABLE_KEY }}
+      P2_STAGE_ADMIN_EMAIL: ${{ secrets.P2_STAGE_ADMIN_EMAIL }}
+      P2_STAGE_ADMIN_PASSWORD: ${{ secrets.P2_STAGE_ADMIN_PASSWORD }}
+      P2_STAGE_NONADMIN_EMAIL: ${{ secrets.P2_STAGE_NONADMIN_EMAIL }}
+      P2_STAGE_NONADMIN_PASSWORD: ${{ secrets.P2_STAGE_NONADMIN_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Node.js 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24.16.0"
+      - name: Install pnpm
+        run: npm install --global pnpm@10.34.8
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Execute isolated CMS and Storage tests
+        run: node scripts/p2-transactional-staging.mjs
