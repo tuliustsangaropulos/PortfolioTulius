@@ -1,5 +1,7 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+> **Decisão posterior do proprietário — 28/10/2026:** a verificação manual visual e funcional de todas as áreas ajustadas neste chat foi **validada pelo proprietário**. Não solicitar novo aceite visual dessas áreas por rotina. A aceitação manual não homologa CRUD/Storage com JWT administrativo, não atinge automaticamente a meta LCP mobile e não autoriza exclusões, custos ou mudanças de segurança. O estado técnico vigente é sempre o HEAD e seus testes, nunca os SHAs históricos citados abaixo.
+
 ## Etapa 5 — Aceite automatizado concluído; manual separado (28/10/2026)
 
 A [reexecução GitHub Actions #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) confirmou **13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas**. [Termo de aceite automatizado](P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). **Não é pendência repetir essa auditoria automaticamente** sem nova alteração relevante do site.
@@ -26,16 +28,20 @@ A [reexecução GitHub Actions #40757162085 (tentativa 2)](https://github.com/tu
 | **P3-PERF-01** | LCP mobile | [P3 válido #40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980): mobile Performance 82, LCP **4,38 s** | Baseline repetido no SHA correto, análise causal React/Supabase, otimização pontual + medição comparável; alvo **≤2,5 s**, sem regressão |
 | **P0-FONTES-01** | Seleção de Fontes ChatGPT | Guia atualizado nas Fontes, mas inventário ainda contém oito históricos/ativos e precisa de limpeza manual | Arquivar backups, preservar variante de 80 linhas, retirar redundâncias das Fontes e acrescentar guia/índice vigente; conferir lista final |
 
-## Prioridade média e aceite humano
+## Prioridade média — decisões ainda abertas
 
 | Código | Frente | Condição para concluir |
 |---|---|---|
-| **P3-VISUAL-01** | Fidelidade de UI | Comparar seções/painéis com referências finais Canva/Figma em dispositivos reais; verificar contraste, animação/foco, zoom 200% e leitor de tela; não presumir aprovação pelo Lighthouse 100 |
+
 | **P1-MIDIA-01** | Proveniência | Conferir licença e créditos dos 2 PNGs (usados InPress/Vale) e decidir entre as duas coleções divergentes de 19 SVGs; ambas são **ilustrativas** |
 | **P1-STORAGE-01** | Objetos privados | Dois PNGs privados têm par público equivalente por path/tamanho/`eTag`; definir política de retenção, backup e integridade antes de qualquer exclusão |
 | **P1-FUNC-01** | Edge Function inativa | Função de importação v2 está implantada mas responde 410; validar integrações externas e recuperação antes de eventual undeploy |
 | **P1-BRANCH-01** | Branches antigas | Branch navegação: 4 commits exclusivos revisados, principal comportamento já está na `main`; motion: 0 exclusivos. Manter até aprovação expressa para arquivar/excluir |
 | **P0-HIST-01** | Fonte seção 01 | A Fonte ChatGPT de **80 linhas** diverge da versão GitHub de **53**; backup histórico integral deve ser guardado antes de removê-la da lista ativa |
+
+## Aceite manual encerrado na conversa atual
+
+**P3-VISUAL-01 — encerrado por decisão expressa do proprietário:** a conferência visual e funcional solicitada neste chat foi declarada validada. Esta declaração não equivale a auditoria instrumental adicional de leitor de tela, testes transacionais ou desempenho mobile. Os parágrafos históricos abaixo conservam sua redação da época.
 
 ## Pendências editoriais no banco
 

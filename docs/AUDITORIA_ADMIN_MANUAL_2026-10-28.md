@@ -1,5 +1,7 @@
 # Auditoria do CMS na revisão manual — 28/10/2026
 
+> **Decisão posterior do proprietário — 28/10/2026:** a verificação manual visual e funcional de todas as áreas ajustadas neste chat foi **validada pelo proprietário**. Não solicitar novo aceite visual dessas áreas por rotina. A aceitação manual não homologa CRUD/Storage com JWT administrativo, não atinge automaticamente a meta LCP mobile e não autoriza exclusões, custos ou mudanças de segurança. O estado técnico vigente é sempre o HEAD e seus testes, nunca os SHAs históricos citados abaixo.
+
 ## Escopo e evidência
 
 Auditoria de leitura do código vigente e conexão Supabase, sem executar gravações de teste em produção. O proprietário pediu validar todas as abas e o funcionamento dos botões de Seções, além de simplificar a Biblioteca e introduzir ajuste de enquadramento. **O P2 transacional permanece suspenso**, portanto a inspeção do código/TypeScript, os testes unitários e as capturas públicas não constituem aceite de operações reais com JWT administrativo. O histórico P5 de leitura autenticada com oito módulos permanece evidência histórica limitada, não foi repetido nesta rodada.
@@ -28,3 +30,12 @@ A Biblioteca **não** converte/recorta JPEG/PNG/SVG no Storage. O editor X/Y/zoo
 ## Pendências mantidas
 
 Homologação segura com conta JWT administrativa para testar efetivamente retorno das RPCs, RLS de escrita, upload/replace, prevenção de dados perdidos e prévia pós-publicação; aceite visual manual de enquadramento nos diferentes dispositivos; desempenho LCP mobile ≤2,5 s. Não reativar P2, não criar staging pago, não apagar dados legados ou editar objetos Storage sem nova autorização.
+
+## Ajustes técnicos de baixo risco após o aceite manual — 28/10/2026
+
+- **Visão geral CMS:** substituída a frase fixa das 14 seções/2 distribuições por contagem dinâmica de seções visíveis e cadastradas, e contador das `editorial_issues` efetivamente abertas. Não houve alteração de registros.
+- **Depoimentos:** grade desktop passa a ter duas linhas uniformes e cartões quadrados, com expansão ocupando duas linhas. No mobile mantém-se uma coluna fluida. Textos e cinco registros publicados preservados.
+- **Janela X/Y/zoom:** o diálogo agora recebe foco inicial, retém Tab/Shift+Tab, permite Escape e devolve o foco ao controle anterior ao fechar; o arquivo original e configurações preexistentes continuam intocados.
+- **Carregamento público:** a consulta de depoimentos, única coleção atualmente vinculada no Supabase público, é iniciada em paralelo à consulta da estrutura de seções. Isso remove uma etapa sequencial de rede no carregamento inicial; não constitui por si só comprovação de LCP ≤2,5 s.
+- **Aceite humano:** declarado concluído pelo proprietário nesta conversa. P2, direitos de mídias, riscos de segurança anteriormente aceitos, exclusões de Storage/branches, 8 ocorrências editoriais e reconciliação de Fontes ChatGPT seguem como decisões separadas.
+

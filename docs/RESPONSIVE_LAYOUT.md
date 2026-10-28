@@ -49,3 +49,12 @@ Depoimentos desktop: grade com seis posições geométricas (3 × 2), cinco cart
 ## Ajuste de enquadramento por dispositivo — 28/10/2026
 
 As imagens de blocos, retratos de abertura, coluna de Contato, foto central de Olá!, logos e slides aceitam coordenadas opcionais por uso no JSONB. O renderer compõe com `object-position`, `transform: scale()` e `transform-origin` somente quando há uma configuração salva; conteúdo sem crop permanece no enquadramento anterior. O diálogo administrativo utiliza preview responsivo e proporção do destino. A configuração compartilha os dados do bloco entre desktop e mobile; ainda não oferece recortes independentes por breakpoint, exceto a imagem desktop própria de Olá!. Não duplicar nem apagar fotografias originais.
+
+## Ajustes técnicos de baixo risco após o aceite manual — 28/10/2026
+
+- **Visão geral CMS:** substituída a frase fixa das 14 seções/2 distribuições por contagem dinâmica de seções visíveis e cadastradas, e contador das `editorial_issues` efetivamente abertas. Não houve alteração de registros.
+- **Depoimentos:** grade desktop passa a ter duas linhas uniformes e cartões quadrados, com expansão ocupando duas linhas. No mobile mantém-se uma coluna fluida. Textos e cinco registros publicados preservados.
+- **Janela X/Y/zoom:** o diálogo agora recebe foco inicial, retém Tab/Shift+Tab, permite Escape e devolve o foco ao controle anterior ao fechar; o arquivo original e configurações preexistentes continuam intocados.
+- **Carregamento público:** a consulta de depoimentos, única coleção atualmente vinculada no Supabase público, é iniciada em paralelo à consulta da estrutura de seções. Isso remove uma etapa sequencial de rede no carregamento inicial; não constitui por si só comprovação de LCP ≤2,5 s.
+- **Aceite humano:** declarado concluído pelo proprietário nesta conversa. P2, direitos de mídias, riscos de segurança anteriormente aceitos, exclusões de Storage/branches, 8 ocorrências editoriais e reconciliação de Fontes ChatGPT seguem como decisões separadas.
+
