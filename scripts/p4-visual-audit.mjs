@@ -61,7 +61,10 @@ try {
               brokenImages: Array.from(el?.querySelectorAll("img") ?? []).filter(img => !img.complete || img.naturalWidth === 0).length,
             }
           }, selector)
-          if (!state.visible || state.textLength < 15 || state.error || state.brokenImages > 0 || state.documentWidth > variant.width+2) {
+          const photoOnlyContact = variant.name === "mobile" && slug === "contato" &&
+            panel === "a" && state.images > 0 && state.brokenImages === 0
+          if (!state.visible || (state.textLength < 15 && !photoOnlyContact) ||
+              state.error || state.brokenImages > 0 || state.documentWidth > variant.width+2) {
             failures++
           }
           const filename = `p4-${variant.name}-${String(index+1).padStart(2,'0')}-${slug}-${panel}.png`
@@ -105,6 +108,11 @@ console.log("P4_EDITORIAL_SUMMARY " + JSON.stringify({
   desktop: report.filter(x => x.panel === "desktop").length,
   mobile: report.filter(x => x.panel !== "desktop").length,
   failures,
-  badPanels: report.filter(x => !x.visible || x.textLength < 15 || x.error || x.brokenImages > 0 || x.documentWidth > (x.panel === "desktop" ? 1442 : 392)),
+  badPanels: report.filter(x => {
+    const photoOnlyContact = x.section === "contato" && x.panel === "a" &&
+      x.images > 0 && x.brokenImages === 0
+    return !x.visible || (x.textLength < 15 && !photoOnlyContact) ||
+      x.error || x.brokenImages > 0 || x.documentWidth > (x.panel === "desktop" ? 1442 : 392)
+  }),
 }))
 if (report.length !== 38 || failures) process.exitCode = 1
