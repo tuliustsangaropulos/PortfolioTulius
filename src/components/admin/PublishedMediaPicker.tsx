@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage } from "../../lib/validation"
+import { MediaFramingDialog } from "./MediaFramingDialog"
+import type { MediaFraming } from "../../lib/media-framing"
 import {
   getPublishedImageChoices,
   type MediaLibraryRow,
@@ -11,10 +13,18 @@ export function PublishedMediaPicker({
   label,
   value,
   onChange,
+  framing,
+  onFramingChange,
+  guidance = "Imagem responsiva: conferir desktop e mobile.",
+  ratio = "16 / 9",
 }: {
   label: string
   value: string
   onChange: (url: string, alt: string) => void
+  framing?: MediaFraming
+  onFramingChange?: (framing: MediaFraming) => void
+  guidance?: string
+  ratio?: string
 }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -22,6 +32,7 @@ export function PublishedMediaPicker({
   const [query, setQuery] = useState("")
   const [assets, setAssets] = useState<PublishedImageChoice[]>([])
   const [previewFailed, setPreviewFailed] = useState(false)
+  const [framingOpen, setFramingOpen] = useState(false)
 
   useEffect(() => {
     setPreviewFailed(false)
@@ -81,6 +92,7 @@ export function PublishedMediaPicker({
   return (
     <div className="published-media-picker">
       <strong className="published-media-picker-label">{label}</strong>
+      <p className="published-media-guidance">Área de destino: {guidance}</p>
       {value && isSafeEditorialImage(value) && !previewFailed ? (
         <div className="published-media-current">
           <img
@@ -108,12 +120,21 @@ export function PublishedMediaPicker({
         >
           {open ? "Fechar biblioteca" : "Escolher da biblioteca"}
         </button>
+        {value && onFramingChange && (
+          <button type="button" className="secondary-button" onClick={() => setFramingOpen(true)}>
+            Ajustar posição e zoom
+          </button>
+        )}
         {value && (
           <button type="button" className="secondary-button" onClick={() => onChange("", "")}>
             Remover imagem
           </button>
         )}
       </div>
+      {framingOpen && value && onFramingChange && (
+        <MediaFramingDialog src={value} label={label} guidance={guidance} ratio={ratio}
+          value={framing} onChange={onFramingChange} onClose={() => setFramingOpen(false)} />
+      )}
       {open && (
         <div className="published-media-panel" role="region" aria-label={`Biblioteca: ${label}`}>
           <p>Somente imagens publicadas na aba Mídia podem ser escolhidas.</p>

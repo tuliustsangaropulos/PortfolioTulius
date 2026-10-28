@@ -4,6 +4,7 @@ import { isSafeEditorialImage, validateContentItems } from "../../lib/validation
 import { stagePrivateMediaChange } from "../../lib/media-operations"
 import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
 import { PublishedMediaPicker } from "./PublishedMediaPicker"
+import { AdminNotice, statusPt } from "./AdminNotice"
 import { withOpenGraphImage } from "../../lib/media-selection"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
 import type {
@@ -43,11 +44,7 @@ type BlockRow = {
 const emptyItem: ContentItem = { title: "Novo item", text: "" }
 
 function StatusMessage({ children }: { children: string }) {
-  return children ? (
-    <p className="save-message" role="status">
-      {children}
-    </p>
-  ) : null
+  return <AdminNotice message={children} />
 }
 
 function optionalNumber(value: string) {
@@ -590,7 +587,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
               <div>
                 <strong>{block.content_json.items?.[0]?.title ?? block.block_type}</strong>
                 <small>
-                  {block.status} · {block.content_json.items?.length ?? 0} itens
+                  {statusPt(block.status)} · {block.content_json.items?.length ?? 0} itens
                 </small>
               </div>
             </button>
@@ -1834,7 +1831,7 @@ export function CollectionsStudio() {
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <strong>{record[config.titleKey] || "Sem título"}</strong>
-                <small>{record.status}</small>
+                <small>{statusPt(record.status)}</small>
               </div>
             </button>
           ))}

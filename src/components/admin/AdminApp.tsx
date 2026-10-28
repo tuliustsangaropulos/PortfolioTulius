@@ -4,6 +4,7 @@ import { defaultTokens } from "../../content/fallback"
 import { isAdmin, isSupabaseConfigured, supabase } from "../../lib/supabase"
 import { PublicSite } from "../public/PublicSite"
 import { Icon } from "../ui/Icons"
+import { AdminNotice, statusPt } from "./AdminNotice"
 import {
   CollectionsStudio,
   ContentStudio,
@@ -398,7 +399,7 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
               <span>{String(section.sort_order).padStart(2, "0")}</span>
               <div>
                 <strong>{section.title}</strong>
-                <small>{section.status}</small>
+                <small>{statusPt(section.status)}</small>
               </div>
             </button>
           ))}
@@ -506,11 +507,7 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
                 Exibir no site
               </label>
             </div>
-            {message && (
-              <p className="save-message" role="status">
-                {message}
-              </p>
-            )}
+            <AdminNotice message={message} />
             <div className="form-actions">
               <button className="danger-button" onClick={remove}>
                 Arquivar
@@ -634,7 +631,7 @@ function DesignEditor() {
             </label>
           ))}
         </div>
-        {message && <p className="save-message">{message}</p>}
+        <AdminNotice message={message} />
       </section>
       <section className="admin-card license-card">
         <p>Escala e movimento</p>

@@ -68,6 +68,8 @@ export type HeroVisualConfig = {
   mobile?: HeroDeviceStyle
 }
 
+import type { MediaFraming } from "../lib/media-framing"
+
 export type ContentItem = {
   // Device-specific presentation from block_placements (never duplicated content).
   placement?: {
@@ -82,9 +84,11 @@ export type ContentItem = {
   value?: string
   image?: string
   alt?: string
+  mediaFraming?: MediaFraming
   /** Independent full-height image for section 02 on desktop; mobile retains image. */
   aboutDesktopImage?: string
   aboutDesktopAlt?: string
+  aboutDesktopFraming?: MediaFraming
   tags?: string[]
   placeholder?: boolean
   /** Editorial card retained in the CMS but excluded from public experience lists. */
@@ -114,11 +118,13 @@ export type ExperienceSlide = {
   image?: string
   alt?: string
   caption?: string
+  framing?: MediaFraming
 }
 
 export type ExperienceMedia = {
   logo?: string
   logoAlt?: string
+  logoFraming?: MediaFraming
   slides?: ExperienceSlide[]
 }
 

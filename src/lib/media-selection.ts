@@ -1,4 +1,5 @@
 import { isSafeEditorialImage } from "./validation"
+import { mediaFileName } from "./media-framing"
 
 export type MediaLibraryRow = {
   id: string
@@ -43,7 +44,7 @@ export function getPublishedImageChoices(
         ? [
             {
               id: row.id,
-              title: row.title?.trim() || row.storage_path,
+              title: mediaFileName(row.storage_path),
               alt: row.alt_text?.trim() || "",
               url,
               path: row.storage_path,
