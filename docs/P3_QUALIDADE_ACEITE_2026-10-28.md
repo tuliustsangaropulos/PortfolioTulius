@@ -83,3 +83,9 @@ Performance Lighthouse é **dado de laboratório**, variável entre execuções 
 **Instrumentação:** `performance.mark` para início da requisição, chegada das cinco dependências principais e composição dos dados; a suíte de navegador registra tempos e nomes de tabelas das requisições Supabase, sem parâmetros, JWT ou conteúdo editorial. A alteração é **funcional somente na ordem de liberação de SEO**, sem redimensionamento de imagem, alteração de layout, tema ou conteúdo.
 
 **Aceite necessário:** verificar CI, Vercel `READY` no mesmo SHA, P3 completo (13/25/38, A11y/SEO), LCP mobile e TBT. **Não declarar ganho de performance até medir.** Caso SEO regressione, reverter pontualmente a separação. O baseline comprovado segue [P3 #40747019980](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40747019980): LCP mobile 4,38 s, score 82.
+
+## Ensaio P3 — primeira dobra antes das seções fora da tela (28/10/2026)
+
+O componente público originalmente montava todas as **13 seções** (com o stack de seis experiências) em uma única atualização React após carregar dados. O teste desta rodada preserva a primeira seção na primeira pintura e monta o restante **dois quadros de animação depois**; URLs com hash inicial e prévia autenticada começam com árvore completa, e a restauração de hash é reexecutada quando o conteúdo restante é liberado. O conteúdo final é idêntico, sem mudanças em HTML/CSS, fotografia, fontes ou textos. O novo marcador `p3:below-fold-render-start` permite inspecionar a ordem.
+
+**Hipótese:** reduzir trabalho de layout/reconciliação antes de apresentar o retrato (LCP). **Critério:** CI, 13 seções/25 painéis/38 screenshots, acessibilidade, SEO e Lighthouse no deployment do mesmo SHA; se houver regressão funcional ou de LCP em laboratório comparável, reverter. O desempenho **não está homologado como melhorado** até a coleta.
