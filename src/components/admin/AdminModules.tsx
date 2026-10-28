@@ -29,6 +29,8 @@ type BlockRow = {
   content_json: {
     items?: ContentItem[]
     source_collection?: string | null
+    collection_start?: number
+    collection_limit?: number
     experienceMedia?: ExperienceMedia
   }
   mobile_panel: "a" | "b"
@@ -680,11 +682,36 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                     ))}
                   </select>
                   {draft.content_json.source_collection && (
-                    <small>
-                      Fonte vinculada: edite e publique registros na aba Coleções. Os cards manuais
-                      abaixo continuam armazenados e voltam a aparecer quando o vínculo for
-                      removido.
-                    </small>
+                    <>
+                      <small>
+                        Fonte vinculada: edite e publique registros na aba Coleções. Os cards manuais
+                        abaixo continuam armazenados e voltam a aparecer quando o vínculo for removido.
+                      </small>
+                      {draft.content_json.source_collection === "testimonials" && (
+                        <div className="field-grid compact-grid">
+                          <NumericField
+                            label="Primeiro depoimento na coleção (índice inicial, começando em 0)"
+                            value={draft.content_json.collection_start ?? 0}
+                            min={0}
+                            max={500}
+                            onChange={(collection_start) => setDraft({
+                              ...draft,
+                              content_json: { ...draft.content_json, collection_start },
+                            })}
+                          />
+                          <NumericField
+                            label="Quantidade neste painel (vazio = todos os restantes)"
+                            value={draft.content_json.collection_limit}
+                            min={1}
+                            max={100}
+                            onChange={(collection_limit) => setDraft({
+                              ...draft,
+                              content_json: { ...draft.content_json, collection_limit },
+                            })}
+                          />
+                        </div>
+                      )}
+                    </>
                   )}
                 </label>
               )}
@@ -1040,7 +1067,10 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
               {(draft.content_json.items ?? []).map((item, index) => (
                 <article className="block-item-editor" key={index}>
                   <div className="block-item-head">
-                    <strong>Item {String(index + 1).padStart(2, "0")}</strong>
+                    <strong>
+                      Item {String(index + 1).padStart(2, "0")}
+                      {item.isHidden === true && <span className="admin-hidden-label"> · Ocultado</span>}
+                    </strong>
                     <div className="order-buttons">
                       <button onClick={() => moveItem(index, -1)} aria-label="Mover item para cima">
                         <Icon name="up" size={17} />
@@ -1053,6 +1083,18 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                       </button>
                     </div>
                   </div>
+                  {["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(
+                    sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
+                  ) && (
+                    <label className="toggle-field admin-visibility-toggle">
+                      <input
+                        type="checkbox"
+                        checked={item.isHidden !== true}
+                        onChange={(event) => updateItem(index, { isHidden: !event.target.checked })}
+                      />
+                      Exibir este item em Projetos e realizações (desmarcado = ocultado, sem excluir)
+                    </label>
+                  )}
                   <div className="field-grid">
                     <label>
                       Título

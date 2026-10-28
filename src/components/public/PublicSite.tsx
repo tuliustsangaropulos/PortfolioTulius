@@ -273,7 +273,13 @@ function MobilePanel({
       data-panel={panel}
       className={`mobile-panel panel-${panel}`}
     >
-      {isProfile && panel === "a" && profile ? (
+      {section.slug === "contato" && panel === "a" ? (
+        <>
+          <div className="contact-mobile-photo">
+            {profile?.image && <img src={profile.image} alt={profile.alt ?? ""} loading="lazy" />}
+          </div>
+        </>
+      ) : isProfile && panel === "a" && profile ? (
         <>
           <div className="mobile-name">
             <span>TULIUS</span>
@@ -364,6 +370,9 @@ function MobilePanel({
               />
             ))}
           </div>
+          {section.slug === "contato" && panel === "b" && (
+            <ContactFooter section={section} location={section.panelA[0]?.text} />
+          )}
         </>
       )}
     </div>
@@ -648,6 +657,78 @@ function ResultsMobile({
   )
 }
 
+function TestimonialsDesktop({ section }: { section: PortfolioSection }) {
+  const items = [
+    ...(section.desktopPanelA ?? section.panelA),
+    ...(section.desktopPanelB ?? section.panelB),
+  ]
+  const [expanded, setExpanded] = useState<string | null>(null)
+
+  return (
+    <div className="desktop-editorial testimonials-editorial">
+      <header className="section-heading">
+        <h2>{section.title}</h2>
+        {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
+      </header>
+      <div className="testimonials-grid">
+        {items.map((item, index) => {
+          const key = item.title + "-" + index
+          const isExpanded = expanded === key
+          return (
+            <button
+              type="button"
+              key={key}
+              className={`testimonial-card${isExpanded ? " is-expanded" : ""}`}
+              aria-expanded={isExpanded}
+              aria-label={`${isExpanded ? "Recolher" : "Expandir"} depoimento de ${item.title}`}
+              onClick={() => setExpanded(isExpanded ? null : key)}
+            >
+              <div className="testimonial-person">
+                {item.image && <img src={item.image} alt={item.alt ?? ""} loading="lazy" />}
+                <div>
+                  <h3>{item.title}</h3>
+                  {item.meta && <span>{item.meta}</span>}
+                </div>
+              </div>
+              <p className="testimonial-quote">{item.text}</p>
+              <span className="testimonial-action">{isExpanded ? "Recolher −" : "Ler depoimento completo +"}</span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function ContactFooter({ section, location }: { section: PortfolioSection; location?: string }) {
+  return (
+    <footer className="contact-footer">
+      <span>{section.intro}</span>
+      {location && <span>{location}</span>}
+    </footer>
+  )
+}
+
+function ContactDesktop({ section }: { section: PortfolioSection }) {
+  const portrait = (section.desktopPanelA ?? section.panelA)[0]
+  const links = section.desktopPanelB ?? section.panelB
+  return (
+    <div className="contact-desktop">
+      <header className="section-heading contact-heading">
+        <h2>{section.title}</h2>
+        {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
+      </header>
+      <div className="contact-portrait">
+        {portrait?.image && <img src={portrait.image} alt={portrait.alt ?? ""} loading="lazy" decoding="async" />}
+      </div>
+      <div className="contact-links">
+        {links.map((item, i) => <ItemCard key={item.title + i} item={item} index={i} layout="contact" />)}
+      </div>
+      <ContactFooter section={section} location={portrait?.text} />
+    </div>
+  )
+}
+
 function Section({
   section,
   nextSectionSlug,
@@ -683,6 +764,10 @@ function Section({
             selectedTheme={selectedTheme}
             onSelectTheme={onSelectTheme}
           />
+        ) : section.slug === "depoimentos" ? (
+          <TestimonialsDesktop section={section} />
+        ) : section.slug === "contato" ? (
+          <ContactDesktop section={section} />
         ) : (
           <div
             className={

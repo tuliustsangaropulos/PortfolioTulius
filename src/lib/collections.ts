@@ -129,11 +129,25 @@ export function resolveCollectionBlocks(
   return blocks.map((block) => {
     const source = block.content_json?.source_collection
     if (!isCollectionSource(source)) return block
+    const records = sources.get(source) ?? []
+    const start = Number.isInteger(block.content_json?.collection_start)
+      ? Math.max(0, block.content_json.collection_start ?? 0)
+      : 0
+    const limit = Number.isInteger(block.content_json?.collection_limit) && (block.content_json?.collection_limit ?? 0) > 0
+      ? block.content_json!.collection_limit!
+      : undefined
+    const selection = records.slice(start, limit == null ? undefined : start + limit)
+    const originals = block.content_json?.items ?? []
     return {
       ...block,
       content_json: {
         ...block.content_json,
-        items: sources.get(source) ?? [],
+        items: selection.map((record) => {
+          const original = originals.find((item) => item.title === record.title)
+          return original?.image
+            ? { ...record, image: original.image, alt: original.alt }
+            : record
+        }),
       },
     }
   })

@@ -57,3 +57,10 @@ Os 18 slots de mídia representam temas de projeto reais, mas **as imagens ainda
 **Seção 01:** os seis cards de histórico profissional recebem interação na superfície inteira, com fundo sutil alaranjado, linha de acento à esquerda, título em laranja-escuro e foco visível. Não aplicar esse estilo à fotografia nem aos cinco cards temáticos (que mantêm o hover anterior).
 
 **Contato:** títulos de canais e valores são brancos ao passar o cursor ou focalizar o link; o fundo laranja, o texto secundário e o ícone de seta permanecem.
+
+## Verificação manual: experiências, depoimentos e contato (28/10/2026)
+
+O volume da coluna de experiências é editorialmente controlado: até seis itens visíveis como composição padrão, com os excedentes ocultos no CMS, nunca descartados. Os depoimentos usam cards quadrados uniformes (3 colunas × 2 linhas desktop), texto com truncamento em linhas e expansão sob clique/teclado; o card expandido ocupa duas linhas e a grade reacomoda os demais. A identificação **fictícia** dos dois exemplos é explícita.
+
+Contato passa a ter três colunas: chamada à esquerda, retrato central de altura disponível, links à direita; assinatura e localização compõem faixa de rodapé. As setas dos links ocupam coluna própria, sem cobrir URLs. No mobile a foto, os links e o rodapé permanecem acessíveis em fluxo vertical.
+

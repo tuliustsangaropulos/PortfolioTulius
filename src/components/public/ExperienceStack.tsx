@@ -110,7 +110,7 @@ function ExperienceCard({ section, order }: { section: PortfolioSection; order: 
   const items = [
     ...(section.desktopPanelA ?? section.panelA),
     ...(section.desktopPanelB ?? section.panelB),
-  ]
+  ].filter((item) => item.isHidden !== true)
   return (
     <section
       id={section.slug}

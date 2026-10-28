@@ -20,6 +20,10 @@ export type ContentBlockRow = {
   content_json: {
     items?: ContentItem[]
     source_collection?: string | null
+    /** Zero-based start index in an ordered linked collection. */
+    collection_start?: number
+    /** Optional positive number of linked items for this block. */
+    collection_limit?: number
     experienceMedia?: ExperienceMedia
   } | null
 }

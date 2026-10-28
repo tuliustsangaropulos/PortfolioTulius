@@ -62,7 +62,7 @@ try {
   }, { origin: restOrigin, headers: publicHeaders })
 
   if (result.publicSections !== 13 || result.nonPublished ||
-      result.publicNavigation !== result.publicSections || result.invalidNavigation ||
+      result.publicNavigation !== 8 || result.invalidNavigation ||
       result.adminsExposed || result.issuesExposed ||
       result.revisionsExposed || result.auditLogsExposed) {
     throw new Error("Public RLS contract mismatch: " + JSON.stringify(result))

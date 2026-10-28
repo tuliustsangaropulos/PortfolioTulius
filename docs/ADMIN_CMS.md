@@ -117,3 +117,12 @@ A alteração de `ogImage` preserva as demais propriedades de `seo_json`, inclus
 Inventário de campos com seletor: `content_json.items[].image`, `content_json.items[].aboutDesktopImage`, `content_json.experienceMedia.logo`, `content_json.experienceMedia.slides[].image`, e `site_settings.seo_json.ogImage`. A Biblioteca de mídia propriamente dita administra objetos, prévias, upload e metadados, não vínculos de imagem em páginas. **Coleções** não expõe campo de imagem editável no formulário atual. URLs genéricas, endereços de contato, `canonical`, cores e seletores de ícones continuam sendo controles apropriados aos seus tipos — não imagens.
 
 Não foram alterados imagens existentes, conteúdo editorial, banco de dados, Auth, Storage ou RLS. A sessão administrativa com JWT real e a prévia real de redes sociais continuam condições separadas de aceite.
+
+## Revisão manual de conteúdo — 28/10/2026
+
+**Blocos e painéis → experiências:** cada item possui a opção **Exibir este item em Projetos e realizações**. Quando desmarcada, o CMS destaca **Ocultado**; o conteúdo não é apagado do JSONB e pode ser reexibido com a mesma opção. A referência inicial é Vale, com seis itens visíveis por empregador sempre que existirem seis.
+
+**Coleções → Depoimentos:** esta é a fonte pública autoritativa para os cinco cartões. Dois registros de demonstração são identificados como fictícios; evitar tratá-los como endossos reais. Os blocos em Depoimentos guardam conteúdo manual original, mas têm vínculo com `testimonials` (painel A: início 0, quantidade 2; painel B: início 2, restantes). Alterações publicadas na coleção são refletidas sem duplicação editorial; o painel B contém novos depoimentos conforme a ordem. Os cartões expandidos são controlados pelo visitante e não alteram o CMS.
+
+**Contato:** o texto de rodapé provém de `sections.intro` e do campo Texto do primeiro item do painel A; fotografia e URLs são editáveis nos blocos existentes. **Menu:** usar o módulo Navegação para ajustar rótulos ou reexibir links individuais dos empregadores sem editar as seções.
+

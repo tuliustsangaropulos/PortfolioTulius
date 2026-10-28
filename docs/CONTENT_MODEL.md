@@ -65,3 +65,11 @@ Em `content_blocks.content_json.items[]` dos painéis A/B da seção `ferramenta
 Os seis objetos de carreira em `perfil/B` (índices 5–10 em base zero) receberam `targetSlug`, na ordem editorial já existente: `invest-rs`, `prefeitura-sp`, `vale`, `inpress`, `globo-sportv`, `cdi`. São âncoras com destino condicionado à publicação do slug, independentes dos cinco cards de especialidades (tema/resultado). O campo já existente `targetSlug` foi estendido, sem novos modelos ou tabelas.
 
 Sem DDL, migrations, Auth, RLS ou Storage; mudanças do banco limitaram-se a campos JSONB dos três blocos citados e ao tema da seção Ferramentas.
+
+## Revisão manual — experiências, depoimentos, contato e menu (28/10/2026)
+
+- **Experiências:** `content_blocks.content_json.items[].isHidden` é uma marcação editorial opcional. Itens ocultos **permanecem íntegros no JSONB e editáveis no CMS**, mas não aparecem em `ExperienceStack` desktop/mobile. As listas maiores foram limitadas inicialmente a seis itens visíveis para reduzir a necessidade de rolagem; em janelas curtas continua possível rolar. Não houve exclusão nem migration.
+- **Depoimentos:** coleção `testimonials` é fonte única de texto, nome, cargo e status. Os blocos históricos `depoimentos/a` e `depoimentos/b` utilizam `source_collection="testimonials"` com `collection_start` e `collection_limit` para distribuir 2+3 itens entre mobile A/B, preservando os arrays originais como backup e as fotografias já aprovadas. No desktop cinco cards quadrados ocupam grade 3 colunas × 2 linhas, com expansão acessível que ocupa duas linhas. Dois novos textos foram explicitamente identificados como **fictícios/ilustrativos** e não representam recomendações reais. Edição no admin: **Coleções → Depoimentos**.
+- **Contato:** `sections.intro` e `contato/a.items[0].text` permanecem editáveis no CMS e são exibidos no rodapé; a imagem do item A ocupa exclusivamente a coluna central. Links permanecem no bloco B e são apresentados sem colisão da seta com URLs.
+- **Menu:** rótulos e visibilidade são gerenciados por `navigation_items`; há 13 seções públicas, mas **8 entradas visíveis no menu**. Cinco entradas individuais de empregadores ficam ocultas, preservadas no banco; `invest-rs` recebe o rótulo "Experiência Profissional". A navegação horizontal interna entre empregadores continua independente do menu lateral.
+

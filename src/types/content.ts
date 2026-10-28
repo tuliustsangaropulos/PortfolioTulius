@@ -87,6 +87,8 @@ export type ContentItem = {
   aboutDesktopAlt?: string
   tags?: string[]
   placeholder?: boolean
+  /** Editorial card retained in the CMS but excluded from public experience lists. */
+  isHidden?: boolean
   icon?: "arrow" | "none"
   targetSlug?: string
   metricIcon?: MetricIconName
