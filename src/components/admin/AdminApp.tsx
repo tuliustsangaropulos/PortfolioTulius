@@ -199,7 +199,8 @@ function Dashboard({
   sections: SectionRow[]
   loadStatus: "loading" | "ready" | "error"
 }) {
-  const published = sections.filter((s) => s.status === "published").length
+  const published = sections.filter((section) => section.status === "published").length
+  const visible = sections.filter((section) => section.status === "published" && section.is_visible).length
   const sourceStatus = { loading: "Carregando", ready: "Online", error: "Erro" }[loadStatus]
   const [issueCount, setIssueCount] = useState<number | null>(null)
   useEffect(() => {
@@ -208,6 +209,7 @@ function Dashboard({
     void supabase
       .from("editorial_issues")
       .select("id", { count: "exact", head: true })
+      .eq("status", "open")
       .then(({ count, error }) => {
         if (active) setIssueCount(error ? null : count)
       })
@@ -229,7 +231,7 @@ function Dashboard({
         <article>
           <span>Pendências editoriais</span>
           <strong>{issueCount ?? "—"}</strong>
-          <small>Registros editoriais no CMS</small>
+          <small>Registros editoriais abertos</small>
         </article>
         <article>
           <span>Fonte de dados</span>
@@ -250,7 +252,7 @@ function Dashboard({
             <span className="check done">✓</span>
             <div>
               <strong>Estrutura editorial</strong>
-              <p>14 seções e duas distribuições mobile por seção.</p>
+              <p>{visible} seções exibidas no site, de {sections.length} cadastradas. Os painéis mobile seguem a composição aprovada.</p>
             </div>
           </li>
           <li>

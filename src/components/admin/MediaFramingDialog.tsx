@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   defaultMediaFraming,
   imageFramingStyle,
@@ -23,13 +23,39 @@ export function MediaFramingDialog({
   onClose: () => void
 }) {
   const [current, setCurrent] = useState(() => normalizeMediaFraming(value))
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef(onClose)
+  closeRef.current = onClose
   useEffect(() => {
-    const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose()
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const dialog = dialogRef.current
+    const focusables = () =>
+      Array.from(dialog?.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled])') ?? [])
+    focusables()[0]?.focus()
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
+        closeRef.current()
+      }
+      if (event.key !== "Tab") return
+      const controls = focusables()
+      if (!controls.length) return
+      const first = controls[0]
+      const last = controls[controls.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
-    window.addEventListener("keydown", key)
-    return () => window.removeEventListener("keydown", key)
-  }, [onClose])
+    window.addEventListener("keydown", onKey)
+    return () => {
+      window.removeEventListener("keydown", onKey)
+      previousFocus?.focus()
+    }
+  }, [])
   const set = (field: keyof MediaFraming, n: number) =>
     setCurrent((before) => normalizeMediaFraming({ ...before, [field]: n }))
   return (
@@ -40,6 +66,7 @@ export function MediaFramingDialog({
       }}
     >
       <div
+        ref={dialogRef}
         className="media-frame-dialog"
         role="dialog"
         aria-modal="true"

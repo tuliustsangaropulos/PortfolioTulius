@@ -94,6 +94,18 @@ export function usePortfolio(includeDrafts = false) {
       .eq("status", "published")
       .limit(1)
       .maybeSingle()
+    // The current published portfolio binds only its testimonials collection.
+    // Start that independent request alongside the section graph, rather than
+    // imposing another network round trip before the first fold can render.
+    const testimonialsQuery = supabase
+      .from("testimonials")
+      .select("*")
+      .order("sort_order")
+    const testimonialsRequest = Promise.resolve(
+      includeDrafts
+        ? testimonialsQuery.neq("status", "archived")
+        : testimonialsQuery.eq("status", "published"),
+    )
     let query = supabase
       .from("sections")
       .select(
@@ -149,10 +161,11 @@ export function usePortfolio(includeDrafts = false) {
             if (activeSources.size) {
               const results = await Promise.all(
                 Array.from(activeSources).map(async (source) => {
-                  const query = supabaseClient.from(source).select("*").order("sort_order")
-                  const response = includeDrafts
-                    ? await query.neq("status", "archived")
-                    : await query.eq("status", "published")
+                  const response = source === "testimonials"
+                    ? await testimonialsRequest
+                    : includeDrafts
+                      ? await supabaseClient.from(source).select("*").order("sort_order").neq("status", "archived")
+                      : await supabaseClient.from(source).select("*").order("sort_order").eq("status", "published")
                   if (response.error) throw response.error
                   return [
                     source,
