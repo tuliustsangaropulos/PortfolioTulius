@@ -50,3 +50,7 @@ Rotas principais: `/` (pública), `/admin/login`, `/admin` (protegida), `/admin/
 A integração **GitHub `main` → Vercel Production** cria deployment automaticamente em pushes. Antes de atribuir uma medição Lighthouse ao código, conferir que o deployment `READY` e a execução Actions correspondem ao **mesmo SHA**. Build: `pnpm build`; saída `dist/`. `supabase/migrations/` **não** é aplicado por build e a baseline inicial **não deve ser reaplicada**.
 
 **Não modificar design, textos, mídia, segurança, branches, migrations ou dados aprovados fora do pedido.** Trabalhar somente na `main` conforme `AGENTS.md`; verificar diff, CI e Vercel após commits.
+
+## Atualização operacional — P2 staging e medição P3 (28/10/2026)
+
+O [P2 transacional](docs/P2_TRANSACIONAL_STAGING_2026-10-28.md) tem workflow manual e fixture seguros preparados, porém **ainda não foi executado** porque não existe staging Supabase aprovado e a criação de branch exige confirmação de custo. O [P3 #40757162085](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) confirmou no deployment correspondente **Performance mobile 82/LCP mediano 4,32 s**, desktop 98/1,16 s (3 amostras por dispositivo), 13 seções/25 painéis/38 capturas e a11y/SEO 100. **A meta de LCP mobile continua aberta**. O índice [vigente](docs/ESTADO_ATUAL_VIGENTE.md) indica os próximos passos e não deve ser interpretado como SHA futuro fixo.

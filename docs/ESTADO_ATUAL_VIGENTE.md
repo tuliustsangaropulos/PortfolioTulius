@@ -66,3 +66,10 @@ Preservar layout, fontes, fotografias, textos e conteúdo aprovado. Não criar b
 **P2:** suíte transacional isolada preparada em [`P2_TRANSACIONAL_STAGING_2026-10-28.md`](P2_TRANSACIONAL_STAGING_2026-10-28.md); **não executada**. Não havia branch Supabase de homologação e a criação exigiu confirmação de custo. O script falha fechado se receber ref de produção, testa JWT real de admin e não admin, CMS/Storage com fixture, sem excluir dados aprovados. Não reaplicar a baseline do GitHub no remoto sem revisão específica.
 
 **P3:** após P5 e auditoria inicial, foram ensaiadas a separação de consultas SEO e renderização isolada da primeira dobra. O segundo experimento foi revertido por potencial regressão de TBT; o workflow agora coleta **três amostras mobile** no mesmo SHA para mediana/variância antes de novos ajustes. Nenhuma meta LCP ≤2,5 s foi alcançada ou declarada. [Evidências P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+## Última medição P3 validada e plano P2 — 28/10/2026
+
+- **P3:** [Audit #40757162085](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) `success`, Vercel `READY` previamente confirmado no **SHA `50a66f896deb87e315b194e65e3de964495beeb8`**. Medianas de três runs: **mobile Performance 82/LCP 4,32 s; desktop 98/LCP 1,16 s**. A11y/SEO/boas práticas 100 em todas as amostras; 13 seções, 25 painéis e 38 capturas sem falhas. Meta LCP mobile ≤2,5 s **continua aberta**. [Relatório P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
+- **P2:** [suíte de homologação isolada](P2_TRANSACIONAL_STAGING_2026-10-28.md) versionada e protegida contra uso no ref de produção, mas **não executada**: falta projeto/branch staging, confirmação de eventual custo, verificação de baseline e contas JWT de teste. P5 read-only 4/4 segue aprovado.
+
+Este é o snapshot funcional antes do commit exclusivamente documental que registra a auditoria; sempre consultar o HEAD/deployment reais.

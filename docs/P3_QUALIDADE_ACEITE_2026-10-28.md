@@ -117,3 +117,22 @@ Todos os relatórios tiveram Accessibility/SEO/Best Practices 100/100; desktop P
 A [auditoria #40756743808](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40756743808), SHA `07f8f4c`, teve erro de inicialização do Chrome headless (`waiting for dynamic debugging port`), **sem produzir Lighthouse mobile**. O único desktop apresentou Performance 73 apesar de LCP 1,13 s. O workflow rejeitou corretamente as evidências ausentes; **não é medição válida de regressão de produção**.
 
 A coleta foi fortalecida para **até três tentativas de inicialização quando uma captura falha**, com três relatórios mobile e três desktop do mesmo deployment; o gate usa mediana de desempenho/LCP em ambos, sem reduzir limites (mobile 55/LCP 6,5 s; desktop 90/LCP 3 s) e preserva verificações rígidas para acessibilidade, SEO, boas práticas e CLS. Os testes de navegador continuam executáveis mesmo se o Lighthouse falhar. A meta real de LCP mobile **≤2,5 s** continua pendente.
+
+## Auditoria estabilizada válida — 28/10/2026, SHA 50a66f8
+
+[GitHub Actions P3 #40757162085](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) concluiu **SUCCESS** após confirmar Vercel `READY` no commit [`50a66f896deb87e315b194e65e3de964495beeb8`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/50a66f896deb87e315b194e65e3de964495beeb8). A medição usa 3 amostras mobile e 3 desktop, com mediana de Performance/LCP, pior resultado de acessibilidade/SEO/boas práticas e maior CLS. Os orçamentos não foram afrouxados.
+
+| Indicador (mediana de três amostras) | Mobile | Desktop |
+|---|---:|---:|
+| Performance | **82** | **98** |
+| LCP | **4.324,51 ms** | **1.158,10 ms** |
+| FCP | **2.459,72 ms** | Conforme artifact JSON |
+| TBT | **1 ms** | Conforme artifact JSON |
+| A11y/SEO/Boas Práticas | **100/100 em todas as amostras** | **100/100 em todas as amostras** |
+| Gate de regressão | **PASS** | **PASS** |
+
+**Amplitude LCP mobile:** 4.269,47–4.504,45 ms. As notas individuais de Performance mobile foram **53, 82 e 82**; a primeira amostra apresentou TBT de **1.478,79 ms**, contra 0 e 1 ms nas outras. Não ocultar a variância do runner. A mediana não é Core Web Vitals de campo, e o objetivo **LCP ≤2.500 ms continua NÃO atendido**.
+
+**Contrato e segurança pública:** `P3_BROWSER_AUDIT failures=0`, `P4_EDITORIAL_SUMMARY captures=38,desktop=13,mobile=25,failures=0`, `P5_PUBLIC_RLS PASS`; zero exposição de tabelas administrativas nas consultas anônimas previstas. A avaliação estética humana, zoom nativo 200% e leitor de tela real não foram substituídos por esses testes.
+
+**Parecer:** o experimento de separar SEO do bloqueio de renderização permaneceu por preservar comportamento e passar nos gates; não há evidência de ganho causal suficiente para fechar a prioridade do LCP. A montagem adiada das seções foi revertida. Próximos experimentos devem isolar custo de JavaScript inicial, render React e CSS de fontes, com novas medições comparáveis e rollback pontual.

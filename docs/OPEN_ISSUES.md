@@ -49,3 +49,9 @@ A primeira dobra renderizada separadamente reduziu o LCP num run, mas elevou o T
 ## P3 — primeira mediana Lighthouse de 3 amostras (28/10/2026)
 
 [Run #40756305871](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40756305871), mesmo SHA/Vercel: amostras mobile **54/83/83** em Performance; **4,89/4,31/4,23 s** LCP. **Mediana 83 e 4,31 s**, TBT mediano 47 ms, Accessibility/SEO 100; todos os 13/25/38 testes de browser passaram. Run saiu `failure` porque o gate anterior olhava somente a primeira amostra 54. Gate atualizado para mediana, sem relaxar limites; ainda exige nova execução. **Meta 2,5 s continua não atendida.**
+
+## P3 — mediana estabilizada com workflow aprovado (28/10/2026)
+
+[Audit #40757162085](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) passou no SHA `50a66f8`, com **3 mobile + 3 desktop**. Mediana mobile **82/100 e LCP 4,32 s**, desktop **98/100 e 1,16 s**; A11y, SEO e boas práticas 100; **13/25/38 PASS**. Primeira amostra mobile Performance 53 e TBT 1.479 ms, outras duas 82 e 0–1 ms: manter monitoramento de variância, não declarar performance estável em dispositivo real. O **LCP mobile ≤2,5 s permanece pendente**; [P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+**P2 transacional:** [workflow isolado preparado](P2_TRANSACIONAL_STAGING_2026-10-28.md), sem execução de fixture até criar staging e aprovar custo/credenciais de teste. Não usar produção.
