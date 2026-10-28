@@ -125,6 +125,8 @@ jobs:
           }
           if (missing) process.exitCode = 1
           NODE
+      - name: Mobile LCP bottleneck triage
+        run: node scripts/p3-lcp-triage.mjs "$RUNNER_TEMP"
       - name: Enforce conservative P6 Lighthouse regression budgets
         shell: bash
         run: node "$GITHUB_WORKSPACE/scripts/p6-lighthouse-guard.mjs" "$RUNNER_TEMP"
