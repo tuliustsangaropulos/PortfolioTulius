@@ -286,7 +286,10 @@ function MobilePanel({
       ) : section.slug === "contato" && panel === "a" ? (
         <>
           <div className="contact-mobile-photo">
-            {profile?.image && <img src={profile.image} alt={profile.alt ?? ""} style={imageFramingStyle(profile.mediaFraming)} loading="lazy" />
+            {profile?.image && (
+              <img src={profile.image} alt={profile.alt ?? ""}
+                style={imageFramingStyle(profile.mediaFraming)} loading="lazy" />
+            )}
           </div>
         </>
       ) : isProfile && panel === "a" && profile ? (
