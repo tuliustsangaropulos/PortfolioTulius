@@ -708,3 +708,56 @@
   text-transform: uppercase;
   color: #bc390c;
 }
+
+/* Desktop visual density — match the approved 75% browser-zoom reference at 100%. */
+/*
+ * Scope this to wide public layouts, not the CMS or mobile. The gradual
+ * scale avoids a sudden jump near the tablet/desktop breakpoint. Viewport
+ * heights are compensated so a full-screen section still fills the window;
+ * overflow remains available if editorial content exceeds its space.
+ */
+@media (min-width: 1101px) {
+  .public-site {
+    --desktop-visual-scale: clamp(.75, calc(1 - (100vw - 1100px) / 1700px), 1);
+    zoom: var(--desktop-visual-scale);
+  }
+
+  .portfolio-section, .desktop-panel, .desktop-editorial,
+  .experience-card, .experience-desktop {
+    min-height: calc(100svh / var(--desktop-visual-scale));
+  }
+  .about-desktop { min-height: calc(100dvh / var(--desktop-visual-scale)); }
+  .about-portrait { height: calc(100dvh / var(--desktop-visual-scale)); }
+
+  .profile-desktop {
+    height: auto;
+    min-height: calc(100dvh / var(--desktop-visual-scale));
+    overflow: visible;
+  }
+  .profile-sidebar {
+    grid-template-rows:
+      minmax(
+        13rem,
+        min(
+          max(
+            calc(var(--hero-desktop-visual-height, 45dvh) / var(--desktop-visual-scale)),
+            calc(48dvh / var(--desktop-visual-scale))
+          ),
+          calc(52dvh / var(--desktop-visual-scale))
+        )
+      )
+      minmax(0, 1fr);
+    overflow: visible;
+  }
+  .profile-sidebar-content { overflow: visible; }
+
+  .results-center {
+    max-height: calc(100dvh / var(--desktop-visual-scale) - 8rem);
+  }
+  .experience-projects {
+    max-height: calc(100svh / var(--desktop-visual-scale) - 13rem);
+  }
+  .experience-media-frame {
+    max-height: calc(57svh / var(--desktop-visual-scale));
+  }
+}
