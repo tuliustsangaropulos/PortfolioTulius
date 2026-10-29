@@ -1,5 +1,12 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## P3-PERF-01 — 29/10/2026: gargalo de imagem continua aberto
+
+**SHA funcional:** [`4a8412e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/4a8412e93c99db4fae15e57d1e19785581daaf51). [CI #40824692978](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824692978) **success**, deployment Vercel Production **READY** no mesmo SHA, [P3 #40824693037](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824693037): **failure exclusivamente no orçamento sintético P6 mobile**.
+
+**Resolvido:** bloqueio da auditoria por ausência do status GitHub `Vercel`; a checagem lê o SHA implantado em produção e permitiu executar as seis amostras. **Ainda aberto:** LCP mobile mediano **7,55 s** / alvo **≤2,5 s**, com orçamento conservador P6 de 6,5 s reprovado. O retrato é um PNG CMS/Supabase atual, potencial de economia aproximado de **1.008 KiB** apontado pelo Lighthouse; requer obter/servir derivada otimizada preservando original, sem executar transformação cobrável ou gravação CMS/Storage em produção. A auditoria funcional 13/25/38 e P5 3/3 passou; não confundir com P6. [Evidências e diagnóstico](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+
 ## Verificação manual — Olá! e Invest RS, 29/10/2026
 
 - **Seção 02 “Olá!” (somente desktop):** para que a silhueta da fotografia personalizada alcance a margem inferior do painel, `src/index.css` compensou a faixa transparente inferior da imagem com altura `calc(100% + clamp(2rem, 5.5dvh, 3rem))`, posicionada no topo e recortada pelo contêiner existente. Mantidos fonte original no Supabase, enquadramento do CMS, colunas, textos, cor laranja e composição mobile. Sem zoom/scale global.
