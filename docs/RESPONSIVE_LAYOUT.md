@@ -129,3 +129,11 @@ A referência visual de densidade continua sendo a **última captura fornecida c
 
 **Commit funcional:** [`d882d7a`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/d882d7a71ff45e0d6980cf85fbcaa6533f0f89db). [CI #40815457072](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457072) `success`, Vercel Production `READY`; [P3 #40815457107](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457107) em execução na criação deste registro. P2 transacional continua suspenso e LCP mobile ≤2,5s permanece pendente. Não houve custo adicional, mudança de RLS, Storage, arquivo de mídia ou estrutura do banco.
 
+### Evidência final adicional: auditoria P3 #40815457107 — 29/10/2026
+
+No SHA funcional `d882d7a` (mesmo código público da documentação `cce4869`), o navegador automatizado mediu `P3_ABOUT_INVEST_FIT`: `aboutBottom=1382`, `portraitBottom=1420` (38 px extras recortados ao fim), `count=4`, `listHeight=422`, `listScrollHeight=422` (nenhuma rolagem no painel Invest RS), `headingLogoBorder=0px`, `indexLogoBorder=1px`. `P3_BROWSER_AUDIT failures=0`, `P5_PUBLIC_RESULT passed=3/3 mutations=0` e `P4_EDITORIAL_SUMMARY captures=38 failures=0`. O site mostrou `publicSections=13`, `portraitComplete=true`.
+
+**Importante: o job P3 final tem resultado global `failure` por falha de integração de status, não por falha funcional:** o gate `Confirm Vercel production deployment status for audit SHA` consultou 30 vezes o status de commit com contexto `Vercel` e recebeu `missing`, mesmo havendo deployment `READY` confirmado diretamente pelo conector Vercel. Como Lighthouse dependia desse gate, as seis amostras não foram produzidas e o gate P6 reportou `missing sample`. Não afirmar aprovação da auditoria completa nem inferir mudança de LCP com base nessa execução. A meta LCP mobile ≤2,5 s e o ajuste do gate GitHub↔Vercel seguem como **pendências independentes**, sem suspender o sucesso dos testes funcionais de layout.
+
+[Execução P3](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457107) · [CI funcional](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457072) · [Deployment funcional READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/CW4JH4aXUtmCGW3Hx6Gi5Phvrs34).
+
