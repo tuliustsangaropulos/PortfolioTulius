@@ -294,7 +294,18 @@ try {
           width, siteZoom: findings.siteZoom, siteTransform: findings.siteTransform, result: "FAIL",
         }))
       }
-      if (findings.sectionCount !== 13 || findings.mobilePanelCount !== 25 ||
+      // The invisible responsive tree is intentionally not mounted.
+      // Verify the 25 mobile panels when mobile, and no mobile DOM on desktop.
+      const responsivePanels = findings.mobilePanelCount === (width < 768 ? 25 : 0) &&
+        (width < 768 ? findings.desktopDisplay === null : findings.mobileDisplay === null)
+      if (!responsivePanels) {
+        console.log("P3_RESPONSIVE_DOM_REGRESSION " + JSON.stringify({
+          width, mobilePanelCount: findings.mobilePanelCount,
+          desktopDisplay: findings.desktopDisplay, mobileDisplay: findings.mobileDisplay,
+          result: "FAIL",
+        }))
+      }
+      if (findings.sectionCount !== 13 || !responsivePanels ||
           findings.documentWidth > width + 2 || !nativeScale) failures++
     } catch (error) {
       failures++
