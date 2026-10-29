@@ -34,16 +34,27 @@ for (const device of ["mobile", "desktop"]) {
   if (reports.length !== names.length) continue
   const performance = median(reports.map((r) => r.categories?.performance?.score))
   const lcpMs = median(reports.map((r) => r.audits?.["largest-contentful-paint"]?.numericValue))
-  // A missing portfolio once produced an apparently excellent mobile LCP.
-  // Do not score an empty/error page as a performance improvement.
+  // Require the actual hero portrait as LCP in every run. Its URL is CMS-
+  // controlled: a newly published image can be a Supabase Storage PNG, not
+  // the older bundled JPEG. Do not mistake that legitimate edit for an empty
+  // page, but never accept a headline/text or an unrelated image as the LCP.
+  const target = device === "mobile" ? "mobile-profile-hero > img" : "profile-portrait > img"
+  const containsPortrait = (value) => {
+    if (!value || typeof value !== "object") return false
+    if (Array.isArray(value)) return value.some(containsPortrait)
+    if (typeof value.selector === "string" && value.selector.includes(target)) {
+      const snippet = typeof value.snippet === "string" ? value.snippet : ""
+      if (/<img\b/.test(snippet) && /\bsrc=["'](?:\/|https:\/\/)/.test(snippet)) return true
+    }
+    return Object.values(value).some(containsPortrait)
+  }
   const lcpContentPresent = reports.every((report) => {
     const audits = report.audits ?? {}
-    const nodes = audits["lcp-breakdown-insight"]?.details?.items ??
-      audits["lcp-discovery-insight"]?.details?.items ??
-      audits["largest-contentful-paint-element"]?.details?.items ?? []
-    const serialized = JSON.stringify(nodes)
-    return serialized.includes("tulius-portrait-dark.jpg") &&
-      serialized.includes(device === "mobile" ? "mobile-profile-hero" : "profile-portrait")
+    return [
+      audits["lcp-breakdown-insight"]?.details?.items,
+      audits["lcp-discovery-insight"]?.details?.items,
+      audits["largest-contentful-paint-element"]?.details?.items,
+    ].some(containsPortrait)
   })
   console.log("P6_LCP_CONTENT_GATE " + JSON.stringify({
     device, result: lcpContentPresent ? "PASS" : "FAIL", expected: "approved_profile_portrait",
