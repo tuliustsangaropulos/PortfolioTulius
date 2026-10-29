@@ -296,6 +296,10 @@ try {
               left: Math.round(r.left), right: Math.round(r.right) } : null
           }
           const heading = document.querySelector(".name-lockup")
+          const computedFont = (selector) => {
+            const el = document.querySelector(selector)
+            return el ? Number.parseFloat(getComputedStyle(el).fontSize) : null
+          }
           const badge = rect(".profile-portrait .badge-360")
           const yearsCopy = rect(".years span")
           const overlap = badge && yearsCopy
@@ -306,6 +310,10 @@ try {
             headerHeight: rect(".site-header")?.bottom ?? null,
             nameTop: rect(".name-lockup")?.top ?? null,
             nameFontPx: heading ? Math.round(parseFloat(getComputedStyle(heading).fontSize)) : null,
+            introFontPx: computedFont(".profile-intro"),
+            highlightTextFontPx: computedFont(".profile-highlights .content-item p"),
+            careerTextFontPx: computedFont(".career-grid .content-item p"),
+            cardLabelFontPx: computedFont(".area-grid .item-label"),
             cardsTop: rect(".area-grid")?.top ?? null,
             cardsBottom: rect(".area-grid")?.bottom ?? null,
             finalHighlightBottom: document.querySelector(".profile-highlights .content-item:last-child")?.getBoundingClientRect().bottom ?? null,
@@ -319,6 +327,10 @@ try {
           density.cardsTop !== null && density.cardsTop >= 175 && density.cardsTop <= 215 &&
           density.cardsBottom !== null && density.cardsBottom <= 320 &&
           density.finalHighlightBottom !== null && density.finalHighlightBottom <= height + 3 &&
+          density.introFontPx !== null && density.introFontPx >= 12 &&
+          density.highlightTextFontPx !== null && density.highlightTextFontPx >= 11.5 &&
+          density.careerTextFontPx !== null && density.careerTextFontPx >= 11.5 &&
+          density.cardLabelFontPx !== null && density.cardLabelFontPx >= 9.7 &&
           density.badgeYearsOverlapPx2 !== null && density.badgeYearsOverlapPx2 < 200
         if (!compact) {
           failures++

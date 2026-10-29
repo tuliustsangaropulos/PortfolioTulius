@@ -742,12 +742,12 @@
   .profile-role { margin: .3rem 0 1.125rem; font-size: clamp(.69rem, .75vw, .75rem); }
   .area-grid .content-item { padding: .75rem; }
   .area-grid .content-item h3 { font-size: clamp(.75rem, 1.1vw, 1.05rem); }
-  .area-grid .item-label { font-size: .55rem; }
+  .area-grid .item-label { font-size: .61rem; font-weight: 800; letter-spacing: .01em; }
   .profile-main > h2 { margin: 1.125rem 0 .375rem; padding-top: .45rem; font-size: clamp(1rem, 1.5vw, 1.5rem); }
   .career-grid { column-gap: 1.5rem; }
   .career-grid .content-item { padding: .49rem 0; }
-  .career-grid .content-item h3 { font-size: clamp(.75rem, .95vw, 1.05rem); }
-  .career-grid .content-item p { font-size: clamp(.68rem, .7vw, .78rem); }
+  .career-grid .content-item h3 { font-size: clamp(.78rem, .98vw, 1.08rem); }
+  .career-grid .content-item p { font-size: clamp(.72rem, .735vw, .82rem); }
   .profile-next-section { bottom: 1.125rem; width: 2.75rem; height: 2.75rem; }
 
   /* Fit the entire left editorial list without clipping the fourth item. */
@@ -756,25 +756,25 @@
     top: calc(var(--hero-desktop-badge-y, 74%) - clamp(1.6rem, 4.5dvh, 2.5rem));
   }
   .profile-sidebar-content {
-    gap: clamp(.525rem, 1.125dvh, .94rem);
+    gap: clamp(.48rem, 1dvh, .875rem);
     padding: clamp(.75rem, 1.65dvh, 1.25rem) clamp(.75rem, 1.65vw, 1.5rem) clamp(.75rem, 1.5dvh, 1.2rem);
   }
   .profile-intro {
     max-width: 19.5rem;
-    font-size: clamp(.7rem, calc(var(--hero-desktop-intro-size, 1rem) * .75), .9rem);
+    font-size: clamp(.75rem, calc(var(--hero-desktop-intro-size, 1rem) * .79), .95rem);
   }
-  .profile-highlights { gap: clamp(.18rem, .525dvh, .49rem); }
+  .profile-highlights { gap: clamp(.16rem, .44dvh, .44rem); }
   .profile-highlights .content-item {
     grid-template-columns: 1.875rem minmax(0, 1fr);
-    padding-block: calc(var(--item-desktop-spacing, .45rem) * .75);
+    padding-block: calc(var(--item-desktop-spacing, .45rem) * .68);
   }
   .profile-highlights .item-arrow { width: 1.55rem; height: 1.55rem; }
   .profile-highlights .item-arrow svg { width: .87rem; height: .87rem; }
   .profile-highlights .content-item h3 {
-    font-size: clamp(.64rem, calc(var(--item-desktop-title-size, .85rem) * .75), .78rem);
+    font-size: clamp(.68rem, calc(var(--item-desktop-title-size, .85rem) * .77), .82rem);
   }
   .profile-highlights .content-item p {
-    font-size: clamp(.68rem, calc(var(--item-desktop-text-size, .84rem) * .75), .84rem);
+    font-size: clamp(.72rem, calc(var(--item-desktop-text-size, .84rem) * .79), .89rem);
   }
 
   /* Same physical editorial rhythm on remaining desktop sections. */
