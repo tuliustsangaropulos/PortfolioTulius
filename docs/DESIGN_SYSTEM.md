@@ -67,3 +67,8 @@ Contato passa a ter três colunas: chamada à esquerda, retrato central de altur
 ## Media framing contextual — revisão manual (28/10/2026)
 
 O CMS exibe dimensões esperadas **como referência de composição**, não como redimensionamento automático: herói e foto de Contato aproximadamente 900×1200 (3:4), miniquadros 600×600 (1:1), foto central de Olá! aproximadamente 900×1200 (3:4), logos quadrados aproximadamente 400×400, slides de experiência 900×1000 (9:10) e Open Graph 1200×630. Uma janela com prévia de proporção, X, Y e zoom aplica apenas o recorte de apresentação por área. Fotos e logos originais preservados; arquivos do Storage não são processados. As seções editoriais especiais mantêm composição/efeitos fixos; os controles correspondentes permanecem desabilitados na UI em vez de produzir alterações falsas.
+
+### Referência visual desktop mais recente (29/10/2026)
+
+A nova solicitação do proprietário **substituiu** a captura anterior que buscava 125%: **o aspecto desejado a 100% agora é o visto a 75%** no anexo mais recente, em desktop ~1512×691. A implementação é localizada na mídia `min-width:1101px`, sem zoom/scale global e sem alterar dados. O P3 [#40806132632](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40806132632) passou: início do título 66 px, cards 199–279 px, quatro destaques até 669 px e sobreposição selo/anos zero, além dos 13/25 painéis e 38 capturas. A meta LCP mobile ≤2,5 s permanece aberta. Esta referência **prevalece** sobre as referências anteriores a 75%/125% documentadas no histórico. O aceite estético da última mudança ainda depende de inspeção do proprietário.
+
