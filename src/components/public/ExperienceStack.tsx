@@ -119,7 +119,7 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
   )
 }
 
-function ExperienceCard({ section, order }: { section: PortfolioSection; order: number }) {
+function ExperienceCard({ section, order, isMobile }: { section: PortfolioSection; order: number; isMobile: boolean }) {
   const items = [
     ...(section.desktopPanelA ?? section.panelA),
     ...(section.desktopPanelB ?? section.panelB),
@@ -131,7 +131,7 @@ function ExperienceCard({ section, order }: { section: PortfolioSection; order: 
       className={`portfolio-section experience-card theme-${section.theme} motion-${section.animation ?? "fade-up"}`}
       style={{ zIndex: order + 1 }}
     >
-      <div className="desktop-panel experience-desktop">
+      {!isMobile && <div className="desktop-panel experience-desktop">
         <header className="experience-heading">
           <CompanyMark section={section} />
           <h2>{section.title}</h2>
@@ -151,8 +151,8 @@ function ExperienceCard({ section, order }: { section: PortfolioSection; order: 
           ))}
         </div>
         <PhotoGallery section={section} />
-      </div>
-      <div className="mobile-panels">
+      </div>}
+      {isMobile && <div className="mobile-panels">
         <div
           id={`${section.slug}-a`}
           className="mobile-panel experience-mobile-copy"
@@ -184,12 +184,12 @@ function ExperienceCard({ section, order }: { section: PortfolioSection; order: 
         >
           <PhotoGallery section={section} />
         </div>
-      </div>
+      </div>}
     </section>
   )
 }
 
-export function ExperienceStack({ sections }: { sections: PortfolioSection[] }) {
+export function ExperienceStack({ sections, isMobile }: { sections: PortfolioSection[]; isMobile: boolean }) {
   const [active, setActive] = useState(sections[0]?.slug ?? "")
 
   useEffect(() => {
@@ -225,7 +225,7 @@ export function ExperienceStack({ sections }: { sections: PortfolioSection[] }) 
         ))}
       </nav>
       {sections.map((section, index) => (
-        <ExperienceCard key={section.id} section={section} order={index} />
+        <ExperienceCard key={section.id} section={section} order={index} isMobile={isMobile} />
       ))}
     </div>
   )

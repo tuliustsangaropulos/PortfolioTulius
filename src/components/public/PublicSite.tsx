@@ -777,12 +777,14 @@ function Section({
   nextSectionSlug,
   publishedSlugs,
   selectedTheme,
+  isMobile,
   onSelectTheme,
 }: {
   section: PortfolioSection
   nextSectionSlug?: string
   publishedSlugs: string[]
   selectedTheme: string | null
+  isMobile: boolean
   onSelectTheme: (themeKey: string | null) => void
 }) {
   return (
@@ -791,7 +793,7 @@ function Section({
       data-section={section.slug}
       className={`portfolio-section theme-${section.theme} layout-${section.layout} motion-${section.animation ?? "fade-up"}`}
     >
-      <div className="desktop-panel">
+      {!isMobile && <div className="desktop-panel">
         {section.slug === "perfil" ? (
           <ProfileDesktop
             section={section}
@@ -848,8 +850,8 @@ function Section({
             </div>
           </div>
         )}
-      </div>
-      <div className="mobile-panels">
+      </div>}
+      {isMobile && <div className="mobile-panels">
         {section.slug === "resultados" ? (
           <ResultsMobile
             section={section}
@@ -874,7 +876,7 @@ function Section({
             />
           </>
         )}
-      </div>
+      </div>}
     </section>
   )
 }
@@ -887,6 +889,18 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
   )
   const [current, setCurrent] = useState("perfil")
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
+  // Avoid mounting invisible desktop/mobile subtrees and duplicating their
+  // DOM, photos, SVGs and galleries on the initial render.
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia("(max-width: 767px)").matches,
+  )
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)")
+    const syncViewport = () => setIsMobile(media.matches)
+    media.addEventListener("change", syncViewport)
+    return () => media.removeEventListener("change", syncViewport)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -997,6 +1011,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
                 sections={visible.filter((entry) =>
                   EXPERIENCE_SLUGS.includes(entry.slug as (typeof EXPERIENCE_SLUGS)[number]),
                 )}
+                isMobile={isMobile}
               />
             )
           }
@@ -1008,6 +1023,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
               publishedSlugs={visible
                 .filter((entry) => entry.status === "published" && entry.visible)
                 .map((entry) => entry.slug)}
+              isMobile={isMobile}
               selectedTheme={selectedTheme}
               onSelectTheme={setSelectedTheme}
             />
