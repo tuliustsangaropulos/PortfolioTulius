@@ -38,30 +38,39 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "24.16.0"
-      - name: Confirm Vercel production deployment status for audit SHA
+      - name: Verify the deployed commit served by the production domain
         shell: bash
-        env:
-          GH_STATUS_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          api="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/status"
-          for attempt in $(seq 1 30); do
-            status=$(curl --fail --silent --show-error --max-time 15 \
-              -H "Authorization: Bearer ${GH_STATUS_TOKEN}" \
-              -H "Accept: application/vnd.github+json" "$api" | \
-              node -e 'let s=""; process.stdin.on("data",c=>s+=c).on("end",()=>{const x=JSON.parse(s);const v=(x.statuses??[]).find(z=>z.context==="Vercel");process.stdout.write(v?.state??"missing")})')
-            echo "P3_DEPLOYMENT_CHECK attempt=${attempt} sha=${GITHUB_SHA} vercel=${status}"
-            if [ "$status" = "success" ]; then
-              echo "P3_DEPLOYMENT_GATE sha=${GITHUB_SHA} vercel=success"
+          # A deployment may be READY without posting the GitHub 'Vercel'
+          # status. Verify the SHA actually served by the production alias.
+          for attempt in $(seq 1 45); do
+            marker="$(curl --fail --silent --show-error --location --max-time 15 \
+              -H "Accept: application/json" -H "Cache-Control: no-cache" \
+              "https://tulius.work/p3-deployment.json?sha=$GITHUB_SHA&attempt=$attempt" || true)"
+            result="$(printf '%s' "$marker" | node -e '
+              let data = ""
+              process.stdin.on("data", (part) => data += part)
+              process.stdin.on("end", () => {
+                try {
+                  const parsed = JSON.parse(data)
+                  process.stdout.write(
+                    /^[0-9a-f]{40}$/.test(parsed.sha) &&
+                      parsed.sha === process.env.GITHUB_SHA ? "MATCH" : "PENDING"
+                  )
+                } catch {
+                  process.stdout.write("PENDING")
+                }
+              })
+            ')"
+            echo "P3_DEPLOYMENT_CHECK attempt=$attempt sha=$GITHUB_SHA production_marker=$result"
+            if [ "$result" = "MATCH" ]; then
+              echo "P3_DEPLOYMENT_GATE sha=$GITHUB_SHA production=verified"
               exit 0
             fi
-            if [ "$status" = "failure" ] || [ "$status" = "error" ]; then
-              echo "Vercel reported a terminal deployment failure" >&2
-              exit 1
-            fi
-            sleep 5
+            sleep 4
           done
-          echo "Timed out awaiting Vercel success for audit SHA" >&2
+          echo "Production did not serve the audit SHA: refusing Lighthouse attribution" >&2
           exit 1
       - name: Production HTTP and SEO smoke
         run: node scripts/smoke-production.mjs
