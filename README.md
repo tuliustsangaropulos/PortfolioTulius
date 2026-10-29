@@ -118,3 +118,7 @@ A nova solicitação do proprietário **substituiu** a captura anterior que busc
 
 Com a geometria original mantida e sem `zoom` global, foram refinados apenas os textos secundários, as numerações 01–05 e os microespaçamentos da coluna esquerda. [CI #40807420317](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40807420317) e [P3 #40807420323](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40807420323) `success`, com 13 seções, 25 painéis e 38 capturas. O último destaque permanece dentro de 1512×691 e sem sobreposição com o selo. [Detalhamento no design system](docs/DESIGN_SYSTEM.md). O LCP mobile continua aberto (~4,45 s nesta amostra).
 
+### Menu público compacto — 29/10/2026
+
+Removidos subtítulos Perfil/Experiência/Referências e assinatura da gaveta; as oito opções mantêm ordem, destinos e altura mínima de toque 44 px. Admin sem edição de grupos; Supabase `navigation_items` preserva 14 registros (8 visíveis, 6 ocultos), todos com `group_name='Menu'` por compatibilidade. [CI #40810591049](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40810591049) e [P3 #40810488285](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40810488285) passaram; sem scroll em 390×844 nem 1512×691. Detalhes em [CMS](docs/ADMIN_CMS.md) e [responsividade](docs/RESPONSIVE_LAYOUT.md). LCP mobile segue aberto.
+
