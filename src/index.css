@@ -888,3 +888,24 @@
 .experience-card.theme-ink .experience-eyebrow,
 .experience-card.theme-ink .experience-value,
 .experience-card.theme-ink .experience-gallery-kicker { color: var(--orange); }
+
+/* P3 LCP: avoid layout/paint work for below-fold mobile sections.
+ * The browser activates skipped content as it enters the viewport.
+ * Intrinsic sizes match the number of mobile panels, so scroll anchors,
+ * sticky navigation and scroll snapping keep their original geometry.
+ */
+@supports (content-visibility: auto) {
+  @media (max-width: 767px) {
+    .public-site main > .portfolio-section:not(#perfil) {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 200svh;
+    }
+    .public-site main > #resultados {
+      contain-intrinsic-size: auto 100svh;
+    }
+    .experience-stack .experience-card {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 200svh;
+    }
+  }
+}
