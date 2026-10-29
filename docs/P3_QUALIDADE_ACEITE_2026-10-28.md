@@ -138,3 +138,25 @@ A coleta foi fortalecida para **até três tentativas de inicialização quando 
 **Contrato e segurança pública:** `P3_BROWSER_AUDIT failures=0`, `P4_EDITORIAL_SUMMARY captures=38,desktop=13,mobile=25,failures=0`, `P5_PUBLIC_RLS PASS`; zero exposição de tabelas administrativas nas consultas anônimas previstas. A avaliação estética humana, zoom nativo 200% e leitor de tela real não foram substituídos por esses testes.
 
 **Parecer:** o experimento de separar SEO do bloqueio de renderização permaneceu por preservar comportamento e passar nos gates; não há evidência de ganho causal suficiente para fechar a prioridade do LCP. A montagem adiada das seções foi revertida. Próximos experimentos devem isolar custo de JavaScript inicial, render React e CSS de fontes, com novas medições comparáveis e rollback pontual.
+
+## Ensaio dirigido de LCP mobile — 29/10/2026 UTC (solicitação do chat de 28/10)
+
+**Objetivo ainda NÃO atingido:** LCP mobile ≤2,5 s. Baseline documentado no SHA anterior à rodada: **4,36 s**, P3 [#40794804504](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40794804504). O alvo permanece como requisito, **não** confundir a aprovação do orçamento de regressão do CI com cumprimento da meta.
+
+**Hipótese confirmada no código:** a árvore React renderizava simultaneamente as composições desktop e mobile de todas as seções, mesmo quando o CSS escondia uma das versões. **Otimização mantida:** `PublicSite` e `ExperienceStack` agora montam apenas a versão correspondente ao `matchMedia("(max-width: 767px)")`, acompanhando mudanças de viewport. Não modifica conteúdo, ordem, CSS visual ou metadados; reduz DOM e trabalho de componentes ocultos. O P3 passou a exigir **25 painéis apenas em mobile** e ausência de árvore mobile em desktop, sem afrouxar a checagem de 13 seções, navegação, zoom e overflow. Um acesso a `.name-lockup` inexistente em mobile no teste foi corrigido.
+
+### Experimentos e evidências (mesmo tipo de Lighthouse, três amostras por dispositivo)
+
+| Versão | Experimento | Mediana LCP mobile | Decisão |
+|---|---|---:|---|
+| `cbc5bc2` | Baseline com ambas as árvores DOM | 4,36 s | Referência anterior |
+| `638e54c` | Render responsivo exclusivo, CI/P3 [#40796975171](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40796975171) | **4,18 s** | Mantido |
+| `9f9a4a3` | `content-visibility:auto` em seções mobile fora da primeira dobra, CI/P3 [#40797088345](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797088345) | **4,19 s** | Revertido: sem ganho relevante e com complexidade de altura intrínseca |
+| `82db120` | CSS de fontes Google não bloqueante, CI/P3 [#40797397621](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797397621) | **4,31 s** | Revertido: FCP melhorou, não houve ganho de LCP |
+| `4ab9ce5` | **Código funcional final**, apenas render exclusivo mantido, [CI #40797703964](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703964) e [P3 #40797703855](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703855) ambos **success** | **4,30 s** (Performance 80) | Mantido como melhoria de DOM, sem atribuir ganho estatisticamente robusto |
+
+A auditoria final `4ab9ce5` confirmou **13 seções, 25 painéis mobile, 38 capturas sem falhas, 12 viewports sem overflow, P5 anônimo 3/3 e zero mutações**; desktop LCP mediano **1,07 s**, Performance 98. A variabilidade entre runs impede declarar a redução de 4,36 para 4,30 como melhora causal conclusiva, embora a duplicação de DOM tenha sido eliminada de maneira verificável. Vercel Production `READY` no SHA funcional antes da auditoria.
+
+**Bottleneck restante:** o LCP é o retrato `/media/tulius-portrait-dark.jpg` já pré-carregado, `fetchpriority=high`, cerca de 13 KB. O relatório atribui atraso principalmente a execução do bundle e ao trabalho de renderização/hidratação e layout, não à transferência dessa foto. Bundle `vendor` anteriormente medido com **397,10 kB minificados / 111,04 kB gzip**. A próxima intervenção necessária para perseguir ≤2,5 s é investigar uma **redução arquitetural real do JavaScript inicial e do caminho de composição React/Supabase**, com testes comparáveis, possível divisão de dependências e rollback isolado. Não fazer SSR, alterar as leituras públicas/RLS ou persistir snapshots sem avaliar risco de conteúdo desatualizado e impacto na segurança. Não usar mudanças de métrica, esconder LCP, atrasar intencionalmente recursos críticos nem afrouxar orçamentos para declarar sucesso.
+
+**Restrições preservadas:** sem mudanças de banco, Supabase Storage, autenticação, custos, fontes finais, conteúdo aprovado, temas, dimensões visuais, layout mobile/desktop ou P2 transacional suspenso.

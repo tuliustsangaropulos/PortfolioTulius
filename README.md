@@ -97,3 +97,7 @@ O site público utiliza **escala natural de navegador**, sem redução CSS globa
 ### Continuidade da frente manual e Fontes do ChatGPT — 28/10/2026
 
 A documentação da rodada de verificação manual, das duas referências de zoom e da reconciliação dos **quatro arquivos atualmente anexados ao projeto ChatGPT** está em [`docs/CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md`](docs/CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md). O estado atual sempre é o SHA da `main`, não as cópias de Fontes datadas; não reabrir a revisão manual anterior sem novo achado.
+
+### LCP mobile — otimização medida, meta ainda aberta
+
+A rodada de 29/10 eliminou a montagem duplicada de DOM desktop/mobile no site público, com P3 13/25/38 e CI aprovados. LCP mobile mediano do SHA final `4ab9ce5`: **4,30 s** (baseline 4,36 s); o objetivo **≤2,5 s continua NÃO ATENDIDO**. Experimentos de `content-visibility` e carregamento não bloqueante de fontes foram revertidos por ausência de ganho. Evidências e próximo diagnóstico arquitetural em [qualidade P3](docs/P3_QUALIDADE_ACEITE_2026-10-28.md).

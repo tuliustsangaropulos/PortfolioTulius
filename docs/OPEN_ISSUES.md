@@ -117,3 +117,6 @@ Novo achado manual: 100% de zoom do navegador exibindo conteúdo pequeno, com re
 
 O mecanismo global anterior deve permanecer **proibido** pelo teste `src/lib/layout-zoom.test.ts` e pela checagem de estilo calculado `P3_VIEWPORT`; correções futuras de tipografia/densidade devem ser locais e responsivas, sem novo percentual de zoom CSS.
 
+### P3-PERF-01 — nova medição do LCP mobile (29/10/2026 UTC)
+
+**Aberto: objetivo ≤2,5 s ainda não atendido.** Código funcional `4ab9ce5`: mediana de três amostras mobile **4,30 s**, Performance 80; [P3 #40797703855](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703855) `success`. Baseline anterior 4,36 s; a pequena diferença não comprova melhoria causal. Mantida a eliminação da dupla árvore React desktop/mobile. Revertidos `content-visibility` e fontes Google não bloqueantes porque não melhoraram LCP. Próxima frente: reduzir o trabalho do JavaScript inicial (bundle vendor/React/Supabase), sem mudanças em produção não autorizadas. [Relatório](P3_QUALIDADE_ACEITE_2026-10-28.md).

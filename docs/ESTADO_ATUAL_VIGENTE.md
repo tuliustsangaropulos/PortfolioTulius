@@ -150,3 +150,6 @@ Por solicitação expressa, a composição de referência passou a ser a captura
 
 O mecanismo global anterior deve permanecer **proibido** pelo teste `src/lib/layout-zoom.test.ts` e pela checagem de estilo calculado `P3_VIEWPORT`; correções futuras de tipografia/densidade devem ser locais e responsivas, sem novo percentual de zoom CSS.
 
+### P3 — última rodada de desempenho mobile (29/10/2026 UTC)
+
+A correção de densidade/zoom anterior permanece intacta. A otimização de montar **apenas uma árvore responsiva** por viewport foi mantida; os testes P3 preservam 13 seções, 25 painéis mobile, 38 capturas e zero falhas. Último SHA funcional `4ab9ce5`, [CI #40797703964](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703964) e [P3 #40797703855](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703855) `success`; LCP mobile mediano **4,30 s**, meta **≤2,5 s não atendida**, desktop 1,07 s. Tentativas de contenção de pintura e fontes assíncronas foram **revertidas**. Nenhum dado ou mídia foi alterado. Detalhes e decisões de continuidade em [P3](P3_QUALIDADE_ACEITE_2026-10-28.md).

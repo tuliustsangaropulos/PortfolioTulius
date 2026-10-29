@@ -56,3 +56,7 @@ Não usar CSS `zoom` ou `transform:scale()` global em `.public-site`. Alteraçõ
 **Quatro documentos ativos observados:** (1) guia atualizado antigo, (2) índice operacional antigo, (3) contexto produto/design histórico, (4) backup privado da seção 01 de 80 linhas.
 
 **Ação proposta:** substituir as cópias (1) e (2) por revisões atuais; manter (3) e (4), preservando cópia privada do backup. **Não é necessária uma quinta Fonte permanente**, pois este documento novo reside no GitHub e pode ser lido pelo conector. A gestão das Fontes é manual no ChatGPT, não controlada por commits no GitHub.
+
+### P3 — última rodada de desempenho mobile (29/10/2026 UTC)
+
+A correção de densidade/zoom anterior permanece intacta. A otimização de montar **apenas uma árvore responsiva** por viewport foi mantida; os testes P3 preservam 13 seções, 25 painéis mobile, 38 capturas e zero falhas. Último SHA funcional `4ab9ce5`, [CI #40797703964](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703964) e [P3 #40797703855](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703855) `success`; LCP mobile mediano **4,30 s**, meta **≤2,5 s não atendida**, desktop 1,07 s. Tentativas de contenção de pintura e fontes assíncronas foram **revertidas**. Nenhum dado ou mídia foi alterado. Detalhes e decisões de continuidade em [P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
