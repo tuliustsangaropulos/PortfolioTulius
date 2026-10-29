@@ -29,9 +29,7 @@ export function prepareContentRestoration(
   if (typeof current.updated_at !== "string" || !current.updated_at) {
     throw new Error("Não foi possível conferir a versão atual do registro.")
   }
-  const fields = entityType === "content_blocks"
-    ? ["content_json"]
-    : ["title", "eyebrow", "intro"]
+  const fields = entityType === "content_blocks" ? ["content_json"] : ["title", "eyebrow", "intro"]
   const patch: Row = {}
   for (const field of fields) {
     if (!(field in old)) throw new Error("A revisão não possui todos os campos recuperáveis.")
