@@ -234,7 +234,9 @@ try {
           siteZoom: getComputedStyle(document.querySelector(".public-site")).zoom,
           siteTransform: getComputedStyle(document.querySelector(".public-site")).transform,
           nameLockupWidth: Math.round(document.querySelector(".name-lockup")?.getBoundingClientRect().width ?? 0),
-          nameLockupFontSize: parseFloat(getComputedStyle(document.querySelector(".name-lockup")).fontSize),
+          nameLockupFontSize: document.querySelector(".name-lockup")
+            ? parseFloat(getComputedStyle(document.querySelector(".name-lockup")).fontSize)
+            : null,
           documentWidth: document.documentElement.scrollWidth,
           overflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
           desktopDisplay: desktop ? getComputedStyle(desktop).display : null,
