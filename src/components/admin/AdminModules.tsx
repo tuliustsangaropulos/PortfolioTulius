@@ -2570,8 +2570,8 @@ export function EnhancedMediaLibrary() {
                 <strong>Publicado</strong>
                 {asset.storage_bucket === "portfolio-private" && (
                   <small>
-                    Arquivo privado protegido. Use “Disponibilizar no site” para torná-lo
-                    acessível nas páginas públicas.
+                    Arquivo privado protegido. Use “Disponibilizar no site” para torná-lo acessível
+                    nas páginas públicas.
                   </small>
                 )}
               </div>

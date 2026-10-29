@@ -2,8 +2,13 @@ import { describe, expect, it } from "vitest"
 import { getPublishedImageChoices } from "./media-selection"
 
 const row = (storage_bucket: string) => ({
-  id: storage_bucket, title: "photo.jpg", alt_text: "", mime_type: "image/jpeg",
-  storage_bucket, storage_path: "photo.jpg", status: "published",
+  id: storage_bucket,
+  title: "photo.jpg",
+  alt_text: "",
+  mime_type: "image/jpeg",
+  storage_bucket,
+  storage_path: "photo.jpg",
+  status: "published",
 })
 
 describe("published metadata cannot expose private media", () => {
