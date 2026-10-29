@@ -294,6 +294,30 @@ try {
         failures++
         console.log("P3_ABOUT_INVEST_FIT_REGRESSION " + JSON.stringify(composition))
       }
+      const refinements = await page.evaluate(() => {
+        const photo = document.querySelector("#contato .contact-portrait")
+        const border = document.querySelector("#contato .contact-footer")
+        const cards = Array.from(document.querySelectorAll("#depoimentos .testimonial-card"))
+        return {
+          contactPhotoBottom: photo?.getBoundingClientRect().bottom ?? null,
+          contactLineTop: border?.getBoundingClientRect().top ?? null,
+          testimonialCount: cards.length,
+          tallestCard: cards.length ? Math.max(...cards.map((card) => card.getBoundingClientRect().height)) : null,
+          testimonialOverflow: cards.some((card) => card.scrollHeight > card.clientHeight + 2),
+        }
+      })
+      console.log("P3_EDITORIAL_REFINEMENTS " + JSON.stringify(refinements))
+      const contactAligned = refinements.contactPhotoBottom !== null &&
+        refinements.contactLineTop !== null &&
+        Math.abs(refinements.contactPhotoBottom - refinements.contactLineTop) <= 2
+      const cardsCompact = refinements.testimonialCount === 5 &&
+        refinements.tallestCard !== null &&
+        refinements.tallestCard < 280 &&
+        !refinements.testimonialOverflow
+      if (!contactAligned || !cardsCompact) {
+        failures++
+        console.log("P3_EDITORIAL_REFINEMENTS_REGRESSION " + JSON.stringify(refinements))
+      }
       await page.screenshot({ path: path.join(shots, "p3-about-invest-1512.png"), fullPage: false })
     } catch (error) {
       failures++
