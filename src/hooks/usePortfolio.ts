@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { defaultTokens, sections as fallbackSections } from "../content/fallback"
-import { supabase } from "../lib/supabase"
+import type { SupabaseClient } from "@supabase/supabase-js"
+import { createPublicReadClient, isPublicConfigured } from "../lib/public-read"
 import {
   buildPublicNavigation,
   type PublicNavigationItem,
@@ -67,28 +68,35 @@ function toSection(
 }
 
 export function usePortfolio(includeDrafts = false) {
-  const [data, setData] = useState<PortfolioSection[]>(supabase ? [] : fallbackSections)
+  const [data, setData] = useState<PortfolioSection[]>(isPublicConfigured ? [] : fallbackSections)
   const [tokens, setTokens] = useState(defaultTokens)
   const [navigation, setNavigation] = useState<PublicNavigationItem[]>([])
-  const [source, setSource] = useState<"supabase" | "fallback">(supabase ? "supabase" : "fallback")
-  const [loading, setLoading] = useState(Boolean(supabase))
+  const [source, setSource] = useState<"supabase" | "fallback">(isPublicConfigured ? "supabase" : "fallback")
+  const [loading, setLoading] = useState(isPublicConfigured)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!supabase) return
-    const supabaseClient = supabase
+    if (!isPublicConfigured) return
     let cancelled = false
-    setLoading(true)
+    const loadPublishedData = async () => {
+      // Admin previews still use the full authenticated client. The public
+      // homepage uses only anonymous read-only REST calls.
+      const client = includeDrafts
+        ? (await import("../lib/supabase")).supabase
+        : createPublicReadClient()
+      if (!client || cancelled) return
+      const supabaseClient = client as unknown as SupabaseClient
+      setLoading(true)
     if (!includeDrafts) performance.mark("p3:portfolio-fetch-start")
     // SEO metadata is not required to compose the first fold. Request it in
     // parallel but do not make the initial visible content wait for those calls.
-    const pageRequest = supabase
+    const pageRequest = supabaseClient
       .from("pages")
       .select("seo_title,seo_description")
       .eq("slug", "home")
       .eq("status", "published")
       .maybeSingle()
-    const settingsRequest = supabase
+    const settingsRequest = supabaseClient
       .from("site_settings")
       .select("site_title,description,seo_json,locale")
       .eq("status", "published")
@@ -97,13 +105,13 @@ export function usePortfolio(includeDrafts = false) {
     // The current published portfolio binds only its testimonials collection.
     // Start that independent request alongside the section graph, rather than
     // imposing another network round trip before the first fold can render.
-    const testimonialsQuery = supabase.from("testimonials").select("*").order("sort_order")
+    const testimonialsQuery = supabaseClient.from("testimonials").select("*").order("sort_order")
     const testimonialsRequest = Promise.resolve(
       includeDrafts
         ? testimonialsQuery.neq("status", "archived")
         : testimonialsQuery.eq("status", "published"),
     )
-    let query = supabase
+    let query = supabaseClient
       .from("sections")
       .select(
         "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json)",
@@ -113,14 +121,14 @@ export function usePortfolio(includeDrafts = false) {
 
     void Promise.all([
       query,
-      supabase.from("section_panels").select("id,section_id,panel_key"),
-      supabase
+      supabaseClient.from("section_panels").select("id,section_id,panel_key"),
+      supabaseClient
         .from("block_placements")
         .select(
           "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
         ),
-      supabase.from("design_tokens").select("token_key,token_value").eq("status", "published"),
-      supabase
+      supabaseClient.from("design_tokens").select("token_key,token_value").eq("status", "published"),
+      supabaseClient
         .from("navigation_items")
         .select("label,target_slug,group_name,sort_order,is_visible,status")
         .eq("status", "published")
@@ -290,6 +298,15 @@ export function usePortfolio(includeDrafts = false) {
         // The pre-rendered HTML already contains safe canonical/SEO defaults.
         // Optional metadata failure must never block the public content.
       })
+    }
+    void loadPublishedData().catch(() => {
+      if (cancelled) return
+      setData([])
+      setNavigation([])
+      setSource("supabase")
+      setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
+      setLoading(false)
+    })
     return () => {
       cancelled = true
     }
