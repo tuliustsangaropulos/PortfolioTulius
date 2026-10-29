@@ -58,3 +58,15 @@ As imagens de blocos, retratos de abertura, coluna de Contato, foto central de O
 - **Carregamento público:** a consulta de depoimentos, única coleção atualmente vinculada no Supabase público, é iniciada em paralelo à consulta da estrutura de seções. Isso remove uma etapa sequencial de rede no carregamento inicial; não constitui por si só comprovação de LCP ≤2,5 s.
 - **Aceite humano:** declarado concluído pelo proprietário nesta conversa. P2, direitos de mídias, riscos de segurança anteriormente aceitos, exclusões de Storage/branches, 8 ocorrências editoriais e reconciliação de Fontes ChatGPT seguem como decisões separadas.
 
+## Correção estrutural de densidade desktop — 28/10/2026 (substitui o ajuste de 75%)
+
+**Novo achado do proprietário:** o navegador em 100% mostrava a página excessivamente pequena; a composição desejada corresponde à captura obtida com navegador em 125%. O mecanismo anterior de 75% de densidade permanece documentado **acima como histórico, não como regra vigente**.
+
+**Causa e remoção:** o código usava `zoom: var(--desktop-visual-scale)` em `.public-site`, com uma escala variável entre 75% e 100% em função de `100vw`. O zoom do navegador altera o viewport CSS e, consequentemente, o próprio valor calculado dessa escala, amplificando o efeito. Foram removidos a redução global, a variável `--desktop-visual-scale` e **todas** as compensações dependentes de `svh/dvh/vw` ligadas a ela, incluindo depoimentos e Contato. Preservou-se o ajuste independente de conteúdo longo na seção 01: `overflow:visible` e `min-height:100dvh` no desktop largo.
+
+**Novo contrato:** o aplicativo público não força `zoom` ou `transform:scale()` no contêiner. O navegador em 100% exibe o CSS responsivo nativo; o zoom em 125% e 200% é controlado exclusivamente pelo usuário, com passagem natural pelos breakpoints. As fontes, os tokens de identidade, o conteúdo editorial, o layout mobile e o CMS não foram modificados.
+
+**Prevenção de regressão:** teste unitário `src/lib/layout-zoom.test.ts` impede a reintrodução de zoom global/variável de compensação. O smoke P3 verifica o `getComputedStyle(.public-site).zoom === 1` e a ausência de transform no site, com viewports de 1920, 1757, 1440, 1366, 1200, 1101, 1100, tablet, simulador de 200% e mobile. A igualdade visual com a referência de 125% deve ser confirmada na mesma área útil em pixels físicos; diferenças de renderização entre SO/navegadores são esperadas.
+
+**Limites:** testes por mudança de viewport não simulam *verdadeiro* zoom nativo do navegador; a validação humana desses detalhes permanece baseada nos anexos da conversa. Este ajuste é estritamente do CSS público, sem gravação ou migração no Supabase. O P2 transacional e a meta LCP mobile são independentes.
+

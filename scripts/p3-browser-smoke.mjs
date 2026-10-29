@@ -201,7 +201,11 @@ try {
 
   const viewports = [
     [1920, 1080],
+    [1757, 832], // Desktop reference at native 100%, matching the owner's screenshot width.
     [1440, 900],
+    [1200, 800], // Wide-layout boundary; must not depend on CSS zoom.
+    [1101, 800],
+    [1100, 800],
     [1366, 768],
     [768, 1024],
     [720, 450], // CSS viewport equivalent to a 1440px screen at ~200% zoom; not native zoom
@@ -226,6 +230,11 @@ try {
           layoutViewportWidth: document.documentElement.clientWidth,
           visualViewportWidth: window.visualViewport?.width ?? null,
           requestedWidth,
+          // Global CSS zoom changes size again after browser zoom; forbid it.
+          siteZoom: getComputedStyle(document.querySelector(".public-site")).zoom,
+          siteTransform: getComputedStyle(document.querySelector(".public-site")).transform,
+          nameLockupWidth: Math.round(document.querySelector(".name-lockup")?.getBoundingClientRect().width ?? 0),
+          nameLockupFontSize: parseFloat(getComputedStyle(document.querySelector(".name-lockup")).fontSize),
           documentWidth: document.documentElement.scrollWidth,
           overflowPx: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
           desktopDisplay: desktop ? getComputedStyle(desktop).display : null,
@@ -278,7 +287,15 @@ try {
       }, width)
       await page.screenshot({ path: path.join(shots, `p3-${width}x${height}.png`), fullPage: false })
       console.log("P3_VIEWPORT " + JSON.stringify({ width, height, ...findings }))
-      if (findings.sectionCount !== 13 || findings.mobilePanelCount !== 25 || findings.documentWidth > width + 2) failures++
+      const nativeScale = Math.abs(Number(findings.siteZoom || 1) - 1) < 0.001 &&
+        findings.siteTransform === "none"
+      if (!nativeScale) {
+        console.log("P3_DESKTOP_ZOOM_REGRESSION " + JSON.stringify({
+          width, siteZoom: findings.siteZoom, siteTransform: findings.siteTransform, result: "FAIL",
+        }))
+      }
+      if (findings.sectionCount !== 13 || findings.mobilePanelCount !== 25 ||
+          findings.documentWidth > width + 2 || !nativeScale) failures++
     } catch (error) {
       failures++
       console.log("P3_VIEWPORT_ERROR " + JSON.stringify({ width, height, error: String(error).slice(0, 250) }))

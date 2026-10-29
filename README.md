@@ -90,3 +90,7 @@ Ver [auditoria das dez abas](docs/AUDITORIA_ADMIN_MANUAL_2026-10-28.md), incluin
 - **Carregamento público:** a consulta de depoimentos, única coleção atualmente vinculada no Supabase público, é iniciada em paralelo à consulta da estrutura de seções. Isso remove uma etapa sequencial de rede no carregamento inicial; não constitui por si só comprovação de LCP ≤2,5 s.
 - **Aceite humano:** declarado concluído pelo proprietário nesta conversa. P2, direitos de mídias, riscos de segurança anteriormente aceitos, exclusões de Storage/branches, 8 ocorrências editoriais e reconciliação de Fontes ChatGPT seguem como decisões separadas.
 
+### Prevenção de regressão de escala desktop (28/10/2026)
+
+O site público utiliza **escala natural de navegador**, sem redução CSS global para simular 75% do zoom. A nova referência de composição é a captura fornecida a 125% do navegador, desejada a 100%. Mudanças futuras devem ajustar tipografia/colunas/margens por componente e breakpoint, **nunca** `zoom` na raiz `.public-site` nem um `transform:scale()` global. `src/lib/layout-zoom.test.ts` e `scripts/p3-browser-smoke.mjs` impedem a reintrodução do padrão anterior; consultar [responsividade](docs/RESPONSIVE_LAYOUT.md). Nenhuma alteração de CMS, dados ou Storage foi necessária.
+

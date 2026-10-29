@@ -101,3 +101,7 @@ O formato Open Graph depende dos pixels reais do arquivo compartilhado: CSS do p
 
 As verificações da versão documental de `main` são [CI #40781599089](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40781599089) e [Export Docs #40781598923](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40781598923), ambas **success**. Vercel Production `READY` no mesmo commit documental antes deste registro. A declaração expressa do proprietário encerra a fase de aceite manual do chat; não encerra metas de performance ou P2 transacional.
 
+## Zoom CSS global removido — prevenção de regressão (28/10/2026)
+
+Novo achado manual: 100% de zoom do navegador exibindo conteúdo pequeno, com referência desejada em 125%. **Causa técnica solucionada no código:** removido o antigo `--desktop-visual-scale` de `.public-site` e as compensações associadas. A garantia estática `src/lib/layout-zoom.test.ts` e a auditoria de navegador P3 cobrem zoom/transform globais e a transição desktop/tablet. Se as capturas a 100% em navegador físico mostrarem diferenças do anexo desejado, corrigir dimensões locais de componentes, sem retornar a zoom global. Não reabrir o aceite dos demais ajustes já aprovados; P2 e LCP mobile permanecem independentes.
+

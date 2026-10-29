@@ -133,3 +133,7 @@ A nova frente manual solicitou tradução de status, confirmação e feedback de
 
 As verificações da versão documental de `main` são [CI #40781599089](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40781599089) e [Export Docs #40781598923](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40781598923), ambas **success**. Vercel Production `READY` no mesmo commit documental antes deste registro. A declaração expressa do proprietário encerra a fase de aceite manual do chat; não encerra metas de performance ou P2 transacional.
 
+## Correção de densidade desktop nativa — 28/10/2026
+
+Por solicitação expressa, a composição de referência passou a ser a captura com zoom do navegador em **125%**, agora desejada no navegador em **100%**. O mecanismo CSS anterior de escala 75% foi removido completamente do site público, juntamente com compensações de viewport dependentes. A seção de abertura mantém overflow e altura flexível em desktop largo. O contrato passa a não admitir **zoom CSS global** nem scale global na `.public-site`. Teste unitário preventivo e extensão de P3 auditam zoom calculado, transform e larguras adjacentes ao breakpoint. A implementação é exclusivamente pública; dados CMS/Supabase e admin preservados. Ver [Layout responsivo](RESPONSIVE_LAYOUT.md) e os commits/CI no HEAD vigente. O aceite de outras frentes manuais já registrado permanece preservado; este é um **novo ajuste solicitado**.
+
