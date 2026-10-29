@@ -12,6 +12,10 @@ const [html, robots, sitemap] = await Promise.all([
   read("sitemap.xml"),
 ])
 check(/<title>[^<]+<\/title>/i.test(html), "Título ausente no HTML.")
+check(/fonts\.googleapis\.com\/css2[^>]+media=["']print["'][^>]+onload=/.test(html),
+  "Google Fonts voltou a bloquear o primeiro paint.")
+check(/<noscript>\s*<link[^>]+fonts\.googleapis\.com\/css2/.test(html),
+  "Fallback de Google Fonts para navegadores sem JavaScript ausente.")
 check(/<meta\s+name=["']description["'][^>]+>/i.test(html),
   "Meta description ausente.")
 check(/<link\s+rel=["']canonical["'][^>]+>/i.test(html),
