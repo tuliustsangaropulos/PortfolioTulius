@@ -1,5 +1,12 @@
 # PortfolioTulius — estado operacional vigente
 
+## Auditoria P3/P6 e LCP mobile — 29/10/2026 (posterior à revisão de Invest RS)
+
+**SHA funcional:** [`4a8412e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/4a8412e93c99db4fae15e57d1e19785581daaf51). [CI #40824692978](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824692978) **success**, deployment Vercel Production **READY** no mesmo SHA, [P3 #40824693037](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824693037): **failure exclusivamente no orçamento sintético P6 mobile**.
+
+Corrigida a dependência do status GitHub `Vercel` usando fingerprint SHA servido no domínio; gate da produção passou e seis amostras Lighthouse foram coletadas. O preload da imagem Perfil agora lê o retrato publicado no CMS no build, sem alterar mídia nem conteúdo. O P6 reconhece o PNG real como LCP, mantendo a proteção contra página vazia. Browser **0 falhas**, P5 público **3/3**, **38 capturas**, **13 seções / 25 painéis**. LCP mobile mediano **7,55 s** (Performance 69) contra meta **≤2,5 s**; orçamento P6 6,5 s reprovado. O PNG atual demanda otimização própria, não habilitada por transformação de imagem paga. Ver [relatório P3](P3_QUALIDADE_ACEITE_2026-10-28.md). P2 transacional e decisões de custos/Storage permanecem suspensos.
+
+
 ## Verificação manual — Olá! e Invest RS, 29/10/2026
 
 - **Seção 02 “Olá!” (somente desktop):** para que a silhueta da fotografia personalizada alcance a margem inferior do painel, `src/index.css` compensou a faixa transparente inferior da imagem com altura `calc(100% + clamp(2rem, 5.5dvh, 3rem))`, posicionada no topo e recortada pelo contêiner existente. Mantidos fonte original no Supabase, enquadramento do CMS, colunas, textos, cor laranja e composição mobile. Sem zoom/scale global.
