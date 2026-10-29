@@ -363,18 +363,22 @@ export const sections: PortfolioSection[] = [
       },
       {
         title: "Estratégia de CRM e mailing institucional",
+        isHidden: true,
         text: "Diagnóstico e proposta de modelo integrado para mailing e CRM: consolidação de contatos, segmentação, governança, fluxos de convites e histórico de relacionamento. As integrações externas permanecem planejadas.",
       },
       {
         title: "Cartões de visita digitais",
+        isHidden: true,
         text: "Concepção de variantes multilíngues, QR Code e vCard.",
       },
       {
         title: "Conteúdo e apresentações institucionais",
+        isHidden: true,
         text: "Produção de materiais institucionais, apresentações estratégicas e articulação com stakeholders e agências contratadas.",
       },
       {
         title: "Inovação, IA e automação",
+        isHidden: true,
         text: "Participação em frentes de projetos digitais e inovação com inteligência artificial e automação aplicadas a fluxos de comunicação.",
       },
     ],

@@ -258,6 +258,51 @@ try {
     }
   }
 
+  // Approved employer and introduction first folds at native 100% zoom.
+  {
+    const page = await browser.newPage()
+    try {
+      await page.setViewport({ width: 1512, height: 691 })
+      await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
+      await page.waitForSelector("#invest-rs .desktop-panel .experience-project", { timeout: 10000 })
+      const composition = await page.evaluate(() => {
+        const about = document.querySelector("#sobre .about-portrait")
+        const portrait = about?.querySelector("img")
+        const projects = document.querySelector("#invest-rs .desktop-panel .experience-projects")
+        const logo = document.querySelector("#invest-rs .experience-heading > .company-mark")
+        const navigationLogo = document.querySelector(".experience-index .company-mark-small")
+        return {
+          aboutBottom: about?.getBoundingClientRect().bottom ?? null,
+          portraitBottom: portrait?.getBoundingClientRect().bottom ?? null,
+          count: projects?.querySelectorAll(".experience-project").length ?? 0,
+          listHeight: projects?.clientHeight ?? 0,
+          listScrollHeight: projects?.scrollHeight ?? 0,
+          headingLogoBorder: logo ? getComputedStyle(logo).borderTopWidth : null,
+          indexLogoBorder: navigationLogo ? getComputedStyle(navigationLogo).borderTopWidth : null,
+        }
+      })
+      console.log("P3_ABOUT_INVEST_FIT " + JSON.stringify(composition))
+      const fits = composition.aboutBottom !== null &&
+        composition.portraitBottom !== null &&
+        composition.portraitBottom >= composition.aboutBottom + 16 &&
+        composition.count === 4 &&
+        composition.listScrollHeight <= composition.listHeight + 3 &&
+        composition.headingLogoBorder === "0px" &&
+        composition.indexLogoBorder !== null &&
+        composition.indexLogoBorder !== "0px"
+      if (!fits) {
+        failures++
+        console.log("P3_ABOUT_INVEST_FIT_REGRESSION " + JSON.stringify(composition))
+      }
+      await page.screenshot({ path: path.join(shots, "p3-about-invest-1512.png"), fullPage: false })
+    } catch (error) {
+      failures++
+      console.log("P3_ABOUT_INVEST_FIT " + JSON.stringify({ result: "FAIL", error: String(error).slice(0, 500) }))
+    } finally {
+      await page.close()
+    }
+  }
+
   const viewports = [
     [1920, 1080],
     [1757, 832], // Desktop reference at native 100%, matching the owner's screenshot width.
