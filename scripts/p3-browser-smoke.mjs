@@ -59,6 +59,28 @@ try {
       await page.waitForFunction(() => document.activeElement?.classList.contains("icon-button"), { timeout: 10000 })
       const mainInert = await page.$eval(".public-site main", el => el.hasAttribute("inert"))
       if (!mainInert) throw new Error("Conteúdo de fundo não recebeu inert")
+      stage = "menu fits the mobile viewport"
+      const mobileMenu = await page.evaluate(() => {
+        const drawer = document.querySelector(".nav-drawer")
+        const items = [...drawer.querySelectorAll("ol li button")]
+        const last = items.at(-1)?.getBoundingClientRect()
+        const container = drawer.getBoundingClientRect()
+        return {
+          count: items.length,
+          groupLabels: drawer.querySelectorAll(".menu-group-label").length,
+          footer: !!drawer.querySelector(".drawer-foot"),
+          scrollHeight: drawer.scrollHeight,
+          clientHeight: drawer.clientHeight,
+          lastBottom: last?.bottom,
+          containerBottom: container.bottom,
+        }
+      })
+      console.log("P3_MENU_FIT_MOBILE " + JSON.stringify(mobileMenu))
+      if (mobileMenu.count !== 8 || mobileMenu.groupLabels !== 0 || mobileMenu.footer ||
+          mobileMenu.scrollHeight > mobileMenu.clientHeight + 2 ||
+          mobileMenu.lastBottom > mobileMenu.containerBottom + 2) {
+        throw new Error("Menu mobile não cabe na viewport: " + JSON.stringify(mobileMenu))
+      }
       stage = "focus trap"
       await page.keyboard.down("Shift")
       await page.keyboard.press("Tab")
@@ -103,6 +125,43 @@ try {
     } catch (error) {
       failures++
       console.log("P3_INTERACTION " + JSON.stringify({ result: "FAIL", stage, error: String(error).slice(0, 260) }))
+    } finally {
+      await page.close()
+    }
+  }
+
+  // Menu height and content at the compact desktop screenshot viewport.
+  {
+    const page = await browser.newPage()
+    try {
+      await page.setViewport({ width: 1512, height: 691 })
+      await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
+      await page.click(".menu-button")
+      await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
+      const info = await page.evaluate(() => {
+        const drawer = document.querySelector(".nav-drawer")
+        const buttons = [...drawer.querySelectorAll("ol li button")]
+        const lastRect = buttons.at(-1)?.getBoundingClientRect()
+        return {
+          count: buttons.length,
+          groupLabels: drawer.querySelectorAll(".menu-group-label").length,
+          footer: !!drawer.querySelector(".drawer-foot"),
+          scrollHeight: drawer.scrollHeight,
+          clientHeight: drawer.clientHeight,
+          lastBottom: lastRect?.bottom,
+          viewportHeight: innerHeight,
+        }
+      })
+      console.log("P3_MENU_FIT_DESKTOP " + JSON.stringify(info))
+      if (info.count !== 8 || info.groupLabels !== 0 || info.footer ||
+          info.scrollHeight > info.clientHeight + 2 ||
+          info.lastBottom > info.viewportHeight + 2) {
+        throw new Error("Menu desktop não cabe na viewport: " + JSON.stringify(info))
+      }
+      await page.screenshot({ path: path.join(shots, "p3-menu-1512x691.png"), fullPage: false })
+    } catch (error) {
+      failures++
+      console.log("P3_MENU_FIT_DESKTOP " + JSON.stringify({ result: "FAIL", error: String(error).slice(0, 350) }))
     } finally {
       await page.close()
     }

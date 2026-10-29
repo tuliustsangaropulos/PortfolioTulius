@@ -40,18 +40,17 @@
 .menu-button { color: inherit; grid-column: 3; justify-self: end; display: flex; align-items: center; gap: .6rem; min-height: 44px; border: 0; background: transparent; font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
 .nav-backdrop { position: fixed; z-index: 100; inset: 0; background: color-mix(in srgb, var(--ink) 55%, transparent); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .25s ease, visibility .25s; }
 .nav-backdrop.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
-.nav-drawer { position: absolute; right: 0; top: 0; height: 100%; width: min(34rem, 100%); overflow-y: auto; background: var(--ink); color: var(--paper); padding: clamp(1.25rem, 3vw, 2.5rem); transform: translateX(100%); transition: transform .25s ease-out; }
+.nav-drawer { position: absolute; right: 0; top: 0; height: 100%; height: 100dvh; width: min(34rem, 100%); display: flex; flex-direction: column; overflow-y: auto; background: var(--ink); color: var(--paper); padding: clamp(.75rem, 2dvh, 1.75rem) clamp(1.25rem, 3vw, 2.5rem); transform: translateX(100%); transition: transform .25s ease-out; }
 .is-open .nav-drawer { transform: none; }
-.drawer-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.5rem; border-bottom: 1px solid #ffffff33; }
+.drawer-head { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding-bottom: clamp(.35rem, 1dvh, .75rem); border-bottom: 1px solid #ffffff33; }
 .drawer-head p, .drawer-foot { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; }
 .icon-button, .order-buttons button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid currentColor; background: transparent; color: inherit; }
-.nav-drawer ol { list-style: none; margin: 1.5rem 0; padding: 0; }
-.nav-drawer li button { width: 100%; display: grid; grid-template-columns: 2.5rem 1fr auto; align-items: center; gap: .5rem; padding: .7rem 0; border: 0; border-bottom: 1px solid #ffffff24; background: transparent; color: inherit; text-align: left; font-family: var(--font-display); font-size: clamp(1.5rem, 4vh, 2.3rem); text-transform: uppercase; }
+.nav-drawer ol { flex: 0 0 auto; display: grid; grid-auto-rows: clamp(44px, 9dvh, 72px); list-style: none; margin: clamp(.45rem, 1.5dvh, .95rem) 0 0; padding: 0; }
+.nav-drawer li button { width: 100%; height: 100%; min-height: 44px; display: grid; grid-template-columns: 2.5rem 1fr auto; align-items: center; gap: .5rem; padding: clamp(.3rem, .8dvh, .65rem) 0; border: 0; border-bottom: 1px solid #ffffff24; background: transparent; color: inherit; text-align: left; font-family: var(--font-display); font-size: clamp(1.4rem, 3.65dvh, 2rem); line-height: 1; text-transform: uppercase; }
 .nav-drawer li button span { color: var(--orange); font: 600 .8rem 'Inter'; }
 .nav-drawer li button svg { opacity: 0; transition: transform .2s, opacity .2s; }
 .nav-drawer li button:hover svg, .nav-drawer li button.active svg { opacity: 1; transform: translate(3px, -3px); }
 .nav-drawer li button.active { color: var(--orange); }
-.menu-group-label { display: block; padding: 1rem 0 .35rem; color: #a9a19b; font: 700 .65rem var(--font-body); text-transform: uppercase; letter-spacing: .16em; }
 .drawer-foot { color: #aaa; }
 .nav-open { overflow: hidden; }
 
@@ -332,7 +331,7 @@
 .collection-tabs { display: flex; gap: .35rem; margin-bottom: 1rem; overflow-x: auto; padding-bottom: .25rem; }
 .collection-tabs button { flex: 0 0 auto; min-height: 42px; border: 1px solid #d7d2ce; background: white; padding: .55rem .75rem; }
 .collection-tabs button.active { background: #171617; color: white; border-color: #171617; }
-.navigation-form > div { display: grid; grid-template-columns: auto 1fr 1fr 1fr auto auto; align-items: end; gap: .75rem; padding: 1rem 0; border-top: 1px solid #ece8e5; }
+.navigation-form > div { display: grid; grid-template-columns: auto 1fr 1fr auto auto; align-items: end; gap: .75rem; padding: 1rem 0; border-top: 1px solid #ece8e5; }
 .navigation-form label, .media-editor-grid label { display: grid; gap: .35rem; color: #504a47; font-size: .76rem; font-weight: 600; }
 .navigation-form code { align-self: center; }
 .editorial-columns { display: grid; grid-template-columns: 1.2fr .8fr; gap: 1rem; align-items: start; }

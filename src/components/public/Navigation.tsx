@@ -121,9 +121,6 @@ export function Navigation({
           <ol>
             {navigation.map((item, index) => (
               <li key={item.slug}>
-                {(index === 0 || navigation[index - 1]?.group !== item.group) && (
-                  <span className="menu-group-label">{item.group}</span>
-                )}
                 <button
                   className={current === item.slug ? "active" : ""}
                   onClick={() => go(item.slug)}
@@ -136,7 +133,6 @@ export function Navigation({
             ))}
           </ol>
           {navigation.length === 0 && <p className="drawer-foot">Nenhum item de menu publicado.</p>}
-          <p className="drawer-foot">Comunicação · Estratégia · Reputação</p>
         </nav>
       </div>
     </>

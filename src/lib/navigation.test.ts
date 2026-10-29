@@ -13,13 +13,13 @@ const row = (slug: string, order: number, extra: Partial<NavigationRow> = {}): N
 })
 
 describe("navegação editorial", () => {
-  it("segue a ordem e os grupos editoriais sem reordenar as seções", () => {
+  it("mantém a ordem mesmo com grupos legados, sem expô-los na navegação", () => {
     const entries = buildPublicNavigation(sections, [
       row("sobre", 2, { label: "Quem sou", group_name: "Sobre" }),
       row("contato", 1, { label: "Contato", group_name: "Ação" }),
     ])
     expect(entries.map((item) => item.slug)).toEqual(["contato", "sobre"])
-    expect(entries.map((item) => item.group)).toEqual(["Ação", "Sobre"])
+    expect(entries.every((item) => !("group" in item))).toBe(true)
     expect(sections[0].slug).toBe("perfil")
   })
 

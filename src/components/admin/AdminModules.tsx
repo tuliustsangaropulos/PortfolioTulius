@@ -1994,7 +1994,7 @@ export function NavigationStudio() {
         id: crypto.randomUUID(),
         label: "Novo item",
         target_slug: "perfil",
-        group_name: "Principal",
+        group_name: "Menu",
         sort_order: items.length + 1,
         is_visible: false,
         status: "draft",
@@ -2005,11 +2005,11 @@ export function NavigationStudio() {
     if (!supabase) return
     setMessage("Salvando navegação…")
     const rows = items.map(
-      ({ id, label, target_slug, group_name, sort_order, is_visible, status }) => ({
+      ({ id, label, target_slug, sort_order, is_visible, status }) => ({
         id,
         label,
         target_slug,
-        group_name,
+        group_name: "Menu",
         sort_order,
         is_visible,
         status,
@@ -2032,7 +2032,7 @@ export function NavigationStudio() {
         <div>
           <p>Menu público</p>
           <h1>Navegação</h1>
-          <span>Rótulos, grupos, ordem e visibilidade</span>
+          <span>Menu único: rótulos, ordem, âncoras e visibilidade. Sem títulos de grupo no site.</span>
         </div>
         <div className="header-actions">
           <button className="secondary-button" onClick={create}>
@@ -2059,13 +2059,6 @@ export function NavigationStudio() {
               <input
                 value={item.label}
                 onChange={(event) => patch(index, { label: event.target.value })}
-              />
-            </label>
-            <label>
-              Grupo
-              <input
-                value={item.group_name}
-                onChange={(event) => patch(index, { group_name: event.target.value })}
               />
             </label>
             <label>

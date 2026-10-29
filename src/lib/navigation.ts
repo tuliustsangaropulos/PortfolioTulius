@@ -12,7 +12,6 @@ export type NavigationRow = {
 export type PublicNavigationItem = {
   slug: string
   label: string
-  group: string
   number: number
 }
 
@@ -38,7 +37,6 @@ export function buildPublicNavigation(
         {
           slug: section.slug,
           label: record.label.trim() || section.title,
-          group: record.group_name.trim() || "Principal",
           number: section.number,
         },
       ]
