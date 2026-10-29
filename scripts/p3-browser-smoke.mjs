@@ -202,6 +202,7 @@ try {
   const viewports = [
     [1920, 1080],
     [1757, 832], // Desktop reference at native 100%, matching the owner's screenshot width.
+    [1512, 691], // Owner's 100% desktop-zoom reference; editorial density contract.
     [1440, 900],
     [1200, 800], // Wide-layout boundary; must not depend on CSS zoom.
     [1101, 800],
@@ -287,6 +288,43 @@ try {
             })),
         }
       }, width)
+      if (width === 1512 && height === 691) {
+        const density = await page.evaluate(() => {
+          const rect = (sel) => {
+            const r = document.querySelector(sel)?.getBoundingClientRect()
+            return r ? { top: Math.round(r.top), bottom: Math.round(r.bottom),
+              left: Math.round(r.left), right: Math.round(r.right) } : null
+          }
+          const heading = document.querySelector(".name-lockup")
+          const badge = rect(".profile-portrait .badge-360")
+          const yearsCopy = rect(".years span")
+          const overlap = badge && yearsCopy
+            ? Math.max(0, Math.min(badge.bottom, yearsCopy.bottom) - Math.max(badge.top, yearsCopy.top)) *
+              Math.max(0, Math.min(badge.right, yearsCopy.right) - Math.max(badge.left, yearsCopy.left))
+            : null
+          return {
+            headerHeight: rect(".site-header")?.bottom ?? null,
+            nameTop: rect(".name-lockup")?.top ?? null,
+            nameFontPx: heading ? Math.round(parseFloat(getComputedStyle(heading).fontSize)) : null,
+            cardsTop: rect(".area-grid")?.top ?? null,
+            cardsBottom: rect(".area-grid")?.bottom ?? null,
+            finalHighlightBottom: document.querySelector(".profile-highlights .content-item:last-child")?.getBoundingClientRect().bottom ?? null,
+            badgeYearsOverlapPx2: overlap,
+          }
+        })
+        console.log("P3_DESKTOP_DENSITY " + JSON.stringify(density))
+        const compact = density.headerHeight !== null && density.headerHeight <= 59 &&
+          density.nameTop !== null && density.nameTop < 80 &&
+          density.nameFontPx >= 73 && density.nameFontPx <= 90 &&
+          density.cardsTop !== null && density.cardsTop >= 175 && density.cardsTop <= 215 &&
+          density.cardsBottom !== null && density.cardsBottom <= 320 &&
+          density.finalHighlightBottom !== null && density.finalHighlightBottom <= height + 3 &&
+          density.badgeYearsOverlapPx2 !== null && density.badgeYearsOverlapPx2 < 200
+        if (!compact) {
+          failures++
+          console.log("P3_DESKTOP_DENSITY_REGRESSION " + JSON.stringify({ result: "FAIL", density }))
+        }
+      }
       await page.screenshot({ path: path.join(shots, `p3-${width}x${height}.png`), fullPage: false })
       console.log("P3_VIEWPORT " + JSON.stringify({ width, height, ...findings }))
       const nativeScale = Math.abs(Number(findings.siteZoom || 1) - 1) < 0.001 &&

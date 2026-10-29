@@ -726,6 +726,79 @@
   }
 }
 
+/* 28 Oct 2026 — desktop editorial density at native browser 100%.
+ * Reference: the owner's 75%-browser screenshot at a ~1512x691 physical viewport.
+ * Browser zoom changes the CSS viewport, so do NOT use zoom, a root transform,
+ * or a single viewport-based global scale. Preserve the column geometry/images
+ * and tune only the fixed-size editorial spacing and typographic clamps.
+ * CMS tokens and the mobile breakpoint remain independent.
+ */
+@media (min-width: 1101px) {
+  .public-site { --header: 3.375rem; }
+  .public-site .brand-button { font-size: .825rem; }
+
+  /* Profile: preserve the two-column split, title, portrait and circular seal. */
+  .profile-main { padding-top: clamp(4.125rem, 6.75vh, 6rem); padding-bottom: 1.5rem; }
+  .profile-role { margin: .3rem 0 1.125rem; font-size: clamp(.69rem, .75vw, .75rem); }
+  .area-grid .content-item { padding: .75rem; }
+  .area-grid .content-item h3 { font-size: clamp(.75rem, 1.1vw, 1.05rem); }
+  .area-grid .item-label { font-size: .55rem; }
+  .profile-main > h2 { margin: 1.125rem 0 .375rem; padding-top: .45rem; font-size: clamp(1rem, 1.5vw, 1.5rem); }
+  .career-grid { column-gap: 1.5rem; }
+  .career-grid .content-item { padding: .49rem 0; }
+  .career-grid .content-item h3 { font-size: clamp(.75rem, .95vw, 1.05rem); }
+  .career-grid .content-item p { font-size: clamp(.68rem, .7vw, .78rem); }
+  .profile-next-section { bottom: 1.125rem; width: 2.75rem; height: 2.75rem; }
+
+  /* Fit the entire left editorial list without clipping the fourth item. */
+  .years span { font-size: clamp(.69rem, .75vw, .75rem); }
+  .profile-portrait .badge-360 {
+    top: calc(var(--hero-desktop-badge-y, 74%) - clamp(1.65rem, 5dvh, 2.5rem));
+  }
+  .profile-sidebar-content {
+    gap: clamp(.525rem, 1.125dvh, .94rem);
+    padding: clamp(.75rem, 1.65dvh, 1.25rem) clamp(.75rem, 1.65vw, 1.5rem) clamp(.75rem, 1.5dvh, 1.2rem);
+  }
+  .profile-intro {
+    max-width: 19.5rem;
+    font-size: clamp(.7rem, calc(var(--hero-desktop-intro-size, 1rem) * .75), .9rem);
+  }
+  .profile-highlights { gap: clamp(.18rem, .525dvh, .49rem); }
+  .profile-highlights .content-item {
+    grid-template-columns: 1.875rem minmax(0, 1fr);
+    padding-block: calc(var(--item-desktop-spacing, .45rem) * .75);
+  }
+  .profile-highlights .item-arrow { width: 1.55rem; height: 1.55rem; }
+  .profile-highlights .item-arrow svg { width: .87rem; height: .87rem; }
+  .profile-highlights .content-item h3 {
+    font-size: clamp(.64rem, calc(var(--item-desktop-title-size, .85rem) * .75), .78rem);
+  }
+  .profile-highlights .content-item p {
+    font-size: clamp(.68rem, calc(var(--item-desktop-text-size, .84rem) * .75), .84rem);
+  }
+
+  /* Same physical editorial rhythm on remaining desktop sections. */
+  .desktop-editorial {
+    padding-top: clamp(4.125rem, 6vh, 5.625rem);
+    padding-bottom: clamp(1.875rem, 4.5vh, 3rem);
+  }
+  .desktop-editorial .section-intro { font-size: clamp(.83rem, .9vw, .98rem); }
+  .desktop-editorial .desktop-content .content-item {
+    padding-block: var(--item-desktop-spacing, .75rem);
+  }
+  .desktop-editorial .desktop-content .content-item h3 {
+    font-size: var(--item-desktop-title-size, clamp(.94rem, 1.2vw, 1.32rem));
+  }
+  .desktop-editorial .desktop-content .content-item p {
+    font-size: var(--item-desktop-text-size, clamp(.75rem, .77vw, .84rem));
+  }
+  .experience-desktop {
+    padding-top: calc(var(--header) + 3.375rem);
+    padding-bottom: clamp(1.5rem, 3vh, 3rem);
+  }
+  .experience-project { padding-block: .525rem; }
+}
+
 /* Manual review 28 Oct: five square testimonials with accessible expansion. */
 .testimonials-editorial { grid-template-columns: minmax(14rem, .72fr) minmax(0, 1.55fr); gap: clamp(1rem, 3vw, 3rem); }
 .testimonials-editorial > .section-heading h2 { font-size: clamp(3.5rem, 5.2vw, 6.8rem); }
