@@ -105,3 +105,13 @@ As verificações da versão documental de `main` são [CI #40781599089](https:/
 
 Novo achado manual: 100% de zoom do navegador exibindo conteúdo pequeno, com referência desejada em 125%. **Causa técnica solucionada no código:** removido o antigo `--desktop-visual-scale` de `.public-site` e as compensações associadas. A garantia estática `src/lib/layout-zoom.test.ts` e a auditoria de navegador P3 cobrem zoom/transform globais e a transição desktop/tablet. Se as capturas a 100% em navegador físico mostrarem diferenças do anexo desejado, corrigir dimensões locais de componentes, sem retornar a zoom global. Não reabrir o aceite dos demais ajustes já aprovados; P2 e LCP mobile permanecem independentes.
 
+### Evidências do ajuste nativo de escala — Auditoria 28/10/2026
+
+**SHA funcional** [`8a45e9b`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/8a45e9bc0663ee15e9b0797785900308f6622712), [CI Validate #40794804474](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40794804474) **success**, [P3 Lighthouse + browser #40794804504](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40794804504) **success** e Vercel Production `READY` no mesmo SHA previamente à auditoria.
+
+**Novos testes do contrato de escala:** 12/12 viewports (1920×1080, 1757×832, 1440×900, 1366×768, 1200×800, 1101×800, 1100×800, 768×1024, 720×450, 390×844, 360×800, 320×700) registraram `getComputedStyle(.public-site).zoom === "1"`, `transform === "none"` e `overflowPx=0`. A passagem de 1101 para 1100 px não altera artificialmente a escala (fonte da marca: 61,656 px e 61,6 px, respectivamente). **13 seções**, **25 painéis mobile**, **38 capturas editoriais**, **nenhum erro** de navegador ou painel; 6 experiências e galeria navegáveis. P5 público anônimo 3/3 e `mutations=0`.
+
+**Performance (mediana de 3 execuções Lighthouse)**: mobile Performance **78**, LCP **4,36 s**, desktop Performance **97**, LCP **1,09 s**. O gate de regressão foi aprovado, porém **LCP mobile ≤2,5 s não foi atingido**. Alteração de zoom não constitui intervenção em performance mobile. O teste em 720 px é uma simulação por largura de viewport e **não** comprova zoom nativo de 200% em todos os navegadores.
+
+O mecanismo global anterior deve permanecer **proibido** pelo teste `src/lib/layout-zoom.test.ts` e pela checagem de estilo calculado `P3_VIEWPORT`; correções futuras de tipografia/densidade devem ser locais e responsivas, sem novo percentual de zoom CSS.
+
