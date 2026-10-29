@@ -1,5 +1,17 @@
 # PortfolioTulius — P3: auditoria de qualidade e aceite
 
+## Atualização P3/P6 — 29/10/2026: gate corrigido; performance mobile aberta
+
+**SHA funcional:** [`4a8412e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/4a8412e93c99db4fae15e57d1e19785581daaf51). [CI #40824692978](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824692978) **success**, deployment Vercel Production **READY** no mesmo SHA, [P3 #40824693037](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824693037): **failure exclusivamente no orçamento sintético P6 mobile**.
+
+- **Gate GitHub↔Vercel:** o status GitHub `Vercel` ausente em deploys `READY` foi substituído por fingerprint estático `p3-deployment.json` gerado no build com `VERCEL_GIT_COMMIT_SHA`, validado pelo domínio `tulius.work`. O gate **PASS** no SHA correto e permitiu executar Lighthouse completo. Sem secrets ou alteração de configuração Vercel.
+- **Preload do retrato:** `scripts/generate-seo.mjs` consulta o bloco publicado `perfil/a` e substitui o preload antigo `/media/tulius-portrait-dark.jpg` pela URL atual de `content_json.items[0].image`. Na ausência de URL confiável, omite o preload remoto; o build Vercel registrou `preload do retrato sincronizado com CMS`. Fotografia e dados não foram alterados.
+- **Gate P6 de conteúdo:** agora valida o elemento `img` dentro de `.mobile-profile-hero` / `.profile-portrait` em vez de exigir um nome de arquivo fixo. Isto aceita o PNG publicado no CMS sem aceitar uma página vazia. **PASS** em mobile e desktop.
+- **Auditoria funcional:** `P3_BROWSER_AUDIT failures=0`, `P5_PUBLIC_RESULT 3/3 mutations=0`, `P4_EDITORIAL_SUMMARY captures=38 desktop=13 mobile=25 failures=0`. Lighthouse: a11y/SEO/boas práticas 100/100.
+- **Lighthouse mediano (3 amostras):** mobile **Performance 69, LCP 7.545,89 ms** (variação 7.203–7.663 ms) e desktop **Performance 94, LCP ~1.607 ms**. O **orçamento P6 mobile de 6,5 s falhou** e a **meta ideal ≤2,5 s segue não cumprida**. Não chamar auditoria global de aprovada.
+- **Diagnóstico:** o LCP agora é um PNG público atual do Supabase (a imagem aprovada do Perfil), com sugestão Lighthouse de ~1.008 KiB de economia na entrega de imagens e até ~3,1 s de possível economia de LCP (estimativa Lighthouse, não medida de ganho). Preload reduziu atraso de requisição da amostra inicial de ~947 ms para ~69 ms, mas a mediana de LCP não demonstrou cumprimento do alvo. Próximo passo técnico é obter **uma versão otimizada da imagem real, sem substituí-la nem apagar o original**, validar fidelidade visual e medir no mesmo método. Não habilitar transformação cobrável do Supabase nem alterar CMS/Storage sem escopo autorizado.
+
+
 **Início:** 28/10/2026. **Critério:** verificar a mesma implementação publicada, sem alterar conteúdo editorial, licenças, dados do CMS ou identidade visual.
 
 > **Aceite automatizado final (28/10/2026): APROVADO.** A [reexecução #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085) confirmou **13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas**. Veja o [termo específico de aceite automatizado](P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). A conferência visual humana será realizada em nova frente/novo chat; **LCP mobile ≤2,5 s ainda não alcançado**.
