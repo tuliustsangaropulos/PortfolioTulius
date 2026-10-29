@@ -1,6 +1,13 @@
 # CMS administrativo
 
-> **Estado operacional em 28/10/2026:** confira [índice vigente](ESTADO_ATUAL_VIGENTE.md) e [pendências P2](OPEN_ISSUES.md). O [P5 de leitura autenticada #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770) **passou 4/4** (login, 8 módulos, prévia, logout, zero requisições de escrita CMS/Storage detectadas). **Não testou salvar, publicar, alterar, promover upload ou restaurar via UI.** Os fluxos descritos abaixo são funcionalidades do código, não provas de homologação transacional. A restauração de snapshots pela interface **não está implementada**. A seção antiga de 26/10 deve ser lida como histórico das alterações; não criar usuário administrativo adicional sem pedido explícito.
+> **Estado operacional em 28/10/2026:** confira [índice vigente](ESTADO_ATUAL_VIGENTE.md) e [pendências P2](OPEN_ISSUES.md). O [P5 de leitura autenticada #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770) **passou 4/4** (login, 8 módulos, prévia, logout, zero requisições de escrita CMS/Storage detectadas). **Não testou salvar, publicar, alterar, promover upload ou restaurar via UI.** Os fluxos descritos abaixo são funcionalidades do código, não provas de homologação transacional. A recuperação limitada de campos de seções e blocos foi implementada na interface em 29/10, mas **não está homologada com gravações reais**. Mídia e Storage continuam excluídos da restauração. A seção antiga de 26/10 deve ser lida como histórico das alterações; não criar usuário administrativo adicional sem pedido explícito.
+
+## Restauração assistida de revisões — 29/10/2026
+
+Em `/admin` → **Revisões**, uma revisão de `sections` ou `content_blocks` pode ser comparada com a versão atual. A recuperação é **limitada** a `title`, `eyebrow` e `intro` (seções), ou a `content_json` (blocos). Não recupera `media_assets`, arquivos Storage, `status`, visibilidade, ordem, IDs ou placements. A prévia mostra os campos a recuperar; revisões cujo conteúdo ultrapasse o limite de pré-visualização permanecem bloqueadas para recuperação nessa interface.
+
+Antes de gravar, a interface exige confirmação, relê a versão atual, compara `updated_at`, insere explicitamente o snapshot atual em `content_revisions` e somente então tenta aplicar o patch restrito, condicionado ao mesmo `updated_at`. O trigger existente continua capturando snapshots posteriores. Esta sequência protege contra sobrescrita simples e preserva uma cópia prévia, **mas não é uma transação SQL atômica única** entre a cópia e o UPDATE. **A execução transacional com JWT administrativo real continua não homologada e suspensa (P2)**. Os testes unitários validam apenas a lista branca, integridade de identidade e proibição de reverter mídia.
+
 
 ## Capacidades implementadas
 
@@ -22,7 +29,7 @@ Nenhuma configuração executa JS/CSS do banco. Slugs publicados são bloqueados
 
 Já existe **uma conta Auth associada a um registro em `admin_users`** no snapshot verificado de 28/10. Não criar ou substituir contas durante homologação documental. **Somente se for solicitada expressamente uma nova conta**, provisionar via Supabase Auth e inserir seu UID em `admin_users` pelo operador autorizado. Não existe autopromoção, signup administrativo público ou autorização baseada apenas em `authenticated`.
 
-Revisões e auditoria são gravadas por trigger. Restauração de snapshots pela interface permanece evolução futura.
+Revisões e auditoria são gravadas por trigger. A interface atual oferece comparação e recuperação **restrita** de campos com cópia de segurança e controle de concorrência; o ensaio transacional P2 com JWT real permanece suspenso.
 
 ## Destino dos cinco cards da abertura (25/10/2026)
 
