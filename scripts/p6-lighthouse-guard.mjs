@@ -34,6 +34,21 @@ for (const device of ["mobile", "desktop"]) {
   if (reports.length !== names.length) continue
   const performance = median(reports.map((r) => r.categories?.performance?.score))
   const lcpMs = median(reports.map((r) => r.audits?.["largest-contentful-paint"]?.numericValue))
+  // A missing portfolio once produced an apparently excellent mobile LCP.
+  // Do not score an empty/error page as a performance improvement.
+  const lcpContentPresent = reports.every((report) => {
+    const audits = report.audits ?? {}
+    const nodes = audits["lcp-breakdown-insight"]?.details?.items ??
+      audits["lcp-discovery-insight"]?.details?.items ??
+      audits["largest-contentful-paint-element"]?.details?.items ?? []
+    const serialized = JSON.stringify(nodes)
+    return serialized.includes("tulius-portrait-dark.jpg") &&
+      serialized.includes(device === "mobile" ? "mobile-profile-hero" : "profile-portrait")
+  })
+  console.log("P6_LCP_CONTENT_GATE " + JSON.stringify({
+    device, result: lcpContentPresent ? "PASS" : "FAIL", expected: "approved_profile_portrait",
+  }))
+  if (!lcpContentPresent) errors.push(device + ": expected published profile portrait missing from LCP")
   const cls = Math.max(...reports.map((r) => r.audits?.["cumulative-layout-shift"]?.numericValue ?? Infinity))
   if (performance === null || performance < bounds[device].performance)
     errors.push(device + ": median performance below budget")

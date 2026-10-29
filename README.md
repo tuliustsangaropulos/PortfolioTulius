@@ -101,3 +101,7 @@ A documentação da rodada de verificação manual, das duas referências de zoo
 ### LCP mobile — otimização medida, meta ainda aberta
 
 A rodada de 29/10 eliminou a montagem duplicada de DOM desktop/mobile no site público, com P3 13/25/38 e CI aprovados. LCP mobile mediano do SHA final `4ab9ce5`: **4,30 s** (baseline 4,36 s); o objetivo **≤2,5 s continua NÃO ATENDIDO**. Experimentos de `content-visibility` e carregamento não bloqueante de fontes foram revertidos por ausência de ganho. Evidências e próximo diagnóstico arquitetural em [qualidade P3](docs/P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+### Prevenção de score Lighthouse falso após divisão de chunks
+
+O P3 de 29/10 isolou os chunks do Supabase sem mudar o cliente ou as consultas públicas. Uma tentativa anterior de REST customizado foi revertida quando deixou o site vazio: LCP baixo sem conteúdo **não é melhoria**. Novo gate `P6_LCP_CONTENT_GATE` exige o retrato publicado como LCP nas três amostras mobile/desktop. O objetivo ≤2,5 s continua aberto. [P3 completo](docs/P3_QUALIDADE_ACEITE_2026-10-28.md).

@@ -60,3 +60,7 @@ Não usar CSS `zoom` ou `transform:scale()` global em `.public-site`. Alteraçõ
 ### P3 — última rodada de desempenho mobile (29/10/2026 UTC)
 
 A correção de densidade/zoom anterior permanece intacta. A otimização de montar **apenas uma árvore responsiva** por viewport foi mantida; os testes P3 preservam 13 seções, 25 painéis mobile, 38 capturas e zero falhas. Último SHA funcional `4ab9ce5`, [CI #40797703964](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703964) e [P3 #40797703855](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40797703855) `success`; LCP mobile mediano **4,30 s**, meta **≤2,5 s não atendida**, desktop 1,07 s. Tentativas de contenção de pintura e fontes assíncronas foram **revertidas**. Nenhum dado ou mídia foi alterado. Detalhes e decisões de continuidade em [P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+### Continuação do LCP mobile — 29/10/2026 UTC
+
+Teste de leitor REST público foi revertido por produzir **zero seções**; o Lighthouse falso de 2,26 s é inválido e não representa cumprimento da meta. O Supabase SDK/autenticação originais foram preservados. **Apenas a separação de chunks Vite** foi mantida: `supabase-sdk` e `vendor`. Auditoria P3 `e1846ac`: 13 seções, 25 painéis, 38 capturas, LCP mediano mobile 4,248 s, P5 sem mutações. A meta ≤2,5 s continua aberta e o gate P6 foi reforçado para exigir conteúdo LCP real. Ver [relatório P3](P3_QUALIDADE_ACEITE_2026-10-28.md).
