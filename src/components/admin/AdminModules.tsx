@@ -2004,17 +2004,15 @@ export function NavigationStudio() {
   async function save() {
     if (!supabase) return
     setMessage("Salvando navegação…")
-    const rows = items.map(
-      ({ id, label, target_slug, sort_order, is_visible, status }) => ({
-        id,
-        label,
-        target_slug,
-        group_name: "Menu",
-        sort_order,
-        is_visible,
-        status,
-      }),
-    )
+    const rows = items.map(({ id, label, target_slug, sort_order, is_visible, status }) => ({
+      id,
+      label,
+      target_slug,
+      group_name: "Menu",
+      sort_order,
+      is_visible,
+      status,
+    }))
     const { error } = await supabase.from("navigation_items").upsert(rows, { onConflict: "id" })
     setMessage(error?.message ?? "Navegação salva.")
     if (!error) await load()
@@ -2032,7 +2030,9 @@ export function NavigationStudio() {
         <div>
           <p>Menu público</p>
           <h1>Navegação</h1>
-          <span>Menu único: rótulos, ordem, âncoras e visibilidade. Sem títulos de grupo no site.</span>
+          <span>
+            Menu único: rótulos, ordem, âncoras e visibilidade. Sem títulos de grupo no site.
+          </span>
         </div>
         <div className="header-actions">
           <button className="secondary-button" onClick={create}>
