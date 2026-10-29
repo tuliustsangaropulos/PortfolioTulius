@@ -114,3 +114,7 @@ No SHA funcional [`cc30446`](https://github.com/tuliustsangaropulos/PortfolioTul
 
 A nova solicitação do proprietário **substituiu** a captura anterior que buscava 125%: **o aspecto desejado a 100% agora é o visto a 75%** no anexo mais recente, em desktop ~1512×691. A implementação é localizada na mídia `min-width:1101px`, sem zoom/scale global e sem alterar dados. O P3 [#40806132632](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40806132632) passou: início do título 66 px, cards 199–279 px, quatro destaques até 669 px e sobreposição selo/anos zero, além dos 13/25 painéis e 38 capturas. A meta LCP mobile ≤2,5 s permanece aberta. Esta referência **prevalece** sobre as referências anteriores a 75%/125% documentadas no histórico. O aceite estético da última mudança ainda depende de inspeção do proprietário.
 
+### Primeira dobra desktop — refinamento de legibilidade (29/10/2026)
+
+Com a geometria original mantida e sem `zoom` global, foram refinados apenas os textos secundários, as numerações 01–05 e os microespaçamentos da coluna esquerda. [CI #40807420317](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40807420317) e [P3 #40807420323](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40807420323) `success`, com 13 seções, 25 painéis e 38 capturas. O último destaque permanece dentro de 1512×691 e sem sobreposição com o selo. [Detalhamento no design system](docs/DESIGN_SYSTEM.md). O LCP mobile continua aberto (~4,45 s nesta amostra).
+
