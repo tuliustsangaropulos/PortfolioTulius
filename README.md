@@ -105,3 +105,8 @@ A rodada de 29/10 eliminou a montagem duplicada de DOM desktop/mobile no site p�
 ### Prevenção de score Lighthouse falso após divisão de chunks
 
 O P3 de 29/10 isolou os chunks do Supabase sem mudar o cliente ou as consultas públicas. Uma tentativa anterior de REST customizado foi revertida quando deixou o site vazio: LCP baixo sem conteúdo **não é melhoria**. Novo gate `P6_LCP_CONTENT_GATE` exige o retrato publicado como LCP nas três amostras mobile/desktop. O objetivo ≤2,5 s continua aberto. [P3 completo](docs/P3_QUALIDADE_ACEITE_2026-10-28.md).
+
+### Auditoria final da proteção P6 e divisão dos chunks — 29/10/2026 UTC
+
+No SHA funcional [`cc30446`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/cc304462bf9bf2ab0d8583b85920eb136a127916), [CI #40800444163](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40800444163) e [P3 #40800444157](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40800444157) passaram, com Vercel Production `READY`. P3: **13 seções**, **25 painéis mobile**, **38 capturas**, `P3_BROWSER_AUDIT failures=0`, P5 anônimo **3/3**, **0 mutações**. O novo **`P6_LCP_CONTENT_GATE` passou em mobile e desktop**, comprovando que o LCP medido era o retrato publicado. Mediana Lighthouse mobile: **Performance 82, LCP 4,421 s**; desktop: **Performance 97, LCP 1,235 s**. O valor de 4,248 s do experimento `e1846ac` não se repetiu; **não há evidência de melhora causal do LCP** frente ao baseline de aproximadamente 4,30 s. A meta mobile **≤2,5 s permanece aberta**. Preservar o SDK e o conteúdo original; a separação dos chunks está mantida apenas como isolamento/cache, **não** como aceite de desempenho.
+
