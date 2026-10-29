@@ -793,90 +793,94 @@ function Section({
       data-section={section.slug}
       className={`portfolio-section theme-${section.theme} layout-${section.layout} motion-${section.animation ?? "fade-up"}`}
     >
-      {!isMobile && <div className="desktop-panel">
-        {section.slug === "perfil" ? (
-          <ProfileDesktop
-            section={section}
-            nextSectionSlug={nextSectionSlug}
-            publishedSlugs={publishedSlugs}
-            onSelectTheme={onSelectTheme}
-          />
-        ) : section.slug === "sobre" ? (
-          <AboutDesktop section={section} />
-        ) : section.slug === "resultados" ? (
-          <ResultsDesktop
-            section={section}
-            selectedTheme={selectedTheme}
-            onSelectTheme={onSelectTheme}
-          />
-        ) : section.slug === "depoimentos" ? (
-          <TestimonialsDesktop section={section} />
-        ) : section.slug === "contato" ? (
-          <ContactDesktop section={section} />
-        ) : (
-          <div
-            className={
-              section.slug === "ferramentas"
-                ? "desktop-editorial tools-editorial"
-                : "desktop-editorial"
-            }
-          >
-            <header className="section-heading">
-              <h2>{section.title}</h2>
-              {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
-              {section.intro && <p className="section-intro">{section.intro}</p>}
-            </header>
-            <div className="desktop-content">
-              <div>
-                {(section.desktopPanelA ?? section.panelA).map((item, i) => (
-                  <ItemCard
-                    key={`${item.title}-${i}`}
-                    item={item}
-                    index={i}
-                    layout={section.layout}
-                  />
-                ))}
-              </div>
-              <div>
-                {(section.desktopPanelB ?? section.panelB).map((item, i) => (
-                  <ItemCard
-                    key={`${item.title}-${i}`}
-                    item={item}
-                    index={i}
-                    layout={section.layout}
-                  />
-                ))}
+      {!isMobile && (
+        <div className="desktop-panel">
+          {section.slug === "perfil" ? (
+            <ProfileDesktop
+              section={section}
+              nextSectionSlug={nextSectionSlug}
+              publishedSlugs={publishedSlugs}
+              onSelectTheme={onSelectTheme}
+            />
+          ) : section.slug === "sobre" ? (
+            <AboutDesktop section={section} />
+          ) : section.slug === "resultados" ? (
+            <ResultsDesktop
+              section={section}
+              selectedTheme={selectedTheme}
+              onSelectTheme={onSelectTheme}
+            />
+          ) : section.slug === "depoimentos" ? (
+            <TestimonialsDesktop section={section} />
+          ) : section.slug === "contato" ? (
+            <ContactDesktop section={section} />
+          ) : (
+            <div
+              className={
+                section.slug === "ferramentas"
+                  ? "desktop-editorial tools-editorial"
+                  : "desktop-editorial"
+              }
+            >
+              <header className="section-heading">
+                <h2>{section.title}</h2>
+                {section.eyebrow && <p className="eyebrow">{section.eyebrow}</p>}
+                {section.intro && <p className="section-intro">{section.intro}</p>}
+              </header>
+              <div className="desktop-content">
+                <div>
+                  {(section.desktopPanelA ?? section.panelA).map((item, i) => (
+                    <ItemCard
+                      key={`${item.title}-${i}`}
+                      item={item}
+                      index={i}
+                      layout={section.layout}
+                    />
+                  ))}
+                </div>
+                <div>
+                  {(section.desktopPanelB ?? section.panelB).map((item, i) => (
+                    <ItemCard
+                      key={`${item.title}-${i}`}
+                      item={item}
+                      index={i}
+                      layout={section.layout}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>}
-      {isMobile && <div className="mobile-panels">
-        {section.slug === "resultados" ? (
-          <ResultsMobile
-            section={section}
-            selectedTheme={selectedTheme}
-            onSelectTheme={onSelectTheme}
-          />
-        ) : (
-          <>
-            <MobilePanel
+          )}
+        </div>
+      )}
+      {isMobile && (
+        <div className="mobile-panels">
+          {section.slug === "resultados" ? (
+            <ResultsMobile
               section={section}
-              panel="a"
-              items={section.panelA}
-              publishedSlugs={publishedSlugs}
+              selectedTheme={selectedTheme}
               onSelectTheme={onSelectTheme}
             />
-            <MobilePanel
-              section={section}
-              panel="b"
-              items={section.panelB}
-              publishedSlugs={publishedSlugs}
-              onSelectTheme={onSelectTheme}
-            />
-          </>
-        )}
-      </div>}
+          ) : (
+            <>
+              <MobilePanel
+                section={section}
+                panel="a"
+                items={section.panelA}
+                publishedSlugs={publishedSlugs}
+                onSelectTheme={onSelectTheme}
+              />
+              <MobilePanel
+                section={section}
+                panel="b"
+                items={section.panelB}
+                publishedSlugs={publishedSlugs}
+                onSelectTheme={onSelectTheme}
+              />
+            </>
+          )}
+        </div>
+      )}
     </section>
   )
 }
@@ -891,9 +895,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
   // Avoid mounting invisible desktop/mobile subtrees and duplicating their
   // DOM, photos, SVGs and galleries on the initial render.
-  const [isMobile, setIsMobile] = useState(
-    () => window.matchMedia("(max-width: 767px)").matches,
-  )
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 767px)").matches)
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)")

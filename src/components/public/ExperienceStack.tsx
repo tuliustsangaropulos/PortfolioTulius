@@ -119,7 +119,15 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
   )
 }
 
-function ExperienceCard({ section, order, isMobile }: { section: PortfolioSection; order: number; isMobile: boolean }) {
+function ExperienceCard({
+  section,
+  order,
+  isMobile,
+}: {
+  section: PortfolioSection
+  order: number
+  isMobile: boolean
+}) {
   const items = [
     ...(section.desktopPanelA ?? section.panelA),
     ...(section.desktopPanelB ?? section.panelB),
@@ -131,33 +139,8 @@ function ExperienceCard({ section, order, isMobile }: { section: PortfolioSectio
       className={`portfolio-section experience-card theme-${section.theme} motion-${section.animation ?? "fade-up"}`}
       style={{ zIndex: order + 1 }}
     >
-      {!isMobile && <div className="desktop-panel experience-desktop">
-        <header className="experience-heading">
-          <CompanyMark section={section} />
-          <h2>{section.title}</h2>
-          {section.eyebrow && <p className="experience-eyebrow">{section.eyebrow}</p>}
-          {section.intro && <p>{section.intro}</p>}
-        </header>
-        <div className="experience-projects">
-          <h3>Projetos e realizações</h3>
-          {items.map((item, index) => (
-            <article className="experience-project" key={`${item.title}-${index}`}>
-              {item.meta && <span className="experience-project-meta">{item.meta}</span>}
-              <h4>{item.title}</h4>
-              {item.value && <strong className="experience-value">{item.value}</strong>}
-              {item.text && <p>{item.text}</p>}
-              {item.tags && <p>{item.tags.join(" · ")}</p>}
-            </article>
-          ))}
-        </div>
-        <PhotoGallery section={section} />
-      </div>}
-      {isMobile && <div className="mobile-panels">
-        <div
-          id={`${section.slug}-a`}
-          className="mobile-panel experience-mobile-copy"
-          data-panel="a"
-        >
+      {!isMobile && (
+        <div className="desktop-panel experience-desktop">
           <header className="experience-heading">
             <CompanyMark section={section} />
             <h2>{section.title}</h2>
@@ -176,20 +159,55 @@ function ExperienceCard({ section, order, isMobile }: { section: PortfolioSectio
               </article>
             ))}
           </div>
-        </div>
-        <div
-          id={`${section.slug}-b`}
-          className="mobile-panel experience-mobile-gallery"
-          data-panel="b"
-        >
           <PhotoGallery section={section} />
         </div>
-      </div>}
+      )}
+      {isMobile && (
+        <div className="mobile-panels">
+          <div
+            id={`${section.slug}-a`}
+            className="mobile-panel experience-mobile-copy"
+            data-panel="a"
+          >
+            <header className="experience-heading">
+              <CompanyMark section={section} />
+              <h2>{section.title}</h2>
+              {section.eyebrow && <p className="experience-eyebrow">{section.eyebrow}</p>}
+              {section.intro && <p>{section.intro}</p>}
+            </header>
+            <div className="experience-projects">
+              <h3>Projetos e realizações</h3>
+              {items.map((item, index) => (
+                <article className="experience-project" key={`${item.title}-${index}`}>
+                  {item.meta && <span className="experience-project-meta">{item.meta}</span>}
+                  <h4>{item.title}</h4>
+                  {item.value && <strong className="experience-value">{item.value}</strong>}
+                  {item.text && <p>{item.text}</p>}
+                  {item.tags && <p>{item.tags.join(" · ")}</p>}
+                </article>
+              ))}
+            </div>
+          </div>
+          <div
+            id={`${section.slug}-b`}
+            className="mobile-panel experience-mobile-gallery"
+            data-panel="b"
+          >
+            <PhotoGallery section={section} />
+          </div>
+        </div>
+      )}
     </section>
   )
 }
 
-export function ExperienceStack({ sections, isMobile }: { sections: PortfolioSection[]; isMobile: boolean }) {
+export function ExperienceStack({
+  sections,
+  isMobile,
+}: {
+  sections: PortfolioSection[]
+  isMobile: boolean
+}) {
   const [active, setActive] = useState(sections[0]?.slug ?? "")
 
   useEffect(() => {
