@@ -94,3 +94,6 @@ Ver [auditoria das dez abas](docs/AUDITORIA_ADMIN_MANUAL_2026-10-28.md), incluin
 
 O site público utiliza **escala natural de navegador**, sem redução CSS global para simular 75% do zoom. A nova referência de composição é a captura fornecida a 125% do navegador, desejada a 100%. Mudanças futuras devem ajustar tipografia/colunas/margens por componente e breakpoint, **nunca** `zoom` na raiz `.public-site` nem um `transform:scale()` global. `src/lib/layout-zoom.test.ts` e `scripts/p3-browser-smoke.mjs` impedem a reintrodução do padrão anterior; consultar [responsividade](docs/RESPONSIVE_LAYOUT.md). Nenhuma alteração de CMS, dados ou Storage foi necessária.
 
+### Continuidade da frente manual e Fontes do ChatGPT — 28/10/2026
+
+A documentação da rodada de verificação manual, das duas referências de zoom e da reconciliação dos **quatro arquivos atualmente anexados ao projeto ChatGPT** está em [`docs/CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md`](docs/CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md). O estado atual sempre é o SHA da `main`, não as cópias de Fontes datadas; não reabrir a revisão manual anterior sem novo achado.

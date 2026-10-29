@@ -80,3 +80,6 @@ As imagens de blocos, retratos de abertura, coluna de Contato, foto central de O
 
 O mecanismo global anterior deve permanecer **proibido** pelo teste `src/lib/layout-zoom.test.ts` e pela checagem de estilo calculado `P3_VIEWPORT`; correções futuras de tipografia/densidade devem ser locais e responsivas, sem novo percentual de zoom CSS.
 
+### Continuidade após a última auditoria de zoom
+
+O proprietário solicitou que a aparência atual a 100% reproduzisse a referência antes observada a 125%. **Corrigida a causa técnica** (sem zoom CSS global e sem compensações progressivas) e aprovada a auditoria P3 do SHA funcional `8a45e9b`: 12 resoluções, 0 overflow, 13 seções, 25 painéis e 38 capturas. A correspondência estética exata da nova referência em navegador físico ainda não foi confirmada por mensagem posterior. O aceite manual anterior para as demais áreas permanece válido. Mais contexto: [continuidade do chat](CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md).

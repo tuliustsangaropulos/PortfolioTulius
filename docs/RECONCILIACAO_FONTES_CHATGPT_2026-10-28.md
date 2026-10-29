@@ -1,32 +1,37 @@
-# PortfolioTulius — reconciliação atual das Fontes ChatGPT
+# PortfolioTulius — reconciliação das Fontes do projeto ChatGPT
 
-**Conferência:** 28/10/2026. **Estado vigente:** [`ESTADO_ATUAL_VIGENTE.md`](ESTADO_ATUAL_VIGENTE.md). O [registro inicial de reconciliação](historico/RECONCILIACAO_FONTES_CHATGPT_INICIAL_2026-10-28.md) é histórico. Esta página é um inventário de fontes **anexadas ao projeto ChatGPT**, não um substituto para o banco, repositório ou arquivos originais.
+**Conferência efetiva: 28/10/2026, após a última correção estrutural de zoom.** Inventário lido da superfície de arquivos do projeto ChatGPT nesta conversa, não inferido de arquivos antigos. Fonte de verdade operacional: GitHub `main`, CI/Vercel no mesmo SHA e Supabase atual quando necessário. Consultar [estado vigente](ESTADO_ATUAL_VIGENTE.md), [pendências](OPEN_ISSUES.md) e [resumo do chat](CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md).
 
-## Fontes permanentes observadas antes desta atualização — 8
+## Quatro documentos Markdown atualmente anexados ao projeto ChatGPT
 
-1. `GUIA_FONTES_VIGENTES_PORTFOLIOTULIUS_2026-10-28.md` — **manter até substituir por guia atualizado** com este índice, depois retirar a versão antiga.
-2. `CONTEXTO_PRODUTO_DESIGN_PORTFOLIOTULIUS.md` — **manter** como contexto de produto/design histórico, com precedência do código e documentos atuais.
-3. `INVENTARIO_GITHUB_ESTADO_ATUAL_PORTFOLIOTULIUS.md` — **retirar das Fontes ativas após backup**; inventário antigo do GitHub não representa o estado corrente.
-4. `CONTINUIDADE_P3_APRENDIZADOS_PLANO_PORTFOLIOTULIUS.md` — **retirar após backup**, plano antigo.
-5. `HISTORICO_CORRECOES_EVOLUCAO_PORTFOLIOTULIUS.md` — **arquivar após backup**, história importante, não situação operacional.
-6. `ESTADO_ATUAL_AUDITORIA_2026-10-25.md` — **retirar após backup**, snapshot superado; versão idêntica no GitHub.
-7. `CONTINUIDADE_AJUSTES_SECAO_02_2026-10-26.md` — **retirar após backup**, idêntica ao equivalente no GitHub.
-8. `CONTINUIDADE_AJUSTES_SECAO_01_PORTFOLIOTULIUS_2026-10-25.md` — **preservar integralmente antes de retirar**; Fonte de **80 linhas**, enquanto [GitHub](CONTINUIDADE_AJUSTES_SECAO_01_2026-10-25.md) tem **53**.
+| Arquivo anexado | Papel real | Recomendação |
+|---|---|---|
+| `GUIA_FONTES_VIGENTES_PORTFOLIOTULIUS_ATUALIZADO_2026-10-28.md` | Guia congelado no commit `d10ef39`; contém afirmação histórica de aceite humano ainda pendente | **Substituir por cópia revisada** do guia, sem manter duas versões ativas |
+| `ESTADO_ATUAL_VIGENTE_PORTFOLIOTULIUS_2026-10-28.md` | Snapshot operacional também congelado em `d10ef39`; 13/13 de navegação histórica, LCP antigo, status manual anterior | **Substituir por cópia revisada** com resumo recente e indicação de consultar `main` |
+| `CONTEXTO_PRODUTO_DESIGN_PORTFOLIOTULIUS.md` | Registro amplo de intenções, produto, identidade, 14 seções do plano e decisões de 24–25/10 | **Manter sem reescrever**; é memória histórica de requisitos, não diagnóstico do estado atual |
+| `BACKUP_CONTINUIDADE_SECAO_01_VERSAO_80_LINHAS_2026-10-28.md` | Variante exclusiva da seção 01, **80 linhas**, SHA-256 `67db85f1cc497e6f51625f19472f76a753707cb0c7b34407af73d7f23b4ff288` | **Preservar integralmente**, com cópia privada independente; não confundir com a variante GitHub de 53 linhas nem publicar automaticamente |
 
-## Backups e preservação
+Além desses documentos, a conversa contém capturas de tela chamadas `image.png`: são anexos da conversa, **não** novas Fontes Markdown permanentes.
 
-Neste atendimento foram preparados **dois ZIPs locais para download** (8 Fontes ativas, 6 documentos históricos disponíveis na sessão), ambos com `MANIFESTO_SHA256.json`; também uma cópia `.md` da variante de 80 linhas. O SHA-256 da Fonte original seção 01 é `67db85f1cc497e6f51625f19472f76a753707cb0c7b34407af73d7f23b4ff288`. Esses anexos são **de uso privado do proprietário**, e **não foram publicados no repositório público**. Arquivar os ZIPs em local seguro antes de remover Fontes. O repositório GitHub preserva sua variante de 53 linhas e os snapshots das outras seis continuidades sem modificações.
+## Correção importante do inventário anterior
 
-## Seleção ativa recomendada depois da reorganização
+A listagem de **oito Fontes** no guia anterior e na [reconciliação histórica](historico/RECONCILIACAO_FONTES_CHATGPT_INICIAL_2026-10-28.md) é um snapshot de uma fase anterior, **não** a situação atualmente observada. Nesta conferência foram encontradas exatamente as **quatro Fontes Markdown** acima. Portanto, **não instruir a remover oito arquivos inexistentes na lista atual**.
 
-- **Obrigatórias:** guia atualizado das Fontes e `CONTEXTO_PRODUTO_DESIGN_PORTFOLIOTULIUS.md`.
-- **Altamente úteis sem conector:** cópia atual de [índice operacional](ESTADO_ATUAL_VIGENTE.md), [DESIGN_SYSTEM](DESIGN_SYSTEM.md), [RESPONSIVE_LAYOUT](RESPONSIVE_LAYOUT.md), [CONTENT_MODEL](CONTENT_MODEL.md) e [ADMIN_CMS](ADMIN_CMS.md).
-- **Por necessidade:** [P1](P1_INVESTIGACAO_HIGIENE_2026-10-28.md), [P2](P2_HOMOLOGACAO_ADMINISTRATIVA_2026-10-28.md), [P3](P3_QUALIDADE_ACEITE_2026-10-28.md). Consultar preferencialmente pelo conector GitHub para evitar anexos congelados.
+Não há necessidade operacional de quinta Fonte permanente caso o guia e o estado sejam substituídos. O documento detalhado deste chat permanece no **GitHub** e deve ser consultado pelo conector. Não anexar duplicatas do README, DESIGN_SYSTEM, ADMIN_CMS, P3 ou do novo registro a menos que se pretenda usar o projeto sem acesso ao GitHub.
 
-**Atenção:** o conector GitHub não remove nem substitui as Fontes do projeto ChatGPT. Até a troca manual, o guia antigo continua anexado. Não duplicar versões sem indicar qual é a vigente.
+## Procedimento de atualização do ChatGPT
 
-## Precedência
+1. Arquivar as duas cópias atuais do guia e do estado, se for importante manter a proveniência.
+2. Substituí-las manualmente por novas cópias Markdown identificadas com a revisão posterior à auditoria de zoom; **não apagar** o contexto de produto/design.
+3. Preservar a variante da seção 01 de 80 linhas e seu SHA-256; manter cópia privada fora do GitHub.
+4. Confirmar que restam somente **quatro Fontes Markdown ativas** e que o guia aponta para `main`.
+5. Lembrar que atualizar arquivos do GitHub **não atualiza automaticamente Fontes do projeto ChatGPT**.
 
-1. GitHub `main` + Vercel `READY` no SHA correto + Supabase atual (somente quando pertinente).
-2. [AGENTS](../AGENTS.md), [índice](ESTADO_ATUAL_VIGENTE.md), [pendências](OPEN_ISSUES.md) e documentação do módulo.
-3. Fontes históricas somente para recuperar decisões; não inferir contagens, status P5 ou proveniência real dos ativos a partir delas.
+## Pendências que não são de organização de Fontes
+
+- P2 transacional (CRUD, publicação, upload e restauração com JWT real) **suspenso**, sem autorização de custos/staging;
+- LCP mobile **4,36 s** (auditoria do ajuste de zoom, mediana de três), meta **≤2,5 s**;
+- oito pendências editoriais atuais; decisão separada sobre depoimentos fictícios, direitos de 19 SVGs e 2 PNGs, objetos privados, função 410, branches e riscos de segurança historicamente aceitos;
+- confirmação visual **específica da última correção de zoom** na mesma área útil de navegador da captura de referência, sem reabrir automaticamente o aceite manual de experiências/CMS/depoimentos/Contato/menu.
+
+**Segurança:** não publicar backups exclusivos privados, credenciais, tokens ou conteúdo de arquivos privados no repositório público. Não remover ou substituir Fontes do ChatGPT por ação GitHub.

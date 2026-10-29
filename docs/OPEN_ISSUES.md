@@ -1,5 +1,7 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+> **Estado das pendências após a conversa — 28/10/2026.** A rodada manual de experiências, depoimentos, Contato, menu e CMS foi declarada validada pelo proprietário. A correção posterior da **escala desktop nativa** passou no P3, sem `zoom` global em 12 resoluções, porém a equivalência estética exata com a última referência ainda não recebeu confirmação após o deployment. Permanecem o **LCP mobile ≤2,5 s**, o **P2 transacional suspenso**, decisões separadas de P1/segurança e **oito ocorrências editoriais**. O registro histórico detalhado abaixo inclui frases de etapas superadas e deve ser lido nessa ordem de precedência. [Resumo do chat](CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md).
+
 > **Decisão posterior do proprietário — 28/10/2026:** a verificação manual visual e funcional de todas as áreas ajustadas neste chat foi **validada pelo proprietário**. Não solicitar novo aceite visual dessas áreas por rotina. A aceitação manual não homologa CRUD/Storage com JWT administrativo, não atinge automaticamente a meta LCP mobile e não autoriza exclusões, custos ou mudanças de segurança. O estado técnico vigente é sempre o HEAD e seus testes, nunca os SHAs históricos citados abaixo.
 
 ## Etapa 5 — Aceite automatizado concluído; manual separado (28/10/2026)

@@ -1,5 +1,8 @@
 # PortfolioTulius — estado operacional vigente
 
+> **Atualização de fechamento — 28/10/2026, após a correção de zoom.** O estado vigente do projeto é a `main` viva; consultar sempre seu SHA, CI, Vercel e dados atuais quando necessários. O histórico abaixo contém snapshots anteriores, inclusive afirmações de aceite visual “pendente” que foram substituídas pela decisão do proprietário para a rodada manual anterior. **A nova equivalência estética da correção de zoom a 100% com a captura de 125% não foi expressamente confirmada pelo proprietário após o último deployment.** [Resumo de continuidade da conversa](CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md).
+
+
 > **Decisão posterior do proprietário — 28/10/2026:** a verificação manual visual e funcional de todas as áreas ajustadas neste chat foi **validada pelo proprietário**. Não solicitar novo aceite visual dessas áreas por rotina. A aceitação manual não homologa CRUD/Storage com JWT administrativo, não atinge automaticamente a meta LCP mobile e não autoriza exclusões, custos ou mudanças de segurança. O estado técnico vigente é sempre o HEAD e seus testes, nunca os SHAs históricos citados abaixo.
 
 ## Etapa 5 — Aceite automatizado concluído; manual em nova frente (28/10/2026)
