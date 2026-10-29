@@ -83,6 +83,37 @@ async function run() {
     html = replaceMeta(html, "twitter:image", image)
     html = replaceMeta(html, "twitter:card", "summary_large_image")
   }
+  // Match the preload to the current CMS portrait, not the historical fallback
+  // asset. Otherwise a new published photo forces a large LCP image to wait for
+  // React/Supabase while the browser downloads the wrong first-fold image.
+  if (process.env.VITE_SUPABASE_URL) {
+    let portraitUrl = null
+    try {
+      const section = await getPublished(
+        "sections",
+        "slug,content_blocks(mobile_panel,status,content_json)",
+        { slug: "eq.perfil", status: "eq.published", is_visible: "eq.true" },
+      )
+      const profileBlock = (section?.content_blocks ?? []).find(
+        (block) => block.mobile_panel === "a" && block.status === "published",
+      )
+      const candidate = profileBlock?.content_json?.items?.[0]?.image
+      if (typeof candidate === "string") {
+        portraitUrl = candidate.startsWith("/") && !candidate.startsWith("//")
+          ? candidate : secureHttps(candidate)
+      }
+    } catch (error) {
+      console.warn("P3: retrato indisponível no build; sem preload potencialmente incorreto.", error?.message)
+    }
+    const oldPreload = /<link\s+rel=["']preload["']\s+as=["']image["'][^>]*\/?>/i
+    html = html.replace(
+      oldPreload,
+      portraitUrl
+        ? '<link rel="preload" as="image" href="' + escapeHtml(portraitUrl) + '" fetchpriority="high" />'
+        : "",
+    )
+    console.log("P3: preload do retrato " + (portraitUrl ? "sincronizado com CMS." : "omitido sem URL confirmada."))
+  }
   await writeFile(outputPath, html)
   const siteRoot = new URL("../dist/", import.meta.url)
   const domain = new URL(canonical).origin
@@ -90,6 +121,15 @@ async function run() {
     `User-agent: *\nDisallow: /admin\nDisallow: /admin/\nSitemap: ${domain}/sitemap.xml\n`)
   await writeFile(new URL("sitemap.xml", siteRoot),
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapeHtml(domain + "/")}</loc></url></urlset>\n`)
+  // A public, non-secret build fingerprint lets P3 verify the SHA actually
+  // served by the production alias, even if GitHub receives no Vercel status.
+  const commit = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? ""
+  if (/^[0-9a-f]{40}$/.test(commit)) {
+    await writeFile(new URL("p3-deployment.json", siteRoot), JSON.stringify({ sha: commit }) + "\n")
+    console.log("P3: identificador do deployment produzido.")
+  } else {
+    console.warn("P3: SHA de build não exposto; fingerprint não gerado.")
+  }
   console.log("SEO: título, descrição, Open Graph, canonical, robots e sitemap gerados.")
 }
 
