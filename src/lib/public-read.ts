@@ -8,17 +8,34 @@ const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 export const isPublicConfigured = Boolean(apiUrl && publishableKey)
 
 const tables = new Set([
-  "pages", "site_settings", "sections", "section_panels", "block_placements",
-  "design_tokens", "navigation_items", "career_experiences", "portfolio_projects",
-  "metrics", "skills", "education", "language_levels", "tool_categories",
-  "testimonials", "contact_channels",
+  "pages",
+  "site_settings",
+  "sections",
+  "section_panels",
+  "block_placements",
+  "design_tokens",
+  "navigation_items",
+  "career_experiences",
+  "portfolio_projects",
+  "metrics",
+  "skills",
+  "education",
+  "language_levels",
+  "tool_categories",
+  "testimonials",
+  "contact_channels",
 ])
 type Result = { data: Record<string, unknown>[] | null; error: Error | null }
 
 class ReadQuery implements PromiseLike<Result> {
   private readonly requestUrl: URL
-  constructor(base: string, private readonly key: string, table: string,
-    columns: string, private readonly reader: typeof fetch) {
+  constructor(
+    base: string,
+    private readonly key: string,
+    table: string,
+    columns: string,
+    private readonly reader: typeof fetch,
+  ) {
     const root = base.endsWith("/") ? base.slice(0, -1) : base
     this.requestUrl = new URL(root + "/rest/v1/" + table)
     this.requestUrl.searchParams.set("select", columns)
@@ -42,7 +59,10 @@ class ReadQuery implements PromiseLike<Result> {
   private async read(): Promise<Result> {
     try {
       const res = await this.reader(this.requestUrl.toString(), {
-        method: "GET", mode: "cors", credentials: "omit", cache: "no-store",
+        method: "GET",
+        mode: "cors",
+        credentials: "omit",
+        cache: "no-store",
         headers: { apikey: this.key, Accept: "application/json" },
       })
       if (!res.ok) return { data: null, error: new Error("Anonymous read: HTTP " + res.status) }
@@ -70,13 +90,19 @@ class ReadQuery implements PromiseLike<Result> {
 }
 
 export function createPublicReadClient(
-  url: string = apiUrl, key: string = publishableKey, reader: typeof fetch = fetch,
+  url: string = apiUrl,
+  key: string = publishableKey,
+  reader: typeof fetch = fetch,
 ) {
   if (!url || !key || !url.startsWith("https://")) throw new Error("Public reader not configured")
   return {
     from(table: string) {
       if (!tables.has(table)) throw new Error("Public table not allowed")
-      return { select(columns: string) { return new ReadQuery(url, key, table, columns, reader) } }
+      return {
+        select(columns: string) {
+          return new ReadQuery(url, key, table, columns, reader)
+        },
+      }
     },
   }
 }
