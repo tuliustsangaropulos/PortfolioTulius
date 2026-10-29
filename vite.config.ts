@@ -14,11 +14,6 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             {
-              // Admin-only SDK must not share the initial vendor chunk.
-              name: "admin-supabase",
-              test: /[\\/]node_modules[\\/]@supabase[\\/]/,
-            },
-            {
               // Keep React Router out of the public landing bundle.
               name: "admin-router",
               test: /[\\/]node_modules[\\/]react-router[\\/]/,
