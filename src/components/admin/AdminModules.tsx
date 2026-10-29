@@ -2396,28 +2396,14 @@ export function EnhancedMediaLibrary() {
   useEffect(() => {
     void load()
   }, [])
-  function patch(index: number, values: Record<string, any>) {
-    const next = [...assets]
-    next[index] = { ...next[index], ...values }
-    setAssets(next)
-  }
   async function save(asset: Record<string, any>) {
     if (!supabase) return
     setMessage("Salvando mídia…")
-    if (asset.storage_bucket === "portfolio-public" && asset.status !== "published")
-      return setMessage(
-        "Arquivos públicos não podem virar rascunho apenas alterando o status. Faça um novo upload privado.",
-      )
-    if (asset.storage_bucket === "portfolio-private" && asset.status === "published")
-      return setMessage("Use o botão Publicar para mover a mídia para o bucket público.")
-    if (asset.status === "published" && !asset.alt_text.trim())
-      return setMessage("Alt text é obrigatório para publicar uma mídia.")
     const { error } = await supabase
       .from("media_assets")
       .update({
-        alt_text: asset.alt_text,
         title: mediaFileName(asset.storage_path),
-        status: asset.status,
+        status: "published",
       })
       .eq("id", asset.id)
     setMessage(error?.message ?? "Metadados salvos.")
@@ -2443,16 +2429,19 @@ export function EnhancedMediaLibrary() {
           file_size: file.size,
           alt_text: "",
           title: mediaFileName(path),
-          status: "draft",
+          status: "published",
         }),
       undoStage: () => client.storage.from("portfolio-private").remove([path]),
     })
-    setMessage(result.ok ? "Upload concluído como rascunho privado." : result.message)
+    setMessage(
+      result.ok
+        ? "Mídia cadastrada como publicada. Arquivo privado: use Disponibilizar no site para torná-lo público."
+        : result.message,
+    )
     if (result.ok) await load()
   }
   async function promote(asset: Record<string, any>) {
-    if (!supabase || !asset.alt_text.trim())
-      return setMessage("Preencha o alt text antes de publicar.")
+    if (!supabase) return
     if (asset.storage_bucket === "portfolio-public") return save(asset)
     if (!confirm(`Publicar mídia “${mediaFileName(asset.storage_path)}” no site público?`)) return
     setMessage("Publicando mídia…")
@@ -2516,7 +2505,7 @@ export function EnhancedMediaLibrary() {
             title: mediaFileName(newPath),
             mime_type: file.type,
             file_size: file.size,
-            status: "draft",
+            status: "published",
           })
           .eq("id", asset.id)
           .select("id")
@@ -2526,7 +2515,7 @@ export function EnhancedMediaLibrary() {
     })
     setMessage(
       result.ok
-        ? `Arquivo substituído; revise e publique.${result.warning ? ` ${result.warning}` : ""}`
+        ? `Arquivo substituído; use Disponibilizar no site para atualizar a versão pública.${result.warning ? ` ${result.warning}` : ""}`
         : result.message,
     )
     if (result.ok) await load()
@@ -2537,7 +2526,7 @@ export function EnhancedMediaLibrary() {
         <div>
           <p>Assets editoriais</p>
           <h1>Biblioteca de mídia</h1>
-          <span>Miniaturas, nomes de arquivo, texto alternativo e publicação</span>
+          <span>Miniaturas, nomes de arquivo e publicação</span>
         </div>
         <label className="primary-button upload-button">
           Enviar mídia
@@ -2550,102 +2539,94 @@ export function EnhancedMediaLibrary() {
       </header>
       <StatusMessage>{message}</StatusMessage>
       <div className="media-grid media-library-grid" aria-label="Arquivos da biblioteca">
-        {assets.map((asset) => (
-          <button
-            key={asset.id}
-            type="button"
-            className="media-library-card"
-            aria-pressed={selectedMediaId === asset.id}
-            onClick={() =>
-              setSelectedMediaId((current) => (current === asset.id ? null : asset.id))
-            }
-          >
-            <div className="media-placeholder media-preview">
-              {previews[asset.id]?.url && !failedImages[asset.id] ? (
-                <img
-                  src={previews[asset.id].url}
-                  alt={asset.alt_text?.trim() || mediaFileName(asset.storage_path)}
-                  loading="lazy"
-                  decoding="async"
-                  onError={() => setFailedImages((current) => ({ ...current, [asset.id]: true }))}
-                />
-              ) : (
-                <div className="media-preview-fallback">
-                  <Icon name="image" size={32} />
-                  <small>
-                    {failedImages[asset.id]
-                      ? "Imagem indisponível"
-                      : (previews[asset.id]?.error ?? "Carregando prévia…")}
-                  </small>
+        {assets.map((asset) =>
+          selectedMediaId === asset.id ? (
+            <section
+              className="admin-card media-library-detail"
+              key={asset.id}
+              aria-label={"Editar mídia " + mediaFileName(asset.storage_path)}
+            >
+              <div className="card-heading">
+                <div>
+                  <p>Mídia selecionada</p>
+                  <h2>{mediaFileName(asset.storage_path)}</h2>
                 </div>
-              )}
-            </div>
-            <strong>{mediaFileName(asset.storage_path)}</strong>
-          </button>
-        ))}
-      </div>
-      {assets.map((asset, index) =>
-        selectedMediaId === asset.id ? (
-          <section
-            className="admin-card media-library-detail"
-            key={asset.id}
-            aria-label={`Editar mídia ${mediaFileName(asset.storage_path)}`}
-          >
-            <div className="card-heading">
-              <div>
-                <p>Mídia selecionada</p>
-                <h2>{mediaFileName(asset.storage_path)}</h2>
+                <button
+                  type="button"
+                  className="icon-button media-detail-close"
+                  aria-label="Fechar detalhes da mídia"
+                  title="Fechar detalhes"
+                  onClick={() => setSelectedMediaId(null)}
+                >
+                  <Icon name="close" />
+                </button>
               </div>
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={() => setSelectedMediaId(null)}
-              >
-                Fechar detalhes
-              </button>
-            </div>
-            <label>
-              Nome do arquivo (título)
-              <input value={mediaFileName(asset.storage_path)} readOnly />
-            </label>
-            <label>
-              Texto alternativo
-              <textarea
-                value={asset.alt_text ?? ""}
-                onChange={(event) => patch(index, { alt_text: event.target.value })}
-              />
-            </label>
-            <label>
-              Status
-              <select
-                value={asset.status}
-                onChange={(event) => patch(index, { status: event.target.value })}
-              >
-                <option value="draft">Rascunho</option>
-                <option value="in_review">Em revisão</option>
-                <option value="published">Publicado</option>
-                <option value="archived">Arquivado</option>
-              </select>
-            </label>
-            <div className="media-actions">
-              <label className="secondary-button replace-button">
-                Substituir arquivo
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/svg+xml"
-                  onChange={(event) => replace(event, asset)}
-                />
+              <label>
+                Nome do arquivo (título)
+                <input value={mediaFileName(asset.storage_path)} readOnly />
               </label>
-              <button type="button" className="secondary-button" onClick={() => save(asset)}>
-                Salvar
-              </button>
-              <button type="button" className="primary-button" onClick={() => promote(asset)}>
-                Publicar
-              </button>
-            </div>
-          </section>
-        ) : null,
-      )}
+              <div className="media-library-publication">
+                <span>Status</span>
+                <strong>Publicado</strong>
+                {asset.storage_bucket === "portfolio-private" && (
+                  <small>
+                    Arquivo privado protegido. Use “Disponibilizar no site” para torná-lo
+                    acessível nas páginas públicas.
+                  </small>
+                )}
+              </div>
+              <div className="media-actions">
+                <label className="secondary-button replace-button">
+                  Substituir arquivo
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                    onChange={(event) => replace(event, asset)}
+                  />
+                </label>
+                <button type="button" className="secondary-button" onClick={() => save(asset)}>
+                  Salvar
+                </button>
+                {asset.storage_bucket === "portfolio-private" && (
+                  <button type="button" className="primary-button" onClick={() => promote(asset)}>
+                    Disponibilizar no site
+                  </button>
+                )}
+              </div>
+            </section>
+          ) : (
+            <button
+              key={asset.id}
+              type="button"
+              className="media-library-card"
+              aria-expanded={false}
+              onClick={() => setSelectedMediaId(asset.id)}
+            >
+              <div className="media-placeholder media-preview">
+                {previews[asset.id]?.url && !failedImages[asset.id] ? (
+                  <img
+                    src={previews[asset.id].url}
+                    alt={asset.alt_text?.trim() || mediaFileName(asset.storage_path)}
+                    loading="lazy"
+                    decoding="async"
+                    onError={() => setFailedImages((current) => ({ ...current, [asset.id]: true }))}
+                  />
+                ) : (
+                  <div className="media-preview-fallback">
+                    <Icon name="image" size={32} />
+                    <small>
+                      {failedImages[asset.id]
+                        ? "Imagem indisponível"
+                        : (previews[asset.id]?.error ?? "Carregando prévia…")}
+                    </small>
+                  </div>
+                )}
+              </div>
+              <strong>{mediaFileName(asset.storage_path)}</strong>
+            </button>
+          ),
+        )}
+      </div>
     </>
   )
 }
