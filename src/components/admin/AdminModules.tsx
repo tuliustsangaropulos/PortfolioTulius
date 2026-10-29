@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage, validateContentItems } from "../../lib/validation"
-import { isRestorableEntity, prepareContentRestoration, type RestorableEntity } from "../../lib/revision-restore"
+import {
+  isRestorableEntity,
+  prepareContentRestoration,
+  type RestorableEntity,
+} from "../../lib/revision-restore"
 import { stagePrivateMediaChange } from "../../lib/media-operations"
 import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
 import { PublishedMediaPicker } from "./PublishedMediaPicker"
@@ -2278,7 +2282,9 @@ export function EditorialStudio() {
     setIssues(issueResult?.data ?? [])
     setRevisions(revisionResult?.data ?? [])
     if (issueResult?.error || revisionResult?.error) {
-      setMessage(issueResult?.error?.message ?? revisionResult?.error?.message ?? "Falha na leitura.")
+      setMessage(
+        issueResult?.error?.message ?? revisionResult?.error?.message ?? "Falha na leitura.",
+      )
     }
   }
   useEffect(() => {
@@ -2323,9 +2329,11 @@ export function EditorialStudio() {
         patch: result.patch,
         changedFields: result.changedFields,
       })
-      setMessage(result.changedFields.length
-        ? "Comparação pronta. Nenhuma alteração foi gravada."
-        : "Esta revisão já corresponde aos campos recuperáveis do registro.")
+      setMessage(
+        result.changedFields.length
+          ? "Comparação pronta. Nenhuma alteração foi gravada."
+          : "Esta revisão já corresponde aos campos recuperáveis do registro.",
+      )
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Não foi possível comparar a revisão.")
     } finally {
@@ -2335,9 +2343,12 @@ export function EditorialStudio() {
 
   async function restorePreview() {
     if (!supabase || !preview || busy || !preview.changedFields.length) return
-    if (!confirm(
-      "Restaurar os campos exibidos desta revisão? O estado atual será salvo como uma nova revisão antes da alteração. Status, visibilidade, ordem e Storage serão preservados.",
-    )) return
+    if (
+      !confirm(
+        "Restaurar os campos exibidos desta revisão? O estado atual será salvo como uma nova revisão antes da alteração. Status, visibilidade, ordem e Storage serão preservados.",
+      )
+    )
+      return
     setBusy(true)
     setMessage("Validando versão atual e criando cópia de segurança…")
     try {
@@ -2361,16 +2372,20 @@ export function EditorialStudio() {
         snapshot_json: latest,
         actor_user_id: authData.user.id,
       })
-      if (backupError) throw new Error("Backup não gravado. Nenhuma restauração feita: " + backupError.message)
+      if (backupError)
+        throw new Error("Backup não gravado. Nenhuma restauração feita: " + backupError.message)
       const { data: updated, error: updateError } = await supabase
         .from(table)
         .update(preview.patch)
         .eq("id", preview.entityId)
         .eq("updated_at", preview.current.updated_at)
         .select("id")
-      if (updateError) throw new Error("A restauração falhou. O backup foi preservado: " + updateError.message)
+      if (updateError)
+        throw new Error("A restauração falhou. O backup foi preservado: " + updateError.message)
       if (updated?.length !== 1)
-        throw new Error("O registro mudou durante a restauração. Backup preservado; nada foi sobrescrito.")
+        throw new Error(
+          "O registro mudou durante a restauração. Backup preservado; nada foi sobrescrito.",
+        )
       setPreview(null)
       setMessage("Campos recuperados. A versão anterior foi preservada no histórico.")
       await load()
@@ -2414,15 +2429,16 @@ export function EditorialStudio() {
             </div>
           </div>
           <p>
-            Selecione uma revisão para comparar os campos recuperáveis com o registro atual.
-            A restauração preserva estado de publicação, visibilidade, ordem e arquivos.
-            Histórico de mídia disponível somente para consulta.
+            Selecione uma revisão para comparar os campos recuperáveis com o registro atual. A
+            restauração preserva estado de publicação, visibilidade, ordem e arquivos. Histórico de
+            mídia disponível somente para consulta.
           </p>
           {preview && (
             <div className="revision-preview">
               <h3>Comparação da revisão</h3>
               <p>
-                {preview.entityType} · {preview.changedFields.length
+                {preview.entityType} ·{" "}
+                {preview.changedFields.length
                   ? "Campos diferentes: " + preview.changedFields.join(", ")
                   : "Sem diferenças recuperáveis"}
               </p>
@@ -2436,13 +2452,20 @@ export function EditorialStudio() {
               <div className="header-actions">
                 <button
                   className="primary-button"
-                  disabled={busy || !preview.changedFields.length ||
-                    JSON.stringify(preview.patch).length > 12000}
+                  disabled={
+                    busy ||
+                    !preview.changedFields.length ||
+                    JSON.stringify(preview.patch).length > 12000
+                  }
                   onClick={() => void restorePreview()}
                 >
                   {busy ? "Restaurando…" : "Restaurar apenas estes campos"}
                 </button>
-                <button className="secondary-button" onClick={() => setPreview(null)} disabled={busy}>
+                <button
+                  className="secondary-button"
+                  onClick={() => setPreview(null)}
+                  disabled={busy}
+                >
                   Cancelar
                 </button>
               </div>
