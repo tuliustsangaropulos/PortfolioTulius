@@ -885,7 +885,17 @@
 .contact-heading { min-width: 0; }
 .contact-heading h2 { max-width: none; }
 .contact-portrait { align-self: stretch; min-width: 0; min-height: 18rem; display: flex; align-items: stretch; justify-content: center; overflow: hidden; }
-.contact-portrait img { display: block; height: 100%; width: 100%; object-fit: cover; object-position: center; }
+/* The published CMS PNG has transparent pixels below the silhouette.
+ * Move the visible subject into the footer rule without altering/cropping
+ * the original file or overriding the CMS zoom/position transform. */
+.contact-portrait img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  translate: 0 clamp(3rem, 9svh, 6rem);
+}
 .contact-links { min-width: 0; display: grid; gap: .5rem; }
 .contact-links .contact-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .6rem; min-width: 0; }
 .contact-links .contact-link .item-copy { grid-column: 1; min-width: 0; }
