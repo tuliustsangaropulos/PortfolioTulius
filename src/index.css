@@ -753,7 +753,7 @@
   /* Fit the entire left editorial list without clipping the fourth item. */
   .years span { font-size: clamp(.69rem, .75vw, .75rem); }
   .profile-portrait .badge-360 {
-    top: calc(var(--hero-desktop-badge-y, 74%) - clamp(1.65rem, 5dvh, 2.5rem));
+    top: calc(var(--hero-desktop-badge-y, 74%) - clamp(1.6rem, 4.5dvh, 2.5rem));
   }
   .profile-sidebar-content {
     gap: clamp(.525rem, 1.125dvh, .94rem);
