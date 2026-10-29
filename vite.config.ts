@@ -14,6 +14,12 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             {
+              // Split Supabase from React in separate, cacheable chunks.
+              // No API/query/auth changes: the original SDK remains intact.
+              name: "supabase-sdk",
+              test: /[\\/]node_modules[\\/]@supabase[\\/]/,
+            },
+            {
               // Keep React Router out of the public landing bundle.
               name: "admin-router",
               test: /[\\/]node_modules[\\/]react-router[\\/]/,
