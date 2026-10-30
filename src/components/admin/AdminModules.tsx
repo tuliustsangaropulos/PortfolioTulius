@@ -1894,11 +1894,14 @@ export function CollectionsStudio({
   }, [config.table])
 
   useEffect(() => {
+    // A new record has no id yet; do not erase its in-progress form.
+    if (!selectedId) return
     const record = records.find((item) => item.id === selectedId)
     setDraft(record ? structuredClone(record) : null)
   }, [records, selectedId])
 
   function newRecord() {
+    if (recordDirty && !confirm("Descartar alterações não salvas deste registro?")) return
     const base = Object.fromEntries(config.fields.map((field) => [field.key, ""]))
     setSelectedId("")
     setDraft({
@@ -1975,6 +1978,8 @@ export function CollectionsStudio({
             onClick={() => {
               if (item.table === config.table) return
               if (recordDirty && !confirm("Descartar alterações não salvas deste registro?")) return
+              setDraft(null)
+              setSelectedId("")
               setConfig(item)
             }}
           >

@@ -623,8 +623,8 @@ function SiteEditor({
   const selected = sections.find((item) => item.id === selectedId)
 
   useEffect(() => {
-    if (!selected && sections[0]) setSelectedId(sections[0].id)
-  }, [selected, sections])
+    if (!selectedId && sections[0]) setSelectedId(sections[0].id)
+  }, [selectedId, sections])
 
   function canLeave() {
     return !dirty || confirm("Existem alterações não salvas. Deseja descartá-las e continuar?")
