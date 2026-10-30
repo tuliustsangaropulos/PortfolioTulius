@@ -8,6 +8,9 @@ type IconProps = {
     | "up"
     | "down"
     | "edit"
+    | "info"
+    | "sliders"
+    | "trash"
     | "image"
     | "palette"
     | "logout"
@@ -45,6 +48,22 @@ export function Icon({ name, size = 22 }: IconProps) {
     edit: (
       <>
         <path d="m4 20 4-1 11-11-3-3L5 16l-1 4ZM14 7l3 3" />
+      </>
+    ),
+    info: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 11v5M12 8h.01" />
+      </>
+    ),
+    sliders: (
+      <>
+        <path d="M4 7h16M4 17h16M8 4v6M16 14v6" />
+      </>
+    ),
+    trash: (
+      <>
+        <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v6M14 11v6" />
       </>
     ),
     image: (

@@ -1037,3 +1037,24 @@
   .site-editor-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-editor-actions { align-items: stretch; }
 }
+
+/* Admin CMS: exclusive item accordion and scoped contextual media controls. */
+.block-item-editor .block-item-head { gap: .5rem; margin-bottom: 0; }
+.block-item-toggle { display: flex; align-items: center; gap: .6rem; min-width: 0; flex: 1; min-height: 44px; padding: .15rem; border: 0; background: transparent; text-align: left; color: inherit; }
+.block-item-toggle-label { display: grid; gap: .15rem; min-width: 0; }
+.block-item-toggle-label strong, .block-item-toggle-label small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.block-item-toggle-label small { color: #716b67; font-size: .76rem; font-weight: 500; }
+.block-item-body { margin-top: .7rem; padding-top: .8rem; border-top: 1px solid #ded9d5; min-width: 0; }
+.admin-field-with-info, .published-media-label-row { display: flex; align-items: center; gap: .3rem; min-width: 0; }
+.admin-info-wrap { position: relative; display: inline-flex; flex: none; align-items: center; }
+.admin-info-trigger { display: grid; place-items: center; width: 2rem; height: 2rem; padding: 0; background: white; border: 1px solid #bdb4ae; border-radius: 50%; color: #504a47; }
+.admin-info-trigger:hover, .admin-info-trigger[aria-expanded="true"] { background: #171617; border-color: #171617; color: white; }
+.admin-info-tooltip { position: absolute; z-index: 15; top: calc(100% + .35rem); right: 0; width: min(18rem, calc(100vw - 3rem)); padding: .7rem .8rem; color: white; background: #171617; font-size: .76rem; font-weight: 400; line-height: 1.5; box-shadow: 0 6px 18px #17161720; overflow-wrap: anywhere; pointer-events: none; }
+.admin-info-tooltip[hidden] { display: none; }
+.field-grid .item-alt-field { align-self: start; align-content: start; grid-template-rows: max-content max-content; }
+.published-media-actions .media-icon-action { display: grid; place-items: center; width: 44px; min-width: 44px; height: 44px; min-height: 44px; padding: 0; }
+@media (max-width: 767px) {
+  .block-item-head { flex-wrap: wrap; }
+  .block-item-toggle { min-width: min(100%, 10rem); }
+  .admin-info-trigger { width: 44px; height: 44px; }
+}

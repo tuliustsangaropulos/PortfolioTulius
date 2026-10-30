@@ -9,6 +9,12 @@ import {
 import { stagePrivateMediaChange } from "../../lib/media-operations"
 import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
 import { PublishedMediaPicker } from "./PublishedMediaPicker"
+import { AdminInfoTip } from "./AdminInfoTip"
+import {
+  nextExpandedItem,
+  expandedAfterMove,
+  expandedAfterRemoval,
+} from "../../lib/admin-item-expansion"
 import { AdminNotice, statusPt } from "./AdminNotice"
 import { mediaFileName } from "../../lib/media-framing"
 import { withOpenGraphImage } from "../../lib/media-selection"
@@ -307,6 +313,7 @@ export function ContentStudio({
   const [sectionId, setSectionId] = useState(sectionIdOverride ?? sections[0]?.id ?? "")
   const [blocks, setBlocks] = useState<BlockRow[]>([])
   const [selectedId, setSelectedId] = useState("")
+  const [expandedItemIndex, setExpandedItemIndex] = useState<number | null>(null)
   const [draft, setDraft] = useState<BlockRow | null>(null)
   const [message, setMessage] = useState("")
   const initialPlacement = {
@@ -360,6 +367,10 @@ export function ContentStudio({
   useEffect(() => {
     void load()
   }, [sectionId])
+
+  useEffect(() => {
+    setExpandedItemIndex(null)
+  }, [selectedId, sectionId])
 
   useEffect(() => {
     let cancelled = false
@@ -572,12 +583,14 @@ export function ContentStudio({
     if (target < 0 || target >= items.length) return
     ;[items[index], items[target]] = [items[target], items[index]]
     setDraft({ ...draft, content_json: { ...draft.content_json, items } })
+    setExpandedItemIndex((current) => expandedAfterMove(current, index, target))
   }
 
   function removeItem(index: number) {
     if (!draft || !confirm("Remover este item do bloco?")) return
     const items = (draft.content_json.items ?? []).filter((_, i) => i !== index)
     setDraft({ ...draft, content_json: { ...draft.content_json, items } })
+    setExpandedItemIndex((current) => expandedAfterRemoval(current, index))
   }
 
   return (
@@ -1179,12 +1192,26 @@ export function ContentStudio({
               {(draft.content_json.items ?? []).map((item, index) => (
                 <article className="block-item-editor" key={index}>
                   <div className="block-item-head">
-                    <strong>
-                      Item {String(index + 1).padStart(2, "0")}
-                      {item.isHidden === true && (
-                        <span className="admin-hidden-label"> · Ocultado</span>
-                      )}
-                    </strong>
+                    <button
+                      type="button"
+                      className="block-item-toggle"
+                      aria-expanded={expandedItemIndex === index}
+                      aria-controls={`block-item-fields-${draft.id}-${index}`}
+                      onClick={() =>
+                        setExpandedItemIndex((current) => nextExpandedItem(current, index))
+                      }
+                    >
+                      <Icon name={expandedItemIndex === index ? "up" : "down"} size={17} />
+                      <span className="block-item-toggle-label">
+                        <strong>
+                          Item {String(index + 1).padStart(2, "0")}
+                          {item.isHidden === true && (
+                            <span className="admin-hidden-label"> · Ocultado</span>
+                          )}
+                        </strong>
+                        <small>{item.title?.trim() || "Sem título"}</small>
+                      </span>
+                    </button>
                     <div className="order-buttons">
                       <button onClick={() => moveItem(index, -1)} aria-label="Mover item para cima">
                         <Icon name="up" size={17} />
@@ -1197,6 +1224,8 @@ export function ContentStudio({
                       </button>
                     </div>
                   </div>
+                  {expandedItemIndex === index && (
+                    <div className="block-item-body" id={`block-item-fields-${draft.id}-${index}`}>
                   {[
                     "invest-rs",
                     "prefeitura-sp",
@@ -1240,14 +1269,26 @@ export function ContentStudio({
                       />
                     </label>
                     <label>
-                      Valor/métrica
+                      <span className="admin-field-with-info">
+                        Valor/métrica
+                        <AdminInfoTip
+                          label="Valor/métrica"
+                          description="Valor ou indicador exibido em componentes que utilizam métricas. Deixe vazio quando o item não tiver um valor."
+                        />
+                      </span>
                       <input
                         value={item.value ?? ""}
                         onChange={(event) => updateItem(index, { value: event.target.value })}
                       />
                     </label>
                     <label>
-                      Metadado/URL
+                      <span className="admin-field-with-info">
+                        Metadado/URL
+                        <AdminInfoTip
+                          label="Metadado/URL"
+                          description="Informação complementar do item, como período, local ou unidade. Alguns componentes podem utilizar este campo como URL; o comportamento depende da seção."
+                        />
+                      </span>
                       <input
                         value={item.meta ?? ""}
                         onChange={(event) => updateItem(index, { meta: event.target.value })}
@@ -1511,6 +1552,8 @@ export function ContentStudio({
                     )}
                     <PublishedMediaPicker
                       label="Imagem do item"
+                      guidanceAsInfo
+                      iconOnlyActions
                       guidance={
                         ["perfil", "contato"].includes(
                           sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
@@ -1530,7 +1573,7 @@ export function ContentStudio({
                       value={item.image ?? ""}
                       onChange={(image, alt) => updateItem(index, { image, alt })}
                     />
-                    <label>
+                    <label className="item-alt-field">
                       Texto alternativo
                       <input
                         value={item.alt ?? ""}
@@ -1696,11 +1739,15 @@ export function ContentStudio({
                       </fieldset>
                     )}
                   </details>
+                    </div>
+                  )}
                 </article>
               ))}
               <button
+                type="button"
                 className="secondary-button"
-                onClick={() =>
+                onClick={() => {
+                  const nextIndex = draft.content_json.items?.length ?? 0
                   setDraft({
                     ...draft,
                     content_json: {
@@ -1708,7 +1755,8 @@ export function ContentStudio({
                       items: [...(draft.content_json.items ?? []), { ...emptyItem }],
                     },
                   })
-                }
+                  setExpandedItemIndex(nextIndex)
+                }}
               >
                 Adicionar item
               </button>

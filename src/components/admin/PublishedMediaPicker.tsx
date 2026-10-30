@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage } from "../../lib/validation"
 import { MediaFramingDialog } from "./MediaFramingDialog"
+import { AdminInfoTip } from "./AdminInfoTip"
+import { Icon } from "../ui/Icons"
 import type { MediaFraming } from "../../lib/media-framing"
 import {
   getPublishedImageChoices,
@@ -17,6 +19,8 @@ export function PublishedMediaPicker({
   onFramingChange,
   guidance = "Imagem responsiva: conferir desktop e mobile.",
   ratio = "16 / 9",
+  guidanceAsInfo = false,
+  iconOnlyActions = false,
 }: {
   label: string
   value: string
@@ -25,6 +29,8 @@ export function PublishedMediaPicker({
   onFramingChange?: (framing: MediaFraming) => void
   guidance?: string
   ratio?: string
+  guidanceAsInfo?: boolean
+  iconOnlyActions?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -91,8 +97,15 @@ export function PublishedMediaPicker({
 
   return (
     <div className="published-media-picker">
-      <strong className="published-media-picker-label">{label}</strong>
-      <p className="published-media-guidance">Área de destino: {guidance}</p>
+      <div className="published-media-label-row">
+        <strong className="published-media-picker-label">{label}</strong>
+        {guidanceAsInfo && (
+          <AdminInfoTip label={label} description={`Área de destino: ${guidance}`} />
+        )}
+      </div>
+      {!guidanceAsInfo && (
+        <p className="published-media-guidance">Área de destino: {guidance}</p>
+      )}
       {value && isSafeEditorialImage(value) && !previewFailed ? (
         <div className="published-media-current">
           <img
@@ -114,20 +127,34 @@ export function PublishedMediaPicker({
       <div className="published-media-actions">
         <button
           type="button"
-          className="secondary-button"
+          className={iconOnlyActions ? "secondary-button media-icon-action" : "secondary-button"}
+          aria-label={iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined}
+          title={iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined}
           aria-expanded={open}
           onClick={() => setOpen((current) => !current)}
         >
-          {open ? "Fechar biblioteca" : "Escolher da biblioteca"}
+          {iconOnlyActions ? <Icon name="image" size={20} /> : open ? "Fechar biblioteca" : "Escolher da biblioteca"}
         </button>
         {value && onFramingChange && (
-          <button type="button" className="secondary-button" onClick={() => setFramingOpen(true)}>
-            Ajustar posição e zoom
+          <button
+            type="button"
+            className={iconOnlyActions ? "secondary-button media-icon-action" : "secondary-button"}
+            aria-label={iconOnlyActions ? "Ajustar posição e zoom" : undefined}
+            title={iconOnlyActions ? "Ajustar posição e zoom" : undefined}
+            onClick={() => setFramingOpen(true)}
+          >
+            {iconOnlyActions ? <Icon name="sliders" size={20} /> : "Ajustar posição e zoom"}
           </button>
         )}
         {value && (
-          <button type="button" className="secondary-button" onClick={() => onChange("", "")}>
-            Remover imagem
+          <button
+            type="button"
+            className={iconOnlyActions ? "secondary-button media-icon-action" : "secondary-button"}
+            aria-label={iconOnlyActions ? "Remover imagem" : undefined}
+            title={iconOnlyActions ? "Remover imagem" : undefined}
+            onClick={() => onChange("", "")}
+          >
+            {iconOnlyActions ? <Icon name="trash" size={20} /> : "Remover imagem"}
           </button>
         )}
       </div>
