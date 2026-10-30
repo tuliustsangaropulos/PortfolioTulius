@@ -9,6 +9,8 @@ describe("Pré-carregamento do retrato LCP mobile publicado", () => {
   })
   it("pré-conecta ao Storage e prioriza a fotografia publicada", () => {
     expect(html).toContain('rel="preconnect" href="https://zfnrhzplwpjpdljraypt.supabase.co"')
-    expect(html).toMatch(/rel="preload" as="image" href="https:\/\/zfnrhzplwpjpdljraypt\.supabase\.co\/storage\/v1\/object\/public\/portfolio-public\/[^"]+\.png" fetchpriority="high"/)
+    expect(html).toMatch(
+      /rel="preload" as="image" href="https:\/\/zfnrhzplwpjpdljraypt\.supabase\.co\/storage\/v1\/object\/public\/portfolio-public\/[^"]+\.png" fetchpriority="high"/,
+    )
   })
 })
