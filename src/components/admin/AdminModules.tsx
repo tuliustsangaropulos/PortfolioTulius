@@ -16,6 +16,7 @@ import {
   expandedAfterRemoval,
 } from "../../lib/admin-item-expansion"
 import { AdminNotice, statusPt } from "./AdminNotice"
+import { adminConfirm } from "./AdminConfirmationHost"
 import { mediaFileName } from "../../lib/media-framing"
 import { withOpenGraphImage } from "../../lib/media-selection"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
@@ -440,7 +441,7 @@ export function ContentStudio({
     if (!supabase || !sectionId) return
     if (
       blockDirty &&
-      !confirm("Alterações deste bloco ainda não foram salvas. Descartar e criar outro?")
+      !(await adminConfirm("Alterações deste bloco ainda não foram salvas. Descartar e criar outro?", { title: "Descartar alterações?" }))
     )
       return
     const { data, error } = await supabase
@@ -527,7 +528,8 @@ export function ContentStudio({
   }
 
   async function archiveBlock() {
-    if (!supabase || !draft || !confirm("Arquivar este bloco?")) return
+    if (!supabase || !draft) return
+    if (!(await adminConfirm("Arquivar este bloco?", { title: "Arquivar bloco", confirmLabel: "Arquivar", tone: "danger" }))) return
     const { error } = await supabase
       .from("content_blocks")
       .update({ status: "archived" })
@@ -586,8 +588,9 @@ export function ContentStudio({
     setExpandedItemIndex((current) => expandedAfterMove(current, index, target))
   }
 
-  function removeItem(index: number) {
-    if (!draft || !confirm("Remover este item do bloco?")) return
+  async function removeItem(index: number) {
+    if (!draft) return
+    if (!(await adminConfirm("Remover este item do bloco?", { title: "Remover item", confirmLabel: "Remover", tone: "danger" }))) return
     const items = (draft.content_json.items ?? []).filter((_, i) => i !== index)
     setDraft({ ...draft, content_json: { ...draft.content_json, items } })
     setExpandedItemIndex((current) => expandedAfterRemoval(current, index))
@@ -638,13 +641,9 @@ export function ContentStudio({
             <button
               key={block.id}
               className={selectedId === block.id ? "active" : ""}
-              onClick={() => {
+              onClick={async () => {
                 if (block.id === selectedId) return
-                if (
-                  blockDirty &&
-                  !confirm("Alterações não salvas neste bloco serão descartadas. Continuar?")
-                )
-                  return
+                if (blockDirty && !(await adminConfirm("Alterações não salvas neste bloco serão descartadas. Continuar?", { title: "Descartar alterações?" }))) return
                 setSelectedId(block.id)
               }}
             >
@@ -743,15 +742,12 @@ export function ContentStudio({
                     Fonte do conteúdo exibido
                     <select
                       value={draft.content_json.source_collection ?? ""}
-                      onChange={(event) => {
+                      onChange={async (event) => {
                         const next = event.target.value
-                        if (
-                          next &&
-                          !confirm(
-                            "Vincular esta coleção fará o site exibir os registros publicados da coleção no lugar dos cards manuais deste bloco. O conteúdo manual será preservado. Continuar?",
-                          )
-                        )
-                          return
+                        if (next && !(await adminConfirm(
+                          "Vincular esta coleção fará o site exibir os registros publicados da coleção no lugar dos cards manuais deste bloco. O conteúdo manual será preservado. Continuar?",
+                          { title: "Alterar fonte de conteúdo" },
+                        ))) return
                         setDraft({
                           ...draft,
                           content_json: {
@@ -1068,8 +1064,8 @@ export function ContentStudio({
                           <button
                             type="button"
                             aria-label="Excluir slide"
-                            onClick={() => {
-                              if (!confirm("Excluir este slide?")) return
+                            onClick={async () => {
+                              if (!(await adminConfirm("Excluir este slide?", { title: "Excluir slide", confirmLabel: "Excluir", tone: "danger" }))) return
                               const slides = (
                                 draft.content_json.experienceMedia?.slides ?? []
                               ).filter((_, i) => i !== slideIndex)
@@ -1966,8 +1962,8 @@ export function CollectionsStudio({
     setDraft(record ? structuredClone(record) : null)
   }, [records, selectedId])
 
-  function newRecord() {
-    if (recordDirty && !confirm("Descartar alterações não salvas deste registro?")) return
+  async function newRecord() {
+    if (recordDirty && !(await adminConfirm("Descartar alterações não salvas deste registro?", { title: "Descartar alterações?" }))) return
     const base = Object.fromEntries(config.fields.map((field) => [field.key, ""]))
     setSelectedId("")
     setDraft({
@@ -1998,7 +1994,8 @@ export function CollectionsStudio({
   }
 
   async function archive() {
-    if (!supabase || !draft?.id || !confirm("Arquivar este registro?")) return
+    if (!supabase || !draft?.id) return
+    if (!(await adminConfirm("Arquivar este registro?", { title: "Arquivar registro", confirmLabel: "Arquivar", tone: "danger" }))) return
     const { error } = await supabase
       .from(config.table)
       .update({ status: "archived" })
@@ -2041,9 +2038,9 @@ export function CollectionsStudio({
             role="tab"
             aria-selected={item.table === config.table}
             className={item.table === config.table ? "active" : ""}
-            onClick={() => {
+            onClick={async () => {
               if (item.table === config.table) return
-              if (recordDirty && !confirm("Descartar alterações não salvas deste registro?")) return
+              if (recordDirty && !(await adminConfirm("Descartar alterações não salvas deste registro?", { title: "Descartar alterações?" }))) return
               setDraft(null)
               setSelectedId("")
               setConfig(item)
@@ -2059,10 +2056,9 @@ export function CollectionsStudio({
             <button
               key={record.id}
               className={selectedId === record.id ? "active" : ""}
-              onClick={() => {
+              onClick={async () => {
                 if (record.id === selectedId) return
-                if (recordDirty && !confirm("Descartar alterações não salvas deste registro?"))
-                  return
+                if (recordDirty && !(await adminConfirm("Descartar alterações não salvas deste registro?", { title: "Descartar alterações?" }))) return
                 setSelectedId(record.id)
               }}
             >
@@ -2522,12 +2518,10 @@ export function EditorialStudio() {
 
   async function restorePreview() {
     if (!supabase || !preview || busy || !preview.changedFields.length) return
-    if (
-      !confirm(
-        "Restaurar os campos exibidos desta revisão? O estado atual será salvo como uma nova revisão antes da alteração. Status, visibilidade, ordem e Storage serão preservados.",
-      )
-    )
-      return
+    if (!(await adminConfirm(
+      "Restaurar os campos exibidos desta revisão? O estado atual será salvo como uma nova revisão antes da alteração. Status, visibilidade, ordem e Storage serão preservados.",
+      { title: "Restaurar revisão", confirmLabel: "Restaurar", tone: "danger" },
+    ))) return
     setBusy(true)
     setMessage("Validando versão atual e criando cópia de segurança…")
     try {
@@ -2794,7 +2788,7 @@ export function EnhancedMediaLibrary() {
   async function promote(asset: Record<string, any>) {
     if (!supabase) return
     if (asset.storage_bucket === "portfolio-public") return save(asset)
-    if (!confirm(`Publicar mídia “${mediaFileName(asset.storage_path)}” no site público?`)) return
+    if (!(await adminConfirm(`Publicar mídia “${mediaFileName(asset.storage_path)}” no site público?`, { title: "Publicar mídia", confirmLabel: "Publicar" }))) return
     setMessage("Publicando mídia…")
     const { data, error } = await supabase.storage
       .from("portfolio-private")
