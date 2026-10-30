@@ -152,11 +152,22 @@ function AdminShell({
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <Link to="/" className="admin-logo" onClick={async (event) => {
-          event.preventDefault()
-          if (editorDirty && !(await adminConfirm("Existem alterações não salvas. Deseja descartá-las e voltar ao site?", { title: "Descartar alterações?" }))) return
-          navigate("/")
-        }}>
+        <Link
+          to="/"
+          className="admin-logo"
+          onClick={async (event) => {
+            event.preventDefault()
+            if (
+              editorDirty &&
+              !(await adminConfirm(
+                "Existem alterações não salvas. Deseja descartá-las e voltar ao site?",
+                { title: "Descartar alterações?" },
+              ))
+            )
+              return
+            navigate("/")
+          }}
+        >
           <span>TT</span>
           <strong>
             Tulius
@@ -395,7 +406,9 @@ function SectionsEditor({
     if (
       draft &&
       JSON.stringify(draft) !== JSON.stringify(selected) &&
-      !(await adminConfirm("Alterações desta seção ainda não foram salvas. Descartar e duplicar?", { title: "Descartar alterações?" }))
+      !(await adminConfirm("Alterações desta seção ainda não foram salvas. Descartar e duplicar?", {
+        title: "Descartar alterações?",
+      }))
     )
       return
     const { data, error } = await supabase.rpc("duplicate_section", {
@@ -414,7 +427,10 @@ function SectionsEditor({
       draft &&
       selected &&
       JSON.stringify(draft) !== JSON.stringify(selected) &&
-      !(await adminConfirm("Alterações desta seção ainda não foram salvas. Descartar e criar outra?", { title: "Descartar alterações?" }))
+      !(await adminConfirm(
+        "Alterações desta seção ainda não foram salvas. Descartar e criar outra?",
+        { title: "Descartar alterações?" },
+      ))
     )
       return
     setMessage("Criando seção e painéis…")
@@ -431,7 +447,13 @@ function SectionsEditor({
 
   async function publish() {
     if (!selected || !supabase) return
-    if (!(await adminConfirm(`Publicar “${selected.title}” e seus blocos?`, { title: "Publicar seção", confirmLabel: "Publicar" }))) return
+    if (
+      !(await adminConfirm(`Publicar “${selected.title}” e seus blocos?`, {
+        title: "Publicar seção",
+        confirmLabel: "Publicar",
+      }))
+    )
+      return
     // Publication validates editorial placeholders; Save must never bypass this RPC.
     setMessage("Publicando seção…")
     const { error } = await supabase.rpc("publish_section", {
@@ -443,7 +465,14 @@ function SectionsEditor({
   }
   async function remove() {
     if (!selected || !supabase) return
-    if (!(await adminConfirm(`Arquivar “${selected.title}”?`, { title: "Arquivar seção", confirmLabel: "Arquivar", tone: "danger" }))) return
+    if (
+      !(await adminConfirm(`Arquivar “${selected.title}”?`, {
+        title: "Arquivar seção",
+        confirmLabel: "Arquivar",
+        tone: "danger",
+      }))
+    )
+      return
     const { error } = await supabase
       .from("sections")
       .update({ status: "archived", is_visible: false })
@@ -661,7 +690,10 @@ function SiteEditor({
     let cancelled = false
     setLinkedSources([])
     if (!supabase || !selectedId) return
-    void supabase.from("content_blocks").select("content_json").eq("section_id", selectedId)
+    void supabase
+      .from("content_blocks")
+      .select("content_json")
+      .eq("section_id", selectedId)
       .then(({ data }) => {
         if (cancelled) return
         const sources = (data ?? [])
@@ -669,7 +701,9 @@ function SiteEditor({
           .filter(isCollectionSource)
         setLinkedSources([...new Set(sources)])
       })
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [selectedId])
 
   useEffect(() => {
@@ -677,7 +711,12 @@ function SiteEditor({
   }, [selectedId, sections])
 
   async function canLeave() {
-    return !dirty || await adminConfirm("Existem alterações não salvas. Deseja descartá-las e continuar?", { title: "Descartar alterações?" })
+    return (
+      !dirty ||
+      (await adminConfirm("Existem alterações não salvas. Deseja descartá-las e continuar?", {
+        title: "Descartar alterações?",
+      }))
+    )
   }
 
   async function selectSection(id: string) {
@@ -883,9 +922,12 @@ function SiteEditor({
                         <strong>Fontes vinculadas aos blocos desta seção</strong>
                         <div>
                           {linkedSources.map((source) => (
-                            <button type="button" key={source}
+                            <button
+                              type="button"
+                              key={source}
                               className={source === collectionSource ? "active" : ""}
-                              onClick={() => switchCollection(source)}>
+                              onClick={() => switchCollection(source)}
+                            >
                               {source.replace(/_/g, " ")}
                             </button>
                           ))}
@@ -907,21 +949,39 @@ function SiteEditor({
                       Prévia protegida dos dados já salvos. Alterações abertas nos formulários
                       aparecem somente depois de gravadas.
                     </p>
-                    <div className="site-editor-preview-controls" role="group" aria-label="Visualizar em dispositivo">
-                      <button type="button" className={previewDevice === "desktop" ? "active" : ""}
+                    <div
+                      className="site-editor-preview-controls"
+                      role="group"
+                      aria-label="Visualizar em dispositivo"
+                    >
+                      <button
+                        type="button"
+                        className={previewDevice === "desktop" ? "active" : ""}
                         aria-pressed={previewDevice === "desktop"}
-                        onClick={() => setPreviewDevice("desktop")}>Desktop</button>
-                      <button type="button" className={previewDevice === "mobile" ? "active" : ""}
+                        onClick={() => setPreviewDevice("desktop")}
+                      >
+                        Desktop
+                      </button>
+                      <button
+                        type="button"
+                        className={previewDevice === "mobile" ? "active" : ""}
                         aria-pressed={previewDevice === "mobile"}
-                        onClick={() => setPreviewDevice("mobile")}>Mobile</button>
+                        onClick={() => setPreviewDevice("mobile")}
+                      >
+                        Mobile
+                      </button>
                     </div>
                     <div className={`site-editor-preview-frame ${previewDevice}`}>
-                      <iframe key={selected.slug}
+                      <iframe
+                        key={selected.slug}
                         title={`Prévia ${previewDevice} da seção ${selected.title}`}
                         src={`/admin/preview#${selected.slug}`}
                       />
                     </div>
-                    <small>A simulação varia a largura da prévia; não substitui testes em dispositivos reais.</small>
+                    <small>
+                      A simulação varia a largura da prévia; não substitui testes em dispositivos
+                      reais.
+                    </small>
                   </div>
                 )}
               </div>
@@ -1106,7 +1166,12 @@ export function AdminApp() {
   const [editorDirty, setEditorDirty] = useState(false)
   async function selectModule(next: string) {
     if (next === active) return
-    if (editorDirty && !(await adminConfirm("Existem alterações não salvas. Deseja descartá-las e sair?", { title: "Descartar alterações?" })))
+    if (
+      editorDirty &&
+      !(await adminConfirm("Existem alterações não salvas. Deseja descartá-las e sair?", {
+        title: "Descartar alterações?",
+      }))
+    )
       return
     setEditorDirty(false)
     setActive(next)
