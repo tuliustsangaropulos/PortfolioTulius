@@ -20,6 +20,7 @@ import { adminConfirm } from "./AdminConfirmationHost"
 import { mediaFileName } from "../../lib/media-framing"
 import { withOpenGraphImage } from "../../lib/media-selection"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
+import { buildCollectionSavePayload, normalizeCollectionRecord } from "../../lib/admin-collection-payload"
 import type {
   ContentItem,
   DeviceItemStyle,
@@ -1938,12 +1939,7 @@ export function CollectionsStudio({
   const load = async () => {
     if (!supabase) return
     const { data, error } = await supabase.from(config.table).select("*").order("sort_order")
-    const normalized = (data ?? []).map((record) => ({
-      ...record,
-      tools_text: Array.isArray(record.tools)
-        ? record.tools.map((tool: any) => tool.name ?? String(tool)).join("\n")
-        : "",
-    }))
+    const normalized = (data ?? []).map((record) => normalizeCollectionRecord(record, config.table))
     setRecords(normalized)
     setMessage(error?.message ?? "")
     if (normalized.length && !normalized.some((r) => r.id === selectedId))
@@ -1976,16 +1972,7 @@ export function CollectionsStudio({
   async function save() {
     if (!supabase || !draft) return
     setMessage("Salvando registro…")
-    const payload = { ...draft }
-    delete payload.id
-    delete payload.updated_at
-    if (config.table === "tool_categories") {
-      payload.tools = String(payload.tools_text ?? "")
-        .split("\n")
-        .filter(Boolean)
-        .map((name) => ({ name: name.trim() }))
-      delete payload.tools_text
-    }
+    const payload = buildCollectionSavePayload(draft, config.table)
     const result = draft.id
       ? await supabase.from(config.table).update(payload).eq("id", draft.id)
       : await supabase.from(config.table).insert(payload)
