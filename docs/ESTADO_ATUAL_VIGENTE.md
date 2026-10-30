@@ -1,5 +1,16 @@
 # PortfolioTulius — estado operacional vigente
 
+## Editor administrativo — confirmações padronizadas e acervo corrigido (30/10/2026)
+
+**Código funcional:** [`120e681`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/120e681ec66fdd39596fbc7ba4a4efa81d341b42). [CI Validate #41139782822](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41139782822) **success**, com formatação, TypeScript, testes unitários, build de produção e smoke offline. [Vercel Production](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/4kMTvrv5sVDJoP8kaUQLEVQmBZUo) **READY** no mesmo SHA funcional.
+
+**Diálogos:** no CMS, chamadas nativas a `confirm()` foram substituídas por `adminConfirm()`, renderizado por `AdminConfirmationHost` como diálogo de marca, foco gerenciado, navegação por Tab e Escape para cancelar. Cobertura: alternância entre seção, área, bloco, fonte e registro; descarte de alterações; criação/duplicação de seção, arquivamento e publicação; exclusão de itens/slides; promoção de mídia; restauração de revisões; saída do painel e retorno ao site. Um teste estático `admin-dialog-policy.test.ts` impede `confirm/alert/prompt/beforeunload` nativos em componentes administrativos. O listener `beforeunload` foi removido: **fechar/recarregar a aba não é interceptável por um diálogo próprio**, portanto rascunhos de formulário não salvos podem ser perdidos nessa circunstância. Transições internas têm guarda personalizada. Os avisos `AdminNotice` seguem como toasts padronizados de erro, sucesso, alerta ou informação, com `role=alert` para erros.
+
+**Acervo:** os registros não pertencentes a `tool_categories` não recebem mais o campo virtual `tools_text`; o payload também exclui sempre `tools_text`, `id` e `updated_at`, preservando `tools` estruturado em Ferramentas conforme a implementação anterior. Testes de regressão cobrem esses casos. O Editor mostra fontes `source_collection` explícitas ligadas aos blocos da seção, mantendo o Acervo global para coleções sem relação específica; somente `metrics` é consultada por `section_id` ao editar a seção. A prévia protegida ganhou alternância de largura desktop/mobile (simulação, não substitui teste real). O seletor de tipo de bloco apresenta rótulos editoriais, mantendo os valores gravados.
+
+**Invariantes/limites:** sem migration, SQL de mutação, alterações em RLS/Auth/Storage, gravações em dados aprovados ou edição de componentes públicos. Os testes aprovam código e lógica auxiliar, **não homologam gravação administrativa transacional (P2 suspenso)** nem inspeção manual visual/autenticada dos novos diálogos. LCP mobile P3-PERF-01 segue aberto e independente.
+
+
 ## Editor do site: grupo Experiências Profissionais — 30/10/2026
 
 **Alteração funcional restrita ao CMS:** [commit `05a4cf1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/05a4cf1f27962d1df24fbf4cd53aceb0192955a6), [CI Validate #41137954207](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41137954207) **success** (formatação, TypeScript, testes unitários, build e smoke offline), [Vercel Production](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/EQ5dA4FFMrt9dJqvB5nrxuHjG3ri) **READY** no mesmo SHA antes deste commit documental.

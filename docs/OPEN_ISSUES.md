@@ -1,5 +1,12 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Verificação manual — diálogos e correção de Coleções (30/10/2026)
+
+Implementado em [`120e681`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/120e681ec66fdd39596fbc7ba4a4efa81d341b42), [CI #41139782822](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41139782822) **success** e [Vercel READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/4kMTvrv5sVDJoP8kaUQLEVQmBZUo) no mesmo SHA. Corrigido no código o campo `tools_text` enviado indevidamente por Coleções; teste unitário protege payload. `confirm/alert/prompt` nativos não são mais usados no CMS, com política de teste estático. Toasts têm variantes de estado e o acervo ganhou fontes contextuais e prévia desktop/mobile.
+
+**Conferência autenticada ainda pendente:** abrir/cancelar diálogos por mouse e teclado, foco/Escape, confirmar que dados não salvos não são descartados ao cancelar, conferir toasts, testar visual da prévia e fontes vinculadas. Ao fechar/recarregar a aba, navegador não permite diálogo próprio; removida a antiga confirmação nativa, portanto conteúdo não salvo pode ser perdido. **Não executar CRUD de teste no banco de produção:** P2 transacional continua suspenso por decisão do proprietário. A meta LCP mobile ≤2,5 s permanece pendente e separada.
+
+
 ## Verificação manual pendente — agrupamento de Experiências Profissionais (30/10/2026)
 
 Implementação restrita ao painel administrativo em [`05a4cf1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/05a4cf1f27962d1df24fbf4cd53aceb0192955a6), com [CI #41137954207](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41137954207) **success** e [Vercel READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/EQ5dA4FFMrt9dJqvB5nrxuHjG3ri) no mesmo SHA. As seis seções de experiência aparecem no Editor como uma entrada **Experiências Profissionais**, com seletor interno de trabalho. Os slugs e dados continuam separados; não há mudança no site público.
