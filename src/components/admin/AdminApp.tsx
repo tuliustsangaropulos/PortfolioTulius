@@ -9,6 +9,7 @@ import {
 } from "../../lib/admin-experience-navigation"
 import { Icon } from "../ui/Icons"
 import { AdminNotice, statusPt } from "./AdminNotice"
+import { adminConfirm, AdminConfirmationHost } from "./AdminConfirmationHost"
 import {
   CollectionsStudio,
   ContentStudio,
@@ -138,6 +139,7 @@ function AdminShell({
     ["preview", "Prévia", "arrow"],
   ] as const
   async function logout() {
+    if (!(await adminConfirm("Deseja encerrar a sessão administrativa?", { title: "Sair do painel", confirmLabel: "Sair" }))) return
     await supabase?.auth.signOut()
     navigate("/admin/login")
   }
@@ -383,7 +385,7 @@ function SectionsEditor({
     if (
       draft &&
       JSON.stringify(draft) !== JSON.stringify(selected) &&
-      !confirm("Alterações desta seção ainda não foram salvas. Descartar e duplicar?")
+      !(await adminConfirm("Alterações desta seção ainda não foram salvas. Descartar e duplicar?", { title: "Descartar alterações?" }))
     )
       return
     const { data, error } = await supabase.rpc("duplicate_section", {
@@ -402,7 +404,7 @@ function SectionsEditor({
       draft &&
       selected &&
       JSON.stringify(draft) !== JSON.stringify(selected) &&
-      !confirm("Alterações desta seção ainda não foram salvas. Descartar e criar outra?")
+      !(await adminConfirm("Alterações desta seção ainda não foram salvas. Descartar e criar outra?", { title: "Descartar alterações?" }))
     )
       return
     setMessage("Criando seção e painéis…")
@@ -419,7 +421,7 @@ function SectionsEditor({
 
   async function publish() {
     if (!selected || !supabase) return
-    if (!confirm(`Publicar “${selected.title}” e seus blocos?`)) return
+    if (!(await adminConfirm(`Publicar “${selected.title}” e seus blocos?`, { title: "Publicar seção", confirmLabel: "Publicar" }))) return
     // Publication validates editorial placeholders; Save must never bypass this RPC.
     setMessage("Publicando seção…")
     const { error } = await supabase.rpc("publish_section", {
@@ -430,7 +432,8 @@ function SectionsEditor({
     if (!error) reload()
   }
   async function remove() {
-    if (!selected || !supabase || !confirm(`Arquivar “${selected.title}”?`)) return
+    if (!selected || !supabase) return
+    if (!(await adminConfirm(`Arquivar “${selected.title}”?`, { title: "Arquivar seção", confirmLabel: "Arquivar", tone: "danger" }))) return
     const { error } = await supabase
       .from("sections")
       .update({ status: "archived", is_visible: false })
@@ -647,12 +650,12 @@ function SiteEditor({
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
   }, [selectedId, sections])
 
-  function canLeave() {
-    return !dirty || confirm("Existem alterações não salvas. Deseja descartá-las e continuar?")
+  async function canLeave() {
+    return !dirty || await adminConfirm("Existem alterações não salvas. Deseja descartá-las e continuar?", { title: "Descartar alterações?" })
   }
 
-  function selectSection(id: string) {
-    if (id === selectedId || !canLeave()) return
+  async function selectSection(id: string) {
+    if (id === selectedId || !(await canLeave())) return
     onDirtyChange(false)
     setSelectedId(id)
     if (sections.some((section) => section.id === id && isExperienceSection(section.slug))) {
@@ -668,14 +671,14 @@ function SiteEditor({
     if (next) selectSection(next.id)
   }
 
-  function selectPane(next: SiteEditorPane) {
-    if (next === pane || !canLeave()) return
+  async function selectPane(next: SiteEditorPane) {
+    if (next === pane || !(await canLeave())) return
     onDirtyChange(false)
     setPane(next)
   }
 
-  function editLinkedCollection(source: string) {
-    if (!canLeave()) return
+  async function editLinkedCollection(source: string) {
+    if (!(await canLeave())) return
     onDirtyChange(false)
     setCollectionSource(source)
     setPane("records")
@@ -1044,18 +1047,9 @@ export function AdminApp() {
   const guard = useAdminGuard()
   const [active, setActive] = useState("dashboard")
   const [editorDirty, setEditorDirty] = useState(false)
-  useEffect(() => {
-    if (!editorDirty) return
-    const warn = (event: BeforeUnloadEvent) => {
-      event.preventDefault()
-      event.returnValue = ""
-    }
-    window.addEventListener("beforeunload", warn)
-    return () => window.removeEventListener("beforeunload", warn)
-  }, [editorDirty])
-  function selectModule(next: string) {
+  async function selectModule(next: string) {
     if (next === active) return
-    if (editorDirty && !confirm("Existem alterações não salvas. Deseja descartá-las e sair?"))
+    if (editorDirty && !(await adminConfirm("Existem alterações não salvas. Deseja descartá-las e sair?", { title: "Descartar alterações?" })))
       return
     setEditorDirty(false)
     setActive(next)
@@ -1113,6 +1107,7 @@ export function AdminApp() {
         </div>
       )}
       {screens[active]}
+      <AdminConfirmationHost />
     </AdminShell>
   )
 }

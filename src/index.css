@@ -1071,3 +1071,13 @@
 .site-editor-experience-options button.active small { color: #d4cbc5; }
 .site-editor-experience-options button:focus-visible { outline: 3px solid #ff5414; outline-offset: 2px; }
 .site-editor-experience-current { margin: .8rem 0 0; font-size: .78rem; line-height: 1.5; color: #605954; }
+
+/* Unified accessible CMS confirmation dialog. */
+.admin-confirm-overlay { position: fixed; inset: 0; z-index: 9999; background: #171617ad; display: grid; place-items: center; padding: 1rem; }
+.admin-confirm-dialog { width: min(30rem,100%); background: #f8f4f1; padding: clamp(1.2rem,3vw,2rem); color: #171617; border: 1px solid #d7d2ce; box-shadow: 0 18px 62px #17161777; }
+.admin-confirm-eyebrow { color: #bc390c; font-weight: 800; letter-spacing: .12em; font-size: .72rem; }
+.admin-confirm-dialog h2 { font: 800 clamp(1.6rem,4vw,2.5rem)/1.04 var(--font-display); margin: .6rem 0 1rem; text-transform: uppercase; }
+.admin-confirm-dialog p { color: #514742; font-size: .95rem; line-height: 1.5; overflow-wrap: anywhere; }
+.admin-confirm-actions { margin-top: 1.5rem; display: flex; gap: .65rem; justify-content: flex-end; flex-wrap: wrap; }
+.admin-confirm-actions button { min-width: 7.5rem; min-height: 44px; }
+.admin-confirm-dialog button:focus-visible { outline: 3px solid #ff5414; outline-offset: 3px; }
