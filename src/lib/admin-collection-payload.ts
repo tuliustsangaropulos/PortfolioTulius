@@ -2,7 +2,7 @@
 export function normalizeCollectionRecord<T extends Record<string, any>>(
   record: T,
   table: string,
-): T {
+): T & { tools_text?: string } {
   if (table !== "tool_categories") return { ...record }
   return {
     ...record,
