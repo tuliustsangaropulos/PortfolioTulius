@@ -3,7 +3,10 @@ import { Link, Navigate, useNavigate } from "react-router"
 import { defaultTokens } from "../../content/fallback"
 import { isAdmin, isSupabaseConfigured, supabase } from "../../lib/supabase"
 import { PublicSite } from "../public/PublicSite"
-import { buildAdminSectionNavigation, isExperienceSection } from "../../lib/admin-experience-navigation"
+import {
+  buildAdminSectionNavigation,
+  isExperienceSection,
+} from "../../lib/admin-experience-navigation"
 import { Icon } from "../ui/Icons"
 import { AdminNotice, statusPt } from "./AdminNotice"
 import {
@@ -660,8 +663,8 @@ function SiteEditor({
 
   function selectExperienceGroup() {
     if (selectedIsExperience) return
-    const next = experienceSections.find((section) => section.id === lastExperienceId) ??
-      experienceSections[0]
+    const next =
+      experienceSections.find((section) => section.id === lastExperienceId) ?? experienceSections[0]
     if (next) selectSection(next.id)
   }
 
@@ -708,7 +711,11 @@ function SiteEditor({
               <button
                 type="button"
                 key="professional-experiences"
-                className={selectedIsExperience ? "active site-editor-experience-nav" : "site-editor-experience-nav"}
+                className={
+                  selectedIsExperience
+                    ? "active site-editor-experience-nav"
+                    : "site-editor-experience-nav"
+                }
                 aria-current={selectedIsExperience ? "true" : undefined}
                 onClick={selectExperienceGroup}
               >
@@ -760,7 +767,11 @@ function SiteEditor({
                   aria-label="Trabalhos de Experiências Profissionais"
                 >
                   <h3>Escolha um trabalho</h3>
-                  <div className="site-editor-experience-options" role="group" aria-label="Experiência para editar">
+                  <div
+                    className="site-editor-experience-options"
+                    role="group"
+                    aria-label="Experiência para editar"
+                  >
                     {experienceSections.map((experience) => (
                       <button
                         type="button"
@@ -771,14 +782,16 @@ function SiteEditor({
                       >
                         <strong>{experience.title}</strong>
                         <small>
-                          Seção {String(experience.sort_order).padStart(2, "0")} · {statusPt(experience.status)}
+                          Seção {String(experience.sort_order).padStart(2, "0")} ·{" "}
+                          {statusPt(experience.status)}
                           {!experience.is_visible ? " · Oculta no site" : ""}
                         </small>
                       </button>
                     ))}
                   </div>
                   <p className="site-editor-experience-current">
-                    Editando: <strong>{selected.title}</strong>. O agrupamento existe apenas no painel administrativo; as seções públicas permanecem independentes.
+                    Editando: <strong>{selected.title}</strong>. O agrupamento existe apenas no
+                    painel administrativo; as seções públicas permanecem independentes.
                   </p>
                 </section>
               )}

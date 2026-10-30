@@ -25,7 +25,10 @@ describe("Navegação contextual de Experiências Profissionais", () => {
     expect(isExperienceSection("competencias")).toBe(false)
     expect(isExperienceSection("contato")).toBe(false)
     expect(isExperienceSection("cdi")).toBe(true)
-    const standalone = [{ slug: "perfil", id: "a" }, { slug: "contato", id: "b" }]
+    const standalone = [
+      { slug: "perfil", id: "a" },
+      { slug: "contato", id: "b" },
+    ]
     expect(buildAdminSectionNavigation(standalone)).toEqual([
       { kind: "section", section: standalone[0] },
       { kind: "section", section: standalone[1] },
