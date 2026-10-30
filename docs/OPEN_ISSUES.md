@@ -1,5 +1,17 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Situação atual após o aceite manual e ajuste mobile — 30/10/2026
+
+**Fechado por declaração do proprietário:** a revisão manual anterior do Editor do Site (seções/blocos/coleções, Experiências Profissionais, itens, popups e toasts). O código funcional para responsividade do CMS está em [`f2f8e4f`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/f2f8e4fe7a54e371a96ceff546b711ca5b0bcd19), com [CI #41140863031](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863031) **success** e Vercel Production **READY**. As menções históricas a "verificação manual pendente" nos registros abaixo foram superadas para as telas anteriormente avaliadas; **não representam testes de CRUD com JWT nem aceitação específica da nova composição mobile em aparelho físico**.
+
+**Mobile administrativo implementado:** shell em coluna, navegação superior rolável, formulários em uma coluna, mídia 2/1 colunas conforme largura, botões 44px, modais/toasts móveis e entradas iOS sem zoom de foco. Testes `admin-mobile-layout.test.ts` e CI aprovados. Nenhuma alteração de banco.
+
+**Permanece aberto — P3-PERF-01:** [P3 #41140863050](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863050) conferiu 13/25/38, 0 falhas de browser, P5 3/3 sem mutações e LCP desktop ~1,69 s; **LCP mobile mediano ~7,66 s** (limite 6,5 s, meta ≤2,5 s) reprovado. O preload do arquivo real substituiu preload do fallback, sem evidência de melhora causal. Para superar o principal gargalo, é necessária **derivada comprimida da fotografia aprovada**, mantendo seu conteúdo, recorte e original. Não ativar transformação de imagens do Supabase (pode exigir plano Pro e cobrança) nem trocar mídia sem autorização específica. Não reduzir artificialmente a cobertura P3 ou relaxar o orçamento.
+
+**Permanece bloqueado por decisão anterior — P2 transacional:** não provisionar staging pago nem executar operações reais de gravação/publicação/Storage com JWT de admin na produção. Demais pendências editoriais e de licença são decisões independentes; não declará-las encerradas automaticamente.
+
+
+
 ## Verificação manual — diálogos e correção de Coleções (30/10/2026)
 
 Implementado em [`120e681`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/120e681ec66fdd39596fbc7ba4a4efa81d341b42), [CI #41139782822](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41139782822) **success** e [Vercel READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/4kMTvrv5sVDJoP8kaUQLEVQmBZUo) no mesmo SHA. Corrigido no código o campo `tools_text` enviado indevidamente por Coleções; teste unitário protege payload. `confirm/alert/prompt` nativos não são mais usados no CMS, com política de teste estático. Toasts têm variantes de estado e o acervo ganhou fontes contextuais e prévia desktop/mobile.

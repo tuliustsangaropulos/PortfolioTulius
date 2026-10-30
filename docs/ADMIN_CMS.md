@@ -232,3 +232,10 @@ Código: `src/components/admin/AdminApp.tsx` e `src/lib/admin-experience-navigat
 
 **Invariantes/limites:** sem migration, SQL de mutação, alterações em RLS/Auth/Storage, gravações em dados aprovados ou edição de componentes públicos. Os testes aprovam código e lógica auxiliar, **não homologam gravação administrativa transacional (P2 suspenso)** nem inspeção manual visual/autenticada dos novos diálogos. LCP mobile P3-PERF-01 segue aberto e independente.
 
+
+## Responsividade mobile do CMS e conclusão do aceite — 30/10/2026
+
+O proprietário informou que a verificação manual anterior foi realizada. O CMS mantém seus fluxos existentes, agora com uma navegação superior horizontal em viewport ≤1100px em vez de sidebar fixa. Em ≤767px, edição de seções, formulários e controles passam a uma coluna; mídia e detalhes são apresentados em 2/1 colunas, conforme espaço, e botões/diálogos alcançam ao menos 44px de toque. As proteções de conteúdo não salvo e o diálogo de marca permanecem. Controles na entrada de formulários usam 16px em iOS para evitar ampliação automática. As regras são exclusivamente administrativas, não alteram os 25 painéis públicos.
+
+**Evidência:** [SHA `f2f8e4f`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/f2f8e4fe7a54e371a96ceff546b711ca5b0bcd19), [CI #41140863031](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863031) aprovado, Vercel READY no mesmo código. Teste `admin-mobile-layout.test.ts` inspeciona o contrato de estilo; não constitui teste visual com sessão real de admin. P2 permanece suspenso, sem testes de escrita.
+

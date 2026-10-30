@@ -1,5 +1,13 @@
 # Layout responsivo
 
+## Complemento — CMS administrativo em mobile/tablet (30/10/2026)
+
+**Escopo somente administrativo:** a interface `/admin` foi adaptada por CSS para ≤1100px com faixa de navegação superior sticky e rolável, mantendo a seleção e o aviso de conteúdo não salvo. Até 767px, formulários, métricas, experiências, acervo, revisões e blocos usam colunas fluidas; as grades de mídia se adaptam para duas colunas e, até 380px, uma. Controles de ordem ampliados para área mínima de toque 44px, modal de confirmação e toast acomodam a viewport e safe areas, e inputs de texto usam 16px no iOS. A prévia mobile preserva largura disponível. Zoom nativo continua sob controle do navegador, sem `zoom` global.
+
+**Validação:** [CI Validate #41140863031](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863031), [commit `f2f8e4f`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/f2f8e4fe7a54e371a96ceff546b711ca5b0bcd19). Teste estático da responsividade administrativa PASS; a inspeção manual anterior foi concluída segundo o proprietário, mas os novos breakpoints do admin ainda não foram inspecionados em sessão autenticada após este commit. P3 público [#41140863050](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863050) passou em integridade 13/25/38 e falhou somente no LCP mobile ~7,66s.
+
+
+
 ## Referência desktop vigente — 29/10/2026 (substitui a referência histórica de 125%)
 
 **Solicitação mais recente:** em 1512×691 px de área útil, a captura de navegador a **75%** é a composição desejada **com o navegador em 100%**. Os ajustes anteriores que usavam a captura a 125% como referência ficam **históricos/superados**. Nunca reproduzir a densidade por `zoom`, `transform:scale()` no contêiner raiz, alteração global do `html` ou cálculo de escala baseado em `vw` aplicado à página inteira.

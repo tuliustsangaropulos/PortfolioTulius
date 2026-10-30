@@ -1,5 +1,19 @@
 # PortfolioTulius — estado operacional vigente
 
+## Fechamento de verificação manual e responsividade administrativa — 30/10/2026
+
+**Aceite manual:** o proprietário declarou a verificação manual concluída neste chat. Encerrado o acompanhamento de aceite humano anterior relativo a navegação integrada, itens recolhíveis, Experiências Profissionais, ajudas, ícones, diálogos e toasts. A declaração não equivale a uma nova execução autenticada de CRUD ou a teste em todos os aparelhos após o ajuste de CSS mobile.
+
+**SHA funcional:** [`f2f8e4f`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/f2f8e4fe7a54e371a96ceff546b711ca5b0bcd19); [CI Validate #41140863031](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863031) **success** (formatação, TypeScript, unitários, build, smoke offline). [Vercel Production](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/GFWN5WBxyfRaYF5Me8JWqodmzEgC) **READY** no mesmo SHA funcional, confirmado pelo gate do P3. O último commit de documentação não altera o build funcional.
+
+**CMS mobile/tablet:** em até 1100px de largura o menu lateral fixo é substituído por faixa superior horizontal rolável e o conteúdo ganha a largura integral. Em até 767px: formulários, seções, painéis e editor de navegação em coluna única; grids de mídia adaptados; botões de toque de ao menos 44px; modais e toasts respeitando limites da viewport e safe area; campos em fonte 16px no iOS para evitar zoom automático, foco de teclado visível. Até 380px: grades de mídia em coluna única. Teste estático `src/lib/admin-mobile-layout.test.ts` impede regressões essenciais. CSS restrito a classes `admin-*`, `site-editor-*` e componentes administrativos. Nenhuma tela autenticada nova foi exercitada por Playwright com JWT real (P2 permanece suspenso).
+
+**P3 público pós-ajustes:** [Audit #41140863050](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863050) no SHA funcional correto, confirmou 13 seções / 25 painéis / 38 capturas, `P3_BROWSER_AUDIT failures=0`, `P5_PUBLIC_RESULT 3/3 mutations=0` e LCP desktop mediano **1,689 s PASS**. A auditoria global terminou **failure exclusivamente por orçamento P6 mobile**: LCP mediano **7,664 s**, Performance **70**, contra teto conservador **6,5 s** e meta **≤2,5 s**. Identificação do retrato LCP PASS. O `index.html` deixou de pré-carregar o fallback e passa a pré-conectar/pré-carregar a URL do retrato efetivamente publicado no Supabase, preservando o arquivo original e o seu enquadramento. O ganho observado frente à mediana anterior ~7,694 s não é estatisticamente conclusivo; **não declarar meta mobile atingida**. Lighthouse continua apontando a necessidade de uma derivada comprimida/otimizada da foto publicada. A URL estática de preload deve ser revisada se a foto CMS for substituída.
+
+**Pendências de bloqueio explícito, não encerradas:** P3-PERF-01 (imagem mobile, exige derivada otimizada fiel do original; nenhuma troca de mídia, gravação no Storage ou transformação cobrável foi autorizada/executada), P2 transacional (ambiente de staging com custo não aprovado, testes de escrita proibidos em produção) e pendências editoriais/direitos de mídia independentes. Não houve SQL de mutação, migration, mudança RLS/Auth/Storage, nem alteração dos textos ou da composição pública aprovada.
+
+
+
 ## Editor administrativo — confirmações padronizadas e acervo corrigido (30/10/2026)
 
 **Código funcional:** [`120e681`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/120e681ec66fdd39596fbc7ba4a4efa81d341b42). [CI Validate #41139782822](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41139782822) **success**, com formatação, TypeScript, testes unitários, build de produção e smoke offline. [Vercel Production](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/4kMTvrv5sVDJoP8kaUQLEVQmBZUo) **READY** no mesmo SHA funcional.

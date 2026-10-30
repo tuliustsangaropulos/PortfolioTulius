@@ -2,7 +2,7 @@
 
 Site público e CMS editorial em **React 19, TypeScript, Vite, Tailwind CSS v4 e Supabase**, publicado em [tulius.work](https://tulius.work/) pela Vercel a partir de `main`.
 
-> **Etapa 5 — aceite automatizado aprovado:** [reexecução #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085), 13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas. [Relatório de aceite](docs/P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). **Aceite manual: nova frente em novo chat; LCP mobile ainda aberto.**
+> **Etapa 5 — aceite automatizado aprovado:** [reexecução #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085), 13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas. [Relatório de aceite](docs/P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). **Aceite manual concluído pelo proprietário em 30/10/2026; LCP mobile ainda aberto.**
 
 > **Fonte operacional única:** [docs/ESTADO_ATUAL_VIGENTE.md](docs/ESTADO_ATUAL_VIGENTE.md). Contém o snapshot de dados mais recente, evidências P0–P3, o estado real de homologação e as pendências atuais. **Confirme GitHub, Supabase e Vercel ao vivo antes de cada alteração:** este arquivo não atualiza automaticamente contagens/SHAs.
 
@@ -135,3 +135,7 @@ A fotografia central de “Olá!” foi ajustada localmente para encostar visual
 ### Editor administrativo unificado — 30/10/2026
 
 A navegação do CMS apresenta **Editor do site** no lugar de Seções, Blocos e Coleções como entradas separadas. O proprietário escolhe a seção uma vez e acessa conteúdo, informações, acervo estruturado e prévia contextual. O editor identifica blocos com fonte manual ou coleção explicitamente vinculada; ajustes técnicos de placements permanecem no modo avançado. Contratos de dados, ações de salvamento, status e guardas de publicação existentes foram preservados, sem mudanças no site público ou no Supabase. [Detalhes e limites](docs/ADMIN_CMS.md).
+
+### CMS mobile, conclusão manual e performance (30/10/2026)
+
+O proprietário declarou encerrada a verificação manual anterior. A interface `/admin` foi adaptada para celulares/tablets com menu superior rolável, formulários de uma coluna, diálogos acessíveis e grade de mídia flexível; [CI #41140863031](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863031) aprovado. A auditoria pública [P3 #41140863050](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863050) passou 13 seções/25 painéis/38 capturas e P5 sem mutações, mas **não passou no orçamento de LCP mobile (~7,66 s)**. O novo preload aponta para a foto original publicada, sem ganho conclusivo. Para resolver P3-PERF-01 é necessária derivada otimizada fiel, sem mudança de dados/Storage nem serviço pago não autorizado. P2 transacional permanece suspenso. [Estado detalhado](docs/ESTADO_ATUAL_VIGENTE.md).
