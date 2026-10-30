@@ -4,7 +4,7 @@
 
 Implementação restrita ao painel administrativo em [`05a4cf1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/05a4cf1f27962d1df24fbf4cd53aceb0192955a6), com [CI #41137954207](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41137954207) **success** e [Vercel READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/EQ5dA4FFMrt9dJqvB5nrxuHjG3ri) no mesmo SHA. As seis seções de experiência aparecem no Editor como uma entrada **Experiências Profissionais**, com seletor interno de trabalho. Os slugs e dados continuam separados; não há mudança no site público.
 
-**Checar manualmente:** escolher cada um dos seis trabalhos; manter o painel correto, prévia e ações de edição; testar aviso de rascunho não salvo ao trocar de empresa; conferir usabilidade em diferentes larguras. **P2 transacional suspenso**: sem gravações reais de teste. A pendência P3 LCP mobile ≤2,5 s permanece independente.
+**Checar manualmente:** escolher cada um dos seis trabalhos; manter o painel correto, prévia e ações de edição; testar aviso de rascunho não salvo ao trocar de empresa; conferir usabilidade em diferentes larguras. **P2 transacional suspenso**: sem gravações reais de teste. O [P3 #41137881739](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41137881739) terminou em `failure` apenas no orçamento P6: **LCP mobile 7,694 s**, Performance 69, contra 6,5 s de orçamento e meta ≤2,5 s. Navegador 0 falhas, 13 seções, 25 painéis, 38 capturas sem falhas, P5 3/3 sem mutações e LCP desktop 1,664 s aprovado. A pendência P3 mobile permanece independente do agrupamento administrativo.
 
 
 ## Conferência manual pendente — acordeão e controles do Editor — 30/10/2026
