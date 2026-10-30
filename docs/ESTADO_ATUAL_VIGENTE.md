@@ -1,5 +1,14 @@
 # PortfolioTulius — estado operacional vigente
 
+## Verificação manual do CMS — itens, ajuda e mídia — 30/10/2026
+
+**Código funcional:** [`0c2abd0`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/0c2abd042b1050ec1db5899c13438a9fb367101f). [CI Validate #41136712312](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41136712312) **success** (formatação, TypeScript, testes unitários, build e smoke offline). [Vercel Production `UN2YUd9`](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/UN2YUd9uz1QxXWL1nCARrJinKFkP) **READY** no mesmo SHA.
+
+No **Editor do site → Conteúdo e painéis**, os itens de cada bloco começam recolhidos; só um pode estar aberto. Título e indicador **Ocultado** permanecem visíveis no cabeçalho. A expansão acompanha a troca de posição e a exclusão; **Adicionar item** cria e abre somente o novo item. Os campos **Valor/métrica** e **Metadado/URL** exibem ajuda por hover ou clique, com acesso por teclado e fechamento pelo botão, Escape ou clique externo. No campo **Imagem do item**, a orientação de área/dimensões passou para botão de ajuda, mantendo o texto para retratos “Área de destino: Retrato vertical 3:4; sugestão 900 × 1200 px.”; demais contextos preservam sua indicação vigente 1:1. Os botões de biblioteca, enquadramento e remoção usam somente ícones de 44px com nomes acessíveis **apenas neste seletor de item**; os demais seletores de mídia continuam com rótulos originais. O input de **Texto alternativo** permanece alinhado ao próprio título, sem ocupar verticalmente toda a altura da miniatura.
+
+**Limites:** a implementação não muda `content_json`, contratos de salvamento, valores, imagens, Storage, media framing, permissões ou apresentação pública; não houve operações de escrita ou migration no Supabase. Os testes unitários verificam a regra de um item expandido e a correção de índices ao reordenar/remover. O fluxo de gravação com JWT real segue **não homologado (P2 transacional suspenso)**. A auditoria pública P3 [#41136601132](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41136601132), disparada no primeiro SHA desta rodada, ainda não tinha resultado global confirmado no momento deste registro; não declarar P3/performance aprovados. A meta LCP mobile ≤2,5 s continua pendente.
+
+
 ## Editor do Site integrado — 30/10/2026
 
 **SHA funcional vigente desta rodada:** [`bc4f3ca`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/bc4f3cadc3de8751039954e46b1c19ef05c406a2). [CI Validate #41134897178](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41134897178) **success**, incluindo formatação, TypeScript, Vitest, build e smoke offline. [Vercel Production](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/H4bkM8rzZRMt89icqwog3VfinDzJ) **READY no mesmo SHA**. O commit documental posterior não altera esse código.

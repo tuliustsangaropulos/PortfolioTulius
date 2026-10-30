@@ -1,5 +1,12 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Conferência manual pendente — acordeão e controles do Editor — 30/10/2026
+
+Implementação no [`0c2abd0`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/0c2abd042b1050ec1db5899c13438a9fb367101f), [CI #41136712312](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41136712312) **success** e [Vercel Production READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/UN2YUd9uz1QxXWL1nCARrJinKFkP). Os itens de blocos ficam recolhidos (um expandido por vez), com ajuda contextual em Valor/métrica, Metadado/URL e Imagem do item, input de alt junto ao título e botões de mídia somente com ícones no seletor indicado. A regressão de lógica de expansão/reordenação/exclusão tem testes unitários.
+
+**Aceite manual da interface continua pendente:** verificar hover/clique/teclado nas ajudas, nome acessível dos ícones, alinhamento em desktop/mobile e retenção de rascunhos ao mudar de item. Sem homologar escrita real na produção enquanto P2 estiver suspenso. P3 mobile LCP ≤2,5 s continua em aberto e não foi declarado resolvido por esta mudança administrativa.
+
+
 ## Editor administrativo integrado — 30/10/2026
 
 **Implementado no SHA funcional [`bc4f3ca`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/bc4f3cadc3de8751039954e46b1c19ef05c406a2):** uma entrada **Editor do site** integra a navegação de seções, blocos e coleções; o editor identifica a fonte manual/vinculada, oferece formulário avançado recolhível, prévia protegida e alertas de alterações não salvas. CI [#41134897178](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41134897178) **success**, Vercel Production **READY** no mesmo SHA. Sem mutação Supabase nem mudança da aplicação pública fora de CSS administrativo.
