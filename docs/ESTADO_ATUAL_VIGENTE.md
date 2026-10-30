@@ -1,5 +1,16 @@
 # PortfolioTulius — estado operacional vigente
 
+## Editor do Site integrado — 30/10/2026
+
+**SHA funcional vigente desta rodada:** [`bc4f3ca`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/bc4f3cadc3de8751039954e46b1c19ef05c406a2). [CI Validate #41134897178](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41134897178) **success**, incluindo formatação, TypeScript, Vitest, build e smoke offline. [Vercel Production](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/H4bkM8rzZRMt89icqwog3VfinDzJ) **READY no mesmo SHA**. O commit documental posterior não altera esse código.
+
+A navegação do CMS substituiu as entradas separadas Seções, Blocos e Coleções por **Editor do site**, com escolha persistente de seção e quatro áreas: Conteúdo e painéis, Informações da seção, Acervo estruturado e Prévia. Os formulários originais e as operações existentes de salvar blocos/placements, seções e coleções e publicar seção foram reaproveitados; não foi criado salvamento transacional cruzado. Blocos informam a fonte manual ou `source_collection` vinculada e permitem abrir a coleção correspondente. Configurações de tipo/placement/animação continuam disponíveis em controle avançado recolhível. Alertas protegem edições não salvas ao trocar seção, módulo, registro, bloco ou iniciar criação/duplicação; a criação de registros e a seleção de novas seções receberam correções de continuidade. A prévia protegida exibe dados persistidos, não alterações de formulário ainda não salvas.
+
+**Auditoria pública sobre o primeiro SHA da implementação:** [P3 #41134316506](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41134316506), commit `5ed828e`, confirmou **13 seções, 25 painéis mobile, 38 capturas, zero falhas de navegador, P5 público 3/3 e zero mutações**. O resultado global do job foi **failure somente no orçamento sintético P6 mobile**: LCP mediano **7,538 s**, limite 6,5 s, meta ideal ≤2,5 s; desktop P6 passou (LCP ~1,721 s). Commits funcionais seguintes até `bc4f3ca` alteraram apenas os arquivos administrativos; `src/index.css` público permaneceu idêntico à versão auditada. **Não declarar o P3 global aprovado nesta rodada nem inferir causa de LCP na mudança administrativa.** A pendência P3-PERF-01 continua aberta.
+
+Nenhuma migration, SQL, alteração de schema/RLS/Auth/Storage, gravação em dados de produção, criação de ambiente pago, mudança de layout editorial público ou configuração Vercel foi executada nesta rodada. **P2 transacional continua suspenso:** CI, leitura de código e P3 público não homologam operações de gravação com JWT administrativo real. A experiência integrada ainda requer inspeção manual autenticada pelo proprietário; não há aceite visual/operacional de UI declarado nesta data.
+
+
 ## Auditoria P3/P6 e LCP mobile — 29/10/2026 (posterior à revisão de Invest RS)
 
 **SHA funcional:** [`4a8412e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/4a8412e93c99db4fae15e57d1e19785581daaf51). [CI #40824692978](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824692978) **success**, deployment Vercel Production **READY** no mesmo SHA, [P3 #40824693037](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824693037): **failure exclusivamente no orçamento sintético P6 mobile**.

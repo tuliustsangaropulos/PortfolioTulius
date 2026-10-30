@@ -1,5 +1,12 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Editor administrativo integrado — 30/10/2026
+
+**Implementado no SHA funcional [`bc4f3ca`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/bc4f3cadc3de8751039954e46b1c19ef05c406a2):** uma entrada **Editor do site** integra a navegação de seções, blocos e coleções; o editor identifica a fonte manual/vinculada, oferece formulário avançado recolhível, prévia protegida e alertas de alterações não salvas. CI [#41134897178](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41134897178) **success**, Vercel Production **READY** no mesmo SHA. Sem mutação Supabase nem mudança da aplicação pública fora de CSS administrativo.
+
+**Acompanhar na verificação manual:** inspeção da nova navegação contextual e das transições com rascunhos no CMS autenticado, inclusive criação de seção e registro; testar persistência real apenas se o P2 transacional for reautorizado com ambiente isolado. O P3 [#41134316506](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41134316506) passou nas verificações públicas 13/25/38 e P5 3/3 sem mutações, mas terminou **failure pelo LCP mobile ~7,54 s** acima do orçamento P6 de 6,5 s. A meta ≤2,5 s continua aberta; não reabrir redesign do site público por esse fato isolado. O novo editor não cria vínculo entre coleções e blocos automaticamente.
+
+
 ## P3-PERF-01 — 29/10/2026: gargalo de imagem continua aberto
 
 **SHA funcional:** [`4a8412e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/4a8412e93c99db4fae15e57d1e19785581daaf51). [CI #40824692978](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824692978) **success**, deployment Vercel Production **READY** no mesmo SHA, [P3 #40824693037](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824693037): **failure exclusivamente no orçamento sintético P6 mobile**.
