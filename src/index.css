@@ -1081,3 +1081,19 @@
 .admin-confirm-actions { margin-top: 1.5rem; display: flex; gap: .65rem; justify-content: flex-end; flex-wrap: wrap; }
 .admin-confirm-actions button { min-width: 7.5rem; min-height: 44px; }
 .admin-confirm-dialog button:focus-visible { outline: 3px solid #ff5414; outline-offset: 3px; }
+
+/* Contextual editorial preview and reusable CMS feedback. */
+.site-editor-preview-controls { display: flex; gap: .4rem; margin-bottom: .8rem; }
+.site-editor-preview-controls button, .site-editor-contextual-sources button { padding: .6rem .85rem; min-height: 44px; background: white; border: 1px solid #d7d2ce; color: #171617; }
+.site-editor-preview-controls button.active, .site-editor-contextual-sources button.active { background: #171617; color: white; border-color: #171617; }
+.site-editor-preview-frame { max-width: 100%; margin: 0 auto .65rem; }
+.site-editor-preview-frame.desktop { width: 100%; }
+.site-editor-preview-frame.mobile { width: min(390px, 100%); }
+.site-editor-preview-frame iframe { display: block; width: 100%; height: 75vh; min-height: 530px; border: 1px solid #d7d2ce; background: white; }
+.site-editor-responsive-preview > small { display: block; color: #716b67; }
+.site-editor-contextual-sources { background: #f8f4f1; border: 1px solid #e3dfdc; padding: .9rem 1rem; margin-bottom: .9rem; }
+.site-editor-contextual-sources > div { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+.admin-toast-success { border-left-color: #69b58a; }
+.admin-toast-error { border-left-color: #ff5414; }
+.admin-toast-warning { border-left-color: #e8a242; }
+.admin-toast-info { border-left-color: #8e9cba; }

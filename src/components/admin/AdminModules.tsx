@@ -705,7 +705,7 @@ export function ContentStudio({
                       "contact",
                       "tools",
                     ].map((type) => (
-                      <option key={type}>{type}</option>
+                      <option key={type} value={type}>{({ hero: "Destaque", rich_text: "Texto", metric: "Métrica", cards: "Cards", timeline: "Linha do tempo", skills: "Competências", media: "Imagem/vídeo", quote: "Depoimento", contact: "Contato", tools: "Ferramentas" } as Record<string, string>)[type]}</option>
                     ))}
                   </select>
                 </label>
@@ -1916,10 +1916,12 @@ const collectionConfigs: CollectionConfig[] = [
 
 export function CollectionsStudio({
   initialSource,
+  sectionId,
   embedded = false,
   onDirtyChange,
 }: {
   initialSource?: string
+  sectionId?: string
   embedded?: boolean
   onDirtyChange?: (dirty: boolean) => void
 }) {
@@ -1938,7 +1940,10 @@ export function CollectionsStudio({
 
   const load = async () => {
     if (!supabase) return
-    const { data, error } = await supabase.from(config.table).select("*").order("sort_order")
+    const query = supabase.from(config.table).select("*").order("sort_order")
+    const { data, error } = config.table === "metrics" && sectionId
+      ? await query.eq("section_id", sectionId)
+      : await query
     const normalized = (data ?? []).map((record) => normalizeCollectionRecord(record, config.table))
     setRecords(normalized)
     setMessage(error?.message ?? "")
@@ -1949,7 +1954,7 @@ export function CollectionsStudio({
   useEffect(() => {
     setSelectedId("")
     void load()
-  }, [config.table])
+  }, [config.table, sectionId])
 
   useEffect(() => {
     // A new record has no id yet; do not erase its in-progress form.

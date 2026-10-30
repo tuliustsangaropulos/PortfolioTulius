@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router"
 import { defaultTokens } from "../../content/fallback"
+import { isCollectionSource } from "../../lib/collections"
 import { isAdmin, isSupabaseConfigured, supabase } from "../../lib/supabase"
 import { PublicSite } from "../public/PublicSite"
 import {
@@ -122,10 +123,12 @@ function AdminShell({
   children,
   active,
   setActive,
+  editorDirty,
 }: {
   children: React.ReactNode
   active: string
   setActive: (value: string) => void
+  editorDirty: boolean
 }) {
   const navigate = useNavigate()
   const items = [
@@ -139,14 +142,21 @@ function AdminShell({
     ["preview", "Prévia", "arrow"],
   ] as const
   async function logout() {
-    if (!(await adminConfirm("Deseja encerrar a sessão administrativa?", { title: "Sair do painel", confirmLabel: "Sair" }))) return
+    const question = editorDirty
+      ? "Existem alterações não salvas. Deseja descartá-las e encerrar a sessão?"
+      : "Deseja encerrar a sessão administrativa?"
+    if (!(await adminConfirm(question, { title: "Sair do painel", confirmLabel: "Sair" }))) return
     await supabase?.auth.signOut()
     navigate("/admin/login")
   }
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <Link to="/" className="admin-logo">
+        <Link to="/" className="admin-logo" onClick={async (event) => {
+          event.preventDefault()
+          if (editorDirty && !(await adminConfirm("Existem alterações não salvas. Deseja descartá-las e voltar ao site?", { title: "Descartar alterações?" }))) return
+          navigate("/")
+        }}>
           <span>TT</span>
           <strong>
             Tulius
@@ -640,11 +650,27 @@ function SiteEditor({
   const [selectedId, setSelectedId] = useState(sections[0]?.id ?? "")
   const [pane, setPane] = useState<SiteEditorPane>("content")
   const [collectionSource, setCollectionSource] = useState("career_experiences")
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop")
+  const [linkedSources, setLinkedSources] = useState<string[]>([])
   const [lastExperienceId, setLastExperienceId] = useState("")
   const selected = sections.find((item) => item.id === selectedId)
   const navigationEntries = buildAdminSectionNavigation(sections)
   const experienceSections = sections.filter((section) => isExperienceSection(section.slug))
   const selectedIsExperience = Boolean(selected && isExperienceSection(selected.slug))
+  useEffect(() => {
+    let cancelled = false
+    setLinkedSources([])
+    if (!supabase || !selectedId) return
+    void supabase.from("content_blocks").select("content_json").eq("section_id", selectedId)
+      .then(({ data }) => {
+        if (cancelled) return
+        const sources = (data ?? [])
+          .map((row) => row.content_json?.source_collection)
+          .filter(isCollectionSource)
+        setLinkedSources([...new Set(sources)])
+      })
+    return () => { cancelled = true }
+  }, [selectedId])
 
   useEffect(() => {
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
@@ -682,6 +708,12 @@ function SiteEditor({
     onDirtyChange(false)
     setCollectionSource(source)
     setPane("records")
+  }
+
+  async function switchCollection(source: string) {
+    if (source === collectionSource || !(await canLeave())) return
+    onDirtyChange(false)
+    setCollectionSource(source)
   }
 
   // Creation/duplication already confirms unsaved edits before the RPC.
@@ -846,25 +878,50 @@ function SiteEditor({
                       público desta seção quando um bloco aponta explicitamente para a coleção;
                       editar um registro não cria esse vínculo automaticamente.
                     </p>
+                    {linkedSources.length > 0 && (
+                      <div className="site-editor-contextual-sources">
+                        <strong>Fontes vinculadas aos blocos desta seção</strong>
+                        <div>
+                          {linkedSources.map((source) => (
+                            <button type="button" key={source}
+                              className={source === collectionSource ? "active" : ""}
+                              onClick={() => switchCollection(source)}>
+                              {source.replace(/_/g, " ")}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     <CollectionsStudio
                       key={collectionSource}
                       initialSource={collectionSource}
+                      sectionId={selected.id}
                       embedded
                       onDirtyChange={onDirtyChange}
                     />
                   </>
                 )}
                 {pane === "preview" && (
-                  <div className="embedded-preview">
+                  <div className="embedded-preview site-editor-responsive-preview">
                     <p className="site-editor-note">
-                      Esta prévia protegida apresenta os dados já salvos. Edições ainda abertas nos
-                      formulários não são exibidas até serem gravadas.
+                      Prévia protegida dos dados já salvos. Alterações abertas nos formulários
+                      aparecem somente depois de gravadas.
                     </p>
-                    <iframe
-                      key={selected.slug}
-                      title={`Prévia da seção ${selected.title}`}
-                      src={`/admin/preview#${selected.slug}`}
-                    />
+                    <div className="site-editor-preview-controls" role="group" aria-label="Visualizar em dispositivo">
+                      <button type="button" className={previewDevice === "desktop" ? "active" : ""}
+                        aria-pressed={previewDevice === "desktop"}
+                        onClick={() => setPreviewDevice("desktop")}>Desktop</button>
+                      <button type="button" className={previewDevice === "mobile" ? "active" : ""}
+                        aria-pressed={previewDevice === "mobile"}
+                        onClick={() => setPreviewDevice("mobile")}>Mobile</button>
+                    </div>
+                    <div className={`site-editor-preview-frame ${previewDevice}`}>
+                      <iframe key={selected.slug}
+                        title={`Prévia ${previewDevice} da seção ${selected.title}`}
+                        src={`/admin/preview#${selected.slug}`}
+                      />
+                    </div>
+                    <small>A simulação varia a largura da prévia; não substitui testes em dispositivos reais.</small>
                   </div>
                 )}
               </div>
@@ -1099,7 +1156,7 @@ export function AdminApp() {
     ),
   }
   return (
-    <AdminShell active={active} setActive={selectModule}>
+    <AdminShell active={active} setActive={selectModule} editorDirty={editorDirty}>
       {loadError && (
         <div className="admin-warning">
           <strong>Não foi possível carregar as seções.</strong> {loadError}. Confira a conexão e as
