@@ -427,7 +427,11 @@ export function ContentStudio({
 
   async function createBlock() {
     if (!supabase || !sectionId) return
-    if (blockDirty && !confirm("Alterações deste bloco ainda não foram salvas. Descartar e criar outro?")) return
+    if (
+      blockDirty &&
+      !confirm("Alterações deste bloco ainda não foram salvas. Descartar e criar outro?")
+    )
+      return
     const { data, error } = await supabase
       .from("content_blocks")
       .insert({
