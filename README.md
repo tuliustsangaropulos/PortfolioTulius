@@ -130,3 +130,8 @@ A edição de cada mídia é aberta **no espaço do item clicado** na grade; bot
 
 A fotografia central de “Olá!” foi ajustada localmente para encostar visualmente na margem inferior do desktop, sem alterar mobile ou aplicar zoom global. Os logos grandes das experiências estão sem borda; o seletor superior ficou intocado. Invest RS usa quatro itens visíveis, quatro ocultos **sem exclusão** no Supabase e sinalizados no admin Blocos. [Commit funcional](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/d882d7a71ff45e0d6980cf85fbcaa6533f0f89db), [CI aprovado](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457072), [auditoria P3 em andamento](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457107). LCP mobile permanece pendente.
 
+
+
+### Editor administrativo unificado — 30/10/2026
+
+A navegação do CMS apresenta **Editor do site** no lugar de Seções, Blocos e Coleções como entradas separadas. O proprietário escolhe a seção uma vez e acessa conteúdo, informações, acervo estruturado e prévia contextual. O editor identifica blocos com fonte manual ou coleção explicitamente vinculada; ajustes técnicos de placements permanecem no modo avançado. Contratos de dados, ações de salvamento, status e guardas de publicação existentes foram preservados, sem mudanças no site público ou no Supabase. [Detalhes e limites](docs/ADMIN_CMS.md).

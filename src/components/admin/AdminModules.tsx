@@ -291,8 +291,20 @@ function HeroDeviceEditor({
   )
 }
 
-export function ContentStudio({ sections }: { sections: SectionOption[] }) {
-  const [sectionId, setSectionId] = useState(sections[0]?.id ?? "")
+export function ContentStudio({
+  sections,
+  sectionIdOverride,
+  embedded = false,
+  onDirtyChange,
+  onEditCollection,
+}: {
+  sections: SectionOption[]
+  sectionIdOverride?: string
+  embedded?: boolean
+  onDirtyChange?: (dirty: boolean) => void
+  onEditCollection?: (source: string) => void
+}) {
+  const [sectionId, setSectionId] = useState(sectionIdOverride ?? sections[0]?.id ?? "")
   const [blocks, setBlocks] = useState<BlockRow[]>([])
   const [selectedId, setSelectedId] = useState("")
   const [draft, setDraft] = useState<BlockRow | null>(null)
@@ -317,6 +329,11 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
   const [placementsLoading, setPlacementsLoading] = useState(true)
   const [placementsReadError, setPlacementsReadError] = useState(false)
   const placement = placementsByPanel[placementPanel] ?? initialPlacement
+  const savedBlock = blocks.find((block) => block.id === selectedId)
+  const blockDirty =
+    Boolean(draft && savedBlock && JSON.stringify(draft) !== JSON.stringify(savedBlock)) ||
+    editedPanelKeys.length > 0
+  useEffect(() => onDirtyChange?.(blockDirty), [blockDirty, onDirtyChange])
   const setPlacement = (next: PlacementForm) => {
     setPlacementsByPanel((current) => ({ ...current, [placementPanel]: next }))
     setEditedPanelKeys((current) =>
@@ -560,7 +577,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
 
   return (
     <>
-      <header className="admin-header">
+      {!embedded && <header className="admin-header">
         <div>
           <p>Conteúdo modular</p>
           <h1>Blocos e painéis</h1>
@@ -569,8 +586,17 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
         <button className="primary-button" onClick={createBlock}>
           Novo bloco
         </button>
-      </header>
-      <div className="studio-toolbar">
+      </header>}
+      {embedded && (
+        <div className="site-editor-actions">
+          <div>
+            <strong>Elementos desta seção</strong>
+            <small>Escolha um painel para editar os textos, imagens e itens exibidos.</small>
+          </div>
+          <button type="button" className="secondary-button" onClick={createBlock}>Novo bloco</button>
+        </div>
+      )}
+      {!embedded && <div className="studio-toolbar">
         <label>
           Seção
           <select value={sectionId} onChange={(event) => setSectionId(event.target.value)}>
@@ -581,14 +607,18 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
             ))}
           </select>
         </label>
-      </div>
-      <div className="section-editor-layout">
-        <div className="section-list">
+      </div>}
+      <div className={embedded ? "studio-inline-layout" : "section-editor-layout"}>
+        <div className={embedded ? "studio-block-picker" : "section-list"}>
           {blocks.map((block) => (
             <button
               key={block.id}
               className={selectedId === block.id ? "active" : ""}
-              onClick={() => setSelectedId(block.id)}
+              onClick={() => {
+                if (block.id === selectedId) return
+                if (blockDirty && !confirm("Alterações não salvas neste bloco serão descartadas. Continuar?")) return
+                setSelectedId(block.id)
+              }}
             >
               <span>{block.mobile_panel.toUpperCase()}</span>
               <div>
@@ -602,6 +632,25 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
         </div>
         {draft ? (
           <section className="admin-card editor-form">
+            <div className="site-editor-source">
+              <strong>
+                Origem do conteúdo: {isCollectionSource(draft.content_json.source_collection)
+                  ? collectionConfigs.find((entry) => entry.table === draft.content_json.source_collection)?.label ?? draft.content_json.source_collection
+                  : "Itens editados neste bloco"}
+              </strong>
+              <small>
+                {isCollectionSource(draft.content_json.source_collection)
+                  ? "O site usa os registros publicados desta coleção. Os itens manuais ficam preservados como backup."
+                  : "As alterações dos itens deste bloco não atualizam automaticamente registros do acervo."}
+              </small>
+              {isCollectionSource(draft.content_json.source_collection) && onEditCollection && (
+                <button type="button" className="secondary-button" onClick={() => onEditCollection(draft.content_json.source_collection!)}>
+                  Editar registros vinculados
+                </button>
+              )}
+            </div>
+            <details className="site-editor-advanced">
+              <summary>Configurações avançadas do bloco e dos painéis</summary>
             <div className="field-grid compact-grid">
               <label>
                 Tipo
@@ -862,6 +911,7 @@ export function ContentStudio({ sections }: { sections: SectionOption[] }) {
                 </label>
               </div>
             </fieldset>
+            </details>
             {["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(
               sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
             ) &&
@@ -1782,12 +1832,25 @@ const collectionConfigs: CollectionConfig[] = [
   },
 ]
 
-export function CollectionsStudio() {
-  const [config, setConfig] = useState(collectionConfigs[0])
+export function CollectionsStudio({
+  initialSource,
+  embedded = false,
+  onDirtyChange,
+}: {
+  initialSource?: string
+  embedded?: boolean
+  onDirtyChange?: (dirty: boolean) => void
+}) {
+  const [config, setConfig] = useState(
+    collectionConfigs.find((item) => item.table === initialSource) ?? collectionConfigs[0],
+  )
   const [records, setRecords] = useState<Record<string, any>[]>([])
   const [selectedId, setSelectedId] = useState("")
   const [draft, setDraft] = useState<Record<string, any> | null>(null)
   const [message, setMessage] = useState("")
+  const savedRecord = records.find((item) => item.id === selectedId)
+  const recordDirty = Boolean(draft && (!savedRecord || JSON.stringify(draft) !== JSON.stringify(savedRecord)))
+  useEffect(() => onDirtyChange?.(recordDirty), [recordDirty, onDirtyChange])
 
   const load = async () => {
     if (!supabase) return
@@ -1856,7 +1919,7 @@ export function CollectionsStudio() {
 
   return (
     <>
-      <header className="admin-header">
+      {!embedded && <header className="admin-header">
         <div>
           <p>Fonte estruturada</p>
           <h1>Coleções</h1>
@@ -1865,7 +1928,16 @@ export function CollectionsStudio() {
         <button className="primary-button" onClick={newRecord}>
           Novo registro
         </button>
-      </header>
+      </header>}
+      {embedded && (
+        <div className="site-editor-actions">
+          <div>
+            <strong>Registros do acervo</strong>
+            <small>Dados compartilhados; verifique o vínculo de origem no bloco antes de editar.</small>
+          </div>
+          <button type="button" className="secondary-button" onClick={newRecord}>Novo registro</button>
+        </div>
+      )}
       <div className="collection-tabs" role="tablist">
         {collectionConfigs.map((item) => (
           <button
@@ -1873,7 +1945,11 @@ export function CollectionsStudio() {
             role="tab"
             aria-selected={item.table === config.table}
             className={item.table === config.table ? "active" : ""}
-            onClick={() => setConfig(item)}
+            onClick={() => {
+              if (item.table === config.table) return
+              if (recordDirty && !confirm("Descartar alterações não salvas deste registro?")) return
+              setConfig(item)
+            }}
           >
             {item.label}
           </button>
@@ -1885,7 +1961,11 @@ export function CollectionsStudio() {
             <button
               key={record.id}
               className={selectedId === record.id ? "active" : ""}
-              onClick={() => setSelectedId(record.id)}
+              onClick={() => {
+                if (record.id === selectedId) return
+                if (recordDirty && !confirm("Descartar alterações não salvas deste registro?")) return
+                setSelectedId(record.id)
+              }}
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>

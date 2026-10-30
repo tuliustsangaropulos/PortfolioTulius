@@ -125,9 +125,7 @@ function AdminShell({
   const navigate = useNavigate()
   const items = [
     ["dashboard", "Visão geral", "edit"],
-    ["sections", "Seções", "edit"],
-    ["blocks", "Blocos", "edit"],
-    ["content", "Coleções", "edit"],
+    ["editor", "Editor do site", "edit"],
     ["design", "Identidade", "palette"],
     ["media", "Mídia", "image"],
     ["navigation", "Navegação", "arrow"],
@@ -293,8 +291,22 @@ function Dashboard({
   )
 }
 
-function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: () => void }) {
-  const [selectedId, setSelectedId] = useState<string | null>(sections[0]?.id ?? null)
+function SectionsEditor({
+  sections,
+  reload,
+  selectedSectionId,
+  embedded = false,
+  onSelectSection,
+  onDirtyChange,
+}: {
+  sections: SectionRow[]
+  reload: () => void
+  selectedSectionId?: string
+  embedded?: boolean
+  onSelectSection?: (id: string) => void
+  onDirtyChange?: (dirty: boolean) => void
+}) {
+  const [selectedId, setSelectedId] = useState<string | null>(selectedSectionId ?? sections[0]?.id ?? null)
   const selected = sections.find((s) => s.id === selectedId)
   const [draft, setDraft] = useState<SectionRow | null>(selected ?? null)
   const [message, setMessage] = useState("")
@@ -312,6 +324,9 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
     contato: "contact",
   }
   useEffect(() => setDraft(selected ?? null), [selectedId, selected])
+  useEffect(() => {
+    onDirtyChange?.(Boolean(draft && selected && JSON.stringify(draft) !== JSON.stringify(selected)))
+  }, [draft, selected, onDirtyChange])
   useEffect(() => {
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
   }, [sections, selectedId])
@@ -364,6 +379,7 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
     if (data) {
       reload()
       setSelectedId(data)
+      onSelectSection?.(data)
     }
   }
   async function create() {
@@ -376,6 +392,7 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
     if (!error && data) {
       reload()
       setSelectedId(data)
+      onSelectSection?.(data)
     }
   }
 
@@ -402,7 +419,7 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
   }
   return (
     <>
-      <AdminHeader
+      {!embedded && <AdminHeader
         title="Seções"
         subtitle="Ordem, visibilidade, conteúdo e apresentação"
         action={
@@ -415,9 +432,15 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
             </button>
           </div>
         }
-      />
-      <div className="section-editor-layout">
-        <div className="section-list" aria-label="Seções do site">
+      />}
+      {embedded && (
+        <div className="site-editor-actions">
+          <button className="secondary-button" onClick={create}>Nova seção</button>
+          <button className="secondary-button" onClick={duplicate}>Duplicar seção</button>
+        </div>
+      )}
+      <div className={embedded ? "site-editor-section" : "section-editor-layout"}>
+        {!embedded && <div className="section-list" aria-label="Seções do site">
           {sections.map((section) => (
             <button
               key={section.id}
@@ -431,7 +454,7 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
               </div>
             </button>
           ))}
-        </div>
+        </div>}
         {draft && (
           <section className="editor-form admin-card">
             <div className="card-heading">
@@ -564,6 +587,168 @@ function SectionsEditor({ sections, reload }: { sections: SectionRow[]; reload: 
             </div>
           </section>
         )}
+      </div>
+    </>
+  )
+}
+
+
+type SiteEditorPane = "content" | "details" | "records" | "preview"
+
+function SiteEditor({
+  sections,
+  reload,
+  dirty,
+  onDirtyChange,
+}: {
+  sections: SectionRow[]
+  reload: () => void
+  dirty: boolean
+  onDirtyChange: (dirty: boolean) => void
+}) {
+  const [selectedId, setSelectedId] = useState(sections[0]?.id ?? "")
+  const [pane, setPane] = useState<SiteEditorPane>("content")
+  const [collectionSource, setCollectionSource] = useState("career_experiences")
+  const selected = sections.find((item) => item.id === selectedId)
+
+  useEffect(() => {
+    if (!selected && sections[0]) setSelectedId(sections[0].id)
+  }, [selected, sections])
+
+  function canLeave() {
+    return !dirty || confirm("Existem alterações não salvas. Deseja descartá-las e continuar?")
+  }
+
+  function selectSection(id: string) {
+    if (id === selectedId || !canLeave()) return
+    onDirtyChange(false)
+    setSelectedId(id)
+    setPane("content")
+  }
+
+  function selectPane(next: SiteEditorPane) {
+    if (next === pane || !canLeave()) return
+    onDirtyChange(false)
+    setPane(next)
+  }
+
+  function editLinkedCollection(source: string) {
+    if (!canLeave()) return
+    onDirtyChange(false)
+    setCollectionSource(source)
+    setPane("records")
+  }
+
+  const panes: { id: SiteEditorPane; title: string }[] = [
+    { id: "content", title: "Conteúdo e painéis" },
+    { id: "details", title: "Informações da seção" },
+    { id: "records", title: "Acervo estruturado" },
+    { id: "preview", title: "Prévia" },
+  ]
+
+  return (
+    <>
+      <AdminHeader
+        title="Editor do site"
+        subtitle="Seções, conteúdo e coleções em um único fluxo de trabalho"
+      />
+      <div className="site-editor-layout">
+        <nav className="section-list site-editor-sidebar" aria-label="Escolher seção do site">
+          {sections.map((section) => (
+            <button
+              type="button"
+              key={section.id}
+              className={selectedId === section.id ? "active" : ""}
+              aria-current={selectedId === section.id ? "true" : undefined}
+              onClick={() => selectSection(section.id)}
+            >
+              <span>{String(section.sort_order).padStart(2, "0")}</span>
+              <div>
+                <strong>{section.title}</strong>
+                <small>{statusPt(section.status)}{!section.is_visible ? " · Oculta no site" : ""}</small>
+              </div>
+            </button>
+          ))}
+        </nav>
+        <div className="site-editor-main">
+          {selected ? (
+            <>
+              <div className="site-editor-heading">
+                <p>SEÇÃO {String(selected.sort_order).padStart(2, "0")} · #{selected.slug}</p>
+                <h2>{selected.title}</h2>
+                <span>{selected.is_visible ? "Exibida no site" : "Não exibida no site"} · {statusPt(selected.status)}</span>
+              </div>
+              <div className="site-editor-tabs" role="tablist" aria-label="Edição da seção">
+                {panes.map((item) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    key={item.id}
+                    aria-selected={pane === item.id}
+                    className={pane === item.id ? "active" : ""}
+                    onClick={() => selectPane(item.id)}
+                  >
+                    {item.title}
+                  </button>
+                ))}
+              </div>
+              <div className="site-editor-body">
+                {dirty && <p className="site-editor-unsaved" role="status">Alterações não salvas nesta área.</p>}
+                {pane === "content" && (
+                  <ContentStudio
+                    key={selected.id}
+                    sections={sections}
+                    sectionIdOverride={selected.id}
+                    embedded
+                    onDirtyChange={onDirtyChange}
+                    onEditCollection={editLinkedCollection}
+                  />
+                )}
+                {pane === "details" && (
+                  <SectionsEditor
+                    key={selected.id}
+                    sections={sections}
+                    reload={reload}
+                    selectedSectionId={selected.id}
+                    embedded
+                    onSelectSection={selectSection}
+                    onDirtyChange={onDirtyChange}
+                  />
+                )}
+                {pane === "records" && (
+                  <>
+                    <p className="site-editor-note">
+                      O acervo é compartilhado entre seções. Um registro só altera o conteúdo
+                      público desta seção quando um bloco aponta explicitamente para a coleção;
+                      editar um registro não cria esse vínculo automaticamente.
+                    </p>
+                    <CollectionsStudio
+                      key={collectionSource}
+                      initialSource={collectionSource}
+                      embedded
+                      onDirtyChange={onDirtyChange}
+                    />
+                  </>
+                )}
+                {pane === "preview" && (
+                  <div className="embedded-preview">
+                    <p className="site-editor-note">
+                      Esta prévia protegida apresenta os dados já salvos. Edições ainda abertas
+                      nos formulários não são exibidas até serem gravadas.
+                    </p>
+                    <iframe
+                      key={selected.slug}
+                      title={`Prévia da seção ${selected.title}`}
+                      src={`/admin/preview#${selected.slug}`}
+                    />
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="site-editor-note">Nenhuma seção disponível para edição.</p>
+          )}
+        </div>
       </div>
     </>
   )
@@ -737,6 +922,23 @@ function DesignEditor() {
 export function AdminApp() {
   const guard = useAdminGuard()
   const [active, setActive] = useState("dashboard")
+  const [editorDirty, setEditorDirty] = useState(false)
+  useEffect(() => {
+    if (!editorDirty) return
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+    window.addEventListener("beforeunload", warn)
+    return () => window.removeEventListener("beforeunload", warn)
+  }, [editorDirty])
+  function selectModule(next: string) {
+    if (next === active) return
+    if (editorDirty && !confirm("Existem alterações não salvas. Deseja descartá-las e sair?"))
+      return
+    setEditorDirty(false)
+    setActive(next)
+  }
   const [sections, setSections] = useState<SectionRow[]>([])
   const [loadError, setLoadError] = useState("")
   const [loadStatus, setLoadStatus] = useState<"loading" | "ready" | "error">("loading")
@@ -758,9 +960,7 @@ export function AdminApp() {
   if (guard === "denied") return <Navigate to="/admin/login" replace />
   const screens: Record<string, React.ReactNode> = {
     dashboard: <Dashboard sections={sections} loadStatus={loadStatus} />,
-    sections: <SectionsEditor sections={sections} reload={load} />,
-    blocks: <ContentStudio sections={sections} />,
-    content: <CollectionsStudio />,
+    editor: <SiteEditor sections={sections} reload={load} dirty={editorDirty} onDirtyChange={setEditorDirty} />,
     design: <DesignEditor />,
     media: <EnhancedMediaLibrary />,
     navigation: <NavigationStudio />,
@@ -777,7 +977,7 @@ export function AdminApp() {
     ),
   }
   return (
-    <AdminShell active={active} setActive={setActive}>
+    <AdminShell active={active} setActive={selectModule}>
       {loadError && (
         <div className="admin-warning">
           <strong>Não foi possível carregar as seções.</strong> {loadError}. Confira a conexão e as

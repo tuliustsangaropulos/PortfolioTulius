@@ -192,3 +192,16 @@ A repetição da [auditoria P3 #40812459767](https://github.com/tuliustsangaropu
 
 **Commit funcional:** [`d882d7a`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/d882d7a71ff45e0d6980cf85fbcaa6533f0f89db). [CI #40815457072](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457072) `success`, Vercel Production `READY`; [P3 #40815457107](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457107) em execução na criação deste registro. P2 transacional continua suspenso e LCP mobile ≤2,5s permanece pendente. Não houve custo adicional, mudança de RLS, Storage, arquivo de mídia ou estrutura do banco.
 
+
+
+## Editor do Site unificado — 30/10/2026
+
+A navegação administrativa reúne **Seções, Blocos e Coleções** em **Editor do site**. A escolha de uma seção permanece visível enquanto o editor alterna entre **Conteúdo e painéis**, **Informações da seção**, **Acervo estruturado** e **Prévia**.
+
+A integração é de **interface, não de banco**: `sections`, `content_blocks`, `block_placements` e coleções continuam com seus contratos atuais. O salvamento da seção, a RPC `save_content_block_atomic`, as operações de coleções e a publicação via `publish_section` mantêm ações próprias. Não há botão “salvar tudo” nem nova transação cruzando essas fontes.
+
+**Origem dos dados:** cada bloco informa se usa itens manuais ou a `source_collection` explícita. Se vinculado, há acesso direto ao editor da coleção correspondente. O Acervo também oferece acesso a todas as coleções; editar um registro não cria associação com seções automaticamente. Os itens manuais preservados sob um vínculo não são reescritos pela interface integrada.
+
+**Proteções:** ao mudar seção, área, registro, bloco ou sair do Editor com campos alterados, a interface solicita confirmação antes de descartá-los; o navegador também avisa ao sair com alterações pendentes. Controles técnicos de tipo, origem, placements e animação permanecem acessíveis em **Configurações avançadas**, sem alteração de valores existentes. A prévia protegida usa `/admin/preview#slug` e reflete dados **já persistidos**, não mudanças ainda abertas no formulário.
+
+**Limite de validação:** integração visual e regressões verificáveis por CI/P3; não confundir com homologação de CRUD, publicação, restauração ou Storage com JWT real do P2 transacional suspenso. Não houve alteração planejada de schema, políticas, mídia, dados, layout do site público ou configuração Vercel.
