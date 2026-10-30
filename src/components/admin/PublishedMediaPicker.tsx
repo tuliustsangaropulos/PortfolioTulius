@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage } from "../../lib/validation"
 import { MediaFramingDialog } from "./MediaFramingDialog"
-import { AdminInfoTip } from "./AdminInfoTip"
+import { AdminInfoTip } from "./InfoTip"
 import { Icon } from "../ui/Icons"
 import type { MediaFraming } from "../../lib/media-framing"
 import {

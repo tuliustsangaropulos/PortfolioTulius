@@ -9,7 +9,7 @@ import {
 import { stagePrivateMediaChange } from "../../lib/media-operations"
 import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
 import { PublishedMediaPicker } from "./PublishedMediaPicker"
-import { AdminInfoTip } from "./AdminInfoTip"
+import { AdminInfoTip } from "./InfoTip"
 import {
   nextExpandedItem,
   expandedAfterMove,
