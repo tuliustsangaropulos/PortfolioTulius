@@ -1,5 +1,14 @@
 # PortfolioTulius — estado operacional vigente
 
+## Editor do site: grupo Experiências Profissionais — 30/10/2026
+
+**Alteração funcional restrita ao CMS:** [commit `05a4cf1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/05a4cf1f27962d1df24fbf4cd53aceb0192955a6), [CI Validate #41137954207](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41137954207) **success** (formatação, TypeScript, testes unitários, build e smoke offline), [Vercel Production](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/EQ5dA4FFMrt9dJqvB5nrxuHjG3ri) **READY** no mesmo SHA antes deste commit documental.
+
+No **Editor do Site**, seis entradas laterais individuais passaram a aparecer como **uma única entrada “Experiências Profissionais”**: Invest RS (`invest-rs`), Prefeitura de São Paulo (`prefeitura-sp`), Vale (`vale`), TV Globo/SporTV (`globo-sportv`), Grupo InPress (`inpress`) e CDI Comunicação (`cdi`). Ao entrar no grupo, o editor apresenta os seis trabalhos para seleção, mantendo a área atual de edição de conteúdo, dados de seção, acervo e prévia específicos para a empresa selecionada. Ao trocar de empresa, a guarda de alterações não salvas continua funcionando. Retornar ao grupo mantém a última experiência selecionada na sessão quando possível. Os testes unitários validam seis slugs exatos, ausência de agrupamento de outras seções e a posição original da entrada agrupada.
+
+**Invariantes:** o agrupamento é somente da navegação do CMS. Não houve alteração de slugs, registros, status, ordem, conteúdo, composição de painéis, site público, Supabase, migrations, RLS, Storage ou Vercel settings. As 13 seções públicas e os 25 painéis mobile permanecem com o mesmo contrato. Nenhuma escrita transacional com JWT administrador foi executada (P2 permanece suspenso). A auditoria P3 de qualidade pública iniciada no commit anterior [#41137881739](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41137881739) é independente; não inferir aprovação do LCP mobile desta alteração administrativa. Aceite visual manual do grupo no CMS autenticado permanece pendente.
+
+
 ## Verificação manual do CMS — itens, ajuda e mídia — 30/10/2026
 
 **Código funcional:** [`0c2abd0`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/0c2abd042b1050ec1db5899c13438a9fb367101f). [CI Validate #41136712312](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41136712312) **success** (formatação, TypeScript, testes unitários, build e smoke offline). [Vercel Production `UN2YUd9`](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/UN2YUd9uz1QxXWL1nCARrJinKFkP) **READY** no mesmo SHA.

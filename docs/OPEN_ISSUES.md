@@ -1,5 +1,12 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Verificação manual pendente — agrupamento de Experiências Profissionais (30/10/2026)
+
+Implementação restrita ao painel administrativo em [`05a4cf1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/05a4cf1f27962d1df24fbf4cd53aceb0192955a6), com [CI #41137954207](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41137954207) **success** e [Vercel READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/EQ5dA4FFMrt9dJqvB5nrxuHjG3ri) no mesmo SHA. As seis seções de experiência aparecem no Editor como uma entrada **Experiências Profissionais**, com seletor interno de trabalho. Os slugs e dados continuam separados; não há mudança no site público.
+
+**Checar manualmente:** escolher cada um dos seis trabalhos; manter o painel correto, prévia e ações de edição; testar aviso de rascunho não salvo ao trocar de empresa; conferir usabilidade em diferentes larguras. **P2 transacional suspenso**: sem gravações reais de teste. A pendência P3 LCP mobile ≤2,5 s permanece independente.
+
+
 ## Conferência manual pendente — acordeão e controles do Editor — 30/10/2026
 
 Implementação no [`0c2abd0`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/0c2abd042b1050ec1db5899c13438a9fb367101f), [CI #41136712312](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41136712312) **success** e [Vercel Production READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/UN2YUd9uz1QxXWL1nCARrJinKFkP). Os itens de blocos ficam recolhidos (um expandido por vez), com ajuda contextual em Valor/métrica, Metadado/URL e Imagem do item, input de alt junto ao título e botões de mídia somente com ícones no seletor indicado. A regressão de lógica de expansão/reordenação/exclusão tem testes unitários.
