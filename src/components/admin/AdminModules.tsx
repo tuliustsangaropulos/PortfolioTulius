@@ -577,37 +577,43 @@ export function ContentStudio({
 
   return (
     <>
-      {!embedded && <header className="admin-header">
-        <div>
-          <p>Conteúdo modular</p>
-          <h1>Blocos e painéis</h1>
-          <span>Uma fonte de conteúdo, composições desktop e mobile A/B</span>
-        </div>
-        <button className="primary-button" onClick={createBlock}>
-          Novo bloco
-        </button>
-      </header>}
+      {!embedded && (
+        <header className="admin-header">
+          <div>
+            <p>Conteúdo modular</p>
+            <h1>Blocos e painéis</h1>
+            <span>Uma fonte de conteúdo, composições desktop e mobile A/B</span>
+          </div>
+          <button className="primary-button" onClick={createBlock}>
+            Novo bloco
+          </button>
+        </header>
+      )}
       {embedded && (
         <div className="site-editor-actions">
           <div>
             <strong>Elementos desta seção</strong>
             <small>Escolha um painel para editar os textos, imagens e itens exibidos.</small>
           </div>
-          <button type="button" className="secondary-button" onClick={createBlock}>Novo bloco</button>
+          <button type="button" className="secondary-button" onClick={createBlock}>
+            Novo bloco
+          </button>
         </div>
       )}
-      {!embedded && <div className="studio-toolbar">
-        <label>
-          Seção
-          <select value={sectionId} onChange={(event) => setSectionId(event.target.value)}>
-            {sections.map((section) => (
-              <option key={section.id} value={section.id}>
-                {section.title}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>}
+      {!embedded && (
+        <div className="studio-toolbar">
+          <label>
+            Seção
+            <select value={sectionId} onChange={(event) => setSectionId(event.target.value)}>
+              {sections.map((section) => (
+                <option key={section.id} value={section.id}>
+                  {section.title}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
       <div className={embedded ? "studio-inline-layout" : "section-editor-layout"}>
         <div className={embedded ? "studio-block-picker" : "section-list"}>
           {blocks.map((block) => (
@@ -616,7 +622,11 @@ export function ContentStudio({
               className={selectedId === block.id ? "active" : ""}
               onClick={() => {
                 if (block.id === selectedId) return
-                if (blockDirty && !confirm("Alterações não salvas neste bloco serão descartadas. Continuar?")) return
+                if (
+                  blockDirty &&
+                  !confirm("Alterações não salvas neste bloco serão descartadas. Continuar?")
+                )
+                  return
                 setSelectedId(block.id)
               }}
             >
@@ -634,8 +644,11 @@ export function ContentStudio({
           <section className="admin-card editor-form">
             <div className="site-editor-source">
               <strong>
-                Origem do conteúdo: {isCollectionSource(draft.content_json.source_collection)
-                  ? collectionConfigs.find((entry) => entry.table === draft.content_json.source_collection)?.label ?? draft.content_json.source_collection
+                Origem do conteúdo:{" "}
+                {isCollectionSource(draft.content_json.source_collection)
+                  ? (collectionConfigs.find(
+                      (entry) => entry.table === draft.content_json.source_collection,
+                    )?.label ?? draft.content_json.source_collection)
                   : "Itens editados neste bloco"}
               </strong>
               <small>
@@ -644,273 +657,279 @@ export function ContentStudio({
                   : "As alterações dos itens deste bloco não atualizam automaticamente registros do acervo."}
               </small>
               {isCollectionSource(draft.content_json.source_collection) && onEditCollection && (
-                <button type="button" className="secondary-button" onClick={() => onEditCollection(draft.content_json.source_collection!)}>
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={() => onEditCollection(draft.content_json.source_collection!)}
+                >
                   Editar registros vinculados
                 </button>
               )}
             </div>
             <details className="site-editor-advanced">
               <summary>Configurações avançadas do bloco e dos painéis</summary>
-            <div className="field-grid compact-grid">
-              <label>
-                Tipo
-                <select
-                  value={draft.block_type}
-                  onChange={(event) => setDraft({ ...draft, block_type: event.target.value })}
-                >
-                  {[
-                    "hero",
-                    "rich_text",
-                    "metric",
-                    "cards",
-                    "timeline",
-                    "skills",
-                    "media",
-                    "quote",
-                    "contact",
-                    "tools",
-                  ].map((type) => (
-                    <option key={type}>{type}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Painel mobile
-                <select
-                  value={draft.mobile_panel}
-                  onChange={(event) =>
-                    setDraft({
-                      ...draft,
-                      mobile_panel: event.target.value as "a" | "b",
-                    })
-                  }
-                >
-                  <option value="a">Painel A</option>
-                  <option value="b">Painel B</option>
-                </select>
-              </label>
-              <label>
-                Ordem
-                <input
-                  type="number"
-                  min="1"
-                  value={draft.sort_order}
-                  onChange={(event) =>
-                    setDraft({
-                      ...draft,
-                      sort_order: Number(event.target.value),
-                    })
-                  }
-                />
-              </label>
-              {sections.find((section) => section.id === draft.section_id)?.slug !== "perfil" && (
-                <label className="field-wide">
-                  Fonte do conteúdo exibido
-                  <select
-                    value={draft.content_json.source_collection ?? ""}
-                    onChange={(event) => {
-                      const next = event.target.value
-                      if (
-                        next &&
-                        !confirm(
-                          "Vincular esta coleção fará o site exibir os registros publicados da coleção no lugar dos cards manuais deste bloco. O conteúdo manual será preservado. Continuar?",
-                        )
-                      )
-                        return
-                      setDraft({
-                        ...draft,
-                        content_json: {
-                          ...draft.content_json,
-                          source_collection: next || null,
-                        },
-                      })
-                    }}
-                  >
-                    <option value="">Cards manuais (atual)</option>
-                    {COLLECTION_SOURCES.map((source) => (
-                      <option key={source} value={source}>
-                        {collectionConfigs.find((config) => config.table === source)?.label ??
-                          source}
-                      </option>
-                    ))}
-                  </select>
-                  {draft.content_json.source_collection && (
-                    <>
-                      <small>
-                        Fonte vinculada: edite e publique registros na aba Coleções. Os cards
-                        manuais abaixo continuam armazenados e voltam a aparecer quando o vínculo
-                        for removido.
-                      </small>
-                      {draft.content_json.source_collection === "testimonials" && (
-                        <div className="field-grid compact-grid">
-                          <NumericField
-                            label="Primeiro depoimento na coleção (índice inicial, começando em 0)"
-                            value={draft.content_json.collection_start ?? 0}
-                            min={0}
-                            max={500}
-                            onChange={(collection_start) =>
-                              setDraft({
-                                ...draft,
-                                content_json: { ...draft.content_json, collection_start },
-                              })
-                            }
-                          />
-                          <NumericField
-                            label="Quantidade neste painel (vazio = todos os restantes)"
-                            value={draft.content_json.collection_limit}
-                            min={1}
-                            max={100}
-                            onChange={(collection_limit) =>
-                              setDraft({
-                                ...draft,
-                                content_json: { ...draft.content_json, collection_limit },
-                              })
-                            }
-                          />
-                        </div>
-                      )}
-                    </>
-                  )}
-                </label>
-              )}
-              <label>
-                Status
-                <select
-                  value={draft.status}
-                  onChange={(event) => setDraft({ ...draft, status: event.target.value })}
-                >
-                  <option value="draft">Rascunho</option>
-                  <option value="in_review">Em revisão</option>
-                  <option value="published">Publicado</option>
-                  <option value="archived">Arquivado</option>
-                </select>
-              </label>
-              <label className="toggle-field field-wide">
-                <input
-                  type="checkbox"
-                  checked={draft.is_placeholder}
-                  onChange={(event) =>
-                    setDraft({
-                      ...draft,
-                      is_placeholder: event.target.checked,
-                    })
-                  }
-                />
-                Contém conteúdo provisório
-              </label>
-              <label className="field-wide">
-                Nota editorial
-                <textarea
-                  value={draft.editorial_note ?? ""}
-                  onChange={(event) => setDraft({ ...draft, editorial_note: event.target.value })}
-                />
-              </label>
-            </div>
-            <fieldset className="motion-editor">
-              <legend>Placement e animação</legend>
-              <label>
-                Painel a editar (demais painéis são preservados)
-                <select
-                  value={placementPanel}
-                  onChange={(event) => setPlacementPanel(event.target.value as PanelKey)}
-                >
-                  <option value="desktop">Desktop</option>
-                  <option value="mobile-a">Mobile A</option>
-                  <option value="mobile-b">Mobile B</option>
-                </select>
-              </label>
               <div className="field-grid compact-grid">
                 <label>
-                  Variante de layout
+                  Tipo
                   <select
-                    value={placement.layout_variant}
-                    onChange={(event) =>
-                      setPlacement({
-                        ...placement,
-                        layout_variant: event.target.value,
-                      })
-                    }
+                    value={draft.block_type}
+                    onChange={(event) => setDraft({ ...draft, block_type: event.target.value })}
                   >
-                    <option value="default">Padrão</option>
-                    <option value="compact">Compacto</option>
-                    <option value="featured">Destaque</option>
-                    <option value="wide">Largo</option>
+                    {[
+                      "hero",
+                      "rich_text",
+                      "metric",
+                      "cards",
+                      "timeline",
+                      "skills",
+                      "media",
+                      "quote",
+                      "contact",
+                      "tools",
+                    ].map((type) => (
+                      <option key={type}>{type}</option>
+                    ))}
                   </select>
                 </label>
                 <label>
-                  Preset
+                  Painel mobile
                   <select
-                    value={placement.preset}
-                    onChange={(event) => setPlacement({ ...placement, preset: event.target.value })}
+                    value={draft.mobile_panel}
+                    onChange={(event) =>
+                      setDraft({
+                        ...draft,
+                        mobile_panel: event.target.value as "a" | "b",
+                      })
+                    }
                   >
-                    <option value="none">Nenhum</option>
-                    <option value="fade-in">Fade</option>
-                    <option value="fade-up">Fade vertical</option>
-                    <option value="stagger">Stagger</option>
-                    <option value="image-reveal">Reveal de imagem</option>
-                    <option value="metric-count">Métrica</option>
+                    <option value="a">Painel A</option>
+                    <option value="b">Painel B</option>
                   </select>
                 </label>
                 <label>
-                  Duração (ms)
+                  Ordem
                   <input
                     type="number"
-                    min="0"
-                    max="1200"
-                    value={placement.duration}
+                    min="1"
+                    value={draft.sort_order}
                     onChange={(event) =>
-                      setPlacement({
-                        ...placement,
-                        duration: Number(event.target.value),
+                      setDraft({
+                        ...draft,
+                        sort_order: Number(event.target.value),
                       })
                     }
                   />
                 </label>
+                {sections.find((section) => section.id === draft.section_id)?.slug !== "perfil" && (
+                  <label className="field-wide">
+                    Fonte do conteúdo exibido
+                    <select
+                      value={draft.content_json.source_collection ?? ""}
+                      onChange={(event) => {
+                        const next = event.target.value
+                        if (
+                          next &&
+                          !confirm(
+                            "Vincular esta coleção fará o site exibir os registros publicados da coleção no lugar dos cards manuais deste bloco. O conteúdo manual será preservado. Continuar?",
+                          )
+                        )
+                          return
+                        setDraft({
+                          ...draft,
+                          content_json: {
+                            ...draft.content_json,
+                            source_collection: next || null,
+                          },
+                        })
+                      }}
+                    >
+                      <option value="">Cards manuais (atual)</option>
+                      {COLLECTION_SOURCES.map((source) => (
+                        <option key={source} value={source}>
+                          {collectionConfigs.find((config) => config.table === source)?.label ??
+                            source}
+                        </option>
+                      ))}
+                    </select>
+                    {draft.content_json.source_collection && (
+                      <>
+                        <small>
+                          Fonte vinculada: edite e publique registros na aba Coleções. Os cards
+                          manuais abaixo continuam armazenados e voltam a aparecer quando o vínculo
+                          for removido.
+                        </small>
+                        {draft.content_json.source_collection === "testimonials" && (
+                          <div className="field-grid compact-grid">
+                            <NumericField
+                              label="Primeiro depoimento na coleção (índice inicial, começando em 0)"
+                              value={draft.content_json.collection_start ?? 0}
+                              min={0}
+                              max={500}
+                              onChange={(collection_start) =>
+                                setDraft({
+                                  ...draft,
+                                  content_json: { ...draft.content_json, collection_start },
+                                })
+                              }
+                            />
+                            <NumericField
+                              label="Quantidade neste painel (vazio = todos os restantes)"
+                              value={draft.content_json.collection_limit}
+                              min={1}
+                              max={100}
+                              onChange={(collection_limit) =>
+                                setDraft({
+                                  ...draft,
+                                  content_json: { ...draft.content_json, collection_limit },
+                                })
+                              }
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </label>
+                )}
                 <label>
-                  Atraso (ms)
-                  <input
-                    type="number"
-                    min="0"
-                    max="600"
-                    value={placement.delay}
-                    onChange={(event) =>
-                      setPlacement({
-                        ...placement,
-                        delay: Number(event.target.value),
-                      })
-                    }
-                  />
+                  Status
+                  <select
+                    value={draft.status}
+                    onChange={(event) => setDraft({ ...draft, status: event.target.value })}
+                  >
+                    <option value="draft">Rascunho</option>
+                    <option value="in_review">Em revisão</option>
+                    <option value="published">Publicado</option>
+                    <option value="archived">Arquivado</option>
+                  </select>
                 </label>
-                <label>
-                  Deslocamento
-                  <input
-                    type="number"
-                    min="0"
-                    max="48"
-                    value={placement.distance}
-                    onChange={(event) =>
-                      setPlacement({
-                        ...placement,
-                        distance: Number(event.target.value),
-                      })
-                    }
-                  />
-                </label>
-                <label className="toggle-field">
+                <label className="toggle-field field-wide">
                   <input
                     type="checkbox"
-                    checked={placement.is_visible}
+                    checked={draft.is_placeholder}
                     onChange={(event) =>
-                      setPlacement({
-                        ...placement,
-                        is_visible: event.target.checked,
+                      setDraft({
+                        ...draft,
+                        is_placeholder: event.target.checked,
                       })
                     }
                   />
-                  Placement visível
+                  Contém conteúdo provisório
+                </label>
+                <label className="field-wide">
+                  Nota editorial
+                  <textarea
+                    value={draft.editorial_note ?? ""}
+                    onChange={(event) => setDraft({ ...draft, editorial_note: event.target.value })}
+                  />
                 </label>
               </div>
-            </fieldset>
+              <fieldset className="motion-editor">
+                <legend>Placement e animação</legend>
+                <label>
+                  Painel a editar (demais painéis são preservados)
+                  <select
+                    value={placementPanel}
+                    onChange={(event) => setPlacementPanel(event.target.value as PanelKey)}
+                  >
+                    <option value="desktop">Desktop</option>
+                    <option value="mobile-a">Mobile A</option>
+                    <option value="mobile-b">Mobile B</option>
+                  </select>
+                </label>
+                <div className="field-grid compact-grid">
+                  <label>
+                    Variante de layout
+                    <select
+                      value={placement.layout_variant}
+                      onChange={(event) =>
+                        setPlacement({
+                          ...placement,
+                          layout_variant: event.target.value,
+                        })
+                      }
+                    >
+                      <option value="default">Padrão</option>
+                      <option value="compact">Compacto</option>
+                      <option value="featured">Destaque</option>
+                      <option value="wide">Largo</option>
+                    </select>
+                  </label>
+                  <label>
+                    Preset
+                    <select
+                      value={placement.preset}
+                      onChange={(event) =>
+                        setPlacement({ ...placement, preset: event.target.value })
+                      }
+                    >
+                      <option value="none">Nenhum</option>
+                      <option value="fade-in">Fade</option>
+                      <option value="fade-up">Fade vertical</option>
+                      <option value="stagger">Stagger</option>
+                      <option value="image-reveal">Reveal de imagem</option>
+                      <option value="metric-count">Métrica</option>
+                    </select>
+                  </label>
+                  <label>
+                    Duração (ms)
+                    <input
+                      type="number"
+                      min="0"
+                      max="1200"
+                      value={placement.duration}
+                      onChange={(event) =>
+                        setPlacement({
+                          ...placement,
+                          duration: Number(event.target.value),
+                        })
+                      }
+                    />
+                  </label>
+                  <label>
+                    Atraso (ms)
+                    <input
+                      type="number"
+                      min="0"
+                      max="600"
+                      value={placement.delay}
+                      onChange={(event) =>
+                        setPlacement({
+                          ...placement,
+                          delay: Number(event.target.value),
+                        })
+                      }
+                    />
+                  </label>
+                  <label>
+                    Deslocamento
+                    <input
+                      type="number"
+                      min="0"
+                      max="48"
+                      value={placement.distance}
+                      onChange={(event) =>
+                        setPlacement({
+                          ...placement,
+                          distance: Number(event.target.value),
+                        })
+                      }
+                    />
+                  </label>
+                  <label className="toggle-field">
+                    <input
+                      type="checkbox"
+                      checked={placement.is_visible}
+                      onChange={(event) =>
+                        setPlacement({
+                          ...placement,
+                          is_visible: event.target.checked,
+                        })
+                      }
+                    />
+                    Placement visível
+                  </label>
+                </div>
+              </fieldset>
             </details>
             {["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"].includes(
               sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
@@ -1849,7 +1868,9 @@ export function CollectionsStudio({
   const [draft, setDraft] = useState<Record<string, any> | null>(null)
   const [message, setMessage] = useState("")
   const savedRecord = records.find((item) => item.id === selectedId)
-  const recordDirty = Boolean(draft && (!savedRecord || JSON.stringify(draft) !== JSON.stringify(savedRecord)))
+  const recordDirty = Boolean(
+    draft && (!savedRecord || JSON.stringify(draft) !== JSON.stringify(savedRecord)),
+  )
   useEffect(() => onDirtyChange?.(recordDirty), [recordDirty, onDirtyChange])
 
   const load = async () => {
@@ -1919,23 +1940,29 @@ export function CollectionsStudio({
 
   return (
     <>
-      {!embedded && <header className="admin-header">
-        <div>
-          <p>Fonte estruturada</p>
-          <h1>Coleções</h1>
-          <span>Experiências, resultados, formação e referências</span>
-        </div>
-        <button className="primary-button" onClick={newRecord}>
-          Novo registro
-        </button>
-      </header>}
+      {!embedded && (
+        <header className="admin-header">
+          <div>
+            <p>Fonte estruturada</p>
+            <h1>Coleções</h1>
+            <span>Experiências, resultados, formação e referências</span>
+          </div>
+          <button className="primary-button" onClick={newRecord}>
+            Novo registro
+          </button>
+        </header>
+      )}
       {embedded && (
         <div className="site-editor-actions">
           <div>
             <strong>Registros do acervo</strong>
-            <small>Dados compartilhados; verifique o vínculo de origem no bloco antes de editar.</small>
+            <small>
+              Dados compartilhados; verifique o vínculo de origem no bloco antes de editar.
+            </small>
           </div>
-          <button type="button" className="secondary-button" onClick={newRecord}>Novo registro</button>
+          <button type="button" className="secondary-button" onClick={newRecord}>
+            Novo registro
+          </button>
         </div>
       )}
       <div className="collection-tabs" role="tablist">
@@ -1963,7 +1990,8 @@ export function CollectionsStudio({
               className={selectedId === record.id ? "active" : ""}
               onClick={() => {
                 if (record.id === selectedId) return
-                if (recordDirty && !confirm("Descartar alterações não salvas deste registro?")) return
+                if (recordDirty && !confirm("Descartar alterações não salvas deste registro?"))
+                  return
                 setSelectedId(record.id)
               }}
             >

@@ -306,7 +306,9 @@ function SectionsEditor({
   onSelectSection?: (id: string) => void
   onDirtyChange?: (dirty: boolean) => void
 }) {
-  const [selectedId, setSelectedId] = useState<string | null>(selectedSectionId ?? sections[0]?.id ?? null)
+  const [selectedId, setSelectedId] = useState<string | null>(
+    selectedSectionId ?? sections[0]?.id ?? null,
+  )
   const selected = sections.find((s) => s.id === selectedId)
   const [draft, setDraft] = useState<SectionRow | null>(selected ?? null)
   const [message, setMessage] = useState("")
@@ -325,7 +327,9 @@ function SectionsEditor({
   }
   useEffect(() => setDraft(selected ?? null), [selectedId, selected])
   useEffect(() => {
-    onDirtyChange?.(Boolean(draft && selected && JSON.stringify(draft) !== JSON.stringify(selected)))
+    onDirtyChange?.(
+      Boolean(draft && selected && JSON.stringify(draft) !== JSON.stringify(selected)),
+    )
   }, [draft, selected, onDirtyChange])
   useEffect(() => {
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
@@ -419,42 +423,50 @@ function SectionsEditor({
   }
   return (
     <>
-      {!embedded && <AdminHeader
-        title="Seções"
-        subtitle="Ordem, visibilidade, conteúdo e apresentação"
-        action={
-          <div className="header-actions">
-            <button className="secondary-button" onClick={create}>
-              Nova seção
-            </button>
-            <button className="primary-button" onClick={duplicate}>
-              Duplicar seção
-            </button>
-          </div>
-        }
-      />}
+      {!embedded && (
+        <AdminHeader
+          title="Seções"
+          subtitle="Ordem, visibilidade, conteúdo e apresentação"
+          action={
+            <div className="header-actions">
+              <button className="secondary-button" onClick={create}>
+                Nova seção
+              </button>
+              <button className="primary-button" onClick={duplicate}>
+                Duplicar seção
+              </button>
+            </div>
+          }
+        />
+      )}
       {embedded && (
         <div className="site-editor-actions">
-          <button className="secondary-button" onClick={create}>Nova seção</button>
-          <button className="secondary-button" onClick={duplicate}>Duplicar seção</button>
+          <button className="secondary-button" onClick={create}>
+            Nova seção
+          </button>
+          <button className="secondary-button" onClick={duplicate}>
+            Duplicar seção
+          </button>
         </div>
       )}
       <div className={embedded ? "site-editor-section" : "section-editor-layout"}>
-        {!embedded && <div className="section-list" aria-label="Seções do site">
-          {sections.map((section) => (
-            <button
-              key={section.id}
-              className={selectedId === section.id ? "active" : ""}
-              onClick={() => setSelectedId(section.id)}
-            >
-              <span>{String(section.sort_order).padStart(2, "0")}</span>
-              <div>
-                <strong>{section.title}</strong>
-                <small>{statusPt(section.status)}</small>
-              </div>
-            </button>
-          ))}
-        </div>}
+        {!embedded && (
+          <div className="section-list" aria-label="Seções do site">
+            {sections.map((section) => (
+              <button
+                key={section.id}
+                className={selectedId === section.id ? "active" : ""}
+                onClick={() => setSelectedId(section.id)}
+              >
+                <span>{String(section.sort_order).padStart(2, "0")}</span>
+                <div>
+                  <strong>{section.title}</strong>
+                  <small>{statusPt(section.status)}</small>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
         {draft && (
           <section className="editor-form admin-card">
             <div className="card-heading">
@@ -592,7 +604,6 @@ function SectionsEditor({
   )
 }
 
-
 type SiteEditorPane = "content" | "details" | "records" | "preview"
 
 function SiteEditor({
@@ -665,7 +676,10 @@ function SiteEditor({
               <span>{String(section.sort_order).padStart(2, "0")}</span>
               <div>
                 <strong>{section.title}</strong>
-                <small>{statusPt(section.status)}{!section.is_visible ? " · Oculta no site" : ""}</small>
+                <small>
+                  {statusPt(section.status)}
+                  {!section.is_visible ? " · Oculta no site" : ""}
+                </small>
               </div>
             </button>
           ))}
@@ -674,9 +688,14 @@ function SiteEditor({
           {selected ? (
             <>
               <div className="site-editor-heading">
-                <p>SEÇÃO {String(selected.sort_order).padStart(2, "0")} · #{selected.slug}</p>
+                <p>
+                  SEÇÃO {String(selected.sort_order).padStart(2, "0")} · #{selected.slug}
+                </p>
                 <h2>{selected.title}</h2>
-                <span>{selected.is_visible ? "Exibida no site" : "Não exibida no site"} · {statusPt(selected.status)}</span>
+                <span>
+                  {selected.is_visible ? "Exibida no site" : "Não exibida no site"} ·{" "}
+                  {statusPt(selected.status)}
+                </span>
               </div>
               <div className="site-editor-tabs" role="tablist" aria-label="Edição da seção">
                 {panes.map((item) => (
@@ -693,7 +712,11 @@ function SiteEditor({
                 ))}
               </div>
               <div className="site-editor-body">
-                {dirty && <p className="site-editor-unsaved" role="status">Alterações não salvas nesta área.</p>}
+                {dirty && (
+                  <p className="site-editor-unsaved" role="status">
+                    Alterações não salvas nesta área.
+                  </p>
+                )}
                 {pane === "content" && (
                   <ContentStudio
                     key={selected.id}
@@ -733,8 +756,8 @@ function SiteEditor({
                 {pane === "preview" && (
                   <div className="embedded-preview">
                     <p className="site-editor-note">
-                      Esta prévia protegida apresenta os dados já salvos. Edições ainda abertas
-                      nos formulários não são exibidas até serem gravadas.
+                      Esta prévia protegida apresenta os dados já salvos. Edições ainda abertas nos
+                      formulários não são exibidas até serem gravadas.
                     </p>
                     <iframe
                       key={selected.slug}
@@ -960,7 +983,14 @@ export function AdminApp() {
   if (guard === "denied") return <Navigate to="/admin/login" replace />
   const screens: Record<string, React.ReactNode> = {
     dashboard: <Dashboard sections={sections} loadStatus={loadStatus} />,
-    editor: <SiteEditor sections={sections} reload={load} dirty={editorDirty} onDirtyChange={setEditorDirty} />,
+    editor: (
+      <SiteEditor
+        sections={sections}
+        reload={load}
+        dirty={editorDirty}
+        onDirtyChange={setEditorDirty}
+      />
+    ),
     design: <DesignEditor />,
     media: <EnhancedMediaLibrary />,
     navigation: <NavigationStudio />,
