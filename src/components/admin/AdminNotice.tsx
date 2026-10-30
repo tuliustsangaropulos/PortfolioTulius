@@ -21,7 +21,9 @@ export function AdminNotice({
       ? "error"
       : /atenção|aviso|pendente|não salvas|confira|informe/i.test(message)
         ? "warning"
-        : /salvo|salva|publicad[ao]|criad[ao]|concluíd[ao]|resolvid[ao]|atualizad[ao]/i.test(message)
+        : /salvo|salva|publicad[ao]|criad[ao]|concluíd[ao]|resolvid[ao]|atualizad[ao]/i.test(
+              message,
+            )
           ? "success"
           : "info")
   const [visible, setVisible] = useState(Boolean(message))
