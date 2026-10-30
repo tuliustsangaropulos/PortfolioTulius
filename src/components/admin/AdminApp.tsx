@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router"
 import { defaultTokens } from "../../content/fallback"
 import { isAdmin, isSupabaseConfigured, supabase } from "../../lib/supabase"
 import { PublicSite } from "../public/PublicSite"
+import { buildAdminSectionNavigation, isExperienceSection } from "../../lib/admin-experience-navigation"
 import { Icon } from "../ui/Icons"
 import { AdminNotice, statusPt } from "./AdminNotice"
 import {
@@ -633,7 +634,11 @@ function SiteEditor({
   const [selectedId, setSelectedId] = useState(sections[0]?.id ?? "")
   const [pane, setPane] = useState<SiteEditorPane>("content")
   const [collectionSource, setCollectionSource] = useState("career_experiences")
+  const [lastExperienceId, setLastExperienceId] = useState("")
   const selected = sections.find((item) => item.id === selectedId)
+  const navigationEntries = buildAdminSectionNavigation(sections)
+  const experienceSections = sections.filter((section) => isExperienceSection(section.slug))
+  const selectedIsExperience = Boolean(selected && isExperienceSection(selected.slug))
 
   useEffect(() => {
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
@@ -647,7 +652,17 @@ function SiteEditor({
     if (id === selectedId || !canLeave()) return
     onDirtyChange(false)
     setSelectedId(id)
+    if (sections.some((section) => section.id === id && isExperienceSection(section.slug))) {
+      setLastExperienceId(id)
+    }
     setPane("content")
+  }
+
+  function selectExperienceGroup() {
+    if (selectedIsExperience) return
+    const next = experienceSections.find((section) => section.id === lastExperienceId) ??
+      experienceSections[0]
+    if (next) selectSection(next.id)
   }
 
   function selectPane(next: SiteEditorPane) {
@@ -667,6 +682,9 @@ function SiteEditor({
   function selectCreatedSection(id: string) {
     onDirtyChange(false)
     setSelectedId(id)
+    if (sections.some((section) => section.id === id && isExperienceSection(section.slug))) {
+      setLastExperienceId(id)
+    }
     setPane("content")
   }
 
@@ -685,38 +703,85 @@ function SiteEditor({
       />
       <div className="site-editor-layout">
         <nav className="section-list site-editor-sidebar" aria-label="Escolher seção do site">
-          {sections.map((section) => (
-            <button
-              type="button"
-              key={section.id}
-              className={selectedId === section.id ? "active" : ""}
-              aria-current={selectedId === section.id ? "true" : undefined}
-              onClick={() => selectSection(section.id)}
-            >
-              <span>{String(section.sort_order).padStart(2, "0")}</span>
-              <div>
-                <strong>{section.title}</strong>
-                <small>
-                  {statusPt(section.status)}
-                  {!section.is_visible ? " · Oculta no site" : ""}
-                </small>
-              </div>
-            </button>
-          ))}
+          {navigationEntries.map((entry) =>
+            entry.kind === "experiences" ? (
+              <button
+                type="button"
+                key="professional-experiences"
+                className={selectedIsExperience ? "active site-editor-experience-nav" : "site-editor-experience-nav"}
+                aria-current={selectedIsExperience ? "true" : undefined}
+                onClick={selectExperienceGroup}
+              >
+                <span>{String(entry.sections[0].sort_order).padStart(2, "0")}</span>
+                <div>
+                  <strong>Experiências Profissionais</strong>
+                  <small>{entry.sections.length} trabalhos para editar</small>
+                </div>
+              </button>
+            ) : (
+              <button
+                type="button"
+                key={entry.section.id}
+                className={selectedId === entry.section.id ? "active" : ""}
+                aria-current={selectedId === entry.section.id ? "true" : undefined}
+                onClick={() => selectSection(entry.section.id)}
+              >
+                <span>{String(entry.section.sort_order).padStart(2, "0")}</span>
+                <div>
+                  <strong>{entry.section.title}</strong>
+                  <small>
+                    {statusPt(entry.section.status)}
+                    {!entry.section.is_visible ? " · Oculta no site" : ""}
+                  </small>
+                </div>
+              </button>
+            ),
+          )}
         </nav>
         <div className="site-editor-main">
           {selected ? (
             <>
               <div className="site-editor-heading">
                 <p>
-                  SEÇÃO {String(selected.sort_order).padStart(2, "0")} · #{selected.slug}
+                  {selectedIsExperience
+                    ? `GRUPO EDITORIAL · ${experienceSections.length} TRABALHOS`
+                    : `SEÇÃO ${String(selected.sort_order).padStart(2, "0")} · #${selected.slug}`}
                 </p>
-                <h2>{selected.title}</h2>
+                <h2>{selectedIsExperience ? "Experiências Profissionais" : selected.title}</h2>
                 <span>
-                  {selected.is_visible ? "Exibida no site" : "Não exibida no site"} ·{" "}
-                  {statusPt(selected.status)}
+                  {selectedIsExperience
+                    ? "Escolha abaixo o trabalho que deseja editar."
+                    : `${selected.is_visible ? "Exibida no site" : "Não exibida no site"} · ${statusPt(selected.status)}`}
                 </span>
               </div>
+              {selectedIsExperience && (
+                <section
+                  className="site-editor-experience-picker"
+                  aria-label="Trabalhos de Experiências Profissionais"
+                >
+                  <h3>Escolha um trabalho</h3>
+                  <div className="site-editor-experience-options" role="group" aria-label="Experiência para editar">
+                    {experienceSections.map((experience) => (
+                      <button
+                        type="button"
+                        key={experience.id}
+                        className={experience.id === selectedId ? "active" : ""}
+                        aria-pressed={experience.id === selectedId}
+                        onClick={() => selectSection(experience.id)}
+                      >
+                        <strong>{experience.title}</strong>
+                        <small>
+                          Seção {String(experience.sort_order).padStart(2, "0")} · {statusPt(experience.status)}
+                          {!experience.is_visible ? " · Oculta no site" : ""}
+                        </small>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="site-editor-experience-current">
+                    Editando: <strong>{selected.title}</strong>. O agrupamento existe apenas no painel administrativo; as seções públicas permanecem independentes.
+                  </p>
+                </section>
+              )}
               <div className="site-editor-tabs" role="tablist" aria-label="Edição da seção">
                 {panes.map((item) => (
                   <button

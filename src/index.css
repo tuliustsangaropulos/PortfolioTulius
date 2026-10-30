@@ -1058,3 +1058,16 @@
   .block-item-toggle { min-width: min(100%, 10rem); }
   .admin-info-trigger { width: 44px; height: 44px; }
 }
+
+/* CMS only: the six public experiences are one admin navigation group. */
+.site-editor-experience-picker { padding: 1.1rem 1.25rem; background: white; border: 1px solid #e3dfdc; margin-top: .75rem; }
+.site-editor-experience-picker h3 { margin: 0 0 .7rem; font-size: .9rem; font-weight: 800; }
+.site-editor-experience-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: .5rem; }
+.site-editor-experience-options button { min-height: 64px; padding: .7rem .8rem; border: 1px solid #d7d2ce; text-align: left; color: #171617; background: #fff; }
+.site-editor-experience-options button strong, .site-editor-experience-options button small { display: block; }
+.site-editor-experience-options button strong { font-size: .83rem; }
+.site-editor-experience-options button small { margin-top: .3rem; font-size: .7rem; line-height: 1.35; color: #716b67; }
+.site-editor-experience-options button.active { background: #171617; border-color: #171617; color: white; }
+.site-editor-experience-options button.active small { color: #d4cbc5; }
+.site-editor-experience-options button:focus-visible { outline: 3px solid #ff5414; outline-offset: 2px; }
+.site-editor-experience-current { margin: .8rem 0 0; font-size: .78rem; line-height: 1.5; color: #605954; }
