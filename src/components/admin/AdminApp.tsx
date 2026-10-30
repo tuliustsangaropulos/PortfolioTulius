@@ -376,6 +376,8 @@ function SectionsEditor({
   }
   async function duplicate() {
     if (!selected || !supabase) return
+    if (draft && JSON.stringify(draft) !== JSON.stringify(selected) &&
+        !confirm("Alterações desta seção ainda não foram salvas. Descartar e duplicar?")) return
     const { data, error } = await supabase.rpc("duplicate_section", {
       source_section: selected.id,
     })
@@ -388,6 +390,8 @@ function SectionsEditor({
   }
   async function create() {
     if (!supabase || !sections[0]) return
+    if (draft && selected && JSON.stringify(draft) !== JSON.stringify(selected) &&
+        !confirm("Alterações desta seção ainda não foram salvas. Descartar e criar outra?")) return
     setMessage("Criando seção e painéis…")
     const { data, error } = await supabase.rpc("create_section_with_panels", {
       p_page_id: sections[0].page_id,
@@ -650,6 +654,13 @@ function SiteEditor({
     setPane("records")
   }
 
+  // Creation/duplication already confirms unsaved edits before the RPC.
+  function selectCreatedSection(id: string) {
+    onDirtyChange(false)
+    setSelectedId(id)
+    setPane("content")
+  }
+
   const panes: { id: SiteEditorPane; title: string }[] = [
     { id: "content", title: "Conteúdo e painéis" },
     { id: "details", title: "Informações da seção" },
@@ -734,7 +745,7 @@ function SiteEditor({
                     reload={reload}
                     selectedSectionId={selected.id}
                     embedded
-                    onSelectSection={selectSection}
+                    onSelectSection={selectCreatedSection}
                     onDirtyChange={onDirtyChange}
                   />
                 )}
