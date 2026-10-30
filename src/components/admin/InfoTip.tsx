@@ -1,13 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react"
 import { Icon } from "../ui/Icons"
 
-export function AdminInfoTip({
-  label,
-  description,
-}: {
-  label: string
-  description: string
-}) {
+export function AdminInfoTip({ label, description }: { label: string; description: string }) {
   const id = useId()
   const wrapper = useRef<HTMLSpanElement>(null)
   const [open, setOpen] = useState(false)

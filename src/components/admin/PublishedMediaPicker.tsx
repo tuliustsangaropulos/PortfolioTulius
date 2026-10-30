@@ -103,9 +103,7 @@ export function PublishedMediaPicker({
           <AdminInfoTip label={label} description={`Área de destino: ${guidance}`} />
         )}
       </div>
-      {!guidanceAsInfo && (
-        <p className="published-media-guidance">Área de destino: {guidance}</p>
-      )}
+      {!guidanceAsInfo && <p className="published-media-guidance">Área de destino: {guidance}</p>}
       {value && isSafeEditorialImage(value) && !previewFailed ? (
         <div className="published-media-current">
           <img
@@ -128,12 +126,22 @@ export function PublishedMediaPicker({
         <button
           type="button"
           className={iconOnlyActions ? "secondary-button media-icon-action" : "secondary-button"}
-          aria-label={iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined}
-          title={iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined}
+          aria-label={
+            iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined
+          }
+          title={
+            iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined
+          }
           aria-expanded={open}
           onClick={() => setOpen((current) => !current)}
         >
-          {iconOnlyActions ? <Icon name="image" size={20} /> : open ? "Fechar biblioteca" : "Escolher da biblioteca"}
+          {iconOnlyActions ? (
+            <Icon name="image" size={20} />
+          ) : open ? (
+            "Fechar biblioteca"
+          ) : (
+            "Escolher da biblioteca"
+          )}
         </button>
         {value && onFramingChange && (
           <button
