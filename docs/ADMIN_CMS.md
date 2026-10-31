@@ -239,3 +239,12 @@ O proprietário informou que a verificação manual anterior foi realizada. O CM
 
 **Evidência:** [SHA `f2f8e4f`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/f2f8e4fe7a54e371a96ceff546b711ca5b0bcd19), [CI #41140863031](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41140863031) aprovado, Vercel READY no mesmo código. Teste `admin-mobile-layout.test.ts` inspeciona o contrato de estilo; não constitui teste visual com sessão real de admin. P2 permanece suspenso, sem testes de escrita.
 
+
+## Editor padronizado (31/10/2026)
+
+Campos de texto alternativo são opcionais em todo o conteúdo editável; seus valores existentes e os dados `editorial_note` são preservados. A interface não apresenta mais controles `Nota editorial`. Em **Olá!** uma única área de imagem oferece troca de destino **Mobile/Desktop** com URLs e enquadramentos independentes sem duplicação visual. Os controles de mídia usam ícones sem texto por padrão.
+
+A **biblioteca visual de 50 ícones**, dividida em Resultados, Comunicação, Trabalho e estratégia, Digital e Plataformas, substitui listas textuais nos campos de indicador e ferramentas. As células são pictogramas acessíveis por `aria-label` e seleção por `aria-pressed`; Ferramentas permite três escolhas.
+
+O botão **Salvar flutuante** está disponível nos formulários editáveis (Seções, Blocos, Coleções, Navegação, SEO e Identidade) e fica desabilitado enquanto não há alterações. Na navegação interna com alterações abertas há diálogo próprio; refresh/fechar aba exige diálogo fornecido pelo navegador. Revisões e mídia têm ações específicas (restaurar, disponibilizar, fazer upload), não salvamento geral. Testes automatizados aprovados em [CI #41170233909](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170233909); confirmação manual de edição/salvamento após esta rodada ainda necessária, sem homologação P2 transacional.
+

@@ -1,5 +1,15 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Pendências após edição e WebP — 31/10/2026
+
+**Concluído em código e CI:** revisão do campo Texto alternativo (sempre opcional), retirada de todos os controles visíveis Nota editorial, alternância Mobile/Desktop em um único seletor na seção Olá!, biblioteca visual de **50 ícones em cinco categorias**, botões de mídia com ícones, e barra flutuante Salvar condicionada a alterações nos formulários administrativos. Fluxos internos usam confirmações próprias; reload/fechamento com rascunhos usa confirmação nativa por limitação do navegador. CI [#41170233909](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170233909) **success** no SHA funcional [`ac07b948`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/ac07b9486eade886ea1d0d09e73e16d06c3b7de0).
+
+**Otimização material aplicada:** derivadas WebP da fotografia aprovada, 600px/29.568B e 900px/51.458B, checksums de origem verificados; nenhuma alteração nos dados ou no PNG original do Supabase. O teste [P3 #41170190190](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170190190) confirmou 13/25/38, P5 3/3 mutations=0 e LCP element PASS, **mas LCP mobile = 7,797s (FAIL)**. Não fechar P3-PERF-01. Investigar próximas barreiras de renderização/consultas/long tasks sem mudar mídia aprovada ou relaxar metas.
+
+**Continuam pendentes:** aceite manual desta rodada em viewport real, P3-PERF-01 (performance mobile), P2 transacional previamente suspenso, revisões editoriais/licenças e decisões de higiene/segurança anteriormente bloqueadas. Não iniciar operações de Storage em produção, remover arquivos privados, alterar Auth/RLS ou pagar por serviços sem autorização específica.
+
+
+
 ## Validação após reversão P3 — 31/10/2026
 
 **Versão funcional restaurada:** SHA [`cc1e17e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/cc1e17ea9fafb72ecc47401ca75924ab1f75f92b), com [CI Validate #41168586077](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168586077) **success** e Vercel **READY** no mesmo SHA. O código de dados e renderização pública voltou ao conteúdo do HEAD `1fcd773`, após teste experimental sem ganho sustentado; os componentes auxiliares desse ensaio foram removidos. Nenhuma alteração em banco, arquivos de imagem ou composição editorial.

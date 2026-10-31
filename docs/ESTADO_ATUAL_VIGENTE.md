@@ -1,5 +1,24 @@
 # PortfolioTulius — estado operacional vigente
 
+## Ajustes solicitados no CMS, biblioteca visual e retrato WebP — 31/10/2026
+
+**Código funcional:** [`ac07b948`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/ac07b9486eade886ea1d0d09e73e16d06c3b7de0). [CI Validate #41170233909](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170233909) **success** (formatação, TypeScript, 22 arquivos de teste, build e smoke offline), Vercel Production **READY** para o mesmo SHA funcional, antes deste commit documental. O GitHub `main` permanece a fonte de verdade.
+
+**Editor administrativo:**
+- O campo **Texto alternativo é opcional** em itens, imagem desktop da seção 02, logo e slides. Valores já existentes são preservados; a URL da imagem continua validada. Testes antigos de campo obrigatório foram substituídos por testes da nova regra.
+- Os campos **Nota editorial** foram removidos da interface de Blocos e das configurações de Experiências, Métricas e Idiomas. As colunas `editorial_note` e seus valores continuam preservados no banco; nenhuma migration ou exclusão.
+- Na seção **Olá!**, o único seletor de imagem permite trocar o destino *Mobile/Desktop*; as duas URLs, textos alternativos e enquadramentos mantêm campos independentes no mesmo registro, sem duplicar os pickers visíveis. A escolha de destino altera apenas a edição do campo correspondente.
+- A biblioteca contém **50 ícones visuais únicos**, organizados em **Resultados, Comunicação, Trabalho e estratégia, Digital e Plataformas**, sem títulos individuais nas células; cada botão tem `aria-label` e estado pressionado. As opções já usadas continuam disponíveis. Seletores de indicadores e ferramentas compartilham a biblioteca; ferramentas mantêm até 3 ícones. Os botões de mídia usam ícones por padrão.
+- **Salvar flutuante** nas áreas editáveis de Seções, Blocos, Coleções, Navegação, SEO e Identidade. Botão habilitado apenas quando o rascunho difere do último estado carregado/salvo; a navegação interna e saída usam diálogo próprio. Ao recarregar ou fechar a aba com alterações pendentes, a confirmação obrigatória é **nativa do navegador** (não existe modal personalizável nesse evento). A biblioteca de mídia e a área de revisões têm operações próprias de publicação, upload, resolução e restauração, não formulários gerais de salvamento.
+
+**Retrato otimizado P3:** o anexo `tulius_site.png` possui **900 × 1200 px, RGBA, 684.305 bytes, SHA-256 `81e0dd7c32f0a8e2729f5a561fa730c0bed9d20c5845b3f705c11d102045b569`**, idêntico ao objeto do Storage `b171afda-2708-44eb-b3e5-ab2b7ff13236-tulius_site.png` pelo MD5 `3dc381e51074bd297193a6885fbbdb66`. Workflow [#41169805167](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41169805167) validou o SHA-256 antes de gerar variantes estáticas WebP de **600 × 800 (29.568 bytes)** e **900 × 1200 (51.458 bytes)** via `cwebp`, commitando-as no GitHub (commit `dcb6e9b`). O frontend usa `picture` responsivo apenas quando o `src` CMS equivale à URL exata verificada; outra fotografia selecionada no CMS não reutiliza um retrato antigo. Preservados original, transparência, posicionamento, texto e dados. Nenhuma gravação no Supabase/Storage, alteração de schema, RLS ou contratação de transformação.
+
+**Auditoria pública:** [P3 #41170190190](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170190190) confirmou P3_BROWSER_AUDIT=0, P4 13 desktop/25 mobile/38 capturas sem falhas, P5 anonymous 3/3 com mutations=0 e LCP do retrato aprovado **PASS** em mobile e desktop com suporte a `picture`. LCP desktop **1,666 s PASS**. O LCP mobile mediano **7,797 s / Performance 69 FAIL** pelo orçamento conservador de 6,5 s e objetivo ≤2,5 s. Os arquivos menores estão corretamente servidos, mas a otimização não resolveu o tempo total de LCP: **P3-PERF-01 permanece aberto**, sem relaxar o gate nem declarar ganho causal.
+
+**Aceite pendente desta rodada:** conferir interface autenticada em desktop/celular e o fluxo de editar/cancelar/salvar, inclusive confirmação no refresh. A aprovação automática não equivale a teste de CRUD com JWT real. P2 segue suspenso e não houve gravações de testes em produção.
+
+
+
 ## Validação após reversão P3 — 31/10/2026
 
 **Versão funcional restaurada:** SHA [`cc1e17e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/cc1e17ea9fafb72ecc47401ca75924ab1f75f92b), com [CI Validate #41168586077](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168586077) **success** e Vercel **READY** no mesmo SHA. O código de dados e renderização pública voltou ao conteúdo do HEAD `1fcd773`, após teste experimental sem ganho sustentado; os componentes auxiliares desse ensaio foram removidos. Nenhuma alteração em banco, arquivos de imagem ou composição editorial.

@@ -145,3 +145,7 @@ No SHA funcional `d882d7a` (mesmo código público da documentação `cce4869`),
 
 [Execução P3](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457107) · [CI funcional](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40815457072) · [Deployment funcional READY](https://vercel.com/tuliustsangaropulos-creates-projects/portfolio-tulius/CW4JH4aXUtmCGW3Hx6Gi5Phvrs34).
 
+
+## Otimização responsiva do retrato (31/10/2026)
+
+Abertura pública usa `picture` com `/media/tulius-site-600.webp` e `/media/tulius-site-900.webp`, exclusivamente para a URL do PNG aprovado. Arquivos provenientes do mesmo SHA-256 e renderização preservada. A inspeção automatizada [P3 #41170190190](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170190190) aprovou 13/25/38 e o conteúdo LCP do retrato; LCP mobile 7,797s permanece reprovado.
