@@ -2,7 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { supabase } from "../../lib/supabase"
 import { mediaFileName } from "../../lib/media-framing"
 import { uploadPrivateMedia, publishPrivateMedia } from "../../lib/media-library-actions"
-import { getPublishedImageChoices, type MediaLibraryRow, type PublishedImageChoice } from "../../lib/media-selection"
+import {
+  getPublishedImageChoices,
+  type MediaLibraryRow,
+  type PublishedImageChoice,
+} from "../../lib/media-selection"
 import { adminConfirm } from "./AdminConfirmationHost"
 
 export function PublishedMediaDialog({
@@ -79,7 +83,7 @@ export function PublishedMediaDialog({
       if (event.key !== "Tab") return
       const controls = Array.from(
         dialogRef.current?.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), input:not([disabled])',
+          "button:not([disabled]), input:not([disabled])",
         ) ?? [],
       )
       if (!controls.length) return
@@ -118,10 +122,13 @@ export function PublishedMediaDialog({
 
   async function promote(asset: MediaLibraryRow) {
     if (
-      !(await adminConfirm(`Disponibilizar “${mediaFileName(asset.storage_path)}” no site público?`, {
-        title: "Publicar mídia",
-        confirmLabel: "Disponibilizar no site",
-      }))
+      !(await adminConfirm(
+        `Disponibilizar “${mediaFileName(asset.storage_path)}” no site público?`,
+        {
+          title: "Publicar mídia",
+          confirmLabel: "Disponibilizar no site",
+        },
+      ))
     )
       return
     setBusy(true)
@@ -186,7 +193,11 @@ export function PublishedMediaDialog({
             />
           </label>
         </div>
-        {message && <p role="status" className="published-media-dialog-status">{message}</p>}
+        {message && (
+          <p role="status" className="published-media-dialog-status">
+            {message}
+          </p>
+        )}
         {loading ? (
           <p role="status">Carregando imagens…</p>
         ) : error ? (
@@ -212,10 +223,17 @@ export function PublishedMediaDialog({
             ))}
           </div>
         ) : (
-          <p>{assets.length ? "Nenhuma imagem corresponde à busca." : "Ainda não há imagens públicas."}</p>
+          <p>
+            {assets.length
+              ? "Nenhuma imagem corresponde à busca."
+              : "Ainda não há imagens públicas."}
+          </p>
         )}
         {privateAssets.length > 0 && (
-          <section className="published-media-private" aria-label="Mídias privadas aguardando publicação">
+          <section
+            className="published-media-private"
+            aria-label="Mídias privadas aguardando publicação"
+          >
             <h4>Arquivos privados — não selecionáveis</h4>
             <p>Disponibilize explicitamente no site antes de escolher a imagem para um bloco.</p>
             {privateAssets.map((asset) => (

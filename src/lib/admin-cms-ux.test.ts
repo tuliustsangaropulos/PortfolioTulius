@@ -7,9 +7,9 @@ const read = (name: string) =>
 describe("Correções do CMS sem alterar conteúdo publicado", () => {
   it("mantém os ícones categorizados em um popover fechado por padrão", () => {
     const icons = read("VisualIconLibrary.tsx")
-    expect(icons).toContain('aria-expanded={open}')
+    expect(icons).toContain("aria-expanded={open}")
     expect(icons).toContain('className="visual-icon-popover"')
-    expect(icons).toContain('max={3}')
+    expect(icons).toContain("max={3}")
     expect(icons).toContain('if (event.key === "Escape")')
   })
 
@@ -18,18 +18,18 @@ describe("Correções do CMS sem alterar conteúdo publicado", () => {
     const picker = read("PublishedMediaPicker.tsx")
     expect(dialog).toContain('role="dialog"')
     expect(dialog).toContain('aria-modal="true"')
-    expect(dialog).toContain('getPublishedImageChoices(')
+    expect(dialog).toContain("getPublishedImageChoices(")
     expect(dialog).toContain('asset.storage_bucket === "portfolio-private"')
-    expect(dialog).toContain('await uploadPrivateMedia(file)')
-    expect(dialog).toContain('await publishPrivateMedia(asset)')
+    expect(dialog).toContain("await uploadPrivateMedia(file)")
+    expect(dialog).toContain("await publishPrivateMedia(asset)")
     expect(picker).toContain("<PublishedMediaDialog")
     expect(picker).not.toContain('role="region"')
   })
 
   it("preserva o texto e o enquadramento do slide quando o modal é cancelado", () => {
     const picker = read("PublishedMediaPicker.tsx")
-    expect(picker).toContain('onSelect={onChange}')
-    expect(picker).toContain('onClose={() => setOpen(false)}')
+    expect(picker).toContain("onSelect={onChange}")
+    expect(picker).toContain("onClose={() => setOpen(false)}")
     expect(picker).toContain("<MediaFramingDialog")
     const admin = read("AdminModules.tsx")
     expect(admin).toContain('className="field-grid experience-logo-fields"')

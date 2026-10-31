@@ -59,11 +59,11 @@ function VisualIconSelector({
         onClick={() => setOpen((current) => !current)}
       >
         <span>{label}</span>
-        <div className="visual-icon-current" aria-hidden="true">
+        <span className="visual-icon-current" aria-hidden="true">
           {selected.map((name) => (
             <Icon key={name} name={name as MetricIconName} size={20} />
           ))}
-        </div>
+        </span>
         <Icon name={open ? "up" : "down"} size={18} />
       </button>
       {open && (
@@ -136,7 +136,9 @@ export function PlatformIconLibrary({
       onSelect={(name) => {
         const icon = name as ToolIconName
         onChange(
-          selected.includes(icon) ? selected.filter((entry) => entry !== icon) : [...selected, icon],
+          selected.includes(icon)
+            ? selected.filter((entry) => entry !== icon)
+            : [...selected, icon],
         )
       }}
     />
