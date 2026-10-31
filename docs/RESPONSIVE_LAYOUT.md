@@ -1,5 +1,9 @@
 # Layout responsivo
 
+## Navegação sincronizada dos projetos em desktop e mobile — 31/10/2026
+
+A galeria e a lista `Projetos e realizações` usam um único estado React para o slide ativo, por empresa. Selecionar um item altera a imagem e o título em destaque; avançar/retroceder nas setas ou indicadores atualiza a borda/cor laranja do item. No mobile, a lista e a galeria ocupam painéis distintos, mas permanecem sincronizados; não é criada nova árvore React nem rolagem de página forçada. O conteúdo clicável usa botões e indicadores acessíveis; `Trajetória` preserva a troca de abas. [CI funcional](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735173).
+
 ## Experiências — botões de visualização e tags — 31/10/2026
 
 No desktop, `.experience-projects` mantém limite de altura com rolagem interna quando a trajetória longa é selecionada; os controles `Projetos e realizações` / `Trajetória` ficam sticky no topo dessa área, com seleção exclusiva. No mobile, os controles e conteúdos acompanham a página sem rolagem interna obrigatória; as competências existentes fluem em linhas de badges sob o período, sem largura fixa. A mídia conceitual 1200×1350 é enquadrada pela moldura responsiva existente, sem textos desenhados no SVG; títulos, legendas e indicadores continuam acessíveis externamente. Não usar `zoom` ou `transform:scale()` global na aplicação.

@@ -1,5 +1,11 @@
 # Design system
 
+## Lista de projetos integrada à galeria — 31/10/2026
+
+A cor laranja e a borda esquerda identificam o **mesmo índice** na lista e no slide de projetos; botões sem bordas adicionais permitem clique, foco/teclado e `aria-current`. A seleção é elevada ao componente de experiência, compartilhada pelas versões desktop e mobile. Títulos dos slides são a fonte do vínculo; conteúdo oculto nunca é revelado por associação automática. Métricas sem imagem são exibidas em bloco compacto não clicável.
+
+A visão `Trajetória` substitui os projetos e prioriza contexto e atividades não descritos nos slides. Apenas duplicações editoriais identificadas são omitidas na apresentação pública, sem deletar textos do CMS. Preservados aspecto visual, tipografia, ordem de slides, logos e mídias de 1200×1350 sem texto interno. [Código](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/41a96e3715cdc47ee73ab225374cf72b2e739205).
+
 ## Experiências — componentes editoriais de 31/10/2026
 
 A coluna esquerda apresenta cargo e período, seguidos de badges discretos com borda arredondada, `flex-wrap` e fonte pequena, usando **apenas tags existentes** no CMS (Invest RS tem cinco). A coluna central contém alternância exclusiva de visualização: `Projetos e realizações` (título grande) e `Trajetória` (menor), com `button`, `aria-pressed`, `aria-controls` e indicador visual ativo. A trajetória é texto editorial original; títulos iniciados por marcador até dois-pontos usam `strong`; a visão padrão continua sendo os projetos. O conteúdo mantém rolagem interna somente quando necessário no desktop.

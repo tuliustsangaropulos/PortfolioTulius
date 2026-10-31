@@ -1,5 +1,14 @@
 # PortfolioTulius — estado operacional vigente
 
+## Experiências vinculadas à galeria e trajetória complementar — 31/10/2026
+
+**Código funcional** [`41a96e37`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/41a96e3715cdc47ee73ab225374cf72b2e739205), [Validate #41178735173](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735173) **success**, Vercel Production **READY** no mesmo SHA. [P3 #41178735154](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735154) verifica navegação/responsividade/Lighthouse em separado; manter P3-PERF-01 aberto até medição válida de LCP mobile ≤2,5 s.
+
+- **Sincronização bidirecional:** `ExperienceCard` concentra o índice de slide ativo. Na coluna `Projetos e realizações`, cada item corresponde ao `title` de um slide publicado da mesma empresa, usa `button` e `aria-current`, e mostra título laranja/borda de destaque quando ativo. Clique no item seleciona seu slide; setas e marcadores da galeria atualizam a seleção da lista. Comportamento válido também no mobile (estado compartilhado entre os dois painéis).
+- **Matriz não necessariamente 1:1 no CMS:** os slides definem projetos selecionáveis; títulos são associados a cards **visíveis** com comparação normalizada, sem revelar conteúdos `isHidden=true`. Um slide sem item correspondente permanece selecionável com seu título, sem inventar descrição. Métricas numéricas não ligadas diretamente a um slide são preservadas em `Indicadores complementares`.
+- **Trajetória complementar, sem apagar dados:** uma lista curta de tópicos comprovadamente redundantes, por empresa, é omitida **somente na renderização pública** da aba Trajetória. As descrições completas de `career_experiences`, notas profissionais, conteúdos CMS, status, imagens e Storage não foram editados. Introduções e responsabilidades exclusivas continuam no texto; prefixos terminados em dois-pontos permanecem em negrito.
+- Testes unitários em `src/lib/experience-text.test.ts`: correspondência estável por título e respeito a itens ocultos, além do filtro conservador dos tópicos redundantes. Auditoria P3 passou a conferir clique em projeto, seta da galeria e destaque sincronizado.
+
 ## Entrega de experiências e ilustrações sem texto — 31/10/2026
 
 **Código fonte:** [`79c1ab1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/79c1ab1a17f674f4ee75d0cd90b2b992b3c07e1a), após correção automática de formatação do commit-base [`544bc00`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/544bc0076e7edae465f02d53883144561fcda6a9). A release Vercel segue a `main`; validar CI/P3 e deployment pelo SHA antes de declarar aceite final.

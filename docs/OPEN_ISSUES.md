@@ -1,5 +1,11 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Estado da experiência: lista vinculada ao slide — 31/10/2026
+
+**Entregue em código:** [`41a96e37`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/41a96e3715cdc47ee73ab225374cf72b2e739205), CI [#41178735173](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735173) aprovado e Vercel READY. Projetos correspondem aos títulos de slides ativos, com seleção bidirecional e destaque laranja; itens sem mídia correspondente não recebem associação fictícia, e indicadores quantitativos permanecem visíveis em grupo complementar. A trajetória pública omite apenas tópicos duplicados identificados por empresa; o conteúdo integral da coleção `career_experiences` não foi modificado.
+
+**Homologações ainda independentes:** execução integral [P3 #41178735154](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735154), eventual inspeção visual manual em 1440/390 px e LCP mobile ≤2,5 s; P2 transacional isolada permanece suspensa. Não reabrir ocorrências editoriais já resolvidas.
+
 ## Atualização — ilustrações e alternância da seção profissional (31/10/2026)
 
 **Solicitação implementada:** 19 novas versões SVG livres de texto visual, todas 1200×1350, 16 vinculadas aos slides das cinco empresas, três alternativas no acervo. [Publicação autenticada e verificada #41178250462](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178250462): 19/19 publicadas e 16/16 vinculadas. Mídias antigas mantidas como histórico de reversão, sem exclusão ou sobrescrita. Imagens continuam **conceituais, não registros reais**.
