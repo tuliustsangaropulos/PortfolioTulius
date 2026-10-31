@@ -146,15 +146,18 @@ export function usePortfolio(includeDrafts = false) {
       const profileReady = includeDrafts
         ? Promise.resolve()
         : Promise.resolve(
-            supabase
-              .from("sections")
+            (window as Window & {
+              __p3ProfileBootstrap?: Promise<{ data: unknown; error: unknown }>
+            }).__p3ProfileBootstrap ??
+              supabase
+                .from("sections")
               .select(
                 "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json),section_panels(id,section_id,panel_key,block_placements(block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config))",
               )
-              .eq("slug", "perfil")
-              .eq("status", "published")
-              .eq("is_visible", true)
-              .maybeSingle(),
+                .eq("slug", "perfil")
+                .eq("status", "published")
+                .eq("is_visible", true)
+                .maybeSingle(),
           )
             .then(async ({ data, error: profileError }) => {
               if (cancelled || profileError || !data) return

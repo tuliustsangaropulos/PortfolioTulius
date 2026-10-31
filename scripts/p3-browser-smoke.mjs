@@ -95,6 +95,18 @@ try {
       })
       console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
       const profileCommitMs = firstFold.marks["p3:profile-dom-committed"]
+      const bootstrapStartMs = firstFold.marks["p3:profile-bootstrap-start"]
+      const bootstrapReadyMs = firstFold.marks["p3:profile-bootstrap-ready"]
+      if (!Number.isFinite(bootstrapStartMs) ||
+          !Number.isFinite(bootstrapReadyMs) ||
+          !(bootstrapStartMs < firstFold.marks["p3:portfolio-fetch-start"])) {
+        throw new Error("Live Profile request did not start before React")
+      }
+      console.log("P3_PROFILE_HTML_BOOTSTRAP " + JSON.stringify({
+        startMs: bootstrapStartMs,
+        readyMs: bootstrapReadyMs,
+        result: "PASS",
+      }))
       const profileCmsReadyMs = firstFold.marks["p3:profile-cms-ready"]
       const fullGraphReadyMs = firstFold.marks["p3:portfolio-primary-ready"]
       const seoStartMs = firstFold.marks["p3:seo-fetch-start"]

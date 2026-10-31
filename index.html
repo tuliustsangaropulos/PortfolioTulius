@@ -7,6 +7,37 @@
          Keep this URL in sync if the editorial portrait is ever replaced in the CMS. -->
     <link rel="preconnect" href="https://zfnrhzplwpjpdljraypt.supabase.co" crossorigin />
     <link rel="preload" as="image" type="image/webp" href="/media/tulius-site-600.webp" imagesrcset="/media/tulius-site-600.webp 600w, /media/tulius-site-900.webp 900w" imagesizes="(max-width: 600px) 45vw, (max-width: 1100px) 50vw, 420px" fetchpriority="high" />
+    <!-- Start only the live, RLS-filtered Profile read before React and the
+         shared vendor module. It never includes editorial snapshots or secrets. -->
+    <script>
+      (() => {
+        if (location.pathname !== "/") return;
+        const base = "%VITE_SUPABASE_URL%";
+        const key = "%VITE_SUPABASE_PUBLISHABLE_KEY%";
+        if (!base || !key || base.includes("%VITE_") || key.includes("%VITE_")) return;
+        const params = new URLSearchParams({
+          select: "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json),section_panels(id,section_id,panel_key,block_placements(block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config))",
+          slug: "eq.perfil",
+          status: "eq.published",
+          is_visible: "eq.true",
+          limit: "1"
+        });
+        performance.mark("p3:profile-bootstrap-start");
+        window.__p3ProfileBootstrap = fetch(
+          base.replace(/\\/+$/, "") + "/rest/v1/sections?" + params,
+          {
+            headers: { apikey: key, Authorization: "Bearer " + key },
+            cache: "no-store",
+            priority: "low"
+          }
+        ).then(async (response) => {
+          if (!response.ok) throw new Error("Profile CMS request failed");
+          const rows = await response.json();
+          performance.mark("p3:profile-bootstrap-ready");
+          return { data: Array.isArray(rows) ? rows[0] ?? null : null, error: null };
+        });
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&amp;family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" />
