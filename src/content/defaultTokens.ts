@@ -13,4 +13,3 @@ export const defaultTokens: DesignTokens = {
   sectionSpace: 64,
   motionDuration: 520,
 }
-
