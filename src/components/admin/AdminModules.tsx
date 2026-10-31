@@ -479,12 +479,12 @@ export function ContentStudio({
     if (validationErrors.length) return setMessage(validationErrors.join(" "))
     const media = draft.content_json.experienceMedia
     if (media) {
-      if (media.logo && (!isSafeEditorialImage(media.logo) || !media.logoAlt?.trim()))
-        return setMessage("Logo exige URL segura e texto alternativo.")
+      if (media.logo && !isSafeEditorialImage(media.logo))
+        return setMessage("Logo exige uma URL segura.")
       for (const [index, slide] of (media.slides ?? []).entries()) {
         if (!slide.title.trim()) return setMessage(`Slide ${index + 1}: título obrigatório.`)
-        if (slide.image && (!isSafeEditorialImage(slide.image) || !slide.alt?.trim()))
-          return setMessage(`Slide ${index + 1}: imagem exige URL segura e texto alternativo.`)
+        if (slide.image && !isSafeEditorialImage(slide.image))
+          return setMessage(`Slide ${index + 1}: imagem exige uma URL segura.`)
       }
     }
 
@@ -877,13 +877,6 @@ export function ContentStudio({
                     }
                   />
                   Contém conteúdo provisório
-                </label>
-                <label className="field-wide">
-                  Nota editorial
-                  <textarea
-                    value={draft.editorial_note ?? ""}
-                    onChange={(event) => setDraft({ ...draft, editorial_note: event.target.value })}
-                  />
                 </label>
               </div>
               <fieldset className="motion-editor">
@@ -1875,7 +1868,6 @@ const collectionConfigs: CollectionConfig[] = [
       { key: "start_date", label: "Início" },
       { key: "end_date", label: "Fim" },
       { key: "description", label: "Descrição", multiline: true },
-      { key: "editorial_note", label: "Nota editorial", multiline: true },
     ],
   },
   {
@@ -1898,7 +1890,6 @@ const collectionConfigs: CollectionConfig[] = [
       { key: "value_text", label: "Valor" },
       { key: "unit", label: "Unidade" },
       { key: "context", label: "Contexto", multiline: true },
-      { key: "editorial_note", label: "Nota editorial", multiline: true },
     ],
   },
   {
@@ -1930,7 +1921,6 @@ const collectionConfigs: CollectionConfig[] = [
       { key: "language", label: "Idioma" },
       { key: "level_label", label: "Nível" },
       { key: "evidence_note", label: "Evidência", multiline: true },
-      { key: "editorial_note", label: "Nota editorial", multiline: true },
     ],
   },
   {

@@ -121,10 +121,6 @@ export function validateContentItems(items: ContentItem[]) {
       errors.push(`Item ${index + 1}: destino de seção inválido.`)
     if (item.aboutDesktopImage && !isSafeEditorialImage(item.aboutDesktopImage))
       errors.push(`Item ${index + 1}: imagem desktop deve ser HTTPS ou /media/arquivo.`)
-    if (item.aboutDesktopImage && !item.aboutDesktopAlt?.trim())
-      errors.push(`Item ${index + 1}: imagem desktop exige descrição alternativa.`)
-    if (item.image && !item.alt?.trim())
-      errors.push(`Item ${index + 1}: imagem informativa exige texto alternativo.`)
     if (
       item.meta &&
       (/^(javascript|data|vbscript):/i.test(item.meta) ||
