@@ -38,11 +38,15 @@ for (const device of ["mobile", "desktop"]) {
   // controlled: a newly published image can be a Supabase Storage PNG, not
   // the older bundled JPEG. Do not mistake that legitimate edit for an empty
   // page, but never accept a headline/text or an unrelated image as the LCP.
-  const target = device === "mobile" ? "mobile-profile-hero > img" : "profile-portrait > img"
+  const portraitHost = device === "mobile" ? "mobile-profile-hero" : "profile-portrait"
   const containsPortrait = (value) => {
     if (!value || typeof value !== "object") return false
     if (Array.isArray(value)) return value.some(containsPortrait)
-    if (typeof value.selector === "string" && value.selector.includes(target)) {
+    if (typeof value.selector === "string" &&
+        value.selector.includes(portraitHost + " > ") &&
+        /(?:^| > )img$/.test(value.selector)) {
+      // The approved image can be a direct <img> or an <img> in <picture>
+      // with an optimized source. Preserve the LCP-content requirement.
       const snippet = typeof value.snippet === "string" ? value.snippet : ""
       if (/<img\b/.test(snippet) && /\bsrc=["'](?:\/|https:\/\/)/.test(snippet)) return true
     }
