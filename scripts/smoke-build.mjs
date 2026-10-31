@@ -26,10 +26,15 @@ check(
   modulePreloads.every(([tag]) => !/admin-router-[^"'\s>]+\.js/.test(tag)),
   "HTML público pré-carrega o chunk administrativo.",
 )
-check(
-  modulePreloads.some(([tag]) => /public-postgrest-[^"'\s>]+\.js/.test(tag)),
-  "HTML público não carrega o cliente PostgREST reduzido.",
-)
+// CI's offline build intentionally has no Supabase public environment; Vite
+// eliminates its PostgREST import. Only require the preload when the same
+// build is configured to serve the live CMS, as in Vercel production.
+if (process.env.VITE_SUPABASE_URL && process.env.VITE_SUPABASE_PUBLISHABLE_KEY) {
+  check(
+    modulePreloads.some(([tag]) => /public-postgrest-[^"'\s>]+\.js/.test(tag)),
+    "HTML público não carrega o cliente PostgREST reduzido.",
+  )
+}
 check(
   modulePreloads.every(([tag]) => !/supabase-sdk-[^"'\s>]+\.js/.test(tag)),
   "HTML público ainda pré-carrega Auth/Storage/Realtime.",
