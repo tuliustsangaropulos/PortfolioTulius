@@ -1,5 +1,15 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Validação após reversão P3 — 31/10/2026
+
+**Versão funcional restaurada:** SHA [`cc1e17e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/cc1e17ea9fafb72ecc47401ca75924ab1f75f92b), com [CI Validate #41168586077](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168586077) **success** e Vercel **READY** no mesmo SHA. O código de dados e renderização pública voltou ao conteúdo do HEAD `1fcd773`, após teste experimental sem ganho sustentado; os componentes auxiliares desse ensaio foram removidos. Nenhuma alteração em banco, arquivos de imagem ou composição editorial.
+
+**P3 de produção após reversão:** [#41168586130](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168586130) verificou o SHA publicado e aprovou a integridade funcional do site (browser failures=0; **13 desktop, 25 mobile, 38 capturas sem falhas**; P5 anonymous 3/3, mutations=0), incluindo gate do retrato correto. LCP desktop mediano **1,685 s PASS**, mobile mediano **7,571 s / Performance 73 FAIL** pelo limite sintético conservador 6,5 s e meta ≤2,5 s. O resultado global P3 permanece reprovado **exclusivamente no orçamento mobile**, não na integridade da composição. A variação de 7,37 a 7,66 s entre execuções reforça que o experimento não resolveu o problema.
+
+**Bloqueios sem intervenção não autorizada:** criação de derivada otimizada exige acesso verificável aos bytes da fotografia publicada para confirmar identidade e qualidade do recorte; nenhuma cópia distinta encontrada pode ser promovida por presunção. A criação de ambiente P2 potencialmente cobrável, gravações administrativas, exclusões de arquivos privados, alterações de licenças ou de segurança continuam condicionadas às decisões expressamente registradas pelo proprietário. Não tratá-las como implementadas.
+
+
+
 ## Tentativa P3 mobile sem ganho sustentado — 31/10/2026
 
 **Resultado técnico verificado:** o experimento de composição antecipada apenas da seção Perfil foi medido em [P3 #41168050252](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168050252) (mediana LCP mobile **7,371 s**, P6 FAIL) e, após formatação sem alteração funcional, em [P3 #41168377912](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168377912) (mediana **7,640 s**, Performance 72, P6 FAIL). O baseline anterior era **7,664 s**: a diferença é pequena e incompatível com afirmação de ganho causal ou meta cumprida. As duas execuções verificaram SHA publicado, 13 seções/25 painéis mobile/38 capturas sem falhas, browser 0 erros e P5 anônimo 3/3 sem mutações. LCP do retrato aprovado manteve-se como elemento esperado. **Decisão: reverter o experimento de composição progressiva**, que acrescentava uma renderização intermediária sem benefício comprovado; preservar lógica de dados e conteúdo publicados. A medição 7,640 s é evidência histórica do ensaio **revertido**, não resultado de produção da versão revertida.
