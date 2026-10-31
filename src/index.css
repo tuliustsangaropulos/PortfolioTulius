@@ -599,34 +599,50 @@
   margin: 1rem 0 .65rem; overflow-wrap: anywhere; }
 .experience-heading p { font-size: clamp(.79rem, .95vw, 1rem); line-height: 1.55; }
 .experience-heading .experience-eyebrow { font-weight: 750; color: var(--orange-dark); }
-.experience-projects { max-height: calc(100svh - 13rem); overflow-y: auto; scrollbar-width: thin; }
-.experience-projects > h3 { font-family: var(--font-display); font-size: clamp(1.3rem, 1.6vw, 1.9rem);
-  text-transform: uppercase; margin: 0 0 .4rem; }
+.experience-competencies {
+  display: flex; flex-wrap: wrap; gap: .35rem; padding: 0; margin: .8rem 0 0;
+  list-style: none;
+}
+.experience-competencies li {
+  border: 1px solid #17161730; border-radius: 999px;
+  padding: .24rem .52rem; font-size: clamp(.58rem, .64vw, .72rem);
+  line-height: 1.35; font-weight: 600; letter-spacing: .005em;
+  color: inherit; background: transparent;
+}
+.experience-projects { max-height: calc(100svh - 13rem); overflow-y: auto; scrollbar-width: thin; min-width: 0; }
+.experience-view-switch {
+  position: sticky; top: 0; z-index: 2; display: flex; align-items: baseline;
+  flex-wrap: wrap; column-gap: .85rem; row-gap: .15rem;
+  border-bottom: 1px solid #17161733; padding: .15rem 0 .6rem;
+  background: var(--paper);
+}
+.experience-view-switch button {
+  border: 0; background: transparent; color: inherit;
+  padding: .2rem 0; text-align: left; transition: color .2s ease;
+}
+.experience-view-switch button:hover { color: var(--orange-dark); }
+.experience-view-switch button:disabled { opacity: .4; cursor: not-allowed; }
+.experience-view-switch button.is-active { color: var(--orange-dark); }
+.experience-view-projects {
+  font: 600 clamp(1.25rem, 1.6vw, 1.9rem)/1.1 var(--font-display);
+  text-transform: uppercase;
+}
+.experience-view-trajectory { font: 600 clamp(.74rem, .85vw, .88rem)/1.4 var(--font-body); }
 .experience-project { border-top: 1px solid #17161733; padding: .7rem 0; }
+.experience-view-body > .experience-project:first-child { border-top: 0; }
 .experience-project h4 { font-family: var(--font-display); font-size: clamp(1.1rem, 1.3vw, 1.5rem);
   line-height: 1.1; text-transform: uppercase; }
 .experience-project p { margin: .3rem 0 0; font-size: clamp(.74rem, .87vw, .95rem); line-height: 1.4; }
 .experience-value { display: block; font-size: 1.3rem; color: var(--orange-dark); }
-.experience-full-detail {
-  border-top: 1px solid #17161744;
-  margin-top: .25rem;
-  padding: .8rem 0 1rem;
+.experience-full-body { padding: .2rem 0 .65rem; }
+.experience-full-body p { margin: .6rem 0 0; font-size: clamp(.76rem, .86vw, .94rem); line-height: 1.55; }
+.experience-full-body .experience-full-point { padding-left: .1rem; }
+.experience-full-point strong { font-weight: 800; }
+.experience-card.theme-ink .experience-view-switch {
+  background: var(--ink); border-color: #ffffff44;
 }
-.experience-full-detail summary {
-  cursor: pointer;
-  color: var(--orange-dark);
-  font-weight: 800;
-  font-size: clamp(.8rem, .95vw, .95rem);
-  line-height: 1.45;
-  text-underline-offset: .2em;
-}
-.experience-full-detail summary:hover { text-decoration: underline; }
-.experience-full-detail summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
-.experience-full-body { padding-top: .5rem; }
-.experience-full-body p { margin: .45rem 0 0; font-size: clamp(.76rem, .86vw, .94rem); line-height: 1.55; }
-.experience-full-body .experience-full-point { padding-left: .5rem; }
-.experience-card.theme-ink .experience-full-detail { border-color: #ffffff44; }
-.experience-card.theme-ink .experience-full-detail summary { color: var(--orange); }
+.experience-card.theme-ink .experience-view-switch button.is-active,
+.experience-card.theme-ink .experience-view-switch button:hover { color: var(--orange); }
 .experience-gallery { min-width: 0; }
 .experience-media-frame { width: 100%; aspect-ratio: .9; max-height: 57svh; overflow: hidden; background: #e9e5e2; }
 .experience-media-frame > img { width: 100%; height: 100%; object-fit: cover; }
@@ -658,6 +674,7 @@
  .experience-card .mobile-panels { display: block; }
  .experience-mobile-copy { padding-top: calc(var(--header) + 4.3rem); }
  .experience-mobile-copy .experience-heading h2 { font-size: clamp(3.2rem, 12vw, 5.1rem); }
+ .experience-competencies li { font-size: .7rem; }
  .experience-mobile-copy .experience-projects { max-height: none; overflow: visible; margin-top: 2rem; }
  .experience-mobile-gallery { min-height: auto; padding-top: calc(var(--header) + 3rem); }
  .experience-media-frame { max-height: none; aspect-ratio: 1 / 1.1; }

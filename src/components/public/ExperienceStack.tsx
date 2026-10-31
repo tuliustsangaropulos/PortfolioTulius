@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { ExperienceSlide, PortfolioSection } from "../../types/content"
 import { imageFramingStyle } from "../../lib/media-framing"
+import { splitExperienceBullet } from "../../lib/experience-text"
 import { supabase } from "../../lib/supabase"
 
 export const EXPERIENCE_SLUGS = [
@@ -129,23 +130,100 @@ const CAREER_COMPANY_SLUGS: Record<string, string> = {
   "CDI Comunicação": "cdi",
 }
 
-function ExperienceDetails({ description }: { description?: string }) {
-  if (!description?.trim()) return null
+function ExperienceCompetencies({ tags }: { tags: string[] }) {
+  if (!tags.length) return null
   return (
-    <details className="experience-full-detail">
-      <summary>Ver trajetória completa</summary>
-      <div className="experience-full-body">
-        {description
-          .split(/\n+/)
-          .map((line) => line.trim())
-          .filter(Boolean)
-          .map((line, index) => (
-            <p key={index} className={line.startsWith("• ") ? "experience-full-point" : undefined}>
-              {line}
+    <ul className="experience-competencies" aria-label="Competências aplicadas">
+      {tags.map((tag) => (
+        <li key={tag}>{tag}</li>
+      ))}
+    </ul>
+  )
+}
+
+function ExperienceDetails({ description }: { description: string }) {
+  return (
+    <div className="experience-full-body">
+      {description
+        .split(/\n+/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line, index) => {
+          const bullet = splitExperienceBullet(line)
+          return (
+            <p key={index} className={bullet ? "experience-full-point" : undefined}>
+              {bullet ? (
+                <>
+                  <strong>{bullet.heading}</strong>
+                  {bullet.body}
+                </>
+              ) : (
+                line
+              )}
             </p>
-          ))}
+          )
+        })}
+    </div>
+  )
+}
+
+function ExperienceContent({
+  section,
+  items,
+  detail,
+}: {
+  section: PortfolioSection
+  items: PortfolioSection["panelA"]
+  detail?: string
+}) {
+  const [view, setView] = useState<"projects" | "trajectory">("projects")
+  const containerRef = useRef<HTMLDivElement>(null)
+  const trajectoryAvailable = Boolean(detail?.trim())
+  const showingTrajectory = view === "trajectory" && trajectoryAvailable
+  const chooseView = (next: "projects" | "trajectory") => {
+    setView(next)
+    if (containerRef.current) containerRef.current.scrollTop = 0
+  }
+
+  return (
+    <div className="experience-projects" ref={containerRef}>
+      <div className="experience-view-switch" role="group" aria-label={`Conteúdo de ${section.title}`}>
+        <button
+          type="button"
+          className={showingTrajectory ? "experience-view-projects" : "experience-view-projects is-active"}
+          aria-pressed={!showingTrajectory}
+          aria-controls={`${section.slug}-experience-content`}
+          onClick={() => chooseView("projects")}
+        >
+          Projetos e realizações
+        </button>
+        <button
+          type="button"
+          className={showingTrajectory ? "experience-view-trajectory is-active" : "experience-view-trajectory"}
+          aria-pressed={showingTrajectory}
+          aria-controls={`${section.slug}-experience-content`}
+          disabled={!trajectoryAvailable}
+          onClick={() => chooseView("trajectory")}
+        >
+          Trajetória
+        </button>
       </div>
-    </details>
+      <div id={`${section.slug}-experience-content`} className="experience-view-body">
+        {showingTrajectory ? (
+          <ExperienceDetails description={detail!} />
+        ) : (
+          items.map((item, index) => (
+            <article className="experience-project" key={`${item.title}-${index}`}>
+              {item.meta && <span className="experience-project-meta">{item.meta}</span>}
+              <h4>{item.title}</h4>
+              {item.value && <strong className="experience-value">{item.value}</strong>}
+              {item.text && <p>{item.text}</p>}
+              {item.tags && <p>{item.tags.join(" · ")}</p>}
+            </article>
+          ))
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -164,6 +242,9 @@ function ExperienceCard({
     ...(section.desktopPanelA ?? section.panelA),
     ...(section.desktopPanelB ?? section.panelB),
   ].filter((item) => item.isHidden !== true)
+  const competencies =
+    items.find((item) => item.title.toLowerCase() === "competências aplicadas")?.tags ?? []
+  const projectItems = items.filter((item) => item.title.toLowerCase() !== "competências aplicadas")
   return (
     <section
       id={section.slug}
@@ -178,20 +259,9 @@ function ExperienceCard({
             <h2>{section.title}</h2>
             {section.eyebrow && <p className="experience-eyebrow">{section.eyebrow}</p>}
             {section.intro && <p>{section.intro}</p>}
+            <ExperienceCompetencies tags={competencies} />
           </header>
-          <div className="experience-projects">
-            <h3>Projetos e realizações</h3>
-            {items.map((item, index) => (
-              <article className="experience-project" key={`${item.title}-${index}`}>
-                {item.meta && <span className="experience-project-meta">{item.meta}</span>}
-                <h4>{item.title}</h4>
-                {item.value && <strong className="experience-value">{item.value}</strong>}
-                {item.text && <p>{item.text}</p>}
-                {item.tags && <p>{item.tags.join(" · ")}</p>}
-              </article>
-            ))}
-            <ExperienceDetails description={detail} />
-          </div>
+          <ExperienceContent section={section} items={projectItems} detail={detail} />
           <PhotoGallery section={section} />
         </div>
       )}
@@ -207,20 +277,9 @@ function ExperienceCard({
               <h2>{section.title}</h2>
               {section.eyebrow && <p className="experience-eyebrow">{section.eyebrow}</p>}
               {section.intro && <p>{section.intro}</p>}
+              <ExperienceCompetencies tags={competencies} />
             </header>
-            <div className="experience-projects">
-              <h3>Projetos e realizações</h3>
-              {items.map((item, index) => (
-                <article className="experience-project" key={`${item.title}-${index}`}>
-                  {item.meta && <span className="experience-project-meta">{item.meta}</span>}
-                  <h4>{item.title}</h4>
-                  {item.value && <strong className="experience-value">{item.value}</strong>}
-                  {item.text && <p>{item.text}</p>}
-                  {item.tags && <p>{item.tags.join(" · ")}</p>}
-                </article>
-              ))}
-              <ExperienceDetails description={detail} />
-            </div>
+            <ExperienceContent section={section} items={projectItems} detail={detail} />
           </div>
           <div
             id={`${section.slug}-b`}

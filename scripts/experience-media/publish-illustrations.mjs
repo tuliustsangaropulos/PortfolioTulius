@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js"
 // Uses the pre-existing P5 admin account secrets; never prints access tokens or passwords.
 const PROJECT_URL = "https://zfnrhzplwpjpdljraypt.supabase.co"
 const SITE_URL = "https://tulius.work/"
-const SOURCE = new URL("./illustrations-2026-10-31.json", import.meta.url)
+const SOURCE = new URL("./illustrations-2026-10-31-no-text.json", import.meta.url)
 const allowed = new Set(["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress"])
 const expectedSlots = { "invest-rs": 4, "prefeitura-sp": 3, vale: 3, "globo-sportv": 3, inpress: 3 }
 
@@ -59,10 +59,11 @@ async function main() {
   // Explicitly abort instead of making production write if identities or paths are unexpected.
   for (const asset of manifest.assets) {
     assert(allowed.has(asset.slug), "UNKNOWN_COMPANY")
-    assert(/^portfolio-generated\/2026-10-31\/[a-z0-9-]+-0[1-9]\.svg$/.test(asset.path), "INVALID_PATH")
+    assert(/^portfolio-generated\/2026-10-31-no-text\/[a-z0-9-]+-0[1-9]\.svg$/.test(asset.path), "INVALID_PATH")
     assert(asset.width === 1200 && asset.height === 1350 && asset.svg.includes('width="1200" height="1350"'), "INVALID_DIMENSIONS")
     assert(Buffer.byteLength(asset.svg) < 8_000_000, "TOO_LARGE")
     assert(!/<script|onload=|<foreignObject/i.test(asset.svg), "UNSAFE_SVG")
+    assert(!/<text\b/i.test(asset.svg), "SVG_HAS_VISIBLE_TEXT")
   }
   let newlyUploaded = 0
   let alreadyPresent = 0

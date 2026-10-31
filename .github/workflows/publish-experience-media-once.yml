@@ -1,4 +1,4 @@
-name: Publish 19 experience illustrations (owner-requested)
+name: Publish 19 text-free experience illustrations (owner-requested)
 
 on:
   push:
@@ -35,5 +35,5 @@ jobs:
         run: npm install --global pnpm@10.34.8
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Upload, publish and link reviewed illustrations
+      - name: Upload, publish and link text-free illustrations
         run: node scripts/experience-media/publish-illustrations.mjs
