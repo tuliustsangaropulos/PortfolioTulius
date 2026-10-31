@@ -947,6 +947,22 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
   // DOM, photos, SVGs and galleries on the initial render.
   const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 767px)").matches)
 
+  // Timing markers only: neither alter the portrait nor gate the first paint.
+  useEffect(() => {
+    if (loading || error || preview || !visible.length) return
+    const portrait = document.querySelector<HTMLImageElement>("#perfil-a .mobile-profile-hero img, .profile-portrait img")
+    if (!portrait) return
+    performance.mark("p3:profile-dom-committed")
+    const loaded = () => performance.mark("p3:profile-image-loaded")
+    if (portrait.complete && portrait.naturalWidth > 0) loaded()
+    else portrait.addEventListener("load", loaded, { once: true })
+    const frame = requestAnimationFrame(() => performance.mark("p3:profile-next-frame"))
+    return () => {
+      portrait.removeEventListener("load", loaded)
+      cancelAnimationFrame(frame)
+    }
+  }, [loading, error, preview, visible])
+
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)")
     const syncViewport = () => setIsMobile(media.matches)

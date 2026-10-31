@@ -1,4 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises"
+import { syncProfilePreload } from "./portrait-preload.mjs"
 
 const outputPath = new URL("../dist/index.html", import.meta.url)
 const fallbackCanonical = "https://tulius.work/"
@@ -105,14 +106,9 @@ async function run() {
     } catch (error) {
       console.warn("P3: retrato indisponível no build; sem preload potencialmente incorreto.", error?.message)
     }
-    const oldPreload = /<link\s+rel=["']preload["']\s+as=["']image["'][^>]*\/?>/i
-    html = html.replace(
-      oldPreload,
-      portraitUrl
-        ? '<link rel="preload" as="image" href="' + escapeHtml(portraitUrl) + '" fetchpriority="high" />'
-        : "",
-    )
-    console.log("P3: preload do retrato " + (portraitUrl ? "sincronizado com CMS." : "omitido sem URL confirmada."))
+    const result = syncProfilePreload(html, portraitUrl)
+    html = result.html
+    console.log("P3: preload do retrato " + result.strategy + ".")
   }
   await writeFile(outputPath, html)
   const siteRoot = new URL("../dist/", import.meta.url)

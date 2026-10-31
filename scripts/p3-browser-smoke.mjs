@@ -35,11 +35,25 @@ try {
     try {
       stage = "page loaded"
       await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+      await page.evaluateOnNewDocument(() => {
+        window.__p3LcpSamples = []
+        try {
+          new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              window.__p3LcpSamples.push({
+                startMs: Math.round(entry.startTime),
+                size: Math.round(entry.size),
+                isProfile: Boolean(entry.element?.closest(".mobile-profile-hero")),
+              })
+            }
+          }).observe({ type: "largest-contentful-paint", buffered: true })
+        } catch { /* Observer availability varies by browser. */ }
+      })
       await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 30000 })
       const firstFold = await page.evaluate(() => {
         const marks = Object.fromEntries(
           performance.getEntriesByType("mark")
-            .filter((entry) => entry.name.startsWith("p3:portfolio-"))
+            .filter((entry) => entry.name.startsWith("p3:"))
             .map((entry) => [entry.name, Math.round(entry.startTime)]),
         )
         const resources = performance.getEntriesByType("resource")
@@ -48,9 +62,27 @@ try {
             const url = new URL(entry.name)
             return { table: url.pathname.split("/").at(-1), startMs: Math.round(entry.startTime), durationMs: Math.round(entry.duration) }
           })
-        return { marks, resources,
-          portraitComplete: document.querySelector(".mobile-profile-hero img")?.complete ?? false,
-          publicSections: document.querySelectorAll("section.portfolio-section").length }
+        const portrait = document.querySelector(".mobile-profile-hero img")
+        const imageResource = performance.getEntriesByType("resource")
+          .find((entry) => entry.name === portrait?.currentSrc)
+        return {
+          marks, resources,
+          lcpSamples: window.__p3LcpSamples ?? [],
+          imageResource: imageResource ? {
+            startMs: Math.round(imageResource.startTime),
+            durationMs: Math.round(imageResource.duration),
+            transferSize: imageResource.transferSize,
+          } : null,
+          imagePreloads: [...document.querySelectorAll('link[rel="preload"][as="image"]')].map((link) => ({
+            responsiveWebp: Boolean(link.imageSrcset?.includes("tulius-site-600.webp")),
+            originalPng: link.href.includes("tulius_site.png"),
+          })),
+          adminRouterPreloaded: [...document.querySelectorAll('link[rel="modulepreload"]')].some((link) =>
+            link.href.includes("admin-router"),
+          ),
+          portraitComplete: portrait?.complete ?? false,
+          publicSections: document.querySelectorAll("section.portfolio-section").length,
+        }
       })
       console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
       await page.click(".menu-button")
