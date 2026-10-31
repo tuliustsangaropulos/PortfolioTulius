@@ -234,7 +234,7 @@ try {
           const selector = document.querySelector("#resultados-mobile-selector")
           const grid = resultPanel?.querySelector(".results-metrics-grid")
           const metrics = [...(grid?.querySelectorAll(".content-item") ?? [])]
-          const colSizes = grid ? getComputedStyle(grid).gridTemplateColumns.split(/\\s+/) : []
+          const colSizes = grid ? getComputedStyle(grid).gridTemplateColumns.split(/\s+/) : []
           const rect = aboutPhoto?.getBoundingClientRect()
           const valueOverflow = metrics.some((metric) => {
             const parent = metric.getBoundingClientRect()
