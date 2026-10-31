@@ -28,13 +28,12 @@ export default defineConfig({
               test: /[\\/]node_modules[\\/]@supabase[\\/]/,
             },
             {
-              // Keep React Router out of the public landing bundle.
-              name: "admin-router",
-              test: /[\\/]node_modules[\\/]react-router[\\/]/,
-            },
-            {
+              // Shared React libraries stay cacheable. React Router is kept
+              // outside this eager group so the lazy /admin route owns it.
               name: "vendor",
-              test: /[\\/]node_modules[\\/]/,
+              test: (id) =>
+                /[\\/]node_modules[\\/]/.test(id) &&
+                !/[\\/]node_modules[\\/]react-router[\\/]/.test(id),
             },
           ],
         },
