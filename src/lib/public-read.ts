@@ -6,7 +6,7 @@ const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 
 export function createPublicReadClient(baseUrl: string, publishableKey: string) {
-  return new PostgrestClient(`${baseUrl.replace(/\\/+$/, "")}/rest/v1`, {
+  return new PostgrestClient(`${baseUrl.replace(/\/+$/, "")}/rest/v1`, {
     headers: {
       apikey: publishableKey,
       Authorization: `Bearer ${publishableKey}`,
