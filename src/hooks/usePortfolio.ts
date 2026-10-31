@@ -19,6 +19,7 @@ import {
   type SectionPanelRow,
 } from "../lib/placements"
 import type { DesignTokens, PortfolioSection } from "../types/content"
+import { shouldRenderEarlyProfile } from "../lib/early-profile"
 
 type SectionResult = {
   id: string
@@ -111,21 +112,60 @@ export function usePortfolio(includeDrafts = false) {
       .order("sort_order")
     if (!includeDrafts) query = query.eq("status", "published").eq("is_visible", true)
 
-    void Promise.all([
-      query,
+    // Keep the section graph as a shared promise. The opening panel can be
+    // displayed without waiting for unrelated navigation/tokens/collections.
+    const sectionsRequest = Promise.resolve(query)
+    const panelsRequest = Promise.resolve(
       supabase.from("section_panels").select("id,section_id,panel_key"),
+    )
+    const placementsRequest = Promise.resolve(
       supabase
         .from("block_placements")
-        .select(
-          "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
-        ),
+        .select("block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config"),
+    )
+    const tokensRequest = Promise.resolve(
       supabase.from("design_tokens").select("token_key,token_value").eq("status", "published"),
+    )
+    const navigationRequest = Promise.resolve(
       supabase
         .from("navigation_items")
         .select("label,target_slug,group_name,sort_order,is_visible,status")
         .eq("status", "published")
         .eq("is_visible", true)
         .order("sort_order"),
+    )
+
+    if (shouldRenderEarlyProfile(includeDrafts, window.location.hash)) {
+      void Promise.all([sectionsRequest, panelsRequest, placementsRequest]).then(
+        ([sectionsResult, panelsResult, placementsResult]) => {
+          if (cancelled || sectionsResult.error || panelsResult.error || placementsResult.error)
+            return
+          const profileRow = (sectionsResult.data as SectionResult[]).find(
+            (section) => section.slug === "perfil",
+          )
+          if (!profileRow) return
+          const profile = toSection(
+            profileRow,
+            (panelsResult.data ?? []) as SectionPanelRow[],
+            (placementsResult.data ?? []) as BlockPlacementRow[],
+            false,
+            new Map(),
+          )
+          // Never expose an unbound collection as published content.
+          setData([profile])
+          setSource("supabase")
+        },
+      ).catch(() => {
+        // The complete data request below owns error reporting.
+      })
+    }
+
+    void Promise.all([
+      sectionsRequest,
+      panelsRequest,
+      placementsRequest,
+      tokensRequest,
+      navigationRequest,
     ])
       .then(
         async ([sectionsResult, panelsResult, placementsResult, tokenResult, navigationResult]) => {
