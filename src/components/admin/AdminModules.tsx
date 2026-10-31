@@ -2284,25 +2284,29 @@ export function NavigationStudio({ onDirtyChange }: { onDirtyChange?: (dirty: bo
   )
 }
 
-export function SeoStudio() {
+export function SeoStudio({ onDirtyChange }: { onDirtyChange?: (dirty: boolean) => void }) {
   const [page, setPage] = useState<Record<string, any> | null>(null)
+  const [savedSeo, setSavedSeo] = useState("")
   const [settings, setSettings] = useState<Record<string, any> | null>(null)
   const [message, setMessage] = useState("")
+  const seoDirty = Boolean(page && settings && savedSeo && JSON.stringify({ page, settings }) !== savedSeo)
+  useEffect(() => onDirtyChange?.(seoDirty), [seoDirty, onDirtyChange])
   useEffect(() => {
     void Promise.all([
       supabase?.from("pages").select("*").eq("slug", "home").maybeSingle(),
       supabase?.from("site_settings").select("*").limit(1).maybeSingle(),
     ]).then(([pageResult, settingsResult]) => {
-      setPage(pageResult?.data ?? null)
-      setSettings(
-        settingsResult?.data ?? {
-          site_title: "",
-          locale: "pt-BR",
-          description: "",
-          seo_json: {},
-          status: "draft",
-        },
-      )
+      const loadedPage = pageResult?.data ?? null
+      const loadedSettings = settingsResult?.data ?? {
+        site_title: "",
+        locale: "pt-BR",
+        description: "",
+        seo_json: {},
+        status: "draft",
+      }
+      setPage(loadedPage)
+      setSettings(loadedSettings)
+      setSavedSeo(JSON.stringify({ page: loadedPage, settings: loadedSettings }))
     })
   }, [])
   async function save() {
@@ -2321,10 +2325,8 @@ export function SeoStudio() {
       p_seo_json: settings.seo_json ?? {},
       p_status: settings.status,
     })
-    setMessage(
-      error?.message ??
-        "SEO salvo atomicamente. Metadados para robôs serão regenerados no próximo deploy.",
-    )
+    setMessage(error?.message ?? "SEO salvo atomicamente. Metadados para robôs serão regenerados no próximo deploy.")
+    if (!error) setSavedSeo(JSON.stringify({ page, settings }))
   }
 
   return (
@@ -2335,9 +2337,7 @@ export function SeoStudio() {
           <h1>SEO e metadados</h1>
           <span>Configurações globais e da página principal</span>
         </div>
-        <button className="primary-button" onClick={save}>
-          Salvar SEO
-        </button>
+        <FloatingSaveButton enabled={seoDirty} onClick={save} label="Salvar SEO" />
       </header>
       {page && settings && (
         <section className="admin-card editor-form">

@@ -995,7 +995,7 @@ function SiteEditor({
   )
 }
 
-function DesignEditor() {
+function DesignEditor({ onDirtyChange }: { onDirtyChange?: (dirty: boolean) => void }) {
   const [tokens, setTokens] = useState({
     orange: defaultTokens.orange,
     ink: defaultTokens.ink,
@@ -1013,6 +1013,9 @@ function DesignEditor() {
     "motion.duration": "520",
   })
   const [message, setMessage] = useState("")
+  const [savedDesign, setSavedDesign] = useState("")
+  const designDirty = Boolean(savedDesign && JSON.stringify({ tokens, extraTokens }) !== savedDesign)
+  useEffect(() => onDirtyChange?.(designDirty), [designDirty, onDirtyChange])
   useEffect(() => {
     supabase
       ?.from("design_tokens")
@@ -1025,14 +1028,16 @@ function DesignEditor() {
           if (key in next) next[key] = item.token_value
         })
         setTokens(next)
-        setExtraTokens((current) => ({
-          ...current,
+        const nextExtra = {
+          ...extraTokens,
           ...Object.fromEntries(
             data
               .filter((item) => !item.token_key.startsWith("color."))
               .map((item) => [item.token_key, item.token_value]),
           ),
-        }))
+        }
+        setExtraTokens(nextExtra)
+        setSavedDesign(JSON.stringify({ tokens: next, extraTokens: nextExtra }))
       })
   }, [])
   async function save() {
@@ -1064,6 +1069,7 @@ function DesignEditor() {
     )
     const { error } = await supabase.from("design_tokens").upsert(rows, { onConflict: "token_key" })
     setMessage(error ? error.message : "Tokens publicados.")
+    if (!error) setSavedDesign(JSON.stringify({ tokens, extraTokens }))
   }
   return (
     <>
@@ -1071,9 +1077,7 @@ function DesignEditor() {
         title="Identidade"
         subtitle="Tokens seguros e famílias tipográficas autorizadas"
         action={
-          <button className="primary-button" onClick={save}>
-            Publicar tokens
-          </button>
+          <FloatingSaveButton enabled={designDirty} onClick={save} label="Salvar identidade" />
         }
       />
       <section className="admin-card">
@@ -1164,6 +1168,17 @@ export function AdminApp() {
   const guard = useAdminGuard()
   const [active, setActive] = useState("dashboard")
   const [editorDirty, setEditorDirty] = useState(false)
+  // Reloading or closing the tab cannot display a custom CMS dialog.
+  // Browsers provide only their own generic, user-initiated confirmation.
+  useEffect(() => {
+    if (!editorDirty) return
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+    window.addEventListener("beforeunload", warn)
+    return () => window.removeEventListener("beforeunload", warn)
+  }, [editorDirty])
   async function selectModule(next: string) {
     if (next === active) return
     if (
@@ -1205,10 +1220,10 @@ export function AdminApp() {
         onDirtyChange={setEditorDirty}
       />
     ),
-    design: <DesignEditor />,
+    design: <DesignEditor onDirtyChange={setEditorDirty} />,
     media: <EnhancedMediaLibrary />,
     navigation: <NavigationStudio onDirtyChange={setEditorDirty} />,
-    seo: <SeoStudio />,
+    seo: <SeoStudio onDirtyChange={setEditorDirty} />,
     editorial: <EditorialStudio />,
     preview: (
       <div className="embedded-preview">
