@@ -1,5 +1,15 @@
 # PortfolioTulius — estado operacional vigente
 
+## Tentativa P3 mobile sem ganho sustentado — 31/10/2026
+
+**Resultado técnico verificado:** o experimento de composição antecipada apenas da seção Perfil foi medido em [P3 #41168050252](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168050252) (mediana LCP mobile **7,371 s**, P6 FAIL) e, após formatação sem alteração funcional, em [P3 #41168377912](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41168377912) (mediana **7,640 s**, Performance 72, P6 FAIL). O baseline anterior era **7,664 s**: a diferença é pequena e incompatível com afirmação de ganho causal ou meta cumprida. As duas execuções verificaram SHA publicado, 13 seções/25 painéis mobile/38 capturas sem falhas, browser 0 erros e P5 anônimo 3/3 sem mutações. LCP do retrato aprovado manteve-se como elemento esperado. **Decisão: reverter o experimento de composição progressiva**, que acrescentava uma renderização intermediária sem benefício comprovado; preservar lógica de dados e conteúdo publicados. A medição 7,640 s é evidência histórica do ensaio **revertido**, não resultado de produção da versão revertida.
+
+**Pendência P3-PERF-01 segue aberta:** o Lighthouse atribui potencial de economia de entrega de imagem ~1.008 KiB no conjunto, mas isso não garante redução equivalente do LCP. A foto efetivamente publicada `b171afda-2708-44eb-b3e5-ab2b7ff13236-tulius_site.png` (Storage público, tamanho registrado **684.305 bytes**) continua inalterada. Não foi possível obter com garantia o arquivo binário original através das interfaces disponíveis para gerar e verificar uma derivada fiel. Não substituir a foto por outro arquivo de nome parecido, não alterar `content_json`/Storage, não chamar serviço de transformação potencialmente cobrável. Para prosseguir: obter bytes originais verificáveis, produzir variante de largura/formatos adequados com comparativo visual, manter original preservado, testar entrega no frontend e medir P3 no SHA correspondente.
+
+**Bloqueios independentes mantidos:** P2 transacional segue suspenso por decisão anterior contra custos; não executar CRUD real de produção, staging cobrável nem alterar Auth/RLS. Revisões de licenças, objetos privados, Edge Function, branches antigas e inventário de Fontes dependem das autorizações/insumos listados no histórico. Sem exclusões automáticas.
+
+
+
 ## Fechamento de verificação manual e responsividade administrativa — 30/10/2026
 
 **Aceite manual:** o proprietário declarou a verificação manual concluída neste chat. Encerrado o acompanhamento de aceite humano anterior relativo a navegação integrada, itens recolhíveis, Experiências Profissionais, ajudas, ícones, diálogos e toasts. A declaração não equivale a uma nova execução autenticada de CRUD ou a teste em todos os aparelhos após o ajuste de CSS mobile.
