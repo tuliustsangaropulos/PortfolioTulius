@@ -1244,3 +1244,22 @@
 .admin-image-target-switch button { padding: .55rem .85rem; border: 1px solid #d7d2ce; background: white; min-height: 44px; }
 .admin-image-target-switch button.active { background: #171617; color: white; border-color: #171617; }
 .admin-image-target-switch button:focus-visible { outline: 3px solid #ff5414; outline-offset: 2px; }
+
+/* WebP picture is layout-transparent; preserve the approved image framing. */
+.approved-profile-picture { display: contents; }
+.profile-portrait > picture > img {
+  width: var(--hero-desktop-image-width, 52%);
+  height: var(--hero-desktop-image-height, 100%);
+  object-fit: cover;
+  object-position: var(--hero-desktop-image-x, 50%) var(--hero-desktop-image-y, 0%);
+  filter: grayscale(1);
+}
+@media (max-width: 1100px) {
+  .mobile-profile-hero > picture > img {
+    width: 100%;
+    height: var(--hero-mobile-image-height, 100%);
+    object-fit: cover;
+    object-position: var(--hero-mobile-image-x, 50%) var(--hero-mobile-image-y, 0%);
+    filter: grayscale(1);
+  }
+}
