@@ -187,10 +187,16 @@ function ExperienceContent({
 
   return (
     <div className="experience-projects" ref={containerRef}>
-      <div className="experience-view-switch" role="group" aria-label={`Conteúdo de ${section.title}`}>
+      <div
+        className="experience-view-switch"
+        role="group"
+        aria-label={`Conteúdo de ${section.title}`}
+      >
         <button
           type="button"
-          className={showingTrajectory ? "experience-view-projects" : "experience-view-projects is-active"}
+          className={
+            showingTrajectory ? "experience-view-projects" : "experience-view-projects is-active"
+          }
           aria-pressed={!showingTrajectory}
           aria-controls={`${section.slug}-experience-content`}
           onClick={() => chooseView("projects")}
@@ -199,7 +205,11 @@ function ExperienceContent({
         </button>
         <button
           type="button"
-          className={showingTrajectory ? "experience-view-trajectory is-active" : "experience-view-trajectory"}
+          className={
+            showingTrajectory
+              ? "experience-view-trajectory is-active"
+              : "experience-view-trajectory"
+          }
           aria-pressed={showingTrajectory}
           aria-controls={`${section.slug}-experience-content`}
           disabled={!trajectoryAvailable}
