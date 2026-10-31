@@ -1,5 +1,15 @@
 # PortfolioTulius — estado operacional vigente
 
+## Consolidação documental de 31/10/2026 — UX CMS para o próximo chat
+
+**Status desta solicitação: documentação registrada, interface ainda NÃO alterada.** O proprietário identificou três correções visuais: biblioteca de 50 ícones em **dropdown visual categorizado**, **Descrição alternativa do logo** e **Legenda da imagem** alinhadas ao rótulo/campo, e seleção de imagens em **modal** com possibilidade de enviar mídia no próprio diálogo (sem navegar para Mídia). Critérios completos, arquivos de código envolvidos, proteção de uploads privados, testes e limite P2 em [handoff de 31/10](CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md), itens CMS-UX-01 a 04. **Não declarar esses ajustes implementados.**
+
+**Fonte viva:** snapshot anterior à documentação [`e611429`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/e611429aa88cadb6e8f1bdda43529f423718fe1f), [Validate #41172157025](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172157025) success, Vercel READY nesse SHA. Nova conferência de read-only Supabase: **14** seções cadastradas / **13** publicadas visíveis; **8** menu publicado, **5** depoimentos publicados, **34** itens de mídia, **8** ocorrências editoriais abertas. [P5 autenticado #41172037326](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037326) aprovou login, 8 módulos, mobile 390×844, 50 ícones acessíveis, Salvar flutuante, cancelamento de rascunho, alt opcional, prévia e logout, sem mutações de conteúdo. [P3 #41171332333](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41171332333) preserva **13 seções / 25 painéis mobile / 38 capturas**; LCP desktop **1,643s PASS**, mobile **7,757s FAIL** vs objetivo ≤2,5s, portanto **P3-PERF-01 permanece aberto**. P2 transacional continua **suspenso** por restrição de custos/produção.
+
+**Fontes do projeto ChatGPT:** as cópias congeladas `GUIA_FONTES_VIGENTES_PORTFOLIOTULIUS_ATUALIZADO_2026-10-28.md` e `ESTADO_ATUAL_VIGENTE_PORTFOLIOTULIUS_2026-10-28.md` precisam ser **substituídas manualmente** por cópias recentes. Preservar integralmente `CONTEXTO_PRODUTO_DESIGN_PORTFOLIOTULIUS.md` e o backup **privado** `BACKUP_CONTINUIDADE_SECAO_01_VERSAO_80_LINHAS_2026-10-28.md` (80 linhas, SHA-256 `67db85f1cc497e6f51625f19472f76a753707cb0c7b34407af73d7f23b4ff288`, **nunca publicar no GitHub**). A documentação GitHub **não substitui anexos ChatGPT automaticamente**.
+
+
+
 ## Fechamento técnico autorizado — 31/10/2026 (sem staging e sem mutações)
 
 **HEAD funcional final:** [`e3c85c2`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/e3c85c275bc727c9c658b5cdaa5528f41dfb72fa); [CI Validate #41172037322](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037322) **success** (formatação, TS, unitários, build, smoke). Vercel Production **READY** no mesmo SHA. Não houve migration, manipulação de Storage nem testes transacionais de produção.

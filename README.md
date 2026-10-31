@@ -1,5 +1,9 @@
 # Portfólio editorial — Tulius Tsangaropulos
 
+> **Próxima rodada CMS (31/10/2026):** backlog manual documentado em [continuidade CMS/Fontes e pendências](docs/CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md): ícones em dropdown visual, alinhamento de descrição alternativa do logo e legendas, biblioteca de imagens em modal com upload. **Ainda não implementado.** A validação autenticada read-only anterior passou; P3 LCP mobile e P2 transacional continuam abertos. Consultar [estado vigente](docs/ESTADO_ATUAL_VIGENTE.md) antes de programar.
+
+
+
 Site público e CMS editorial em **React 19, TypeScript, Vite, Tailwind CSS v4 e Supabase**, publicado em [tulius.work](https://tulius.work/) pela Vercel a partir de `main`.
 
 > **Etapa 5 — aceite automatizado aprovado:** [reexecução #40757162085 (tentativa 2)](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40757162085), 13 seções, 25 painéis mobile, 38 capturas, 8 viewports e zero falhas. [Relatório de aceite](docs/P3_ACEITE_AUTOMATIZADO_FINAL_2026-10-28.md). **Aceite manual concluído pelo proprietário em 30/10/2026; LCP mobile ainda aberto.**

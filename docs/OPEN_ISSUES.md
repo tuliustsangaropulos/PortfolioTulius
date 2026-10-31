@@ -1,5 +1,19 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Novo backlog da verificação manual — 31/10/2026
+
+**Pendente de IMPLEMENTAÇÃO em todas as áreas aplicáveis do admin (não concluído neste commit documental):**
+1. **CMS-UX-01:** biblioteca de **50 ícones em dropdown/popover visual**, cinco categorias e células apenas gráficas; seleção única de indicador e até três ícones de plataformas; sem listas sempre expandidas.
+2. **CMS-UX-02:** corrigir espaçamento/alinhamento vertical de **Descrição alternativa do logo** (campo próximo ao título) e **Legenda da imagem** nos slides; preserve textos/alt/URL/enquadramento e acessibilidade mobile.
+3. **CMS-UX-03:** abrir **Biblioteca de imagens em modal** e permitir **Enviar mídia dentro do modal**, reutilizando fluxo privado → publicação deliberada já existente; não selecionar upload privado antes de estar publicado nem alterar Storage sem consentimento e autorização P2.
+4. **CMS-UX-04:** manter Salvar flutuante somente ativo quando há edição, avisos internos personalizados e `beforeunload` nativo obrigatório para fechar/recarregar; seleção cancelada não altera rascunho.
+
+Evidências: quatro capturas entregues no chat de 31/10; critérios, localização no código, casos de teste e ordem de execução no [documento de continuidade](CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md). As capturas **não foram publicadas no repositório**.
+
+**Pendências independentes preservadas:** P3-PERF-01 (LCP mobile último ~7,757s, meta ≤2,5s); P2 transacional suspenso sem custos; aceite visual manual das novas correções após futura execução; oito ocorrências editoriais abertas, direitos/proveniência, objetos privados e riscos de manutenção/segurança. Não fechar testes somente por CI READY. Contagens vigentes: 14 seções totais, 13 públicas, 8 menu, 5 depoimentos, 34 registros de mídia (read-only 31/10). Aceite P5 read-only mais recente [#41172037326](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037326), 4/4 sem gravação de conteúdo.
+
+
+
 ## Pendências definitivas após nova verificação — 31/10/2026
 
 **Concluído e validado:** `main` [`e3c85c2`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/e3c85c275bc727c9c658b5cdaa5528f41dfb72fa) com [CI #41172037322](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037322) **success**, Vercel **READY**, e [P5 Admin Read-Only #41172037326](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037326) **success**. A suíte autenticada validou oito módulos, 50 ícones visualmente selecionáveis, mobile 390px sem overflow, barra flutuante reativa, alt opcional, alerta personalizado de navegação, prévia de 14 seções e logout, com `contentMutations=0`.

@@ -1,5 +1,9 @@
 # PortfolioTulius — reconciliação das Fontes do projeto ChatGPT
 
+> **ATUALIZAÇÃO DOCUMENTAL EM 31/10/2026:** este relatório descreve a **conferência histórica de 28/10**. A lista das quatro Fontes foi reconfirmada em 31/10. O **guia e o estado anexados continuam congelados em 28/10** até substituição manual no ChatGPT. Recomendação e backlog atuais: [continuidade 31/10](CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md). Não publicar nem alterar o backup privado da seção 01 de 80 linhas. A contagem de **oito Fontes** em documentos anteriores foi superada por quatro arquivos existentes.
+
+
+
 **Conferência efetiva: 28/10/2026, após a última correção estrutural de zoom.** Inventário lido da superfície de arquivos do projeto ChatGPT nesta conversa, não inferido de arquivos antigos. Fonte de verdade operacional: GitHub `main`, CI/Vercel no mesmo SHA e Supabase atual quando necessário. Consultar [estado vigente](ESTADO_ATUAL_VIGENTE.md), [pendências](OPEN_ISSUES.md) e [resumo do chat](CONTINUIDADE_CHAT_MANUAL_ZOOM_E_FONTES_2026-10-28.md).
 
 ## Quatro documentos Markdown atualmente anexados ao projeto ChatGPT

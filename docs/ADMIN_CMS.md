@@ -1,5 +1,13 @@
 # CMS administrativo
 
+## Backlog UX manual — 31/10/2026 (não implementado nesta rodada)
+
+As capturas mostram: **(a)** os 50 ícones ocupam o formulário de modo permanente; substituir por **dropdown visual com popover** e as cinco categorias atuais; seleção única de métrica e até 3 plataformas; acessibilidade e estado de rascunho. **(b)** `Descrição alternativa do logo` e `Legenda da imagem` estão deslocadas verticalmente; alinhar label/input ao topo sem alterar valores existentes, inclusive descrições opcionais. **(c)** `PublishedMediaPicker` abre a biblioteca inline `role="region"`; alterar para **dialog/modal** com busca, escolha e envio de imagem no mesmo diálogo. Compartilhar lógica segura de `EnhancedMediaLibrary` para upload privado, revisão e promoção deliberada. Preserve mídia atual, X/Y/zoom e Salvar flutuante; não usar confirmações JS nativas para navegação interna.
+
+**Handoff e critérios de aceite:** [`CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md`](CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md), CMS-UX-01/02/03/04. Testes reais de escrita de arquivos/banco continuam bloqueados por P2; testes de interface e mocks/read-only são permitidos. Este bloco é um **registro de pendência**, não uma descrição da UI já implementada.
+
+
+
 > **Estado operacional em 28/10/2026:** confira [índice vigente](ESTADO_ATUAL_VIGENTE.md) e [pendências P2](OPEN_ISSUES.md). O [P5 de leitura autenticada #40745631770](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40745631770) **passou 4/4** (login, 8 módulos, prévia, logout, zero requisições de escrita CMS/Storage detectadas). **Não testou salvar, publicar, alterar, promover upload ou restaurar via UI.** Os fluxos descritos abaixo são funcionalidades do código, não provas de homologação transacional. A recuperação limitada de campos de seções e blocos foi implementada na interface em 29/10, mas **não está homologada com gravações reais**. Mídia e Storage continuam excluídos da restauração. A seção antiga de 26/10 deve ser lida como histórico das alterações; não criar usuário administrativo adicional sem pedido explícito.
 
 ## Restauração assistida de revisões — 29/10/2026
