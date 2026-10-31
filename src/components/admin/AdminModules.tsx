@@ -33,7 +33,7 @@ import type {
   ExperienceMedia,
 } from "../../types/content"
 import { Icon } from "../ui/Icons"
-import { toolIconOptions } from "../public/ToolIcons"
+import { VisualIconLibrary, PlatformIconLibrary } from "./VisualIconLibrary"
 
 interface SectionOption {
   id: string
@@ -1345,34 +1345,8 @@ export function ContentStudio({
                           "resultados" &&
                           draft.mobile_panel === "a" && (
                             <div className="field-wide">
-                              <label>
-                                Ícone do indicador (substitui o número)
-                                <select
-                                  value={item.metricIcon ?? "chart"}
-                                  onChange={(event) =>
-                                    updateItem(index, {
-                                      metricIcon: event.target.value as MetricIconName,
-                                    })
-                                  }
-                                >
-                                  {[
-                                    ["chart", "Gráfico de barras"],
-                                    ["trending", "Crescimento"],
-                                    ["users", "Públicos / pessoas"],
-                                    ["newspaper", "Imprensa"],
-                                    ["target", "Meta / objetivo"],
-                                    ["megaphone", "Comunicação"],
-                                    ["briefcase", "Projetos"],
-                                    ["calendar", "Eventos"],
-                                    ["award", "Destaque"],
-                                    ["layers", "Estratégia"],
-                                  ].map(([value, label]) => (
-                                    <option key={value} value={value}>
-                                      {label}
-                                    </option>
-                                  ))}
-                                </select>
-                              </label>
+                              <VisualIconLibrary value={item.metricIcon ?? "chart"}
+                                onChange={(metricIcon) => updateItem(index, { metricIcon })} />
                               <fieldset>
                                 <legend>Exibir este indicador nos temas</legend>
                                 {(
@@ -1574,33 +1548,10 @@ export function ContentStudio({
                           )}
                         {sections.find((entry) => entry.id === draft.section_id)?.slug ===
                           "ferramentas" && (
-                          <fieldset className="field-wide">
-                            <legend>Ícones de plataformas (até três)</legend>
-                            {toolIconOptions.map(({ value, label }) => (
-                              <label className="toggle-field" key={value}>
-                                <input
-                                  type="checkbox"
-                                  checked={(item.toolIcons ?? []).includes(value)}
-                                  disabled={
-                                    !(item.toolIcons ?? []).includes(value) &&
-                                    (item.toolIcons?.length ?? 0) >= 3
-                                  }
-                                  onChange={(checked) => {
-                                    const next = item.toolIcons ?? []
-                                    updateItem(index, {
-                                      toolIcons: checked.target.checked
-                                        ? [...next, value]
-                                        : next.filter((icon) => icon !== value),
-                                    })
-                                  }}
-                                />
-                                {label}
-                              </label>
-                            ))}
-                            <small>
-                              Ícones vetoriais locais, associados às plataformas indicadas no texto.
-                            </small>
-                          </fieldset>
+                          <div className="field-wide">
+                            <PlatformIconLibrary selected={item.toolIcons ?? []}
+                              onChange={(toolIcons) => updateItem(index, { toolIcons })} />
+                          </div>
                         )}
                         <PublishedMediaPicker
                           label="Imagem do item"

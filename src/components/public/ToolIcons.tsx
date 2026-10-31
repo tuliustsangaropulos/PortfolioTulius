@@ -18,7 +18,7 @@ export const toolIconOptions: { value: ToolIconName; label: string }[] = [
   { value: "megaphone", label: "Comunicação e campanhas" },
 ]
 
-function Symbol({ name }: { name: ToolIconName }) {
+export function ToolSymbol({ name }: { name: ToolIconName }) {
   switch (name) {
     case "analytics":
       return (
@@ -218,7 +218,7 @@ export function ToolIcons({ icons }: { icons: readonly ToolIconName[] }) {
           aria-label={toolIconOptions.find((item) => item.value === icon)?.label ?? icon}
         >
           <svg viewBox="0 0 24 24" width="66%" height="66%" fill="currentColor" aria-hidden="true">
-            <Symbol name={icon} />
+            <ToolSymbol name={icon} />
           </svg>
         </span>
       ))}

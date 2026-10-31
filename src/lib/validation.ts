@@ -1,4 +1,5 @@
 import type { ContentItem, PortfolioSection } from "../types/content"
+import { allowedVisualIcons } from "./icon-catalog"
 
 export const allowedLayouts: PortfolioSection["layout"][] = [
   "hero",
@@ -64,18 +65,7 @@ export function isSafeEditorialImage(value: string) {
 
 export function validateContentItems(items: ContentItem[]) {
   const errors: string[] = []
-  const metricIcons = [
-    "chart",
-    "trending",
-    "users",
-    "newspaper",
-    "target",
-    "megaphone",
-    "briefcase",
-    "calendar",
-    "award",
-    "layers",
-  ]
+  const metricIcons: readonly string[] = allowedVisualIcons
   const allowedToolIcons = [
     "analytics",
     "search",
