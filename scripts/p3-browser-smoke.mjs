@@ -646,7 +646,8 @@ try {
         details.toolsCounts.join(",") === "3,3" &&
         details.testimonialCount === 3 &&
         details.firstTestimonialHeight > 0 && details.firstTestimonialHeight < 290 &&
-        !!portrait && !!contact && Math.abs(portrait.bottom - contact.bottom) < 4 &&
+        !!portrait && portrait.height >= Math.min(280, details.viewportWidth * .65) &&
+        !!contact && Math.abs(portrait.bottom - contact.bottom) < 4 &&
         headingFonts.every((n) => n !== null && Math.abs(n - headingFonts[0]) < 1)
       if (!valid) {
         failures++

@@ -1564,9 +1564,9 @@
   #contato-a .contact-mobile-photo img {
     display: block;
     width: min(100%, 29rem);
-    height: auto;
-    min-height: 0;
-    max-height: min(68svh, 38rem);
+    height: min(68svh, 36rem);
+    min-height: min(18rem, 44svh);
+    max-height: min(68svh, 36rem);
     object-fit: contain;
     object-position: bottom center;
   }
