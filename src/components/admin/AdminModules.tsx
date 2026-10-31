@@ -1000,7 +1000,7 @@ export function ContentStudio({
                     Use arquivos próprios/autorizados. Sem imagens aprovadas, o site mostra um
                     espaço reservado identificado, não uma fotografia fictícia.
                   </p>
-                  <div className="field-grid">
+                  <div className="field-grid experience-logo-fields">
                     <PublishedMediaPicker
                       label="Logotipo da empresa"
                       guidance="Logo quadrado 1:1; referência 400 × 400 px ou SVG."
@@ -1033,8 +1033,8 @@ export function ContentStudio({
                         })
                       }
                     />
-                    <label>
-                      Descrição alternativa do logo
+                    <label className="experience-logo-alt">
+                      Descrição alternativa do logo (opcional)
                       <input
                         value={draft.content_json.experienceMedia?.logoAlt ?? ""}
                         onChange={(event) =>
@@ -1137,7 +1137,7 @@ export function ContentStudio({
                           </button>
                         </div>
                       </div>
-                      <div className="field-grid">
+                      <div className="field-grid experience-slide-fields">
                         {(
                           [
                             ["title", "Título do projeto"],
@@ -1145,7 +1145,7 @@ export function ContentStudio({
                             ["caption", "Legenda da imagem"],
                           ] as const
                         ).map(([key, label]) => (
-                          <label key={key}>
+                          <label className="experience-slide-field" key={key}>
                             {label}
                             <input
                               value={slide[key] ?? ""}

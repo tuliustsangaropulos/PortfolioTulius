@@ -1263,3 +1263,20 @@
     filter: grayscale(1);
   }
 }
+
+/* CMS UX: keep logo and slide labels at the top of image rows. */
+.experience-logo-fields, .experience-slide-fields { align-items: start; align-content: start; grid-auto-rows: min-content; }
+.experience-logo-fields > .experience-logo-alt, .experience-slide-fields > .experience-slide-field { align-self: start; align-content: start; grid-template-rows: max-content max-content; margin: .8rem 0; }
+.experience-logo-fields > .published-media-picker, .experience-slide-fields > .published-media-picker { align-self: start; }
+
+/* Icon choices open over the editor rather than permanently expanding its layout. */
+.visual-icon-library { position: relative; padding: 0; margin: .75rem 0; background: transparent; border: 0; min-width: 0; }
+.visual-icon-trigger { width: 100%; display: flex; align-items: center; gap: .65rem; min-height: 44px; padding: .55rem .75rem; border: 1px solid #bdb4ae; background: #faf8f6; color: #171617; text-align: left; cursor: pointer; }
+.visual-icon-trigger > span { flex: 1; font-size: .78rem; font-weight: 700; }
+.visual-icon-trigger[aria-expanded="true"] { border-color: #bc390c; }
+.visual-icon-trigger:focus-visible { outline: 3px solid #ff5414; outline-offset: 2px; }
+.visual-icon-current { display: flex; gap: .25rem; align-items: center; }
+.visual-icon-popover { position: absolute; z-index: 55; top: calc(100% + .3rem); left: 0; width: min(31rem, calc(100vw - 4rem)); max-width: 100%; max-height: min(65dvh, 28rem); overflow-y: auto; overscroll-behavior: contain; padding: .85rem; background: #faf8f6; border: 1px solid #bdb4ae; box-shadow: 0 12px 35px #17161730; }
+.visual-icon-popover > div + div { margin-top: 1rem; }
+.visual-icon-popover h4 { margin: 0 0 .55rem; color: #8f310f; font-size: .78rem; letter-spacing: .05em; }
+@media (max-width: 767px) { .visual-icon-popover { width: 100%; max-height: min(65dvh, 24rem); } }
