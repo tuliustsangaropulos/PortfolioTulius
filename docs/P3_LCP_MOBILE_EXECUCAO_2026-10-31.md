@@ -2,6 +2,18 @@
 
 **Data:** 31/10/2026. **Repositório:** `tuliustsangaropulos/PortfolioTulius`. **Situação:** desempenho mobile ainda acima da meta; alterações funcionais validadas e experimento sem ganho revertido.
 
+## Experimento: adiar miniatura pesada da seção Sobre (31/10/2026)
+
+Implementado em [`521bd55`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/521bd551e96b7957596f6cc609e3c60bf817bbdc), com formatação CI em [`11d0dac`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/11d0dac737e403545f4f0d51320fe9bb5790dbeb). A miniatura CMS `a46a4091-...-tulius_tablet.png` (900×1200, ~399 KB) agora só recebe `src` quando fica a até 600 px da viewport; reserva sua proporção 900×1200, mantém `alt`, estilos, original no Supabase e fallback sem IntersectionObserver. Somente a URL publicada e aprovada recebe o tratamento; outros itens e futuras trocas no CMS continuam com a lógica anterior.
+
+**Duas auditorias P3 completas, antes e após a correção de formatação:**
+- [#41203650367](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41203650367): PASS, mobile LCP mediano **4,379 s**, Performance **76**, desktop LCP **1,068 s**.
+- [#41203713347](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41203713347): PASS, mobile LCP mediano **4,208 s**, Performance **84**, desktop LCP **1,018 s**. O diagnóstico `P3_LCP_CRITICAL_PATH` confirmou `largestOtherImages: []` no mobile: a imagem secundária de ~399 KB deixou de competir pela rede na primeira dobra; não afetou o retrato LCP WebP já existente. `P3_ABOUT_IMAGE_FIRST_FOLD` confirmou `deferred: true`. A auditoria dos 13 blocos desktop, 25 painéis mobile e 38 capturas passou com **0 falhas**, incluindo verificação de carregamento efetivo das imagens quando o painel é visitado. RLS anônimo, rota administrativa não autenticada e interação do menu passaram. [CI #41203713367](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41203713367) PASS, incluindo testes e build.
+
+**Interpretação:** há economia **verificada** de ~399 KB de transferência inicial no mobile, sem modificação visual ou editorial. O LCP não mostrou melhora consistente frente à referência de **4,093 s** e variou nas duas rodadas, algumas realizadas concorrentemente; portanto **não atribuir ganho de LCP** à mudança. Esta é otimização de payload, **não** conclusão da meta Web Vitals. A pendência `P3-PERF-01` permanece aberta com diferença aproximada de **1,6–1,9 s** para 2,5 s, conforme rodada.
+
+Próxima investigação: correlacionar o LCP **simulado** no Lighthouse com marcas reais `p3:profile-dom-committed` e `p3:profile-image-loaded`; a decomposição `lcp-breakdown-insight` de apenas centenas de milissegundos **não soma** à métrica simulada de ~4 segundos. Isolar estilos e fontes externos somente com testes de paridade e comparação repetida; assinaturas de cache/preflight dependem do Supabase e não justificam alterar RLS, APIs ou infraestrutura.
+
 ## Etapa adicional — cliente PostgREST público isolado (31/10/2026)
 
 **Implementado** nos commits `bda10f8` a `47f949d`; o código entregue preserva leitura do CMS pelo PostgREST oficial sem importar os módulos completos de Auth/Realtime/Storage na primeira dobra. O cliente Supabase completo permanece carregado dinamicamente nas rotas administrativas e prévia protegida. O helper `src/lib/public-read.ts` usa a chave publicável existente e as mesmas políticas RLS; **não houve mudança de banco, schema, políticas, contas, arquivos ou configuração Vercel**.

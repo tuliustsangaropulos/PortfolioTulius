@@ -1,5 +1,9 @@
 # PortfolioTulius — estado operacional vigente
 
+## P3 — Miniatura da seção Sobre sem transferência antecipada (31/10/2026)
+
+[`11d0dac`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/11d0dac737e403545f4f0d51320fe9bb5790dbeb): imagem PNG CMS secundária de aproximadamente **399 KB** adiada até se aproximar da viewport, preservando o arquivo original e os painéis. [P3 #41203713347](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41203713347) **PASS**: transferência inicial mobile sem o PNG, 13 seções / 25 painéis / 38 capturas, 0 erros, LCP mobile mediano **4,208 s** e desktop **1,018 s**. [CI #41203713367](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41203713367) PASS. O ganho é de **bytes transferidos**, não houve comprovação de redução causal do LCP frente à referência de 4,093 s. **P3-PERF-01 continua ABERTA (objetivo ≤2,5 s)**. [Detalhes](P3_LCP_MOBILE_EXECUCAO_2026-10-31.md).
+
 ## P3 — Isolamento do SDK público concluído (31/10/2026)
 
 A home agora usa `@supabase/postgrest-js` isoladamente; SDK completo permanece disponível sob demanda para `/admin` e prévia protegida. [Auditoria P3 #41183307575](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41183307575) **PASS** no código de runtime: LCP mobile mediano **4,093 s**, Performance **85/100**; 13 seções, 25 painéis, 38 capturas, RLS público e navegação sem falhas. O [CI #41202307819](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41202307819) **PASS** no commit `47f949d` (29 arquivos de testes, TS, build e smoke); Vercel Production READY. O LCP ainda está **1,593 s acima da meta de 2,5 s**, portanto **P3-PERF-01 permanece ABERTA**; a parte autenticada transacional do CMS não foi exercitada. Nenhuma alteração de banco, conteúdo, Storage ou autenticação. [Relatório e evidências](P3_LCP_MOBILE_EXECUCAO_2026-10-31.md).
