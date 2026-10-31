@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import type { ExperienceSlide, PortfolioSection } from "../../types/content"
 import { imageFramingStyle } from "../../lib/media-framing"
+import { supabase } from "../../lib/supabase"
 
 export const EXPERIENCE_SLUGS = [
   "invest-rs",
@@ -119,14 +120,45 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
   )
 }
 
+const CAREER_COMPANY_SLUGS: Record<string, string> = {
+  "Invest RS": "invest-rs",
+  "Prefeitura de São Paulo": "prefeitura-sp",
+  Vale: "vale",
+  "TV Globo/SporTV": "globo-sportv",
+  "Grupo InPress": "inpress",
+  "CDI Comunicação": "cdi",
+}
+
+function ExperienceDetails({ description }: { description?: string }) {
+  if (!description?.trim()) return null
+  return (
+    <details className="experience-full-detail">
+      <summary>Ver trajetória completa</summary>
+      <div className="experience-full-body">
+        {description
+          .split(/\n+/)
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .map((line, index) => (
+            <p key={index} className={line.startsWith("• ") ? "experience-full-point" : undefined}>
+              {line}
+            </p>
+          ))}
+      </div>
+    </details>
+  )
+}
+
 function ExperienceCard({
   section,
   order,
   isMobile,
+  detail,
 }: {
   section: PortfolioSection
   order: number
   isMobile: boolean
+  detail?: string
 }) {
   const items = [
     ...(section.desktopPanelA ?? section.panelA),
@@ -158,6 +190,7 @@ function ExperienceCard({
                 {item.tags && <p>{item.tags.join(" · ")}</p>}
               </article>
             ))}
+            <ExperienceDetails description={detail} />
           </div>
           <PhotoGallery section={section} />
         </div>
@@ -186,6 +219,7 @@ function ExperienceCard({
                   {item.tags && <p>{item.tags.join(" · ")}</p>}
                 </article>
               ))}
+              <ExperienceDetails description={detail} />
             </div>
           </div>
           <div
@@ -209,6 +243,29 @@ export function ExperienceStack({
   isMobile: boolean
 }) {
   const [active, setActive] = useState(sections[0]?.slug ?? "")
+  const [careerDetails, setCareerDetails] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    if (!supabase) return
+    let cancelled = false
+    void supabase
+      .from("career_experiences")
+      .select("company,description")
+      .eq("status", "published")
+      .then(({ data, error }) => {
+        if (cancelled || error) return
+        const published: Record<string, string> = {}
+        for (const row of data ?? []) {
+          const slug = CAREER_COMPANY_SLUGS[row.company]
+          if (slug && row.description) published[slug] = row.description
+        }
+        setCareerDetails(published)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
 
   useEffect(() => {
     const onScroll = () => {
@@ -243,7 +300,13 @@ export function ExperienceStack({
         ))}
       </nav>
       {sections.map((section, index) => (
-        <ExperienceCard key={section.id} section={section} order={index} isMobile={isMobile} />
+        <ExperienceCard
+          key={section.id}
+          section={section}
+          order={index}
+          isMobile={isMobile}
+          detail={careerDetails[section.slug]}
+        />
       ))}
     </div>
   )
