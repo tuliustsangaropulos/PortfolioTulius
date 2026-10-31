@@ -1,5 +1,9 @@
 # PortfolioTulius — estado operacional vigente
 
+## P3 — Isolamento do SDK público concluído (31/10/2026)
+
+A home agora usa `@supabase/postgrest-js` isoladamente; SDK completo permanece disponível sob demanda para `/admin` e prévia protegida. [Auditoria P3 #41183307575](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41183307575) **PASS** no código de runtime: LCP mobile mediano **4,093 s**, Performance **85/100**; 13 seções, 25 painéis, 38 capturas, RLS público e navegação sem falhas. O [CI #41202307819](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41202307819) **PASS** no commit `47f949d` (29 arquivos de testes, TS, build e smoke); Vercel Production READY. O LCP ainda está **1,593 s acima da meta de 2,5 s**, portanto **P3-PERF-01 permanece ABERTA**; a parte autenticada transacional do CMS não foi exercitada. Nenhuma alteração de banco, conteúdo, Storage ou autenticação. [Relatório e evidências](P3_LCP_MOBILE_EXECUCAO_2026-10-31.md).
+
 ## Continuidade P3 — LCP mobile (31/10/2026)
 
 A otimização do preload WebP e a correção do import estático administrativo reduziram a mediana sintética de LCP mobile de **7,704 s** para a faixa de **4,2–4,4 s**. O experimento de renderização progressiva não trouxe ganho e foi revertido. O CI e a auditoria P3 do código revertido `87c9348` foram aprovados (13 seções/25 painéis/38 capturas). **P3-PERF-01 permanece ABERTA**: objetivo ≤2,5 s não alcançado; sem alteração de Supabase, conteúdo ou CMS. [Relatório integral](P3_LCP_MOBILE_EXECUCAO_2026-10-31.md).

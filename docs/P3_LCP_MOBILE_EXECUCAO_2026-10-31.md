@@ -2,6 +2,16 @@
 
 **Data:** 31/10/2026. **Repositório:** `tuliustsangaropulos/PortfolioTulius`. **Situação:** desempenho mobile ainda acima da meta; alterações funcionais validadas e experimento sem ganho revertido.
 
+## Etapa adicional — cliente PostgREST público isolado (31/10/2026)
+
+**Implementado** nos commits `bda10f8` a `47f949d`; o código entregue preserva leitura do CMS pelo PostgREST oficial sem importar os módulos completos de Auth/Realtime/Storage na primeira dobra. O cliente Supabase completo permanece carregado dinamicamente nas rotas administrativas e prévia protegida. O helper `src/lib/public-read.ts` usa a chave publicável existente e as mesmas políticas RLS; **não houve mudança de banco, schema, políticas, contas, arquivos ou configuração Vercel**.
+
+**Verificação de produção:** [P3 #41183307575](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41183307575), sucesso no commit `d087424`. Na amostragem mobile Lighthouse 13.5.0 (três rodadas), LCP mediano **4,093 s**, FCP mediano **1,986 s**, Performance **85/100**, TBT **25 ms**, CLS **0,000629**. O LCP desktop mediano foi **1,046 s**, Performance **98/100**. O HTML público pré-carrega `public-postgrest` (~5,4 KB transferidos), sem requisitar `supabase-sdk` (~56 KB anteriormente). O teste confirmou `adminRouterRequested=false`, `fullSupabaseSdkRequested=false`, `publicPostgrestRequested=true`, 13 seções, 25 painéis e 38 capturas, nenhuma falha; P5 público/RLS `PASS`, sem operações de escrita. As duas rotas `/admin` e `/admin/preview` anônimas redirecionam à autenticação. **A prévia autenticada transacional não foi testada** (P2 suspenso).
+
+**CI atual:** [Validate #41202307819](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41202307819), sucesso no commit `47f949d`: formatação, TypeScript, 29 arquivos de testes, build e smoke offline. O smoke diferencia build local sem variáveis Supabase (fallback) do build de produção com CMS. Não há mudança adicional de runtime entre `d087424` e `47f949d`.
+
+**Leitura cautelosa:** ganho aparente de ~298 ms frente à última mediana de 4,391 s, mas uma rodada Lighthouse não comprova causalidade; remoção do SDK inicial e redução de JS requisitado são fatos confirmados. Persistem nove preflights REST, CSS e fontes bloqueantes e uma imagem secundária de ~399 KB (não o LCP, prioridade baixa). Essas hipóteses ainda não justificam retirar autenticação, editar fotografias/cores/fontes ou mudar a arquitetura de atualização instantânea do CMS. **P3-PERF-01 segue ABERTA: falta ~1,593 s para alcançar 2,5 s.** O gate de regressão P3 existente não equivale à aprovação da meta Web Vitals p75 de campo.
+
 ## Evolução controlada
 
 | Código / rodada | LCP mobile mediano | LCP desktop mediano | Resultado |
