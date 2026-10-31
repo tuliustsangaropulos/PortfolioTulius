@@ -28,9 +28,14 @@ try {
   page.on("request", (request) => {
     const method = request.method()
     const address = request.url()
-    if (["POST", "PUT", "PATCH", "DELETE"].includes(method) &&
-        (address.includes("/rest/v1/") || address.includes("/storage/v1/object/"))) {
-      mutations.push({ method, resource: new URL(address).pathname })
+    // POST /object/sign creates an expiring preview URL; it does not mutate
+    // Storage objects. Still reject all other write-like CMS/Storage requests.
+    const pathname = new URL(address).pathname
+    const readOnlySignedPreview = method === "POST" &&
+      pathname.startsWith("/storage/v1/object/sign/")
+    if (!readOnlySignedPreview && ["POST", "PUT", "PATCH", "DELETE"].includes(method) &&
+        (pathname.includes("/rest/v1/") || pathname.includes("/storage/v1/object/"))) {
+      mutations.push({ method, resource: pathname })
     }
   })
   await page.goto(new URL("/admin/login", base).href, { waitUntil: "domcontentloaded", timeout: 30000 })
@@ -112,7 +117,7 @@ try {
     result: "PASS", viewport: "390x844", floatingSave: true,
     altOptional: true, customLeaveDialog: true, contentMutations: mutations.length,
   }))
-  if (mutations.length) throw new Error("Escrita não autorizada detectada na verificação mobile.")
+  if (mutations.length) throw new Error("Escrita não autorizada detectada na verificação mobile: " + JSON.stringify(mutations))
 
   await page.goto(new URL("/admin/preview", base).href, { waitUntil: "networkidle2", timeout: 30000 })
   await page.waitForSelector(".preview-banner", { timeout: 15000 })
