@@ -36,6 +36,10 @@ type SectionResult = {
   content_blocks?: ContentBlockRow[]
 }
 
+type PublishedProfileResult = SectionResult & {
+  section_panels: (SectionPanelRow & { block_placements: BlockPlacementRow[] })[]
+}
+
 function toSection(
   row: SectionResult,
   panels: SectionPanelRow[],
@@ -110,11 +114,6 @@ export function usePortfolio(includeDrafts = false) {
       // Start that independent request alongside the section graph, rather than
       // imposing another network round trip before the first fold can render.
       const testimonialsQuery = supabase.from("testimonials").select("*").order("sort_order")
-      const testimonialsRequest = Promise.resolve(
-        includeDrafts
-          ? testimonialsQuery.neq("status", "archived")
-          : testimonialsQuery.eq("status", "published"),
-      )
       let query = supabase
         .from("sections")
         .select(
@@ -123,7 +122,81 @@ export function usePortfolio(includeDrafts = false) {
         .order("sort_order")
       if (!includeDrafts) query = query.eq("status", "published").eq("is_visible", true)
 
-      const primaryContent = Promise.all([
+      // Load the published first fold from live PostgREST before fetching the
+      // other sections. Foreign-key embeds retain the current RLS and CMS.
+      // Preview continues to use the complete authenticated data graph.
+      const profileReady = includeDrafts
+        ? Promise.resolve()
+        : Promise.resolve(
+            supabase
+              .from("sections")
+              .select(
+                "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json),section_panels(id,section_id,panel_key,block_placements(block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config))",
+              )
+              .eq("slug", "perfil")
+              .eq("status", "published")
+              .eq("is_visible", true)
+              .maybeSingle(),
+          )
+            .then(async ({ data, error: profileError }) => {
+              if (cancelled || profileError || !data) return
+              const profileRow = data as unknown as PublishedProfileResult
+              const activeSources = new Set<CollectionSource>()
+              for (const block of profileRow.content_blocks ?? []) {
+                if (isCollectionSource(block.content_json?.source_collection)) {
+                  activeSources.add(block.content_json.source_collection)
+                }
+              }
+              // Future collection bindings must also resolve from published
+              // CMS records; never render invented or emptied first-fold cards.
+              const collectionItems = new Map<
+                CollectionSource,
+                import("../types/content").ContentItem[]
+              >()
+              if (activeSources.size) {
+                const entries = await Promise.all(
+                  Array.from(activeSources).map(async (collection) => {
+                    const result = await supabaseClient
+                      .from(collection)
+                      .select("*")
+                      .eq("status", "published")
+                      .order("sort_order")
+                    if (result.error) throw result.error
+                    return [
+                      collection,
+                      collectionToItems(collection, result.data ?? [], false),
+                    ] as const
+                  }),
+                )
+                if (cancelled) return
+                for (const [collection, items] of entries) collectionItems.set(collection, items)
+              }
+              const panels = profileRow.section_panels ?? []
+              const placements = panels.flatMap((panel) => panel.block_placements ?? [])
+              const profile = toSection(profileRow, panels, placements, false, collectionItems)
+              // Empty/unpublished panels do not qualify as a first-fold success.
+              // The full graph remains the authoritative failure/recovery path.
+              if (!profile.panelA.length || !profile.desktopPanelA?.length || cancelled) return
+              performance.mark("p3:profile-cms-ready")
+              setData([profile])
+              setLoading(false)
+            })
+            .catch(() => {
+              // On any fast-path failure, the complete CMS read still runs.
+            })
+
+      // Noncritical testimonials and the section graph start after the real
+      // Profile read, without waiting for unrelated data before first paint.
+      const testimonialsRequest = profileReady.then(() =>
+        Promise.resolve(
+          includeDrafts
+            ? testimonialsQuery.neq("status", "archived")
+            : testimonialsQuery.eq("status", "published"),
+        ),
+      )
+      const primaryContent = profileReady
+        .then(() =>
+          Promise.all([
         query,
         supabase.from("section_panels").select("id,section_id,panel_key"),
         supabase
@@ -138,7 +211,8 @@ export function usePortfolio(includeDrafts = false) {
           .eq("status", "published")
           .eq("is_visible", true)
           .order("sort_order"),
-      ])
+          ]),
+        )
         .then(
           async ([
             sectionsResult,
