@@ -1010,9 +1010,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
         <div className="preview-banner">Pré-visualização protegida · conteúdo em rascunho</div>
       )}
       <Navigation sections={visible} navigation={navigation} current={current} />
-      {loading && visible.length === 0 && (
-        <div className="data-status">Sincronizando conteúdo…</div>
-      )}
+      {loading && <div className="data-status">Sincronizando conteúdo…</div>}
       {error && (
         <div className="data-error" role="status">
           {error}

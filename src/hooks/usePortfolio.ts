@@ -20,14 +20,6 @@ import {
 } from "../lib/placements"
 import type { DesignTokens, PortfolioSection } from "../types/content"
 
-const SECTION_SELECT =
-  "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json)"
-
-/** Only the published landing profile may appear before the complete CMS graph. */
-export function isEarlyProfileRoute(includeDrafts: boolean, hash: string): boolean {
-  return !includeDrafts && (!hash || /^#perfil(?:-[ab])?$/.test(hash))
-}
-
 type SectionResult = {
   id: string
   slug: string
@@ -111,65 +103,22 @@ export function usePortfolio(includeDrafts = false) {
         ? testimonialsQuery.neq("status", "archived")
         : testimonialsQuery.eq("status", "published"),
     )
-    let query = supabase.from("sections").select(SECTION_SELECT).order("sort_order")
+    let query = supabase
+      .from("sections")
+      .select(
+        "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json)",
+      )
+      .order("sort_order")
     if (!includeDrafts) query = query.eq("status", "published").eq("is_visible", true)
 
-    // The profile needs only its own two blocks, not the other 12 sections
-    // or linked testimonials. Start a deliberately narrow, read-only request
-    // beside the full publication query; use the same placement promises once.
-    const panelsRequest = Promise.resolve(
+    void Promise.all([
+      query,
       supabase.from("section_panels").select("id,section_id,panel_key"),
-    )
-    const placementsRequest = Promise.resolve(
       supabase
         .from("block_placements")
         .select(
           "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
         ),
-    )
-    if (isEarlyProfileRoute(includeDrafts, window.location.hash)) {
-      void Promise.all([
-        supabase
-          .from("sections")
-          .select(SECTION_SELECT)
-          .eq("slug", "perfil")
-          .eq("status", "published")
-          .eq("is_visible", true)
-          .maybeSingle(),
-        panelsRequest,
-        placementsRequest,
-      ])
-        .then(([profile, panels, placements]) => {
-          if (cancelled || profile.error || panels.error || placements.error || !profile.data)
-            return
-          const row = profile.data as SectionResult
-          // Never compose a collection-sourced preview with missing records.
-          if (
-            (row.content_blocks ?? []).some((block) =>
-              isCollectionSource(block.content_json?.source_collection),
-            )
-          )
-            return
-          const section = toSection(
-            row,
-            (panels.data ?? []) as SectionPanelRow[],
-            (placements.data ?? []) as BlockPlacementRow[],
-            false,
-            new Map(),
-          )
-          if (!section.panelA.length || !section.desktopPanelA.length) return
-          performance.mark("p3:profile-narrow-ready")
-          setData([section])
-        })
-        .catch(() => {
-          // The complete request below remains authoritative if this fails.
-        })
-    }
-
-    void Promise.all([
-      query,
-      panelsRequest,
-      placementsRequest,
       supabase.from("design_tokens").select("token_key,token_value").eq("status", "published"),
       supabase
         .from("navigation_items")
