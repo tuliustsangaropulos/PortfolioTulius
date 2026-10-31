@@ -22,7 +22,7 @@ async function discoverPublicKey() {
   const page = await fetch(SITE_URL)
   requireValue(page.ok, "SITE_NOT_ACCESSIBLE")
   const html = await page.text()
-  const urls = [...html.matchAll(/<script\\b[^>]*\\bsrc=["']([^"']+\\.js[^"']*)["']/gi)]
+  const urls = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+\.js[^"']*)["']/gi)]
     .map((match) => new URL(match[1], SITE_URL))
   for (const url of urls) {
     requireValue(url.origin === new URL(SITE_URL).origin, "INVALID_SCRIPT_ORIGIN")
@@ -31,7 +31,7 @@ async function discoverPublicKey() {
     const code = await response.text()
     const publishable = code.match(/sb_publishable_[A-Za-z0-9_-]+/)
     if (publishable) return publishable[0]
-    for (const candidate of code.match(/eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+/g) ?? []) {
+    for (const candidate of code.match(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g) ?? []) {
       try {
         const data = JSON.parse(Buffer.from(candidate.split(".")[1], "base64url").toString("utf8"))
         if (data.role === "anon") return candidate
@@ -42,13 +42,13 @@ async function discoverPublicKey() {
 }
 function stripSvgText(source) {
   requireValue(source.includes("<svg"), "SOURCE_NOT_SVG")
-  requireValue(!/<script\\b|<foreignObject\\b|onload\\s*=|xlink:href=["']https?:/i.test(source), "UNSAFE_SVG_SOURCE")
-  const before = (source.match(/<text\\b/gi) ?? []).length
+  requireValue(!/<script\b|<foreignObject\b|onload\s*=|xlink:href=["']https?:/i.test(source), "UNSAFE_SVG_SOURCE")
+  const before = (source.match(/<text\b/gi) ?? []).length
   requireValue(before > 0, "NO_EDITABLE_SVG_TEXT: cannot verify embedded text removal")
   const result = source
-    .replace(/<text\\b[^>]*>[\\s\\S]*?<\\/text\\s*>/gi, "")
-    .replace(/<text\\b[^>]*\\/>/gi, "")
-  requireValue(!/<text\\b|<tspan\\b|<foreignObject\\b/i.test(result), "VISIBLE_TEXT_REMAINING")
+    .replace(/<text\b[^>]*>[\s\S]*?<\/text\s*>/gi, "")
+    .replace(/<text\b[^>]*\/>/gi, "")
+  requireValue(!/<text\b|<tspan\b|<foreignObject\b/i.test(result), "VISIBLE_TEXT_REMAINING")
   return { svg: result, removed: before }
 }
 async function main() {

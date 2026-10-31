@@ -1,4 +1,4 @@
-name: Correct CDI slide illustrations (remove text)
+name: Correct CDI slide illustrations (remove visible text)
 on:
   push:
     branches: [main]
