@@ -946,6 +946,11 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
   // Avoid mounting invisible desktop/mobile subtrees and duplicating their
   // DOM, photos, SVGs and galleries on the initial render.
   const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 767px)").matches)
+  // Allow the mobile portrait to paint before mounting all below-fold panels.
+  // Deep links and CMS preview always mount the complete page immediately.
+  const [deferSecondary, setDeferSecondary] = useState(
+    () => !preview && !window.location.hash && window.matchMedia("(max-width: 767px)").matches,
+  )
 
   // Timing markers only: neither alter the portrait nor gate the first paint.
   useEffect(() => {
@@ -971,6 +976,32 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
     media.addEventListener("change", syncViewport)
     return () => media.removeEventListener("change", syncViewport)
   }, [])
+
+  useEffect(() => {
+    if (!deferSecondary) return
+    if (!isMobile || error || (!loading && visible[0]?.slug !== "perfil")) {
+      setDeferSecondary(false)
+      return
+    }
+    if (loading || !visible.length) return
+    let secondFrame = 0
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        performance.mark("p3:profile-paint-opportunity")
+        setDeferSecondary(false)
+      })
+    })
+    return () => {
+      cancelAnimationFrame(firstFrame)
+      cancelAnimationFrame(secondFrame)
+    }
+  }, [deferSecondary, isMobile, loading, error, visible])
+
+  useEffect(() => {
+    if (!deferSecondary && !loading && !error && !preview && visible.length > 1) {
+      performance.mark("p3:secondary-dom-committed")
+    }
+  }, [deferSecondary, loading, error, preview, visible])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -1000,7 +1031,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       .querySelectorAll("[data-section], [data-panel]")
       .forEach((element) => observer.observe(element))
     return () => observer.disconnect()
-  }, [visible])
+  }, [visible, deferSecondary])
 
   useEffect(() => {
     const restoreHash = () => {
@@ -1022,7 +1053,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       removeEventListener("popstate", restoreHash)
       removeEventListener("hashchange", restoreHash)
     }
-  }, [loading, visible])
+  }, [loading, visible, deferSecondary])
 
   const style = {
     "--orange": tokens.orange,
@@ -1066,6 +1097,7 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
         )}
         <h1 className="sr-only">Tulius Tsangaropulos — Comunicação e Estratégia</h1>
         {visible.map((section, index) => {
+          if (deferSecondary && index > 0 && visible[0]?.slug === "perfil") return null
           if (EXPERIENCE_SLUGS.includes(section.slug as (typeof EXPERIENCE_SLUGS)[number])) {
             if (
               visible
