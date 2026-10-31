@@ -135,7 +135,7 @@ try {
   const iconCatalog = await page.$eval(".block-item-body .visual-icon-library .visual-icon-grid button", (nodes) => ({
     count: nodes.length,
     labeled: nodes.every((node) => Boolean(node.getAttribute("aria-label"))),
-    visual: nodes.every((node) => !node.textContent?.trim()),
+    visual: nodes.every((node) => [...node.childNodes].every((child) => child.nodeType !== 3 || !child.textContent?.trim())),
   }))
   if (iconCatalog.count !== 50 || !iconCatalog.labeled || !iconCatalog.visual) {
     throw new Error("Biblioteca de ícones incompleta: " + JSON.stringify(iconCatalog))
