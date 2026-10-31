@@ -681,6 +681,56 @@ function toDvh(value?: number) {
  * All copy remains in the existing CMS rows; the image has its own optional
  * desktop asset key so the original mobile thumbnail is not changed.
  */
+
+function AboutMobile({ section }: { section: PortfolioSection }) {
+  const photo = section.panelA[0]
+  const imageSource = photo?.image || photo?.aboutDesktopImage
+  const imageAlt = photo?.alt || photo?.aboutDesktopAlt || "Tulius Tsangaropulos com um tablet"
+
+  return (
+    <>
+      <div className="mobile-panel about-mobile-panel about-mobile-intro" id="sobre-a" data-panel="a">
+        <header className="about-mobile-copy">
+          <h2>{section.title}</h2>
+          {section.eyebrow && <p className="about-mobile-eyebrow">{section.eyebrow}</p>}
+          {section.intro && <p className="about-mobile-description">{section.intro}</p>}
+        </header>
+        {imageSource && (
+          <div className="about-mobile-photo">
+            {imageSource === APPROVED_ABOUT_TABLET ? (
+              <DeferredAboutTablet alt={imageAlt} style={imageFramingStyle(photo?.mediaFraming)} />
+            ) : (
+              <img
+                src={imageSource}
+                alt={imageAlt}
+                style={imageFramingStyle(photo?.mediaFraming)}
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </div>
+        )}
+      </div>
+      <div
+        className="mobile-panel about-mobile-panel about-mobile-continuation"
+        id="sobre-b"
+        data-panel="b"
+      >
+        <div className="about-mobile-differences">
+          {section.panelB.map((item, index) => (
+            <ItemCard
+              key={`${item.title}-${index}`}
+              item={item}
+              index={index}
+              layout={section.layout}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
+
 function AboutDesktop({ section }: { section: PortfolioSection }) {
   const itemsA = section.desktopPanelA ?? section.panelA
   const itemsB = section.desktopPanelB ?? section.panelB
@@ -725,12 +775,14 @@ const RESULT_THEME_KEYS = ["corporativa", "projetos", "eventos", "marketing", "i
 function ResultsCenter({
   section,
   selectedTheme,
+  mobile = false,
 }: {
   section: PortfolioSection
   selectedTheme: string | null
+  mobile?: boolean
 }) {
-  const topics = section.desktopPanelB ?? section.panelB
-  const metrics = section.desktopPanelA ?? section.panelA
+  const topics = mobile ? section.panelB : (section.desktopPanelB ?? section.panelB)
+  const metrics = mobile ? section.panelA : (section.desktopPanelA ?? section.panelA)
   const topic = topics.find(
     (item, index) => (item.themeKey || RESULT_THEME_KEYS[index]) === selectedTheme,
   )
@@ -860,12 +912,23 @@ function ResultsMobile({
         <h2>{section.title}</h2>
         {section.intro && <p className="section-intro">{section.intro}</p>}
       </header>
-      <ResultsThemeChooser
-        section={section}
-        selectedTheme={selectedTheme}
-        onSelectTheme={onSelectTheme}
-      />
-      <ResultsCenter section={section} selectedTheme={selectedTheme} />
+      <label htmlFor="resultados-mobile-selector" className="sr-only">
+        Selecionar categoria de resultados
+      </label>
+      <select
+        id="resultados-mobile-selector"
+        className="results-mobile-selector"
+        value={selectedTheme ?? ""}
+        onChange={(event) => onSelectTheme(event.target.value || null)}
+      >
+        <option value="">Visão geral — indicadores</option>
+        {section.panelB.map((item, index) => (
+          <option key={`${item.title}-${index}`} value={item.themeKey || RESULT_THEME_KEYS[index]}>
+            {item.title}
+          </option>
+        ))}
+      </select>
+      <ResultsCenter section={section} selectedTheme={selectedTheme} mobile />
     </div>
   )
 }
@@ -1050,7 +1113,9 @@ function Section({
       )}
       {isMobile && (
         <div className="mobile-panels">
-          {section.slug === "resultados" ? (
+          {section.slug === "sobre" ? (
+            <AboutMobile section={section} />
+          ) : section.slug === "resultados" ? (
             <ResultsMobile
               section={section}
               selectedTheme={selectedTheme}
