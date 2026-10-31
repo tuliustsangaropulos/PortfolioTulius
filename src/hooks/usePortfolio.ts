@@ -80,6 +80,8 @@ export function usePortfolio(includeDrafts = false) {
   useEffect(() => {
     if (!publicReadClient) return
     let cancelled = false
+    let seoFirstFrame = 0
+    let seoSecondFrame = 0
     setLoading(true)
     // Only the protected preview imports the authenticated Supabase SDK.
     // The public home uses PostgREST with the same anonymous key and RLS.
@@ -121,7 +123,7 @@ export function usePortfolio(includeDrafts = false) {
         .order("sort_order")
       if (!includeDrafts) query = query.eq("status", "published").eq("is_visible", true)
 
-      void Promise.all([
+      const primaryContent = Promise.all([
         query,
         supabase.from("section_panels").select("id,section_id,panel_key"),
         supabase
@@ -269,44 +271,61 @@ export function usePortfolio(includeDrafts = false) {
           setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
           setLoading(false)
         })
-      void Promise.all([pageRequest, settingsRequest])
-        .then(([pageResult, settingsResult]) => {
+      // Public SEO is already represented in the build HTML. Wait for the
+      // real CMS first fold to be composed and painted before issuing the
+      // two optional REST requests; the authenticated preview stays immediate.
+      const updateSeo = () => {
+        if (cancelled) return
+        if (!includeDrafts) performance.mark("p3:seo-fetch-start")
+        void Promise.all([pageRequest, settingsRequest])
+          .then(([pageResult, settingsResult]) => {
+            if (cancelled) return
+            const title = pageResult.data?.seo_title ?? settingsResult.data?.site_title
+            const description = pageResult.data?.seo_description ?? settingsResult.data?.description
+            if (title) {
+              document.title = title
+              setMeta("og:title", title, "property")
+            }
+            if (description) {
+              setMeta("description", description)
+              setMeta("og:description", description, "property")
+              setMeta("twitter:description", description)
+            }
+            const seo = settingsResult.data?.seo_json as
+              | {
+                  ogImage?: string
+                  canonical?: string
+                  robots?: string
+                }
+              | undefined
+            if (seo?.ogImage?.startsWith("https://")) {
+              setMeta("og:image", seo.ogImage, "property")
+              setMeta("twitter:image", seo.ogImage)
+              setMeta("twitter:card", "summary_large_image")
+            }
+            if (/^(index|noindex),(follow|nofollow)$/.test(seo?.robots ?? ""))
+              setMeta("robots", seo!.robots!)
+            if (settingsResult.data?.locale?.match(/^[a-z]{2}-[A-Z]{2}$/))
+              setMeta("og:locale", settingsResult.data.locale.replace("-", "_"), "property")
+            setCanonical(
+              seo?.canonical?.startsWith("https://") ? seo.canonical : "https://tulius.work/",
+            )
+          })
+          .catch(() => {
+            // The pre-rendered HTML already contains safe canonical/SEO defaults.
+            // Optional metadata failure must never block the public content.
+          })
+      }
+      if (includeDrafts) {
+        updateSeo()
+      } else {
+        void primaryContent.then(() => {
           if (cancelled) return
-          const title = pageResult.data?.seo_title ?? settingsResult.data?.site_title
-          const description = pageResult.data?.seo_description ?? settingsResult.data?.description
-          if (title) {
-            document.title = title
-            setMeta("og:title", title, "property")
-          }
-          if (description) {
-            setMeta("description", description)
-            setMeta("og:description", description, "property")
-            setMeta("twitter:description", description)
-          }
-          const seo = settingsResult.data?.seo_json as
-            | {
-                ogImage?: string
-                canonical?: string
-                robots?: string
-              }
-            | undefined
-          if (seo?.ogImage?.startsWith("https://")) {
-            setMeta("og:image", seo.ogImage, "property")
-            setMeta("twitter:image", seo.ogImage)
-            setMeta("twitter:card", "summary_large_image")
-          }
-          if (/^(index|noindex),(follow|nofollow)$/.test(seo?.robots ?? ""))
-            setMeta("robots", seo!.robots!)
-          if (settingsResult.data?.locale?.match(/^[a-z]{2}-[A-Z]{2}$/))
-            setMeta("og:locale", settingsResult.data.locale.replace("-", "_"), "property")
-          setCanonical(
-            seo?.canonical?.startsWith("https://") ? seo.canonical : "https://tulius.work/",
-          )
+          seoFirstFrame = requestAnimationFrame(() => {
+            seoSecondFrame = requestAnimationFrame(updateSeo)
+          })
         })
-        .catch(() => {
-          // The pre-rendered HTML already contains safe canonical/SEO defaults.
-          // Optional metadata failure must never block the public content.
-        })
+      }
     })().catch(() => {
       if (cancelled) return
       setData([])
@@ -317,6 +336,8 @@ export function usePortfolio(includeDrafts = false) {
     })
     return () => {
       cancelled = true
+      cancelAnimationFrame(seoFirstFrame)
+      cancelAnimationFrame(seoSecondFrame)
     }
   }, [includeDrafts])
 

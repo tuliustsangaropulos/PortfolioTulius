@@ -94,6 +94,20 @@ try {
         }
       })
       console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
+      const profileCommitMs = firstFold.marks["p3:profile-dom-committed"]
+      const seoStartMs = firstFold.marks["p3:seo-fetch-start"]
+      if (
+        !Number.isFinite(profileCommitMs) ||
+        !Number.isFinite(seoStartMs) ||
+        seoStartMs <= profileCommitMs
+      ) {
+        throw new Error("Public SEO metadata requests started before the Profile mounted")
+      }
+      console.log("P3_SEO_DEFERRED " + JSON.stringify({
+        profileCommitMs,
+        seoStartMs,
+        deferred: true,
+      }))
       const earlyTablet = await page.evaluate(() =>
         performance.getEntriesByType("resource").some((entry) =>
           entry.name.includes("a46a4091-bce1-4345-a17f-7d7947a8e903-tulius_tablet.png"),
