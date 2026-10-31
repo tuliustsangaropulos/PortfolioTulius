@@ -275,6 +275,8 @@ try {
           aboutBottom: about?.getBoundingClientRect().bottom ?? null,
           portraitBottom: portrait?.getBoundingClientRect().bottom ?? null,
           count: projects?.querySelectorAll(".experience-project").length ?? 0,
+          competenceBadges: document.querySelectorAll("#invest-rs .desktop-panel .experience-competencies li").length,
+          trajectoryButton: Boolean(projects?.querySelector(".experience-view-trajectory")),
           listHeight: projects?.clientHeight ?? 0,
           listScrollHeight: projects?.scrollHeight ?? 0,
           headingLogoBorder: logo ? getComputedStyle(logo).borderTopWidth : null,
@@ -285,14 +287,45 @@ try {
       const fits = composition.aboutBottom !== null &&
         composition.portraitBottom !== null &&
         composition.portraitBottom >= composition.aboutBottom + 16 &&
-        composition.count === 4 &&
+        // The former fourth item (Competências aplicadas) is now five header badges.
+        composition.count === 3 &&
+        composition.competenceBadges === 5 &&
+        composition.trajectoryButton &&
         composition.listScrollHeight <= composition.listHeight + 3 &&
         composition.headingLogoBorder === "0px" &&
         composition.indexLogoBorder !== null &&
-        composition.indexLogoBorder !== "0px"
+        composition.indexLogoBorder === "0px"
       if (!fits) {
         failures++
         console.log("P3_ABOUT_INVEST_FIT_REGRESSION " + JSON.stringify(composition))
+      }
+      // New owner-approved exclusive switch must hide projects when the full career is shown.
+      await page.waitForSelector(
+        "#invest-rs .desktop-panel .experience-view-trajectory:not([disabled])",
+        { timeout: 10000 },
+      )
+      await page.click("#invest-rs .desktop-panel .experience-view-trajectory")
+      const trajectoryState = await page.evaluate(() => ({
+        projects: document.querySelectorAll("#invest-rs .desktop-panel .experience-project").length,
+        bulletLabels: document.querySelectorAll("#invest-rs .desktop-panel .experience-full-point strong").length,
+        selected: document.querySelector("#invest-rs .desktop-panel .experience-view-trajectory")?.getAttribute("aria-pressed"),
+      }))
+      await page.click("#invest-rs .desktop-panel .experience-view-projects")
+      const projectsRestored = await page.evaluate(() => ({
+        projects: document.querySelectorAll("#invest-rs .desktop-panel .experience-project").length,
+        selected: document.querySelector("#invest-rs .desktop-panel .experience-view-projects")?.getAttribute("aria-pressed"),
+      }))
+      if (
+        trajectoryState.projects !== 0 ||
+        trajectoryState.bulletLabels < 1 ||
+        trajectoryState.selected !== "true" ||
+        projectsRestored.projects !== 3 ||
+        projectsRestored.selected !== "true"
+      ) {
+        failures++
+        console.log("P3_EXPERIENCE_SWITCH_REGRESSION " + JSON.stringify({ trajectoryState, projectsRestored }))
+      } else {
+        console.log("P3_EXPERIENCE_SWITCH " + JSON.stringify({ result: "PASS", trajectoryState, projectsRestored }))
       }
       const refinements = await page.evaluate(() => {
         const photo = document.querySelector("#contato .contact-portrait")
