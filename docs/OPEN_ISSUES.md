@@ -1,5 +1,13 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Atualização — ilustrações e alternância da seção profissional (31/10/2026)
+
+**Solicitação implementada:** 19 novas versões SVG livres de texto visual, todas 1200×1350, 16 vinculadas aos slides das cinco empresas, três alternativas no acervo. [Publicação autenticada e verificada #41178250462](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178250462): 19/19 publicadas e 16/16 vinculadas. Mídias antigas mantidas como histórico de reversão, sem exclusão ou sobrescrita. Imagens continuam **conceituais, não registros reais**.
+
+Na interface pública, as cinco competências existentes da Invest RS são badges abaixo do período; o item `Competências aplicadas` não se repete entre os projetos. Botões `Projetos e realizações` e `Trajetória` alternam as listas (sem expansão adicional), com prefixos `• ...:` em negrito; preservados conteúdos e cargos do acervo. Código [`79c1ab1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/79c1ab1a17f674f4ee75d0cd90b2b992b3c07e1a).
+
+**Ainda pendente:** aceite visual desktop/mobile da mudança, CI/P3 da release conforme seus resultados, LCP mobile ≤2,5 s e P2 transacional com ambiente isolado (suspenso). Não reinterpretar essas pendências como resolvidas pela publicação dos arquivos.
+
 ## Estado atualizado em 31/10/2026 — revisão editorial e UX do CMS
 
 **Código:** [`01a3a287`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/01a3a28731817c510616408d85196d10dd206113), [Validate #41175411745](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41175411745) **success** e Vercel Production **READY** no mesmo SHA (`dpl_B64aMBXM9URAwppjwWcaxfjoTJJq`). A P3 do novo código é independente; não afirmar que LCP mobile foi corrigido.

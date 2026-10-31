@@ -1,5 +1,11 @@
 # Design system
 
+## Experiências — componentes editoriais de 31/10/2026
+
+A coluna esquerda apresenta cargo e período, seguidos de badges discretos com borda arredondada, `flex-wrap` e fonte pequena, usando **apenas tags existentes** no CMS (Invest RS tem cinco). A coluna central contém alternância exclusiva de visualização: `Projetos e realizações` (título grande) e `Trajetória` (menor), com `button`, `aria-pressed`, `aria-controls` e indicador visual ativo. A trajetória é texto editorial original; títulos iniciados por marcador até dois-pontos usam `strong`; a visão padrão continua sendo os projetos. O conteúdo mantém rolagem interna somente quando necessário no desktop.
+
+A galeria preserva a legenda e o título **abaixo** da mídia, mas os 19 SVGs do conjunto `portfolio-generated/2026-10-31-no-text/` não incorporam palavras no desenho. Dimensões 1200×1350; 16 imagens nos slides, três adicionais no acervo. Imagens ilustrativas não devem ser apresentadas como registros documentais. Confirmação via [job de publicação #41178250462](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178250462).
+
 ## Ajustes administrativos do CMS — 31/10/2026
 
 O editor usa biblioteca visual de 50 ícones em cinco categorias dentro de popover compacto, com estados de seleção, foco e Escape. Logo e slides das experiências têm labels e inputs alinhados pelo topo, sem alterar texto ou mídia. A escolha de imagem usa modal responsivo com rolagem interna; upload entra no bucket privado e só pode virar opção pública após publicação expressa. Esses componentes adotam a tipografia, contraste, indicadores e alvos de 44px do admin existente; a interface pública não foi redesenhada. Código [`6913d91`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/6913d91c71041457d3425836ee2e96f93677bc59). Inspeção visual específica ainda pendente e P2 transacional suspenso.

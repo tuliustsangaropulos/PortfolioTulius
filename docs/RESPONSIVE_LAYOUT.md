@@ -1,5 +1,9 @@
 # Layout responsivo
 
+## Experiências — botões de visualização e tags — 31/10/2026
+
+No desktop, `.experience-projects` mantém limite de altura com rolagem interna quando a trajetória longa é selecionada; os controles `Projetos e realizações` / `Trajetória` ficam sticky no topo dessa área, com seleção exclusiva. No mobile, os controles e conteúdos acompanham a página sem rolagem interna obrigatória; as competências existentes fluem em linhas de badges sob o período, sem largura fixa. A mídia conceitual 1200×1350 é enquadrada pela moldura responsiva existente, sem textos desenhados no SVG; títulos, legendas e indicadores continuam acessíveis externamente. Não usar `zoom` ou `transform:scale()` global na aplicação.
+
 ## Complemento — CMS administrativo em mobile/tablet (30/10/2026)
 
 **Escopo somente administrativo:** a interface `/admin` foi adaptada por CSS para ≤1100px com faixa de navegação superior sticky e rolável, mantendo a seleção e o aviso de conteúdo não salvo. Até 767px, formulários, métricas, experiências, acervo, revisões e blocos usam colunas fluidas; as grades de mídia se adaptam para duas colunas e, até 380px, uma. Controles de ordem ampliados para área mínima de toque 44px, modal de confirmação e toast acomodam a viewport e safe areas, e inputs de texto usam 16px no iOS. A prévia mobile preserva largura disponível. Zoom nativo continua sob controle do navegador, sem `zoom` global.

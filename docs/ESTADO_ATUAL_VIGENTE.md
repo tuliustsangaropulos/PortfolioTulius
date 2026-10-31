@@ -1,5 +1,14 @@
 # PortfolioTulius — estado operacional vigente
 
+## Entrega de experiências e ilustrações sem texto — 31/10/2026
+
+**Código fonte:** [`79c1ab1`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/79c1ab1a17f674f4ee75d0cd90b2b992b3c07e1a), após correção automática de formatação do commit-base [`544bc00`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/544bc0076e7edae465f02d53883144561fcda6a9). A release Vercel segue a `main`; validar CI/P3 e deployment pelo SHA antes de declarar aceite final.
+
+- As imagens dos slides nas cinco empresas (Invest RS, Prefeitura de São Paulo, Vale, Globo/SporTV e InPress) apontam para **16** mídias novas, sem elementos SVG `<text>`; as **19** versões novas (16 de slides e três complementares) são públicas e estão em `portfolio-generated/2026-10-31-no-text/`, com tamanho intrínseco 1200×1350. O [job #41178250462](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178250462) passou e a verificação Supabase confirmou 19/19 no bucket público e 16/16 vinculadas. Os antigos SVGs de 31/10 foram preservados para reversão e NÃO são usados pelas cinco galerias.
+- Nova interface pública: **Competências aplicadas** (cinco tags já registradas para Invest RS) saiu da lista de projetos e passou ao cabeçalho, abaixo do cargo/período; outras experiências não tiveram tags inventadas. **Projetos e realizações / Trajetória** funcionam como botões alternativos exclusivos, sem `details` expansível; a trajetória vem de `career_experiences.description` e seu rótulo com marcador até o primeiro `:` aparece em negrito. O conteúdo editorial do Supabase não foi reescrito por essa mudança.
+- Preservados títulos/legendas *fora* da imagem, textos alternativos acessíveis, títulos de slides, ordem, enquadramento, logos, navegação e a identificação expressa de arte conceitual (não registro fotográfico).
+- **P3-PERF-01 permanece pendente:** a reestilização não comprova LCP mobile ≤2,5 s. **P2 transacional isolado continua suspenso** (não confundir com publicação editorial solicitada e autorizada). Aceite visual final em desktop/mobile ainda depende de inspeção humana.
+
 ## Estado atualizado em 31/10/2026 — revisão editorial e UX do CMS
 
 **Código:** [`01a3a287`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/01a3a28731817c510616408d85196d10dd206113), [Validate #41175411745](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41175411745) **success** e Vercel Production **READY** no mesmo SHA (`dpl_B64aMBXM9URAwppjwWcaxfjoTJJq`). A P3 do novo código é independente; não afirmar que LCP mobile foi corrigido.
