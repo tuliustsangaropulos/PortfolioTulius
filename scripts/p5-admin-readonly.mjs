@@ -113,6 +113,35 @@ try {
   await page.click(".admin-confirm-dialog .primary-button")
   await page.waitForSelector(".site-editor-body .editor-form", { timeout: 10000 })
   await page.waitForFunction(() => document.querySelector(".admin-floating-save button")?.disabled === true, { timeout: 7000 })
+  // Open the published Results block without selecting or saving an icon.
+  await page.$eval(".site-editor-tabs [role=tab]", (nodes) => {
+    nodes.find((node) => node.textContent?.includes("Conteúdo e painéis"))?.click()
+  })
+  await page.waitForSelector(".site-editor-body .block-item-toggle", { timeout: 12000 })
+  const resultsSelected = await page.$eval(".site-editor-sidebar button", (nodes) => {
+    const button = nodes.find((node) => node.textContent?.includes("Resultados e projetos"))
+    if (!button) return false
+    button.click()
+    return true
+  })
+  if (!resultsSelected) throw new Error("Seção Resultados indisponível no editor.")
+  await page.waitForFunction(
+    () => document.querySelector(".site-editor-heading h2")?.textContent?.includes("Resultados"),
+    { timeout: 10000 },
+  )
+  await page.waitForSelector(".site-editor-body .block-item-toggle", { timeout: 12000 })
+  await page.click(".site-editor-body .block-item-toggle")
+  await page.waitForSelector(".block-item-body .visual-icon-library", { timeout: 12000 })
+  const iconCatalog = await page.$eval(".block-item-body .visual-icon-library .visual-icon-grid button", (nodes) => ({
+    count: nodes.length,
+    labeled: nodes.every((node) => Boolean(node.getAttribute("aria-label"))),
+    visual: nodes.every((node) => !node.textContent?.trim()),
+  }))
+  if (iconCatalog.count !== 50 || !iconCatalog.labeled || !iconCatalog.visual) {
+    throw new Error("Biblioteca de ícones incompleta: " + JSON.stringify(iconCatalog))
+  }
+  console.log("P5_ADMIN_ICON_LIBRARY " + JSON.stringify({ result: "PASS", ...iconCatalog }))
+
   console.log("P5_ADMIN_MOBILE_EDIT_GUARD " + JSON.stringify({
     result: "PASS", viewport: "390x844", floatingSave: true,
     altOptional: true, customLeaveDialog: true, contentMutations: mutations.length,
