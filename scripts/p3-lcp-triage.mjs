@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import path from "node:path"
 
 // Read-only diagnostic for Lighthouse 13+ JSON. Never changes score thresholds
@@ -130,3 +130,56 @@ for (const device of ["mobile", "desktop"]) {
       })),
   }))
 }
+
+
+// The regular Lighthouse mobile score is calculated under simulated network/CPU
+// conditions. Insights above describe the browser's observed trace, which was
+// gathered before that simulation. Compare like with like; never reinterpret
+// an unthrottled observation as a mobile field Core Web Vital.
+const sampleFiles = [
+  "lighthouse-mobile.json",
+  "lighthouse-mobile-2.json",
+  "lighthouse-mobile-3.json",
+]
+const samples = sampleFiles.map((file) => {
+  const report = JSON.parse(readFileSync(path.join(directory, file), "utf8"))
+  const metrics = report.audits?.metrics?.details?.items?.[0] ?? {}
+  return {
+    file,
+    observedLcpMs: metrics.observedLargestContentfulPaint ?? null,
+    simulatedLcpMs: report.audits?.["largest-contentful-paint"]?.numericValue ?? null,
+    observedFcpMs: metrics.observedFirstContentfulPaint ?? null,
+    simulatedFcpMs: report.audits?.["first-contentful-paint"]?.numericValue ?? null,
+    throttlingMethod: report.configSettings?.throttlingMethod ?? null,
+  }
+})
+const median = (numbers) => {
+  if (numbers.some((number) => !Number.isFinite(number))) return null
+  return [...numbers].sort((a, b) => a - b)[1]
+}
+const appliedFile = path.join(directory, "lighthouse-mobile-devtools.json")
+let applied = null
+if (existsSync(appliedFile)) {
+  const report = JSON.parse(readFileSync(appliedFile, "utf8"))
+  const metrics = report.audits?.metrics?.details?.items?.[0] ?? {}
+  applied = {
+    throttlingMethod: report.configSettings?.throttlingMethod ?? null,
+    lcpMs: report.audits?.["largest-contentful-paint"]?.numericValue ?? null,
+    fcpMs: report.audits?.["first-contentful-paint"]?.numericValue ?? null,
+    observedLcpMs: metrics.observedLargestContentfulPaint ?? null,
+    observedFcpMs: metrics.observedFirstContentfulPaint ?? null,
+    runtimeError: Boolean(report.runtimeError),
+  }
+}
+console.log("P3_LCP_THROTTLING_COMPARISON " + JSON.stringify({
+  samples,
+  median: {
+    observedLcpMs: median(samples.map((sample) => sample.observedLcpMs)),
+    simulatedLcpMs: median(samples.map((sample) => sample.simulatedLcpMs)),
+    observedFcpMs: median(samples.map((sample) => sample.observedFcpMs)),
+    simulatedFcpMs: median(samples.map((sample) => sample.simulatedFcpMs)),
+  },
+  applied,
+  // Do not mix this secondary result into performance budgets or field p75.
+  appliedIsDiagnosticOnly: true,
+}))

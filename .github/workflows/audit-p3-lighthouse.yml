@@ -199,6 +199,30 @@ jobs:
             done
           done
           node scripts/p3-lcp-repeats.mjs "$RUNNER_TEMP"
+      - name: Mobile applied-throttling cross-check (diagnostic only)
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/lighthouse-mobile-devtools.json"
+          npx --yes lighthouse@13.5.0 https://tulius.work/ \
+            --throttling-method=devtools \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --quiet --output=json --output-path="$output"
+          node -e '
+            const fs = require("node:fs")
+            const report = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+            if (report.configSettings?.throttlingMethod !== "devtools" || !report.categories) {
+              throw Error("Applied-throttling diagnostic did not use DevTools throttling")
+            }
+            console.log("P3_APPLIED_THROTTLING_CAPTURE " + JSON.stringify({
+              method: report.configSettings.throttlingMethod,
+              lcpMs: report.audits?.["largest-contentful-paint"]?.numericValue ?? null,
+              fcpMs: report.audits?.["first-contentful-paint"]?.numericValue ?? null,
+              runtimeError: Boolean(report.runtimeError),
+              diagnosticOnly: true,
+            }))
+          ' "$output"
       - name: Mobile LCP bottleneck triage
         run: node scripts/p3-lcp-triage.mjs "$RUNNER_TEMP"
       - name: Preserve Lighthouse JSON reports
