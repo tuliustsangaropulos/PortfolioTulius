@@ -197,20 +197,23 @@ export function usePortfolio(includeDrafts = false) {
       const primaryContent = profileReady
         .then(() =>
           Promise.all([
-        query,
-        supabase.from("section_panels").select("id,section_id,panel_key"),
-        supabase
-          .from("block_placements")
-          .select(
-            "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
-          ),
-        supabase.from("design_tokens").select("token_key,token_value").eq("status", "published"),
-        supabase
-          .from("navigation_items")
-          .select("label,target_slug,group_name,sort_order,is_visible,status")
-          .eq("status", "published")
-          .eq("is_visible", true)
-          .order("sort_order"),
+            query,
+            supabase.from("section_panels").select("id,section_id,panel_key"),
+            supabase
+              .from("block_placements")
+              .select(
+                "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
+              ),
+            supabase
+              .from("design_tokens")
+              .select("token_key,token_value")
+              .eq("status", "published"),
+            supabase
+              .from("navigation_items")
+              .select("label,target_slug,group_name,sort_order,is_visible,status")
+              .eq("status", "published")
+              .eq("is_visible", true)
+              .order("sort_order"),
           ]),
         )
         .then(
