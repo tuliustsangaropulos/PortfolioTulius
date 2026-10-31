@@ -1,5 +1,11 @@
 # PortfolioTulius — P3: auditoria de qualidade e aceite
 
+## Verificação P3 final — vínculo projetos / galeria — 31/10/2026
+
+A [auditoria P3 #41178735154](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735154) do código funcional [`41a96e37`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/41a96e3715cdc47ee73ab225374cf72b2e739205) confirmou: **P3_EXPERIENCE_SWITCH PASS** (trajetória e retorno aos quatro projetos; sete títulos de tópicos em negrito); **P3_PROJECT_GALLERY_LINK PASS** (clique em "Organização de eventos" seleciona slide 2/4 e avançar pela seta ativa "Plataforma de eventos e relacionamento" também na lista); **P3_BROWSER_AUDIT failures=0** (13 seções desktop/25 painéis mobile), **P4_EDITORIAL_SUMMARY 38 capturas, failures=0**, **P5_PUBLIC_RESULT 3/3 mutations=0**. Verificação do logo sem borda, cinco tags e rolagem interna contextual também passou.
+
+O P6 Lighthouse do mesmo job encerrou como `failure` **somente pelo orçamento de LCP mobile**: mediana **7,628 s**, Performance 69, CLS ~0,098; o LCP era a imagem correta do Perfil (`P6_LCP_CONTENT_GATE PASS`). Desktop LCP **1,725 s**, Performance 93, PASS. Não declarar meta ≤2,5 s atingida. A `main` foi atualizada com documentação posteriormente, sem mudança no código público; CI [#41178828372](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178828372) aprovado. Homologação P2 transacional continua suspensa.
+
 ## Nova medição P3 durante correções administrativas — 31/10/2026
 
 A [Audit P3 Lighthouse #41173406644](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173406644), no SHA de código CMS [`c043375`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/c04337579f50d07d8437db4e8f02a89c6e17279c), confirmou **P3_BROWSER_AUDIT failures=0**, **P4 13 desktop / 25 mobile / 38 capturas, failures=0**, **P5 público 3/3, mutations=0** e retrato correto como elemento LCP em mobile/desktop. O Lighthouse de três amostras marcou **desktop LCP mediano 1,655 s PASS** e **mobile LCP mediano 7,824 s FAIL**, Performance mobile 70; teto sintético 6,5 s e meta real ≤2,5 s permanecem violados. O workflow terminou `failure` somente pelo orçamento de performance mobile.
