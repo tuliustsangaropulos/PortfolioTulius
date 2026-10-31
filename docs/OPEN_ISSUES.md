@@ -1,5 +1,9 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Continuidade P3 — LCP mobile (31/10/2026)
+
+A otimização do preload WebP e a correção do import estático administrativo reduziram a mediana sintética de LCP mobile de **7,704 s** para a faixa de **4,2–4,4 s**. O experimento de renderização progressiva não trouxe ganho e foi revertido. O CI e a auditoria P3 do código revertido `87c9348` foram aprovados (13 seções/25 painéis/38 capturas). **P3-PERF-01 permanece ABERTA**: objetivo ≤2,5 s não alcançado; sem alteração de Supabase, conteúdo ou CMS. [Relatório integral](P3_LCP_MOBILE_EXECUCAO_2026-10-31.md).
+
 ## Revisão mobile concluída; desempenho P3 ainda pendente — 31/10/2026
 
 A [revisão mobile #41180490449](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490449) passou os testes de navegador e responsividade em 360/390/430 px, a expansão dos três depoimentos e 38 capturas de 13 seções/25 painéis, sem erros funcionais. O [CI #41180490364](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490364) passou. O retrato de Contato, inicialmente com altura zero, foi corrigido e agora mede 574 px, ancorado à base. A Formação/Ferramentas não apresentavam dados duplicados: os cabeçalhos do segundo painel foram diferenciados e todos os registros mantidos. Seção 01, Olá!, escala dos títulos e altura dos depoimentos foram adaptadas por CSS mobile. Alt inválido da imagem de Contato foi corrigido no JSONB do bloco aprovado, sem alteração de mídia.

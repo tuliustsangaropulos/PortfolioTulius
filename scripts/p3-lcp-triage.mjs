@@ -86,4 +86,47 @@ for (const device of ["mobile", "desktop"]) {
       scriptingMs: item.scripting,
     })),
   }))
+  // These signals are diagnostic only. Lighthouse's simulated mobile LCP is
+  // not field RUM and its modeled savings are not measured improvements.
+  const requests = audits["network-requests"]?.details?.items ?? []
+  const unusedScripts = audits["unused-javascript"]?.details?.items ?? []
+  const fcp = audits["first-contentful-paint"]?.numericValue
+  const lcp = audits["largest-contentful-paint"]?.numericValue
+  const scriptName = (url) => {
+    try {
+      return new URL(url).pathname.split("/").at(-1)?.slice(0, 90) ?? "unknown"
+    } catch {
+      return "unknown"
+    }
+  }
+  console.log("P3_LCP_CRITICAL_PATH " + JSON.stringify({
+    device,
+    fcpToLcpMs: Number.isFinite(fcp) && Number.isFinite(lcp)
+      ? Math.round(lcp - fcp) : null,
+    preflightCount: requests.filter((item) =>
+      item.resourceType === "Preflight" &&
+      typeof item.url === "string" &&
+      item.url.includes(".supabase.co/rest/v1/")).length,
+    initialScripts: requests.filter((item) => item.resourceType === "Script")
+      .slice(0, 8).map((item) => ({
+        resource: scriptName(item.url),
+        transferBytes: item.transferSize ?? null,
+        priority: item.priority ?? null,
+      })),
+    unusedScripts: unusedScripts.slice(0, 6).map((item) => ({
+      resource: scriptName(item.url),
+      transferBytes: item.totalBytes ?? null,
+      wastedBytes: item.wastedBytes ?? null,
+      wastedPercent: item.wastedPercent ?? null,
+    })),
+    largestOtherImages: requests.filter((item) =>
+      item.resourceType === "Image" &&
+      typeof item.url === "string" &&
+      !item.url.includes("/media/tulius-site-"))
+      .sort((a, b) => (b.transferSize ?? 0) - (a.transferSize ?? 0))
+      .slice(0, 4).map((item) => ({
+        transferBytes: item.transferSize ?? null,
+        priority: item.priority ?? null,
+      })),
+  }))
 }

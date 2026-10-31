@@ -1,5 +1,9 @@
 # PortfolioTulius — estado operacional vigente
 
+## Continuidade P3 — LCP mobile (31/10/2026)
+
+A otimização do preload WebP e a correção do import estático administrativo reduziram a mediana sintética de LCP mobile de **7,704 s** para a faixa de **4,2–4,4 s**. O experimento de renderização progressiva não trouxe ganho e foi revertido. O CI e a auditoria P3 do código revertido `87c9348` foram aprovados (13 seções/25 painéis/38 capturas). **P3-PERF-01 permanece ABERTA**: objetivo ≤2,5 s não alcançado; sem alteração de Supabase, conteúdo ou CMS. [Relatório integral](P3_LCP_MOBILE_EXECUCAO_2026-10-31.md).
+
 ## Revisão e homologação responsiva mobile — 31/10/2026
 
 **Implementado na `main`** em [`494aba3`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/494aba3fa98d061c52fed4897e28349773534920), [CI #41180490364](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490364) PASS e Vercel Production READY. A [auditoria P3 #41180490449](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490449) confirmou: **P3_MOBILE_EDITORIAL_PARITY PASS** em 360/390/430 px, **P3_MOBILE_TESTIMONIAL_EXPAND PASS**, **P3_BROWSER_AUDIT failures=0**, **P4 38 capturas sem falhas** (13 seções desktop, 25 painéis mobile), **P5 público 3/3, mutations=0**.
