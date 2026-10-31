@@ -1721,3 +1721,15 @@
   .public-site #perfil-a .profile-mobile-years strong { font-size: clamp(2.4rem, 12vw, 3.5rem); }
   .public-site #perfil-a .mobile-profile-hero .badge-360 { width: 6.25rem; }
 }
+
+/* A identificação e o posicionamento usam partes do mesmo campo publicado no CMS. */
+@media (max-width: 767px) {
+  .public-site #perfil-a .profile-mobile-positioning {
+    margin: clamp(.55rem, 1.4svh, .9rem) 0 0;
+    max-width: 40ch;
+    font-size: clamp(.82rem, 3.05vw, .95rem);
+    line-height: 1.42;
+    color: var(--ink);
+    overflow-wrap: break-word;
+  }
+}

@@ -345,14 +345,18 @@ function ProfileMobilePresentation({
   profile: ContentItem
 }) {
   const hero = profile.hero
+  const [kicker, ...positioning] = (section.eyebrow ?? "").split(" · ")
   return (
     <>
       <div className="profile-mobile-identity">
-        {section.eyebrow && <p className="profile-mobile-kicker">{section.eyebrow}</p>}
+        {kicker && <p className="profile-mobile-kicker">{kicker}</p>}
         <div className="mobile-name">
           <span>TULIUS</span>
           <span>TSANGAROPULOS</span>
         </div>
+        {positioning.length > 0 && (
+          <p className="profile-mobile-positioning">{positioning.join(" · ")}</p>
+        )}
       </div>
       <div className="profile-mobile-stage" style={{ ...itemStyle(profile), ...heroStyle(hero) }}>
         <div className="mobile-profile-hero">
