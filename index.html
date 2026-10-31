@@ -24,7 +24,7 @@
         });
         performance.mark("p3:profile-bootstrap-start");
         window.__p3ProfileBootstrap = fetch(
-          base.replace(/\\/+$/, "") + "/rest/v1/sections?" + params,
+          new URL("/rest/v1/sections?" + params, base),
           {
             headers: { apikey: key, Authorization: "Bearer " + key },
             cache: "no-store",
