@@ -11,6 +11,7 @@ import {
 import { Icon } from "../ui/Icons"
 import { AdminNotice, statusPt } from "./AdminNotice"
 import { adminConfirm, AdminConfirmationHost } from "./AdminConfirmationHost"
+import { FloatingSaveButton } from "./FloatingSaveButton"
 import {
   CollectionsStudio,
   ContentStudio,
@@ -339,6 +340,7 @@ function SectionsEditor({
   const selected = sections.find((s) => s.id === selectedId)
   const [draft, setDraft] = useState<SectionRow | null>(selected ?? null)
   const [message, setMessage] = useState("")
+  const sectionDirty = Boolean(draft && selected && JSON.stringify(draft) !== JSON.stringify(selected))
   const fixedLayouts: Record<string, string> = {
     perfil: "hero",
     sobre: "editorial",
@@ -355,9 +357,9 @@ function SectionsEditor({
   useEffect(() => setDraft(selected ?? null), [selectedId, selected])
   useEffect(() => {
     onDirtyChange?.(
-      Boolean(draft && selected && JSON.stringify(draft) !== JSON.stringify(selected)),
+      sectionDirty,
     )
-  }, [draft, selected, onDirtyChange])
+  }, [sectionDirty, onDirtyChange])
   useEffect(() => {
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
   }, [sections, selectedId])
@@ -652,9 +654,7 @@ function SectionsEditor({
               <button className="secondary-button" onClick={publish}>
                 Publicar seção
               </button>
-              <button className="primary-button" onClick={save}>
-                Salvar alterações
-              </button>
+              <FloatingSaveButton enabled={sectionDirty} onClick={save} />
             </div>
           </section>
         )}
@@ -1207,7 +1207,7 @@ export function AdminApp() {
     ),
     design: <DesignEditor />,
     media: <EnhancedMediaLibrary />,
-    navigation: <NavigationStudio />,
+    navigation: <NavigationStudio onDirtyChange={setEditorDirty} />,
     seo: <SeoStudio />,
     editorial: <EditorialStudio />,
     preview: (

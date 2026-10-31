@@ -1220,3 +1220,21 @@
 .visual-icon-grid button.active { background: #171617; border-color: #171617; color: white; box-shadow: inset 0 -3px #ff5414; }
 .visual-icon-grid button:disabled { opacity: .35; cursor: not-allowed; }
 .visual-icon-grid button:focus-visible { outline: 3px solid #ff5414; outline-offset: 2px; }
+
+/* Shared floating save control: persistent at viewport edge, inactive until edited. */
+.admin-floating-save {
+  position: fixed; z-index: 850; right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px)); display: flex; gap: .8rem;
+  align-items: center; padding: .55rem .65rem .55rem 1rem;
+  background: #171617; color: #fff; border: 1px solid #383332; box-shadow: 0 8px 26px #0004;
+}
+.admin-floating-save > span { font-size: .76rem; color: #e3dfda; }
+.admin-floating-save button { min-height: 44px; white-space: nowrap; }
+.admin-floating-save button:disabled { opacity: .48; background: #626060; cursor: not-allowed; }
+.admin-main { padding-bottom: 6rem; }
+@media (max-width: 767px) {
+  .admin-floating-save { left: .75rem; right: .75rem; bottom: calc(.75rem + env(safe-area-inset-bottom, 0px)); justify-content: space-between; }
+  .admin-floating-save > span { max-width: 48%; }
+  .admin-floating-save button { min-width: 44%; }
+  .admin-main { padding-bottom: 8rem; }
+}

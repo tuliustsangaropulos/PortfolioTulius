@@ -34,6 +34,7 @@ import type {
 } from "../../types/content"
 import { Icon } from "../ui/Icons"
 import { VisualIconLibrary, PlatformIconLibrary } from "./VisualIconLibrary"
+import { FloatingSaveButton } from "./FloatingSaveButton"
 
 interface SectionOption {
   id: string
@@ -1775,13 +1776,8 @@ export function ContentStudio({
               <button className="danger-button" onClick={archiveBlock}>
                 Arquivar bloco
               </button>
-              <button
-                className="primary-button"
-                onClick={saveBlock}
-                disabled={placementsLoading || placementsReadError}
-              >
-                Salvar bloco
-              </button>
+              <FloatingSaveButton enabled={blockDirty && !placementsLoading && !placementsReadError}
+                onClick={saveBlock} label="Salvar bloco" />
             </div>
           </section>
         ) : (
@@ -2151,9 +2147,7 @@ export function CollectionsStudio({
               <button className="danger-button" onClick={archive} disabled={!draft.id}>
                 Arquivar
               </button>
-              <button className="primary-button" onClick={save}>
-                Salvar registro
-              </button>
+              <FloatingSaveButton enabled={recordDirty} onClick={save} label="Salvar registro" />
             </div>
           </section>
         )}
@@ -2162,8 +2156,11 @@ export function CollectionsStudio({
   )
 }
 
-export function NavigationStudio() {
+export function NavigationStudio({ onDirtyChange }: { onDirtyChange?: (dirty: boolean) => void }) {
   const [items, setItems] = useState<Record<string, any>[]>([])
+  const [savedItems, setSavedItems] = useState("[]")
+  const navigationDirty = JSON.stringify(items) !== savedItems
+  useEffect(() => onDirtyChange?.(navigationDirty), [navigationDirty, onDirtyChange])
   const [message, setMessage] = useState("")
   const load = async () => {
     const { data, error } = (await supabase
@@ -2171,6 +2168,7 @@ export function NavigationStudio() {
       .select("*")
       .order("sort_order")) ?? { data: [], error: null }
     setItems(data ?? [])
+    setSavedItems(JSON.stringify(data ?? []))
     setMessage(error?.message ?? "")
   }
   useEffect(() => {
@@ -2232,9 +2230,7 @@ export function NavigationStudio() {
           <button className="secondary-button" onClick={create}>
             Novo item
           </button>
-          <button className="primary-button" onClick={save}>
-            Salvar menu
-          </button>
+          <FloatingSaveButton enabled={navigationDirty} onClick={save} label="Salvar menu" />
         </div>
       </header>
       <section className="admin-card navigation-form">
