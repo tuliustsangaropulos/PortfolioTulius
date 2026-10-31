@@ -94,6 +94,16 @@ try {
         }
       })
       console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
+      const earlyTablet = await page.evaluate(() =>
+        performance.getEntriesByType("resource").some((entry) =>
+          entry.name.includes("a46a4091-bce1-4345-a17f-7d7947a8e903-tulius_tablet.png"),
+        ),
+      )
+      console.log("P3_ABOUT_IMAGE_FIRST_FOLD " + JSON.stringify({
+        deferred: !earlyTablet,
+        image: "published_about_tablet",
+      }))
+      if (earlyTablet) throw new Error("Oversized About thumbnail loaded before scroll")
       if (firstFold.adminRouterPreloaded || firstFold.adminRouterRequested) {
         throw new Error("Admin router requested on the public first fold")
       }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react"
+import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { usePortfolio } from "../../hooks/usePortfolio"
 import type { ContentItem, HeroVisualConfig, PortfolioSection } from "../../types/content"
 import { Icon } from "../ui/Icons"
@@ -34,6 +34,58 @@ function Badge360({ config }: { config?: HeroVisualConfig }) {
         <path d="M55 100 102 53M70 53h32v32" />
       </svg>
     </div>
+  )
+}
+
+// Exactly this published CMS image is oversized for the mobile About thumbnail.
+// Reserve its original intrinsic ratio but start downloading it only near view.
+// Other images and any future CMS replacement preserve their normal loading.
+const APPROVED_ABOUT_TABLET =
+  "https://zfnrhzplwpjpdljraypt.supabase.co/storage/v1/object/public/portfolio-public/a46a4091-bce1-4345-a17f-7d7947a8e903-tulius_tablet.png"
+
+function DeferredAboutTablet({
+  alt,
+  style,
+}: {
+  alt: string
+  style?: React.CSSProperties
+}) {
+  const elementRef = useRef<HTMLImageElement>(null)
+  const [nearViewport, setNearViewport] = useState(false)
+
+  useEffect(() => {
+    if (nearViewport) return
+    const element = elementRef.current
+    if (!element) return
+    if (typeof IntersectionObserver === "undefined") {
+      setNearViewport(true)
+      return
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setNearViewport(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: "600px 0px" },
+    )
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [nearViewport])
+
+  return (
+    <img
+      ref={elementRef}
+      src={nearViewport ? APPROVED_ABOUT_TABLET : undefined}
+      alt={alt}
+      style={style}
+      width={900}
+      height={1200}
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
+    />
   )
 }
 
@@ -93,16 +145,22 @@ function ItemCard({
         </span>
       )}
       {item.toolIcons && item.toolIcons.length > 0 && <ToolIcons icons={item.toolIcons} />}
-      {item.image && (
-        <img
-          src={item.image}
-          alt={item.alt ?? ""}
-          style={imageFramingStyle(item.mediaFraming)}
-          loading="lazy"
-          decoding="async"
-          fetchPriority={index === 0 ? "auto" : "low"}
-        />
-      )}
+      {item.image &&
+        (item.image === APPROVED_ABOUT_TABLET ? (
+          <DeferredAboutTablet
+            alt={item.alt ?? ""}
+            style={imageFramingStyle(item.mediaFraming)}
+          />
+        ) : (
+          <img
+            src={item.image}
+            alt={item.alt ?? ""}
+            style={imageFramingStyle(item.mediaFraming)}
+            loading="lazy"
+            decoding="async"
+            fetchPriority={index === 0 ? "auto" : "low"}
+          />
+        ))}
       <div className="item-copy">
         {item.label && <span className="item-label">{item.label}</span>}
         {item.value && <strong className="item-value">{item.value}</strong>}
