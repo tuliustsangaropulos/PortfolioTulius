@@ -84,7 +84,9 @@ export function usePortfolio(includeDrafts = false) {
     // Only the protected preview imports the authenticated Supabase SDK.
     // The public home uses PostgREST with the same anonymous key and RLS.
     void (async () => {
-      const supabase = (includeDrafts ? (await import("../lib/supabase")).supabase : publicReadClient) as unknown as PostgrestClient
+      const supabase = (includeDrafts
+        ? (await import("../lib/supabase")).supabase
+        : publicReadClient) as unknown as PostgrestClient
       if (cancelled || !supabase) return
       const supabaseClient = supabase
       if (!includeDrafts) performance.mark("p3:portfolio-fetch-start")
