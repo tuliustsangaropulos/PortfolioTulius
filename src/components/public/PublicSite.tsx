@@ -689,7 +689,11 @@ function AboutMobile({ section }: { section: PortfolioSection }) {
 
   return (
     <>
-      <div className="mobile-panel about-mobile-panel about-mobile-intro" id="sobre-a" data-panel="a">
+      <div
+        className="mobile-panel about-mobile-panel about-mobile-intro"
+        id="sobre-a"
+        data-panel="a"
+      >
         <header className="about-mobile-copy">
           <h2>{section.title}</h2>
           {section.eyebrow && <p className="about-mobile-eyebrow">{section.eyebrow}</p>}

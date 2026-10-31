@@ -214,6 +214,79 @@ try {
         { timeout: 10000 },
       )
       console.log("P3_PROFILE_ANCHOR " + JSON.stringify({ result: "PASS", target: "#perfil-b" }))
+
+      stage = "about and results editorial mobile verification"
+      const editorialViewports = [
+        { width: 320, height: 568 },
+        { width: 360, height: 740 },
+        { width: 375, height: 667 },
+        { width: 390, height: 844 },
+        { width: 430, height: 932 },
+      ]
+      for (const viewport of editorialViewports) {
+        await page.setViewport({ ...viewport, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+        const editorial = await page.evaluate(() => {
+          const aboutHeadings = document.querySelectorAll("#sobre .about-mobile-copy h2")
+          const repeatedHeadings = document.querySelectorAll("#sobre-b h2")
+          const differences = document.querySelectorAll("#sobre-b .about-mobile-differences .content-item")
+          const aboutPhoto = document.querySelector("#sobre-a .about-mobile-photo img")
+          const resultPanel = document.querySelector("#resultados-a")
+          const selector = document.querySelector("#resultados-mobile-selector")
+          const grid = resultPanel?.querySelector(".results-metrics-grid")
+          const metrics = [...(grid?.querySelectorAll(".content-item") ?? [])]
+          const colSizes = grid ? getComputedStyle(grid).gridTemplateColumns.split(/\\s+/) : []
+          const rect = aboutPhoto?.getBoundingClientRect()
+          const valueOverflow = metrics.some((metric) => {
+            const parent = metric.getBoundingClientRect()
+            const value = metric.querySelector(".item-value")?.getBoundingClientRect()
+            return Boolean(value && (value.right > parent.right + 2 || value.left < parent.left - 2))
+          })
+          return {
+            aboutTitleCount: aboutHeadings.length,
+            duplicateTitles: repeatedHeadings.length,
+            differenceCount: differences.length,
+            photoWidthRatio: rect ? rect.width / innerWidth : 0,
+            categoryOptions: selector?.options.length ?? 0,
+            metricCount: metrics.length,
+            columns: colSizes.length,
+            valueOverflow,
+            horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 2,
+            resultHeight: resultPanel?.getBoundingClientRect().height ?? 0,
+            viewportHeight: innerHeight,
+          }
+        })
+        console.log("P3_ABOUT_RESULTS_MOBILE " + JSON.stringify({ viewport, ...editorial }))
+        if (editorial.aboutTitleCount !== 1 || editorial.duplicateTitles !== 0 ||
+            editorial.differenceCount !== 5 || editorial.photoWidthRatio < .72 ||
+            editorial.categoryOptions !== 6 || editorial.metricCount !== 4 ||
+            editorial.columns !== 2 || editorial.valueOverflow || editorial.horizontalOverflow) {
+          throw new Error("Mobile About/Results layout mismatch at " + viewport.width + "px")
+        }
+      }
+      await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+      await page.evaluate(() => document.querySelector("#sobre-a")?.scrollIntoView({ behavior: "instant" }))
+      await page.waitForFunction(() => {
+        const photo = document.querySelector("#sobre-a .about-mobile-photo img")
+        return Boolean(photo?.complete && photo.naturalWidth > 0)
+      }, { timeout: 15000 })
+      await page.select("#resultados-mobile-selector", "marketing")
+      await page.waitForFunction(() =>
+        document.querySelector("#resultados-a .results-topic h3")?.textContent?.toLowerCase()
+          .includes("resultados que orientam decisões") &&
+        document.querySelectorAll("#resultados-a .results-metrics-grid .content-item").length === 2,
+        { timeout: 10000 },
+      )
+      await page.select("#resultados-mobile-selector", "")
+      await page.waitForFunction(() =>
+        !document.querySelector("#resultados-a .results-topic") &&
+        document.querySelectorAll("#resultados-a .results-metrics-grid .content-item").length === 4,
+        { timeout: 10000 },
+      )
+      console.log("P3_ABOUT_RESULTS_INTERACTION " + JSON.stringify({
+        photoLoaded: true, categoryChanged: true, overviewRestored: true, result: "PASS",
+      }))
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }))
+
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
       stage = "menu initial focus"
