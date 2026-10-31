@@ -310,7 +310,8 @@ try {
       const contactAligned = refinements.contactPhotoBottom !== null &&
         refinements.contactLineTop !== null &&
         Math.abs(refinements.contactPhotoBottom - refinements.contactLineTop) <= 2
-      const cardsCompact = refinements.testimonialCount === 5 &&
+      // Owner-approved editorial revision (31/10): exactly three real testimonials stay published.
+      const cardsCompact = refinements.testimonialCount === 3 &&
         refinements.tallestCard !== null &&
         refinements.tallestCard < 280 &&
         !refinements.testimonialOverflow
