@@ -272,8 +272,9 @@ export function usePortfolio(includeDrafts = false) {
           setLoading(false)
         })
       // Public SEO is already represented in the build HTML. Wait for the
-      // real CMS first fold to be composed and painted before issuing the
-      // two optional REST requests; the authenticated preview stays immediate.
+      // first-fold state to be committed and a frame opportunity before issuing
+      // two optional REST requests; the protected preview remains immediate.
+      // A frame opportunity is not proof that the LCP paint has completed.
       const updateSeo = () => {
         if (cancelled) return
         if (!includeDrafts) performance.mark("p3:seo-fetch-start")
