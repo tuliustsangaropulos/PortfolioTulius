@@ -121,7 +121,9 @@ export function usePortfolio(includeDrafts = false) {
     const placementsRequest = Promise.resolve(
       supabase
         .from("block_placements")
-        .select("block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config"),
+        .select(
+          "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
+        ),
     )
     const tokensRequest = Promise.resolve(
       supabase.from("design_tokens").select("token_key,token_value").eq("status", "published"),
@@ -136,8 +138,8 @@ export function usePortfolio(includeDrafts = false) {
     )
 
     if (shouldRenderEarlyProfile(includeDrafts, window.location.hash)) {
-      void Promise.all([sectionsRequest, panelsRequest, placementsRequest]).then(
-        ([sectionsResult, panelsResult, placementsResult]) => {
+      void Promise.all([sectionsRequest, panelsRequest, placementsRequest])
+        .then(([sectionsResult, panelsResult, placementsResult]) => {
           if (cancelled || sectionsResult.error || panelsResult.error || placementsResult.error)
             return
           const profileRow = (sectionsResult.data as SectionResult[]).find(
@@ -154,10 +156,10 @@ export function usePortfolio(includeDrafts = false) {
           // Never expose an unbound collection as published content.
           setData([profile])
           setSource("supabase")
-        },
-      ).catch(() => {
-        // The complete data request below owns error reporting.
-      })
+        })
+        .catch(() => {
+          // The complete data request below owns error reporting.
+        })
     }
 
     void Promise.all([
