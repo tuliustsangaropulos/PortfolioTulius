@@ -1,5 +1,19 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Pendências definitivas após nova verificação — 31/10/2026
+
+**Concluído e validado:** `main` [`e3c85c2`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/e3c85c275bc727c9c658b5cdaa5528f41dfb72fa) com [CI #41172037322](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037322) **success**, Vercel **READY**, e [P5 Admin Read-Only #41172037326](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037326) **success**. A suíte autenticada validou oito módulos, 50 ícones visualmente selecionáveis, mobile 390px sem overflow, barra flutuante reativa, alt opcional, alerta personalizado de navegação, prévia de 14 seções e logout, com `contentMutations=0`.
+
+**P3-PERF-01 — permanece ABERTO:** [P3 #41171332333](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41171332333) com 13 seções/25 painéis/38 capturas, 0 erros de browser, P5 público 3/3 sem mutações. Desktop LCP ~1,64s PASS; mobile ~7,76s FAIL (meta ≤2,5s). A antecipação de uma consulta restrita ao perfil foi **revertida** por ausência de ganho e risco de composição pública incompleta; a versão WebP aprovada continua em uso. Não mudar o limite P3 nem oferecer como pronta uma arquitetura ainda não verificada.
+
+**P2 transacional — SUSPENSO:** o proprietário não aprovou custo de staging; **não** executar gravações, restaurar conteúdo, publicar fixtures, alterar Auth/RLS, comprar recursos ou gravar/remover arquivos em produção para homologação. Requer autorização expressa posterior.
+
+**Aceite visual humano — aguardando observação do proprietário:** a inspeção automatizada autenticada cobre comportamento mobile e DOM, mas não equivale a uma assinatura visual humana, a teste físico em todos os aparelhos ou a homologação de salvamento real. No refresh/fechamento o aviso é necessariamente nativo; na navegação interna permanece o popup personalizado.
+
+**Demais decisões independentes:** continuam **8 ocorrências editoriais abertas** no banco e pendências de mídias/licenças, segurança e manutenção do histórico. Não encerrar, apagar ou alterar sem decisão de conteúdo e proveniência.
+
+
+
 ## Pendências após edição e WebP — 31/10/2026
 
 **Concluído em código e CI:** revisão do campo Texto alternativo (sempre opcional), retirada de todos os controles visíveis Nota editorial, alternância Mobile/Desktop em um único seletor na seção Olá!, biblioteca visual de **50 ícones em cinco categorias**, botões de mídia com ícones, e barra flutuante Salvar condicionada a alterações nos formulários administrativos. Fluxos internos usam confirmações próprias; reload/fechamento com rascunhos usa confirmação nativa por limitação do navegador. CI [#41170233909](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170233909) **success** no SHA funcional [`ac07b948`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/ac07b9486eade886ea1d0d09e73e16d06c3b7de0).

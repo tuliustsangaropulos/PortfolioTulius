@@ -248,3 +248,9 @@ A **biblioteca visual de 50 ícones**, dividida em Resultados, Comunicação, Tr
 
 O botão **Salvar flutuante** está disponível nos formulários editáveis (Seções, Blocos, Coleções, Navegação, SEO e Identidade) e fica desabilitado enquanto não há alterações. Na navegação interna com alterações abertas há diálogo próprio; refresh/fechar aba exige diálogo fornecido pelo navegador. Revisões e mídia têm ações específicas (restaurar, disponibilizar, fazer upload), não salvamento geral. Testes automatizados aprovados em [CI #41170233909](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41170233909); confirmação manual de edição/salvamento após esta rodada ainda necessária, sem homologação P2 transacional.
 
+
+## Verificação autenticada mobile sem gravações — 31/10/2026
+
+O [P5 Admin Read-Only #41172037326](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037326) passou no código de produção, conferindo 8 módulos, biblioteca com 50 botões de ícone acessíveis, editor com viewport 390×844 sem overflow horizontal, Salvar desativado até editar e ativado ao mudar campo, abandono protegido por diálogo próprio com cancelamento que preserva o rascunho, campo alt opcional, prévia de 14 seções, logout e bloqueio do acesso sem sessão. `contentMutations=0`. Alterações de campos foram apenas locais, sem submit nem operações de banco. POST de assinatura de prévia privada é operação de leitura; o detector distingue a rota `/storage/v1/object/sign/` de escrita real.
+
+Permanece pendente a conferência visual manual em aparelho físico; fluxos reais de CRUD/Storage continuam suspensos no P2. [CI #41172037322](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41172037322) e Vercel READY no SHA `e3c85c2`.
