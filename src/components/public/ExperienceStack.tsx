@@ -51,7 +51,7 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
   const count = slides.length
   const index = count ? Math.min(active, count - 1) : 0
   const slide: ExperienceSlide | undefined = slides[index]
-  const hasImage = Boolean(slide?.image && slide.alt)
+  const hasImage = Boolean(slide?.image?.trim())
 
   return (
     <div className="experience-gallery" aria-label={`Galeria de projetos: ${section.title}`}>
@@ -61,7 +61,7 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
         {hasImage ? (
           <img
             src={slide!.image}
-            alt={slide!.alt}
+            alt={slide!.alt?.trim() || slide!.title}
             style={imageFramingStyle(slide!.framing)}
             loading="lazy"
             decoding="async"
@@ -290,11 +290,12 @@ export function ExperienceStack({
             href={`#${section.slug}`}
             key={section.slug}
             className={active === section.slug ? "is-active" : ""}
+            aria-label={section.title}
             aria-current={active === section.slug ? "location" : undefined}
             onClick={() => setActive(section.slug)}
           >
             <CompanyMark section={section} small />
-            <span>{section.title}</span>
+            <span className="experience-index-name">{section.title}</span>
           </a>
         ))}
       </nav>
