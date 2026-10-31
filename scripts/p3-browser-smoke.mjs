@@ -300,13 +300,47 @@ try {
         failures++
         console.log("P3_ABOUT_INVEST_FIT_REGRESSION " + JSON.stringify(composition))
       }
+      // Six experience sections must expose owner-approved, CMS-editable competencies.
+      const competenciesAndCdi = await page.evaluate(() => {
+        const slugs = ["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress", "cdi"]
+        const badges = Object.fromEntries(
+          slugs.map((slug) => [slug, document.querySelectorAll(`#${slug} .desktop-panel .experience-competencies li`).length]),
+        )
+        const src = document.querySelector("#cdi .desktop-panel .experience-media-frame img")?.getAttribute("src") ?? ""
+        const projects = document.querySelector("#invest-rs .desktop-panel .experience-view-projects")
+        const trajectory = document.querySelector("#invest-rs .desktop-panel .experience-view-trajectory")
+        const p = projects ? getComputedStyle(projects) : null
+        const t = trajectory ? getComputedStyle(trajectory) : null
+        return {
+          badges,
+          cdiTextFree: src.includes("/2026-10-31-cdi-no-text/"),
+          sameFont: Boolean(p && t && p.fontFamily === t.fontFamily),
+          uppercase: p?.textTransform === "uppercase" && t?.textTransform === "uppercase",
+          projectsLargerInitially: Boolean(p && t && parseFloat(p.fontSize) > parseFloat(t.fontSize)),
+        }
+      })
+      if (
+        Object.values(competenciesAndCdi.badges).some((count) => count !== 5) ||
+        !competenciesAndCdi.cdiTextFree ||
+        !competenciesAndCdi.sameFont ||
+        !competenciesAndCdi.uppercase ||
+        !competenciesAndCdi.projectsLargerInitially
+      ) {
+        failures++
+        console.log("P3_CMS_COMPETENCIES_MEDIA_REGRESSION " + JSON.stringify(competenciesAndCdi))
+      } else {
+        console.log("P3_CMS_COMPETENCIES_MEDIA " + JSON.stringify({ result: "PASS", ...competenciesAndCdi }))
+      }
       // New owner-approved exclusive switch must hide projects when the full career is shown.
       await page.waitForSelector(
         "#invest-rs .desktop-panel .experience-view-trajectory:not([disabled])",
         { timeout: 10000 },
       )
       await page.click("#invest-rs .desktop-panel .experience-view-trajectory")
+      await new Promise((resolve) => setTimeout(resolve, 300))
       const trajectoryState = await page.evaluate(() => ({
+        projectsFont: getComputedStyle(document.querySelector("#invest-rs .desktop-panel .experience-view-projects")).fontSize,
+        trajectoryFont: getComputedStyle(document.querySelector("#invest-rs .desktop-panel .experience-view-trajectory")).fontSize,
         projects: document.querySelectorAll("#invest-rs .desktop-panel .experience-project").length,
         bulletLabels: document.querySelectorAll("#invest-rs .desktop-panel .experience-full-point strong").length,
         selected: document.querySelector("#invest-rs .desktop-panel .experience-view-trajectory")?.getAttribute("aria-pressed"),
@@ -320,6 +354,7 @@ try {
         trajectoryState.projects !== 0 ||
         trajectoryState.bulletLabels < 1 ||
         trajectoryState.selected !== "true" ||
+        parseFloat(trajectoryState.trajectoryFont) <= parseFloat(trajectoryState.projectsFont) ||
         projectsRestored.projects !== 4 ||
         projectsRestored.selected !== "true"
       ) {
