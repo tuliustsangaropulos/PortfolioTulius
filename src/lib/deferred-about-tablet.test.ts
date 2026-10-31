@@ -1,7 +1,10 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 
-const publicSite = readFileSync(new URL("../components/public/PublicSite.tsx", import.meta.url), "utf8")
+const publicSite = readFileSync(
+  new URL("../components/public/PublicSite.tsx", import.meta.url),
+  "utf8",
+)
 
 describe("Miniatura Sobre carregada sob demanda", () => {
   it("restringe adiamento ao PNG publicado e preserva o CMS para outras imagens", () => {

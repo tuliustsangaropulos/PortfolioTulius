@@ -43,13 +43,7 @@ function Badge360({ config }: { config?: HeroVisualConfig }) {
 const APPROVED_ABOUT_TABLET =
   "https://zfnrhzplwpjpdljraypt.supabase.co/storage/v1/object/public/portfolio-public/a46a4091-bce1-4345-a17f-7d7947a8e903-tulius_tablet.png"
 
-function DeferredAboutTablet({
-  alt,
-  style,
-}: {
-  alt: string
-  style?: React.CSSProperties
-}) {
+function DeferredAboutTablet({ alt, style }: { alt: string; style?: React.CSSProperties }) {
   const elementRef = useRef<HTMLImageElement>(null)
   const [nearViewport, setNearViewport] = useState(false)
 
@@ -147,10 +141,7 @@ function ItemCard({
       {item.toolIcons && item.toolIcons.length > 0 && <ToolIcons icons={item.toolIcons} />}
       {item.image &&
         (item.image === APPROVED_ABOUT_TABLET ? (
-          <DeferredAboutTablet
-            alt={item.alt ?? ""}
-            style={imageFramingStyle(item.mediaFraming)}
-          />
+          <DeferredAboutTablet alt={item.alt ?? ""} style={imageFramingStyle(item.mediaFraming)} />
         ) : (
           <img
             src={item.image}
