@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
-const site = readFileSync(new URL("../components/public/PublicSite.tsx", import.meta.url),"utf8")
-const html = readFileSync(new URL("../../index.html", import.meta.url),"utf8")
+const site = readFileSync(new URL("../components/public/PublicSite.tsx", import.meta.url), "utf8")
+const html = readFileSync(new URL("../../index.html", import.meta.url), "utf8")
 describe("Retrato aprovado em WebP", () => {
   it("usa variantes somente quando a imagem CMS é a original auditada", () => {
     expect(site).toContain("if (src !== APPROVED_PROFILE_PORTRAIT) return image")

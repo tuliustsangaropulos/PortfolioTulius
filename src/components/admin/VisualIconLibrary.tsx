@@ -52,10 +52,19 @@ export function PlatformIconLibrary({
             {group.icons.map(([value, label]) => {
               const active = selected.includes(value)
               return (
-                <button type="button" key={value} className={active ? "active" : ""}
-                  aria-label={label} aria-pressed={active}
+                <button
+                  type="button"
+                  key={value}
+                  className={active ? "active" : ""}
+                  aria-label={label}
+                  aria-pressed={active}
                   disabled={!active && selected.length >= 3}
-                  onClick={() => onChange(active ? selected.filter((icon) => icon !== value) : [...selected, value])}>
+                  onClick={() =>
+                    onChange(
+                      active ? selected.filter((icon) => icon !== value) : [...selected, value],
+                    )
+                  }
+                >
                   <Icon name={value} size={24} />
                 </button>
               )

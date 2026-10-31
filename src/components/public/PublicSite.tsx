@@ -149,22 +149,40 @@ function ItemCard({
 }
 
 /** WebP derivatives of the SHA-256 verified CMS portrait (source remains untouched). */
-const APPROVED_PROFILE_PORTRAIT = "https://zfnrhzplwpjpdljraypt.supabase.co/storage/v1/object/public/portfolio-public/b171afda-2708-44eb-b3e5-ab2b7ff13236-tulius_site.png"
-const RESPONSIVE_PROFILE_SOURCE = "/media/tulius-site-600.webp 600w, /media/tulius-site-900.webp 900w"
+const APPROVED_PROFILE_PORTRAIT =
+  "https://zfnrhzplwpjpdljraypt.supabase.co/storage/v1/object/public/portfolio-public/b171afda-2708-44eb-b3e5-ab2b7ff13236-tulius_site.png"
+const RESPONSIVE_PROFILE_SOURCE =
+  "/media/tulius-site-600.webp 600w, /media/tulius-site-900.webp 900w"
 
-function ApprovedProfileImage({ src, alt, mobile = false, style }: {
+function ApprovedProfileImage({
+  src,
+  alt,
+  mobile = false,
+  style,
+}: {
   src?: string
   alt?: string
   mobile?: boolean
   style?: React.CSSProperties
 }) {
-  const image = <img src={src} alt={alt ?? ""} style={style} loading="eager"
-    fetchPriority="high" decoding="async" />
+  const image = (
+    <img
+      src={src}
+      alt={alt ?? ""}
+      style={style}
+      loading="eager"
+      fetchPriority="high"
+      decoding="async"
+    />
+  )
   if (src !== APPROVED_PROFILE_PORTRAIT) return image
   return (
     <picture className="approved-profile-picture">
-      <source type="image/webp" srcSet={RESPONSIVE_PROFILE_SOURCE}
-        sizes={mobile ? "(max-width: 600px) 45vw, 450px" : "(max-width: 1100px) 50vw, 420px"} />
+      <source
+        type="image/webp"
+        srcSet={RESPONSIVE_PROFILE_SOURCE}
+        sizes={mobile ? "(max-width: 600px) 45vw, 450px" : "(max-width: 1100px) 50vw, 420px"}
+      />
       {image}
     </picture>
   )
@@ -198,8 +216,11 @@ function ProfileDesktop({
     <div className="profile-desktop">
       <aside className="profile-sidebar" style={{ ...itemStyle(profile), ...heroStyle(hero) }}>
         <div className="profile-portrait">
-          <ApprovedProfileImage src={profile.image} alt={profile.alt}
-            style={imageFramingStyle(profile.mediaFraming)} />
+          <ApprovedProfileImage
+            src={profile.image}
+            alt={profile.alt}
+            style={imageFramingStyle(profile.mediaFraming)}
+          />
           <div className="years">
             <strong>{profile.title}</strong>
             <span>{profile.text}</span>
