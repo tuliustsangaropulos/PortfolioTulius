@@ -3021,9 +3021,7 @@ export function EnhancedMediaLibrary() {
                     onChange={(event) => replace(event, asset)}
                   />
                 </label>
-                <button type="button" className="secondary-button" onClick={() => save(asset)}>
-                  Salvar
-                </button>
+                {/* No Save button here: file name is read-only; upload and publish are immediate actions. */}
                 {asset.storage_bucket === "portfolio-private" && (
                   <button type="button" className="primary-button" onClick={() => promote(asset)}>
                     Disponibilizar no site
