@@ -576,8 +576,9 @@
   place-items: center; border: 1px solid #17161722; background: #f1eeec;
   color: var(--ink); overflow: hidden; }
 .company-mark img { max-width: 100%; max-height: 100%; object-fit: contain; }
-/* Employer logo above the title is borderless; navigation thumbnails retain framing. */
-.experience-heading > .company-mark { border: 0; background: transparent; }
+/* Employer logos are borderless in both the heading and the top company navigation. */
+.experience-heading > .company-mark,
+.experience-index .company-mark-small { border: 0; background: transparent; }
 .company-mark-small { width: 1.8rem; height: 1.8rem; }
 .experience-monogram { font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; }
 .company-mark-small .experience-monogram { font-size: .85rem; }
@@ -650,7 +651,8 @@
 }
 @media (max-width: 767px) {
  .experience-index { display: flex; overflow-x: auto; gap: .4rem; padding-inline: 1rem; scrollbar-width: thin; }
- .experience-index a { flex: 0 0 auto; min-height: 2.4rem; font-size: .68rem; padding: .3rem .45rem; }
+ .experience-index a { flex: 0 0 auto; min-height: 2.75rem; padding: .3rem .55rem; }
+ .experience-index-name { display: none; }
  .experience-card { position: relative; top: auto; min-height: 100svh; }
  .experience-desktop { display: none; }
  .experience-card .mobile-panels { display: block; }
