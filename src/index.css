@@ -1280,3 +1280,26 @@
 .visual-icon-popover > div + div { margin-top: 1rem; }
 .visual-icon-popover h4 { margin: 0 0 .55rem; color: #8f310f; font-size: .78rem; letter-spacing: .05em; }
 @media (max-width: 767px) { .visual-icon-popover { width: 100%; max-height: min(65dvh, 24rem); } }
+
+/* The published-image picker now opens one accessible, scrollable media dialog. */
+.published-media-overlay { z-index: 320; }
+.published-media-dialog { width: min(50rem, 100%); max-height: calc(100dvh - 2rem); overflow-y: auto; overscroll-behavior: contain; }
+.published-media-dialog-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .75rem; align-items: end; }
+.published-media-dialog-tools > label:first-child { display: grid; gap: .35rem; min-width: 0; font-size: .8rem; font-weight: 700; }
+.published-media-dialog-tools input[type="search"] { width: 100%; min-width: 0; padding: .75rem; border: 1px solid #d7d2ce; }
+.published-media-upload { position: relative; cursor: pointer; }
+.published-media-upload input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.published-media-upload:focus-within { outline: 3px solid #ff5414; }
+.published-media-dialog-status { padding: .7rem; background: #fff1c9; color: #6a4d00; font-size: .8rem; }
+.published-media-dialog .published-media-grid { max-height: none; overflow-y: visible; }
+.published-media-private { display: grid; gap: .6rem; border-top: 1px solid #d7d2ce; padding-top: .85rem; }
+.published-media-private > h4 { font-size: .9rem; font-weight: 800; }
+.published-media-private > p { font-size: .8rem; color: #625c57; }
+.published-media-private > div { display: flex; align-items: center; justify-content: space-between; gap: .7rem; padding: .5rem; border: 1px solid #e3dfdc; }
+.published-media-private > div span { overflow-wrap: anywhere; min-width: 0; font-size: .78rem; }
+.published-media-private button { flex: none; }
+@media (max-width: 767px) {
+  .published-media-dialog { padding: .85rem; }
+  .published-media-dialog-tools { grid-template-columns: minmax(0, 1fr); }
+  .published-media-private > div { flex-direction: column; align-items: stretch; }
+}

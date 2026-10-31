@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react"
-import { supabase } from "../../lib/supabase"
 import { isSafeEditorialImage } from "../../lib/validation"
 import { MediaFramingDialog } from "./MediaFramingDialog"
+import { PublishedMediaDialog } from "./PublishedMediaDialog"
 import { AdminInfoTip } from "./InfoTip"
 import { Icon } from "../ui/Icons"
 import type { MediaFraming } from "../../lib/media-framing"
-import {
-  getPublishedImageChoices,
-  type MediaLibraryRow,
-  type PublishedImageChoice,
-} from "../../lib/media-selection"
 
 export function PublishedMediaPicker({
   label,
@@ -33,67 +28,12 @@ export function PublishedMediaPicker({
   iconOnlyActions?: boolean
 }) {
   const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [query, setQuery] = useState("")
-  const [assets, setAssets] = useState<PublishedImageChoice[]>([])
   const [previewFailed, setPreviewFailed] = useState(false)
   const [framingOpen, setFramingOpen] = useState(false)
 
   useEffect(() => {
     setPreviewFailed(false)
   }, [value])
-
-  useEffect(() => {
-    if (!open) return
-    let active = true
-    async function load() {
-      if (!supabase) {
-        setError("Supabase não está configurado.")
-        return
-      }
-      setLoading(true)
-      setError("")
-      try {
-        const { data, error: loadError } = await supabase
-          .from("media_assets")
-          .select("id,title,alt_text,mime_type,storage_bucket,storage_path,status")
-          .eq("storage_bucket", "portfolio-public")
-          .eq("status", "published")
-          .order("created_at", { ascending: false })
-        if (!active) return
-        if (loadError) {
-          setError(loadError.message)
-          setAssets([])
-        } else {
-          setAssets(
-            getPublishedImageChoices(
-              data as MediaLibraryRow[],
-              (path) =>
-                supabase!.storage.from("portfolio-public").getPublicUrl(path).data.publicUrl,
-            ),
-          )
-        }
-      } catch {
-        if (active) {
-          setError("Não foi possível consultar a Biblioteca de mídia.")
-          setAssets([])
-        }
-      } finally {
-        if (active) setLoading(false)
-      }
-    }
-    void load()
-    return () => {
-      active = false
-    }
-  }, [open])
-
-  const filtered = assets.filter((asset) =>
-    `${asset.title} ${asset.path} ${asset.alt}`
-      .toLocaleLowerCase("pt-BR")
-      .includes(query.toLocaleLowerCase("pt-BR").trim()),
-  )
 
   return (
     <div className="published-media-picker">
@@ -126,22 +66,11 @@ export function PublishedMediaPicker({
         <button
           type="button"
           className={iconOnlyActions ? "secondary-button media-icon-action" : "secondary-button"}
-          aria-label={
-            iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined
-          }
-          title={
-            iconOnlyActions ? (open ? "Fechar biblioteca" : "Escolher da biblioteca") : undefined
-          }
-          aria-expanded={open}
-          onClick={() => setOpen((current) => !current)}
+          aria-label={iconOnlyActions ? "Escolher da biblioteca" : undefined}
+          title={iconOnlyActions ? "Escolher da biblioteca" : undefined}
+          onClick={() => setOpen(true)}
         >
-          {iconOnlyActions ? (
-            <Icon name="image" size={20} />
-          ) : open ? (
-            "Fechar biblioteca"
-          ) : (
-            "Escolher da biblioteca"
-          )}
+          {iconOnlyActions ? <Icon name="image" size={20} /> : "Escolher da biblioteca"}
         </button>
         {value && onFramingChange && (
           <button
@@ -178,48 +107,12 @@ export function PublishedMediaPicker({
         />
       )}
       {open && (
-        <div className="published-media-panel" role="region" aria-label={`Biblioteca: ${label}`}>
-          <p>Somente imagens publicadas na aba Mídia podem ser escolhidas.</p>
-          <label>
-            Buscar imagem
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Título ou nome do arquivo"
-            />
-          </label>
-          {loading ? (
-            <p role="status">Carregando imagens…</p>
-          ) : error ? (
-            <p role="alert">{error}</p>
-          ) : filtered.length ? (
-            <div className="published-media-grid">
-              {filtered.map((asset) => (
-                <button
-                  type="button"
-                  key={asset.id}
-                  className="published-media-option"
-                  aria-pressed={value === asset.url}
-                  onClick={() => {
-                    onChange(asset.url, asset.alt)
-                    setOpen(false)
-                  }}
-                >
-                  <img src={asset.url} alt="" loading="lazy" decoding="async" />
-                  <span>{asset.title}</span>
-                  {value === asset.url && <small>Selecionada</small>}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p>
-              {assets.length
-                ? "Nenhuma imagem corresponde à busca."
-                : "Não há imagens publicadas. Envie e publique o arquivo na aba Mídia."}
-            </p>
-          )}
-        </div>
+        <PublishedMediaDialog
+          label={label}
+          selectedUrl={value}
+          onSelect={onChange}
+          onClose={() => setOpen(false)}
+        />
       )}
     </div>
   )

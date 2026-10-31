@@ -7,6 +7,7 @@ import {
   type RestorableEntity,
 } from "../../lib/revision-restore"
 import { stagePrivateMediaChange } from "../../lib/media-operations"
+import { uploadPrivateMedia, publishPrivateMedia } from "../../lib/media-library-actions"
 import { resolveMediaPreview, type MediaPreview } from "../../lib/media-preview"
 import { PublishedMediaPicker } from "./PublishedMediaPicker"
 import { AdminInfoTip } from "./InfoTip"
@@ -2842,33 +2843,10 @@ export function EnhancedMediaLibrary() {
   }
   async function upload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
-    if (!file || !supabase) return
-    if (
-      !["image/jpeg", "image/png", "image/webp", "image/svg+xml"].includes(file.type) ||
-      file.size > 8_000_000
-    )
-      return setMessage("Use JPG, PNG, WebP ou SVG de até 8 MB.")
-    const path = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`
-    const client = supabase
-    const result = await stagePrivateMediaChange({
-      stage: () => client.storage.from("portfolio-private").upload(path, file),
-      persist: async () =>
-        client.from("media_assets").insert({
-          storage_bucket: "portfolio-private",
-          storage_path: path,
-          mime_type: file.type,
-          file_size: file.size,
-          alt_text: "",
-          title: mediaFileName(path),
-          status: "published",
-        }),
-      undoStage: () => client.storage.from("portfolio-private").remove([path]),
-    })
-    setMessage(
-      result.ok
-        ? "Mídia cadastrada como publicada. Arquivo privado: use Disponibilizar no site para torná-lo público."
-        : result.message,
-    )
+    if (!file) return
+    event.target.value = ""
+    const result = await uploadPrivateMedia(file)
+    setMessage(result.message)
     if (result.ok) await load()
   }
   async function promote(asset: Record<string, any>) {
@@ -2882,36 +2860,14 @@ export function EnhancedMediaLibrary() {
     )
       return
     setMessage("Publicando mídia…")
-    const { data, error } = await supabase.storage
-      .from("portfolio-private")
-      .download(asset.storage_path)
-    if (error || !data) return setMessage(error?.message ?? "Arquivo não encontrado.")
-    const upload = await supabase.storage
-      .from("portfolio-public")
-      .upload(asset.storage_path, data, {
-        contentType: asset.mime_type,
-        upsert: false,
-      })
-    if (upload.error) return setMessage(upload.error.message)
-    const update = await supabase
-      .from("media_assets")
-      .update({
-        storage_bucket: "portfolio-public",
-        status: "published",
-        title: mediaFileName(asset.storage_path),
-      })
-      .eq("id", asset.id)
-    if (update.error) {
-      const cleanup = await supabase.storage.from("portfolio-public").remove([asset.storage_path])
-      return setMessage(
-        update.error.message +
-          (cleanup.error
-            ? " Atenção: a cópia pública precisa de remoção manual."
-            : " Cópia pública revertida."),
-      )
-    }
-    setMessage("Mídia promovida ao bucket público.")
-    await load()
+    const result = await publishPrivateMedia({
+      id: asset.id,
+      storage_bucket: asset.storage_bucket,
+      storage_path: asset.storage_path,
+      mime_type: asset.mime_type,
+    })
+    setMessage(result.message)
+    if (result.ok) await load()
   }
   async function replace(event: React.ChangeEvent<HTMLInputElement>, asset: Record<string, any>) {
     const file = event.target.files?.[0]
