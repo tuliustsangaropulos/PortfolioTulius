@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js"
 // Uses the pre-existing P5 admin account secrets; never prints access tokens or passwords.
 const PROJECT_URL = "https://zfnrhzplwpjpdljraypt.supabase.co"
 const SITE_URL = "https://tulius.work/"
-const SOURCE = new URL("./assets/illustrations-2026-10-31.json", import.meta.url)
+const SOURCE = new URL("./illustrations-2026-10-31.json", import.meta.url)
 const allowed = new Set(["invest-rs", "prefeitura-sp", "vale", "globo-sportv", "inpress"])
 const expectedSlots = { "invest-rs": 4, "prefeitura-sp": 3, vale: 3, "globo-sportv": 3, inpress: 3 }
 
