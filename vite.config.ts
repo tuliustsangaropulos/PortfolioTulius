@@ -7,6 +7,14 @@ export default defineConfig({
   base: "/",
   plugins: [react(), tailwindcss()],
   build: {
+    modulePreload: {
+      // The public entry must not preload the route-only administrative router.
+      // Keep the dependencies for dynamic JS imports (including /admin) intact.
+      resolveDependencies: (_filename, deps, { hostType }) =>
+        hostType === "html"
+          ? deps.filter((dep) => !/(^|\/)admin-router-[^/]+\.js$/.test(dep))
+          : deps,
+    },
     rolldownOptions: {
       output: {
         // The broad vendor group avoids a 533 kB main-entry regression.

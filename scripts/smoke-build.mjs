@@ -21,6 +21,12 @@ check(robots.includes("Disallow: /admin\n") && robots.includes("Disallow: /admin
 check(/<urlset\b/.test(sitemap) && /<loc>https:\/\//.test(sitemap),
   "sitemap.xml não contém uma URL HTTPS.")
 
+const modulePreloads = [...html.matchAll(/<link\b[^>]*\brel=["']modulepreload["'][^>]*>/gi)]
+check(
+  modulePreloads.every(([tag]) => !/admin-router-[^"'\s>]+\.js/.test(tag)),
+  "HTML público pré-carrega o chunk administrativo.",
+)
+
 const assetNames = [
   ...html.matchAll(/(?:src|href)=["']\/assets\/([^"']+\.(?:js|css))["']/g),
 ].map((match) => match[1])

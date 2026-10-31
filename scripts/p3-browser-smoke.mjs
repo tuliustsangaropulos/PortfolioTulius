@@ -80,11 +80,17 @@ try {
           adminRouterPreloaded: [...document.querySelectorAll('link[rel="modulepreload"]')].some((link) =>
             link.href.includes("admin-router"),
           ),
+          adminRouterRequested: performance.getEntriesByType("resource").some((entry) =>
+            /\/admin-router-[^/]+\.js/.test(entry.name),
+          ),
           portraitComplete: portrait?.complete ?? false,
           publicSections: document.querySelectorAll("section.portfolio-section").length,
         }
       })
       console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
+      if (firstFold.adminRouterPreloaded || firstFold.adminRouterRequested) {
+        throw new Error("Admin router requested on the public first fold")
+      }
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
       stage = "menu initial focus"
