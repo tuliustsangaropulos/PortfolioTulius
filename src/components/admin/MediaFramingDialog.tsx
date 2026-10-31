@@ -60,6 +60,11 @@ export function MediaFramingDialog({
       previousFocus?.focus()
     }
   }, [])
+  const ratioParts = ratio.split("/").map((part) => Number(part.trim()))
+  const aspect =
+    ratioParts.length === 2 && ratioParts[0] > 0 && ratioParts[1] > 0
+      ? ratioParts[0] / ratioParts[1]
+      : 16 / 9
   const set = (field: keyof MediaFraming, n: number) =>
     setCurrent((before) => normalizeMediaFraming({ ...before, [field]: n }))
   return (
@@ -87,7 +92,10 @@ export function MediaFramingDialog({
             ×
           </button>
         </header>
-        <div className="media-frame-stage" style={{ aspectRatio: ratio }}>
+        <div
+          className="media-frame-stage"
+          style={{ aspectRatio: ratio, maxWidth: `min(100%, calc(42dvh * ${aspect}))` }}
+        >
           <img src={src} alt="Prévia do enquadramento" style={imageFramingStyle(current)} />
         </div>
         <div className="media-frame-controls">

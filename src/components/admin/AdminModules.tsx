@@ -691,21 +691,8 @@ export function ContentStudio({
         </div>
         {draft ? (
           <section className="admin-card editor-form">
-            <div className="site-editor-source">
-              <strong>
-                Origem do conteúdo:{" "}
-                {isCollectionSource(draft.content_json.source_collection)
-                  ? (collectionConfigs.find(
-                      (entry) => entry.table === draft.content_json.source_collection,
-                    )?.label ?? draft.content_json.source_collection)
-                  : "Itens editados neste bloco"}
-              </strong>
-              <small>
-                {isCollectionSource(draft.content_json.source_collection)
-                  ? "O site usa os registros publicados desta coleção. Os itens manuais ficam preservados como backup."
-                  : "As alterações dos itens deste bloco não atualizam automaticamente registros do acervo."}
-              </small>
-              {isCollectionSource(draft.content_json.source_collection) && onEditCollection && (
+            {isCollectionSource(draft.content_json.source_collection) && onEditCollection && (
+              <div className="site-editor-collection-action">
                 <button
                   type="button"
                   className="secondary-button"
@@ -713,8 +700,8 @@ export function ContentStudio({
                 >
                   Editar registros vinculados
                 </button>
-              )}
-            </div>
+              </div>
+            )}
             <details className="site-editor-advanced">
               <summary>Configurações avançadas do bloco e dos painéis</summary>
               <div className="field-grid compact-grid">
@@ -1228,14 +1215,11 @@ export function ContentStudio({
             <div className="block-items">
               {sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
                 draft.mobile_panel === "b" && (
-                  <div className="admin-card">
-                    <strong>Textos da seção 02 — coluna direita</strong>
-                    <p>
-                      Cada item corresponde a um título e texto. Use Adicionar item, as setas de
-                      ordenação e Remover item para gerenciar a lista completa. O primeiro item
-                      também aparece junto à foto no painel A mobile. Clique em Salvar alterações
-                      para publicar suas edições no bloco.
-                    </p>
+                  <div className="block-item-help">
+                    <AdminInfoTip
+                      label="Textos da seção 02 — coluna direita"
+                      description="Cada item corresponde a um título e texto. Use Adicionar item, as setas de ordenação e Remover item para gerenciar a lista completa. O primeiro item também aparece junto à foto no painel A mobile. Clique em Salvar alterações para publicar suas edições no bloco."
+                    />
                   </div>
                 )}
               {(draft.content_json.items ?? []).map((item, index) => (

@@ -1303,3 +1303,15 @@
   .published-media-dialog-tools { grid-template-columns: minmax(0, 1fr); }
   .published-media-private > div { flex-direction: column; align-items: stretch; }
 }
+
+/* CMS UX: frame preview is geometrically bounded and isolated from range inputs. */
+.media-frame-dialog { min-width: 0; min-height: 0; }
+.media-frame-stage { position: relative; isolation: isolate; width: 100%; height: auto; max-height: 42dvh; min-height: 0; overflow: hidden; align-self: center; flex: none; }
+.media-frame-stage > img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: cover; }
+.media-frame-controls { position: relative; z-index: 1; min-width: 0; }
+.media-frame-controls label { min-width: 0; }
+.media-frame-controls input[type="range"] { width: 100%; min-width: 0; }
+.media-frame-zoom { min-width: 0; }
+.media-frame-zoom input[type="range"] { min-width: 0; }
+.site-editor-collection-action { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
+.block-item-help { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
