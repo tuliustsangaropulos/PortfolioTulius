@@ -2,6 +2,11 @@ name: P5 Admin Read-Only E2E
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/p5-admin-readonly.yml
+      - scripts/p5-admin-readonly.mjs
 
 permissions:
   contents: read

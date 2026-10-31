@@ -64,6 +64,56 @@ try {
   passed++
   console.log("P5_ADMIN_MODULES " + JSON.stringify({ result: "PASS", modules: expectedModules.length }))
 
+  // Verify the newly edited CMS at a narrow viewport, without submitting any
+  // request that mutates the database. Input changes are ephemeral drafts.
+  await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 })
+  const openEditor = await page.$$eval(".admin-sidebar nav button", (nodes) => {
+    const button = nodes.find((node) => node.textContent?.trim() === "Seções")
+    if (!button) return false
+    button.click()
+    return true
+  })
+  if (!openEditor) throw new Error("Editor não disponível em viewport mobile.")
+  await page.waitForSelector(".site-editor-layout .block-item-toggle", { timeout: 20000 })
+  await page.click(".block-item-toggle")
+  await page.waitForSelector(".block-item-body .item-alt-field input", { timeout: 10000 })
+  const initial = await page.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth > innerWidth + 2,
+    saveDisabled: document.querySelector(".admin-floating-save button")?.disabled,
+    altOptional: !document.querySelector(".block-item-body .item-alt-field input")?.required,
+    editorialNoteVisible: [...document.querySelectorAll("label")].some((node) =>
+      node.textContent?.trim().startsWith("Nota editorial")
+    ),
+  }))
+  if (initial.overflow || initial.saveDisabled !== true || !initial.altOptional || initial.editorialNoteVisible)
+    throw new Error("CMS mobile inicial inválido: " + JSON.stringify(initial))
+  // Change a text field locally; assert the floating save and custom leave
+  // guard, then cancel and explicitly discard the draft without writing data.
+  const title = await page.$(".block-item-body input")
+  if (!title) throw new Error("Campo de edição não encontrado.")
+  await title.type(" P5")
+  await page.waitForFunction(() => {
+    return document.querySelector(".admin-floating-save button")?.disabled === false
+  }, { timeout: 7000 })
+  await page.$$eval(".site-editor-tabs [role=tab]", (nodes) => {
+    nodes.find((node) => node.textContent?.includes("Informações da seção"))?.click()
+  })
+  await page.waitForSelector(".admin-confirm-dialog[role=alertdialog]", { timeout: 7000 })
+  await page.click(".admin-confirm-dialog .secondary-button")
+  if (!await page.$(".block-item-body input")) throw new Error("Cancelar descartou a edição local.")
+  await page.$$eval(".site-editor-tabs [role=tab]", (nodes) => {
+    nodes.find((node) => node.textContent?.includes("Informações da seção"))?.click()
+  })
+  await page.waitForSelector(".admin-confirm-dialog[role=alertdialog]", { timeout: 7000 })
+  await page.click(".admin-confirm-dialog .primary-button")
+  await page.waitForSelector(".site-editor-body .editor-form", { timeout: 10000 })
+  await page.waitForFunction(() => document.querySelector(".admin-floating-save button")?.disabled === true, { timeout: 7000 })
+  console.log("P5_ADMIN_MOBILE_EDIT_GUARD " + JSON.stringify({
+    result: "PASS", viewport: "390x844", floatingSave: true,
+    altOptional: true, customLeaveDialog: true, contentMutations: mutations.length,
+  }))
+  if (mutations.length) throw new Error("Escrita não autorizada detectada na verificação mobile.")
+
   await page.goto(new URL("/admin/preview", base).href, { waitUntil: "networkidle2", timeout: 30000 })
   await page.waitForSelector(".preview-banner", { timeout: 15000 })
   // The preview banner renders before Supabase finishes loading. Wait for the
