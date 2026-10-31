@@ -1,6 +1,6 @@
 # PortfolioTulius — guia de Fontes do projeto ChatGPT
 
-**Revisão do índice GitHub:** 31/10/2026. **Fonte operacional:** [estado vigente](ESTADO_ATUAL_VIGENTE.md) e [pendências](OPEN_ISSUES.md). **Nova correção de CMS: ainda não implementada**; ver [handoff de 31/10](CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md). Esta documentação **não sincroniza automaticamente** os anexos do ChatGPT.
+**Revisão do índice GitHub:** 31/10/2026. **Fonte operacional:** [estado vigente](ESTADO_ATUAL_VIGENTE.md) e [pendências](OPEN_ISSUES.md). **Correções CMS implementadas no código** em [`6913d91`](https://github.com/${repo}/commit/${base}), CI aprovado e Vercel READY; [handoff de 31/10](CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md) preservado como especificação histórica. P2 transacional e aceite visual dos controles novos permanecem pendentes. Esta documentação **não sincroniza automaticamente** os anexos do ChatGPT.
 
 ## Consulta prioritária para cada próximo chat
 

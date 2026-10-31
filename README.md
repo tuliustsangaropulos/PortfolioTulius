@@ -1,6 +1,6 @@
 # Portfólio editorial — Tulius Tsangaropulos
 
-> **Próxima rodada CMS (31/10/2026):** backlog manual documentado em [continuidade CMS/Fontes e pendências](docs/CONTINUIDADE_CMS_FONTES_E_PENDENCIAS_2026-10-31.md): ícones em dropdown visual, alinhamento de descrição alternativa do logo e legendas, biblioteca de imagens em modal com upload. **Ainda não implementado.** A validação autenticada read-only anterior passou; P3 LCP mobile e P2 transacional continuam abertos. Consultar [estado vigente](docs/ESTADO_ATUAL_VIGENTE.md) antes de programar.
+> **CMS UX implementado no código em 31/10/2026:** alinhamento de logo/legenda, catálogo de 50 ícones recolhível e seletor de mídia em modal com upload inicialmente privado e publicação explícita. [CI #41173453310](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173453310) aprovado; Vercel READY no mesmo SHA. **Ainda pendentes:** inspeção visual dos controles novos, P2 transacional suspenso e meta LCP mobile. Consulte [estado vigente](docs/ESTADO_ATUAL_VIGENTE.md).
 
 
 

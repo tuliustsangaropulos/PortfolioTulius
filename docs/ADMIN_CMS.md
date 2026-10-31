@@ -1,6 +1,17 @@
 # CMS administrativo
 
-## Backlog UX manual — 31/10/2026 (não implementado nesta rodada)
+## CMS UX entregue em 31/10/2026 — código e limites
+
+O commit funcional [`6913d91`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/6913d91c71041457d3425836ee2e96f93677bc59), [CI Validate #41173453310](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173453310) **success** e Vercel Production **READY** incorporou:
+
+1. `VisualIconLibrary.tsx` com seletor compacto e popover contendo 50 opções gráficas em cinco grupos; foco inicial, Escape, fechamento externo, `aria-expanded` e os contratos de seleção única/múltipla permanecem.
+2. Em `AdminModules.tsx`, campos de descrição alternativa do logo e legenda dos slides alinhados ao topo pela grade CSS própria (`experience-logo-fields`, `experience-slide-fields`). O `logoAlt` segue opcional e os valores dos campos não foram alterados.
+3. `PublishedMediaPicker.tsx` passou a abrir `PublishedMediaDialog.tsx`, com pesquisa, seleção publicada, envio de mídia dentro do modal e lista separada de arquivos privados não selecionáveis. `src/lib/media-library-actions.ts` compartilha upload privado e publicação explicitamente confirmada com a biblioteca principal; a imagem atual, alt e X/Y/zoom do bloco só mudam se o administrador confirmar uma seleção e posteriormente salvar o formulário.
+4. O Salvar flutuante e as proteções de rascunho continuam existentes. Fechar/cancelar um modal não salva o bloco; `beforeunload` segue nativo por restrição do navegador.
+
+**Provas:** CI completo e teste estático `admin-cms-ux.test.ts`; [P5 read-only #41173340958](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173340958) aprovou o catálogo recolhível e nenhum conteúdo foi escrito. **Não executado:** testes de upload real, promoção, CRUD/restauração transacionais (P2 suspenso), nem nova inspeção visual do modal e popover em aparelhos físicos. Não usar `READY` como prova de publicação editorial/Storage.
+
+## Histórico do backlog de UX — 31/10/2026 (estado anterior à entrega)
 
 As capturas mostram: **(a)** os 50 ícones ocupam o formulário de modo permanente; substituir por **dropdown visual com popover** e as cinco categorias atuais; seleção única de métrica e até 3 plataformas; acessibilidade e estado de rascunho. **(b)** `Descrição alternativa do logo` e `Legenda da imagem` estão deslocadas verticalmente; alinhar label/input ao topo sem alterar valores existentes, inclusive descrições opcionais. **(c)** `PublishedMediaPicker` abre a biblioteca inline `role="region"`; alterar para **dialog/modal** com busca, escolha e envio de imagem no mesmo diálogo. Compartilhar lógica segura de `EnhancedMediaLibrary` para upload privado, revisão e promoção deliberada. Preserve mídia atual, X/Y/zoom e Salvar flutuante; não usar confirmações JS nativas para navegação interna.
 

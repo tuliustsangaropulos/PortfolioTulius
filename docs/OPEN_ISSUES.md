@@ -1,8 +1,14 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
-## Novo backlog da verificação manual — 31/10/2026
+## Situação após implementação CMS-UX — 31/10/2026
 
-**Pendente de IMPLEMENTAÇÃO em todas as áreas aplicáveis do admin (não concluído neste commit documental):**
+**Resolvido em código (não fechar aceite transacional):** CMS-UX-01 (dropdown de ícones), CMS-UX-02 (alinhamento de logo/slide) e CMS-UX-03 (modal de mídia com envio privado/publicação explícita). CMS-UX-04 preservado e coberto por verificações existentes e testes estáticos. Código [`6913d91`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/6913d91c71041457d3425836ee2e96f93677bc59), [CI Validate #41173453310](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173453310) **success**, Vercel Production **READY** no mesmo SHA. P5 read-only da biblioteca de ícones: [#41173340958](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173340958) **success**, sem gravações.
+
+**Ainda pendente:** revisão visual específica dos novos controles, evidência E2E autenticada do novo modal sem escrita, fluxos de edição/publicação/upload com JWT real (**P2 SUSPENSO**, não executar produção nem contratar staging), P3-PERF-01 mobile (LCP mediano 7,757 s; meta ≤2,5 s), oito `editorial_issues`, dois depoimentos ilustrativos e decisões de proveniência/licenças/segurança/limpeza P1. Não houve alteração do Supabase, Storage, conteúdos, auth ou RLS nesta implementação. O backlog abaixo é preservado como histórico do momento anterior.
+
+## Histórico das solicitações manuais de 31/10/2026 — posteriormente implementadas
+
+**Registro histórico do estado anterior à implementação; os itens abaixo tiveram código entregue em 31/10/2026, mas ainda não receberam aceite visual integral ou P2 transacional:**
 1. **CMS-UX-01:** biblioteca de **50 ícones em dropdown/popover visual**, cinco categorias e células apenas gráficas; seleção única de indicador e até três ícones de plataformas; sem listas sempre expandidas.
 2. **CMS-UX-02:** corrigir espaçamento/alinhamento vertical de **Descrição alternativa do logo** (campo próximo ao título) e **Legenda da imagem** nos slides; preserve textos/alt/URL/enquadramento e acessibilidade mobile.
 3. **CMS-UX-03:** abrir **Biblioteca de imagens em modal** e permitir **Enviar mídia dentro do modal**, reutilizando fluxo privado → publicação deliberada já existente; não selecionar upload privado antes de estar publicado nem alterar Storage sem consentimento e autorização P2.
