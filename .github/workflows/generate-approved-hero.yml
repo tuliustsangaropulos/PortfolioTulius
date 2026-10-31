@@ -1,0 +1,47 @@
+name: Generate approved hero WebP assets
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/generate-approved-hero.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  optimized-portrait:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout protected source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+      - name: Download and validate the approved portrait
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 \
+            'https://zfnrhzplwpjpdljraypt.supabase.co/storage/v1/object/public/portfolio-public/b171afda-2708-44eb-b3e5-ab2b7ff13236-tulius_site.png' \
+            -o /tmp/tulius_site.png
+          echo '81e0dd7c32f0a8e2729f5a561fa730c0bed9d20c5845b3f705c11d102045b569  /tmp/tulius_site.png' | sha256sum --check -
+      - name: Generate lossless-alpha quality controlled variants with open-source cwebp
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq webp
+          mkdir -p public/media
+          cwebp -quiet -q 82 -m 6 -exact /tmp/tulius_site.png -o public/media/tulius-site-900.webp
+          cwebp -quiet -q 82 -m 6 -exact -resize 600 800 /tmp/tulius_site.png -o public/media/tulius-site-600.webp
+          file public/media/tulius-site-{600,900}.webp
+          test "$(stat -c %s public/media/tulius-site-900.webp)" -lt 100000
+          test "$(stat -c %s public/media/tulius-site-600.webp)" -lt 75000
+      - name: Commit static WebP without replacing original CMS media
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/media/tulius-site-600.webp public/media/tulius-site-900.webp
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'assets(perf): add verified optimized derivatives of approved profile portrait'
+          git push origin HEAD:main
