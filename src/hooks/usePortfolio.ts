@@ -20,7 +20,8 @@ import {
 } from "../lib/placements"
 import type { DesignTokens, PortfolioSection } from "../types/content"
 
-const SECTION_SELECT = "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json)"
+const SECTION_SELECT =
+  "id,slug,sort_order,title,eyebrow,intro,theme,layout_variant,animation_preset,status,is_visible,content_blocks(id,section_id,sort_order,mobile_panel,status,content_json)"
 
 /** Only the published landing profile may appear before the complete CMS graph. */
 export function isEarlyProfileRoute(includeDrafts: boolean, hash: string): boolean {
@@ -110,10 +111,7 @@ export function usePortfolio(includeDrafts = false) {
         ? testimonialsQuery.neq("status", "archived")
         : testimonialsQuery.eq("status", "published"),
     )
-    let query = supabase
-      .from("sections")
-.select(SECTION_SELECT)
-      .order("sort_order")
+    let query = supabase.from("sections").select(SECTION_SELECT).order("sort_order")
     if (!includeDrafts) query = query.eq("status", "published").eq("is_visible", true)
 
     // The profile needs only its own two blocks, not the other 12 sections
@@ -123,9 +121,11 @@ export function usePortfolio(includeDrafts = false) {
       supabase.from("section_panels").select("id,section_id,panel_key"),
     )
     const placementsRequest = Promise.resolve(
-      supabase.from("block_placements").select(
-        "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
-      ),
+      supabase
+        .from("block_placements")
+        .select(
+          "block_id,panel_id,sort_order,layout_variant,is_visible,style_config,motion_config",
+        ),
     )
     if (isEarlyProfileRoute(includeDrafts, window.location.hash)) {
       void Promise.all([
@@ -144,9 +144,12 @@ export function usePortfolio(includeDrafts = false) {
             return
           const row = profile.data as SectionResult
           // Never compose a collection-sourced preview with missing records.
-          if ((row.content_blocks ?? []).some((block) =>
-            isCollectionSource(block.content_json?.source_collection),
-          )) return
+          if (
+            (row.content_blocks ?? []).some((block) =>
+              isCollectionSource(block.content_json?.source_collection),
+            )
+          )
+            return
           const section = toSection(
             row,
             (panels.data ?? []) as SectionPanelRow[],
