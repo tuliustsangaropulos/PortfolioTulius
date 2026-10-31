@@ -25,12 +25,12 @@ describe("isSafePublicUrl", () => {
 })
 
 describe("validateContentItems", () => {
-  it("valida títulos, alt e links", () => {
+  it("valida títulos e links sem exigir texto alternativo", () => {
     const errors = validateContentItems([
       { title: "", image: "/portrait.jpg" },
       { title: "Contato", meta: "javascript:alert(1)" },
     ])
-    expect(errors).toHaveLength(3)
+    expect(errors).toHaveLength(2)
   })
 })
 
@@ -62,12 +62,12 @@ describe("section 02 desktop portrait", () => {
     expect(isSafeEditorialImage("/media/../private.jpg")).toBe(false)
   })
 
-  it("requires alternative text for explicitly configured desktop media", () => {
+  it("accepts optional alternative text for explicitly configured desktop media", () => {
     expect(
       validateContentItems([
         { title: "Estratégia", aboutDesktopImage: "/media/tulius-contact.jpg" },
       ]),
-    ).toHaveLength(1)
+    ).toHaveLength(0)
     expect(
       validateContentItems([
         {
