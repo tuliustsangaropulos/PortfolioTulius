@@ -1582,3 +1582,142 @@
   #perfil-a .mobile-name { font-size: clamp(2.3rem, 10.3vw, 3rem); }
   #perfil-a .mobile-profile-hero { grid-template-columns: minmax(0, 45%) minmax(0, 55%); }
 }
+
+/* Seção 01: nova hierarquia editorial somente para mobile. */
+@media (max-width: 767px) {
+  .public-site #perfil-a.mobile-panel {
+    display: flex; flex-direction: column; min-height: 100svh;
+    padding: var(--header) 0 0; scroll-margin-top: 0; overflow-wrap: normal;
+  }
+  .public-site #perfil-a .profile-mobile-identity {
+    flex: none; min-width: 0; padding: clamp(.8rem, 2.2svh, 1.4rem) var(--gutter) clamp(1rem, 2.5svh, 1.6rem);
+    background: var(--paper); color: var(--ink);
+  }
+  .public-site #perfil-a .profile-mobile-kicker {
+    position: relative; margin: 0 0 clamp(.85rem, 2svh, 1.45rem); padding-left: 2.7rem;
+    max-width: 46ch; font-size: clamp(.68rem, 2.55vw, .83rem);
+    line-height: 1.4; text-transform: uppercase; overflow-wrap: break-word;
+  }
+  .public-site #perfil-a .profile-mobile-kicker::before {
+    content: ""; position: absolute; top: .55em; left: 0; width: 2rem; border-top: 3px solid var(--orange);
+  }
+  .public-site #perfil-a .mobile-name {
+    display: flex; flex-direction: column; align-items: flex-start; flex-wrap: nowrap;
+    gap: 0; margin: 0; max-width: 100%; min-width: 0; line-height: .92; letter-spacing: -.042em;
+  }
+  .public-site #perfil-a .mobile-name span { padding: 0; max-width: 100%; white-space: nowrap; overflow-wrap: normal; }
+  .public-site #perfil-a .mobile-name span:first-child {
+    padding: .01em .09em 0; background: var(--orange); font-size: clamp(4.45rem, 23vw, 7.4rem);
+  }
+  .public-site #perfil-a .mobile-name span:last-child {
+    margin-top: .12em; background: transparent; font-size: clamp(2.3rem, 10.35vw, 4.2rem);
+    letter-spacing: -.04em;
+  }
+  .public-site #perfil-a .profile-mobile-stage {
+    display: flex; flex: 1 0 auto; flex-direction: column; min-height: clamp(27rem, 56svh, 40rem);
+    padding: 0 var(--gutter) max(.65rem, env(safe-area-inset-bottom));
+    background: var(--hero-panel-background, var(--ink)); color: var(--paper);
+  }
+  .public-site #perfil-a .mobile-profile-hero {
+    display: grid; flex: 1 0 0; grid-template-columns: minmax(0, 62%) minmax(0, 38%);
+    align-items: stretch; min-height: 18.5rem; margin: 0 calc(var(--gutter) * -1);
+    overflow: hidden; background: transparent;
+  }
+  .public-site #perfil-a .mobile-profile-hero > picture,
+  .public-site #perfil-a .mobile-profile-hero > img {
+    display: block; grid-column: 1; grid-row: 1; width: 100%; height: 100%;
+    min-width: 0; min-height: 0; align-self: end;
+  }
+  .public-site #perfil-a .mobile-profile-hero > picture > img,
+  .public-site #perfil-a .mobile-profile-hero > img {
+    display: block; width: 100%; height: 100%; object-fit: contain;
+    object-position: bottom left; filter: grayscale(1);
+  }
+  .public-site #perfil-a .mobile-profile-hero > .profile-mobile-years {
+    grid-column: 2; grid-row: 1; align-self: start; z-index: 1;
+    min-width: 0; padding: clamp(1rem, 3svh, 1.75rem) var(--gutter) 0 .2rem;
+  }
+  .public-site #perfil-a .profile-mobile-years strong {
+    display: block; color: var(--item-title-color, var(--orange));
+    font: 800 clamp(2.65rem, 12.5vw, 4.7rem)/.86 var(--font-display); overflow-wrap: break-word;
+  }
+  .public-site #perfil-a .profile-mobile-years p {
+    margin: .75rem 0 0; color: var(--item-text-color, var(--paper));
+    font-size: clamp(.76rem, 3.25vw, .92rem); line-height: 1.4; overflow-wrap: break-word;
+  }
+  .public-site #perfil-a .mobile-profile-hero .badge-360 {
+    top: auto; right: var(--gutter); bottom: clamp(.5rem, 2svh, 1.3rem);
+    left: auto; width: clamp(6.25rem, 27vw, 8.4rem); transform: none;
+  }
+  .public-site #perfil-a .mobile-intro {
+    z-index: 1; flex: none; width: 100%; min-height: 0; margin: 0;
+    padding: .8rem 0 .55rem; border-top: 1px solid color-mix(in srgb, var(--paper) 35%, transparent);
+    color: var(--hero-intro-color, var(--paper));
+    font: italic 700 clamp(1.1rem, 4.7vw, 1.5rem)/1.2 Georgia, serif;
+    text-align: left; overflow-wrap: break-word;
+  }
+  .public-site #perfil-a .profile-mobile-next {
+    display: grid; flex: none; place-items: center; align-self: center;
+    width: 3.25rem; height: 3.25rem; margin-top: .6rem;
+    border: 1.5px solid currentColor; border-radius: 50%;
+    color: var(--paper); text-decoration: none;
+  }
+  .public-site #perfil-a .profile-mobile-next:focus-visible { outline-color: var(--orange); }
+  .public-site #perfil-b.mobile-panel {
+    min-height: 100svh; scroll-margin-top: 0;
+    padding: calc(var(--header) + clamp(.6rem, 2svh, 1.15rem)) var(--gutter) max(1.5rem, env(safe-area-inset-bottom));
+    background: var(--paper); color: var(--ink);
+  }
+  .public-site #perfil-b .profile-mobile-details { min-width: 0; }
+  .public-site #perfil-b .profile-mobile-block-heading {
+    margin: 0; padding: .7rem 0 .3rem; border-top: 2px solid var(--orange);
+  }
+  .public-site #perfil-b .profile-mobile-block-heading h2 {
+    margin: 0; font: 800 clamp(2rem, 9.2vw, 3.1rem)/.96 var(--font-heading);
+    letter-spacing: -.035em; text-transform: uppercase; overflow-wrap: break-word;
+  }
+  .public-site #perfil-b .profile-mobile-area-list,
+  .public-site #perfil-b .profile-mobile-career-list {
+    display: flex; flex-direction: column; list-style: none; margin: 0; padding: 0;
+  }
+  .public-site #perfil-b .profile-mobile-area-list li,
+  .public-site #perfil-b .profile-mobile-career-list li {
+    order: var(--item-mobile-order, initial); width: 100%;
+    min-width: 0; border-bottom: 1px solid var(--line);
+  }
+  .public-site #perfil-b .profile-mobile-area-list li > a,
+  .public-site #perfil-b .profile-mobile-area-list li > div {
+    display: grid; grid-template-columns: 2rem minmax(0, 1fr) 1.25rem;
+    align-items: center; gap: .55rem; min-height: 3.25rem;
+    padding: .4rem 0; color: inherit; text-decoration: none;
+  }
+  .public-site #perfil-b .profile-mobile-area-list li > a:hover,
+  .public-site #perfil-b .profile-mobile-area-list li > a:focus-visible,
+  .public-site #perfil-b .profile-mobile-career-list li > a:hover,
+  .public-site #perfil-b .profile-mobile-career-list li > a:focus-visible { color: var(--orange-dark); }
+  .public-site #perfil-b .profile-mobile-area-number {
+    color: var(--orange-dark); font-size: .81rem; font-weight: 800; font-variant-numeric: tabular-nums;
+  }
+  .public-site #perfil-b .profile-mobile-area-list strong,
+  .public-site #perfil-b .profile-mobile-career-list strong {
+    display: block; min-width: 0; color: var(--item-title-color, inherit);
+    font: 800 clamp(1.17rem, 5.3vw, 1.52rem)/1.02 var(--font-heading);
+    text-transform: uppercase; overflow-wrap: break-word;
+  }
+  .public-site #perfil-b .profile-mobile-area-list svg { justify-self: end; }
+  .public-site #perfil-b .profile-mobile-career-heading { margin-top: clamp(1.1rem, 3svh, 1.75rem); }
+  .public-site #perfil-b .profile-mobile-career-list li > a,
+  .public-site #perfil-b .profile-mobile-career-list li > div {
+    display: block; min-height: 3.05rem; padding: .35rem 0; color: inherit; text-decoration: none;
+  }
+  .public-site #perfil-b .profile-mobile-career-list li span {
+    display: block; margin-top: .12rem; color: var(--item-text-color, var(--orange-dark));
+    font-size: clamp(.72rem, 3vw, .83rem); line-height: 1.25; overflow-wrap: break-word;
+  }
+}
+@media (max-width: 360px) {
+  .public-site #perfil-a .mobile-name span:first-child { font-size: 22vw; }
+  .public-site #perfil-a .mobile-name span:last-child { font-size: 9.7vw; }
+  .public-site #perfil-a .profile-mobile-years strong { font-size: clamp(2.4rem, 12vw, 3.5rem); }
+  .public-site #perfil-a .mobile-profile-hero .badge-360 { width: 6.25rem; }
+}

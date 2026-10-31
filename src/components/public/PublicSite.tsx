@@ -337,6 +337,133 @@ function ProfileDesktop({
   )
 }
 
+
+function ProfileMobilePresentation({
+  section,
+  profile,
+}: {
+  section: PortfolioSection
+  profile: ContentItem
+}) {
+  const hero = profile.hero
+  return (
+    <>
+      <div className="profile-mobile-identity">
+        {section.eyebrow && <p className="profile-mobile-kicker">{section.eyebrow}</p>}
+        <div className="mobile-name">
+          <span>TULIUS</span>
+          <span>TSANGAROPULOS</span>
+        </div>
+      </div>
+      <div className="profile-mobile-stage" style={{ ...itemStyle(profile), ...heroStyle(hero) }}>
+        <div className="mobile-profile-hero">
+          <ApprovedProfileImage
+            src={profile.image}
+            alt={profile.alt}
+            style={imageFramingStyle(profile.mediaFraming)}
+            mobile
+          />
+          <div className="profile-mobile-years">
+            <strong>{profile.title}</strong>
+            {profile.text && <p>{profile.text}</p>}
+          </div>
+          <Badge360 config={hero} />
+        </div>
+        {section.intro && <p className="mobile-intro">{section.intro}</p>}
+        <a
+          className="profile-mobile-next"
+          href="#perfil-b"
+          aria-label="Ir para áreas de atuação e experiências"
+          title="Ir para áreas de atuação e experiências"
+        >
+          <Icon name="down" size={28} />
+        </a>
+      </div>
+    </>
+  )
+}
+
+function ProfileMobileDetails({
+  items,
+  publishedSlugs,
+  onSelectTheme,
+}: {
+  items: ContentItem[]
+  publishedSlugs: string[]
+  onSelectTheme: (themeKey: string) => void
+}) {
+  const areas = items.slice(0, 5)
+  const careers = items.slice(5)
+  return (
+    <div className="profile-mobile-details">
+      <header className="profile-mobile-block-heading">
+        <h2>Áreas de atuação</h2>
+      </header>
+      <ol className="profile-mobile-area-list">
+        {areas.map((item, index) => {
+          const destination = resolveHeroCardDestination(item.targetSlug, publishedSlugs)
+          const content = (
+            <>
+              <span className="profile-mobile-area-number">
+                {item.label || String(index + 1).padStart(2, "0")}
+              </span>
+              <strong>{item.title}</strong>
+              {destination && <Icon name="arrow" size={19} />}
+            </>
+          )
+          return (
+            <li
+              key={`${item.title}-${index}`}
+              className={item.mobile?.visible === false ? "item-hidden-mobile" : undefined}
+              style={itemStyle(item)}
+            >
+              {destination ? (
+                <a
+                  href={`#${destination}`}
+                  onClick={
+                    destination === "resultados"
+                      ? () => onSelectTheme(item.themeKey || RESULT_THEME_KEYS[index])
+                      : undefined
+                  }
+                >
+                  {content}
+                </a>
+              ) : (
+                <div>{content}</div>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+      <header className="profile-mobile-block-heading profile-mobile-career-heading">
+        <h2>Experiência em destaque</h2>
+      </header>
+      <ul className="profile-mobile-career-list">
+        {careers.map((item, index) => {
+          const destination = publishedSlugs.includes(item.targetSlug ?? "")
+            ? item.targetSlug
+            : undefined
+          const content = (
+            <>
+              <strong>{item.title}</strong>
+              {item.meta && <span>{item.meta}</span>}
+            </>
+          )
+          return (
+            <li
+              key={`${item.title}-${index}`}
+              className={item.mobile?.visible === false ? "item-hidden-mobile" : undefined}
+              style={itemStyle(item)}
+            >
+              {destination ? <a href={`#${destination}`}>{content}</a> : <div>{content}</div>}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
 function MobilePanel({
   section,
   panel,
@@ -386,47 +513,13 @@ function MobilePanel({
           </div>
         </>
       ) : isProfile && panel === "a" && profile ? (
-        <>
-          <div className="mobile-name">
-            <span>TULIUS</span>
-            <span>TSANGAROPULOS</span>
-          </div>
-          <p className="mobile-role">{section.eyebrow}</p>
-          <div
-            className="mobile-profile-hero"
-            style={{ ...itemStyle(profile), ...heroStyle(hero) }}
-          >
-            <ApprovedProfileImage src={profile.image} alt={profile.alt} mobile />
-            <div>
-              <strong>{profile.title}</strong>
-              <p>{profile.text}</p>
-            </div>
-            <Badge360 config={hero} />
-          </div>
-          <p
-            className="mobile-intro"
-            style={{
-              ...heroStyle(hero),
-              color: hero?.introColor ?? undefined,
-            }}
-          >
-            {section.intro}
-          </p>
-          <div className="mobile-highlights">
-            <h2>Destaques</h2>
-            <div>
-              {items.slice(1).map((item, i) => (
-                <ItemCard
-                  key={item.title}
-                  item={item}
-                  index={i}
-                  layout={section.layout}
-                  showArrow
-                />
-              ))}
-            </div>
-          </div>
-        </>
+        <ProfileMobilePresentation section={section} profile={profile} />
+      ) : isProfile && panel === "b" ? (
+        <ProfileMobileDetails
+          items={items}
+          publishedSlugs={publishedSlugs}
+          onSelectTheme={onSelectTheme}
+        />
       ) : (
         <>
           <header
