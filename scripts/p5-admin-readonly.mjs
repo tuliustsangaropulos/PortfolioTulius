@@ -114,11 +114,11 @@ try {
   await page.waitForSelector(".site-editor-body .editor-form", { timeout: 10000 })
   await page.waitForFunction(() => document.querySelector(".admin-floating-save button")?.disabled === true, { timeout: 7000 })
   // Open the published Results block without selecting or saving an icon.
-  await page.$eval(".site-editor-tabs [role=tab]", (nodes) => {
+  await page["\\u0024\\u0024eval"](".site-editor-tabs [role=tab]", (nodes) => {
     nodes.find((node) => node.textContent?.includes("Conteúdo e painéis"))?.click()
   })
   await page.waitForSelector(".site-editor-body .block-item-toggle", { timeout: 12000 })
-  const resultsSelected = await page.$eval(".site-editor-sidebar button", (nodes) => {
+  const resultsSelected = await page["\\u0024\\u0024eval"](".site-editor-sidebar button", (nodes) => {
     const button = nodes.find((node) => node.textContent?.includes("Resultados e projetos"))
     if (!button) return false
     button.click()
@@ -132,7 +132,7 @@ try {
   await page.waitForSelector(".site-editor-body .block-item-toggle", { timeout: 12000 })
   await page.click(".site-editor-body .block-item-toggle")
   await page.waitForSelector(".block-item-body .visual-icon-library", { timeout: 12000 })
-  const iconCatalog = await page.$eval(".block-item-body .visual-icon-library .visual-icon-grid button", (nodes) => ({
+  const iconCatalog = await page["\\u0024\\u0024eval"](".block-item-body .visual-icon-library .visual-icon-grid button", (nodes) => ({
     count: nodes.length,
     labeled: nodes.every((node) => Boolean(node.getAttribute("aria-label"))),
     visual: nodes.every((node) => [...node.childNodes].every((child) => child.nodeType !== 3 || !child.textContent?.trim())),
