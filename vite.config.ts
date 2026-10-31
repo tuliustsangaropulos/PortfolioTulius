@@ -22,10 +22,16 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             {
-              // Split Supabase from React in separate, cacheable chunks.
-              // No API/query/auth changes: the original SDK remains intact.
+              // Keep anonymous public queries separate from Auth/Storage/Realtime.
+              name: "public-postgrest",
+              test: /[\\/]node_modules[\\/]@supabase[\\/]postgrest-js[\\/]/,
+            },
+            {
+              // The complete SDK remains available to authenticated admin routes.
               name: "supabase-sdk",
-              test: /[\\/]node_modules[\\/]@supabase[\\/]/,
+              test: (id) =>
+                /[\\/]node_modules[\\/]@supabase[\\/]/.test(id) &&
+                !/[\\/]node_modules[\\/]@supabase[\\/]postgrest-js[\\/]/.test(id),
             },
             {
               // Shared React libraries stay cacheable. React Router is kept

@@ -6,7 +6,7 @@ import {
   matchExperienceSlides,
   splitExperienceBullet,
 } from "../../lib/experience-text"
-import { supabase } from "../../lib/supabase"
+import { publicReadClient } from "../../lib/public-read"
 
 export const EXPERIENCE_SLUGS = [
   "invest-rs",
@@ -369,9 +369,9 @@ export function ExperienceStack({
   const [careerDetails, setCareerDetails] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    if (!supabase) return
+    if (!publicReadClient) return
     let cancelled = false
-    void supabase
+    void publicReadClient
       .from("career_experiences")
       .select("company,description")
       .eq("status", "published")

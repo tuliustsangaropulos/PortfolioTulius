@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { defaultTokens, sections as fallbackSections } from "../content/fallback"
-import { supabase } from "../lib/supabase"
+import { publicReadClient } from "../lib/public-read"
 import {
   buildPublicNavigation,
   type PublicNavigationItem,
@@ -67,19 +67,26 @@ function toSection(
 }
 
 export function usePortfolio(includeDrafts = false) {
-  const [data, setData] = useState<PortfolioSection[]>(supabase ? [] : fallbackSections)
+  const [data, setData] = useState<PortfolioSection[]>(publicReadClient ? [] : fallbackSections)
   const [tokens, setTokens] = useState(defaultTokens)
   const [navigation, setNavigation] = useState<PublicNavigationItem[]>([])
-  const [source, setSource] = useState<"supabase" | "fallback">(supabase ? "supabase" : "fallback")
-  const [loading, setLoading] = useState(Boolean(supabase))
+  const [source, setSource] = useState<"supabase" | "fallback">(publicReadClient ? "supabase" : "fallback")
+  const [loading, setLoading] = useState(Boolean(publicReadClient))
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!supabase) return
-    const supabaseClient = supabase
+    if (!publicReadClient) return
     let cancelled = false
     setLoading(true)
-    if (!includeDrafts) performance.mark("p3:portfolio-fetch-start")
+    // Only the protected preview imports the authenticated Supabase SDK.
+    // The public home uses PostgREST with the same anonymous key and RLS.
+    void (async () => {
+      const supabase = includeDrafts
+        ? (await import("../lib/supabase")).supabase
+        : publicReadClient
+      if (cancelled || !supabase) return
+      const supabaseClient = supabase
+      if (!includeDrafts) performance.mark("p3:portfolio-fetch-start")
     // SEO metadata is not required to compose the first fold. Request it in
     // parallel but do not make the initial visible content wait for those calls.
     const pageRequest = supabase
@@ -290,6 +297,14 @@ export function usePortfolio(includeDrafts = false) {
         // The pre-rendered HTML already contains safe canonical/SEO defaults.
         // Optional metadata failure must never block the public content.
       })
+    })().catch(() => {
+      if (cancelled) return
+      setData([])
+      setNavigation([])
+      setSource("supabase")
+      setError("Não foi possível carregar o conteúdo do site. Tente novamente.")
+      setLoading(false)
+    })
     return () => {
       cancelled = true
     }

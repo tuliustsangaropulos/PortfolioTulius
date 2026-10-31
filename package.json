@@ -16,6 +16,7 @@
     "smoke:build": "node scripts/smoke-build.mjs"
   },
   "dependencies": {
+    "@supabase/postgrest-js": "2.118.0",
     "@supabase/supabase-js": "^2.118.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

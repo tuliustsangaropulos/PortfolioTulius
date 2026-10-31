@@ -26,6 +26,14 @@ check(
   modulePreloads.every(([tag]) => !/admin-router-[^"'\s>]+\.js/.test(tag)),
   "HTML público pré-carrega o chunk administrativo.",
 )
+check(
+  modulePreloads.some(([tag]) => /public-postgrest-[^"'\s>]+\.js/.test(tag)),
+  "HTML público não carrega o cliente PostgREST reduzido.",
+)
+check(
+  modulePreloads.every(([tag]) => !/supabase-sdk-[^"'\s>]+\.js/.test(tag)),
+  "HTML público ainda pré-carrega Auth/Storage/Realtime.",
+)
 
 const assetNames = [
   ...html.matchAll(/(?:src|href)=["']\/assets\/([^"']+\.(?:js|css))["']/g),

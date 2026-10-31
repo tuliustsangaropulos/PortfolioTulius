@@ -83,6 +83,12 @@ try {
           adminRouterRequested: performance.getEntriesByType("resource").some((entry) =>
             /\/admin-router-[^/]+\.js/.test(entry.name),
           ),
+          fullSupabaseSdkRequested: performance.getEntriesByType("resource").some((entry) =>
+            /\/supabase-sdk-[^/]+\.js/.test(entry.name),
+          ),
+          publicPostgrestRequested: performance.getEntriesByType("resource").some((entry) =>
+            /\/public-postgrest-[^/]+\.js/.test(entry.name),
+          ),
           portraitComplete: portrait?.complete ?? false,
           publicSections: document.querySelectorAll("section.portfolio-section").length,
         }
@@ -90,6 +96,9 @@ try {
       console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
       if (firstFold.adminRouterPreloaded || firstFold.adminRouterRequested) {
         throw new Error("Admin router requested on the public first fold")
+      }
+      if (firstFold.fullSupabaseSdkRequested || !firstFold.publicPostgrestRequested) {
+        throw new Error("Full Supabase SDK requested on the public first fold")
       }
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
