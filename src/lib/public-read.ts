@@ -14,5 +14,4 @@ export function createPublicReadClient(baseUrl: string, publishableKey: string) 
   })
 }
 
-export const publicReadClient =
-  url && key ? createPublicReadClient(url, key) : null
+export const publicReadClient = url && key ? createPublicReadClient(url, key) : null
