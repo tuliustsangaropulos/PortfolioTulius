@@ -998,13 +998,20 @@ export function ContentStudio({
                         rows={5}
                         value={
                           (draft.content_json.items ?? [])
-                            .find((item) => experienceTitleKey(item.title) === "competencias aplicadas")
+                            .find(
+                              (item) => experienceTitleKey(item.title) === "competencias aplicadas",
+                            )
                             ?.tags?.join("\n") ?? ""
                         }
                         onChange={(event) => {
-                          const tags = [...new Set(
-                            event.target.value.split("\n").map((entry) => entry.trim()).filter(Boolean),
-                          )]
+                          const tags = [
+                            ...new Set(
+                              event.target.value
+                                .split("\n")
+                                .map((entry) => entry.trim())
+                                .filter(Boolean),
+                            ),
+                          ]
                           const items = [...(draft.content_json.items ?? [])]
                           const index = items.findIndex(
                             (item) => experienceTitleKey(item.title) === "competencias aplicadas",
@@ -1018,7 +1025,10 @@ export function ContentStudio({
                         }}
                       />
                     </label>
-                    <small>As tags não criam slides, não substituem projetos e não alteram a descrição completa da carreira.</small>
+                    <small>
+                      As tags não criam slides, não substituem projetos e não alteram a descrição
+                      completa da carreira.
+                    </small>
                   </div>
                   <p>
                     Use arquivos próprios/autorizados. Sem imagens aprovadas, o site mostra um
@@ -1093,8 +1103,8 @@ export function ContentStudio({
                         Editar trajetória completa (Coleções)
                       </button>
                       <small>
-                        O site evita exibir trechos já resumidos em Projetos e realizações;
-                        o texto integral continua preservado na coleção.
+                        O site evita exibir trechos já resumidos em Projetos e realizações; o texto
+                        integral continua preservado na coleção.
                       </small>
                     </div>
                   )}
