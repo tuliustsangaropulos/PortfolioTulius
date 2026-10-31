@@ -322,6 +322,9 @@ function MobilePanel({
         </>
       ) : section.slug === "contato" && panel === "a" ? (
         <>
+          <header className="panel-heading">
+            <h2>{section.title}</h2>
+          </header>
           <div className="contact-mobile-photo">
             {profile?.image && (
               <img
@@ -377,8 +380,24 @@ function MobilePanel({
         </>
       ) : (
         <>
-          <header className="panel-heading">
-            <h2>{isProfile ? "Experiência e atuação" : section.title}</h2>
+          <header
+            className={
+              panel === "b" && ["formacao", "ferramentas", "contato"].includes(section.slug)
+                ? "panel-heading mobile-panel-secondary-heading"
+                : "panel-heading"
+            }
+          >
+            {panel === "b" && ["formacao", "ferramentas", "contato"].includes(section.slug) ? (
+              <h3 className="mobile-panel-subheading">
+                {section.slug === "formacao"
+                  ? "Idiomas e formação complementar"
+                  : section.slug === "ferramentas"
+                    ? "Outras ferramentas"
+                    : "Canais de contato"}
+              </h3>
+            ) : (
+              <h2>{isProfile ? "Experiência e atuação" : section.title}</h2>
+            )}
             {panel === "a" && section.eyebrow && <p>{section.eyebrow}</p>}
             {panel === "a" && section.intro && <p className="section-intro">{section.intro}</p>}
           </header>

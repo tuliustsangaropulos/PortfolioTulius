@@ -1379,3 +1379,206 @@
 .experience-admin-relationship-note { color: #625b55; font-size: .78rem; line-height: 1.5; }
 .experience-admin-career-link { display: flex; align-items: start; flex-wrap: wrap; gap: .55rem; margin: .7rem 0 1rem; }
 .experience-admin-career-link small { flex: 1 1 15rem; }
+
+
+/* 31 October mobile parity: all changes are scoped to narrow viewports. */
+@media (max-width: 767px) {
+  :root { --mobile-heading-size: clamp(2.9rem, 12vw, 3.8rem); }
+  .public-site .mobile-panel { min-width: 0; overflow-wrap: break-word; }
+  .public-site .panel-heading h2,
+  .public-site #perfil-b .panel-heading h2 {
+    font-size: var(--mobile-heading-size);
+    line-height: .92;
+    letter-spacing: -.035em;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .public-site .mobile-panel-subheading {
+    font: 700 clamp(1.35rem, 6vw, 1.9rem)/1.05 var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .public-site .mobile-panel-secondary-heading {
+    margin-bottom: .85rem;
+  }
+  .public-site .mobile-items .content-item h3 {
+    font-size: var(--item-mobile-title-size, clamp(1.2rem, 5.2vw, 1.65rem));
+    line-height: 1.12;
+  }
+
+  /* First fold: stack the full name without horizontal clipping. */
+  #perfil-a .mobile-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0 .12em;
+    min-width: 0;
+    font-size: clamp(2.6rem, 10.5vw, 4rem);
+    line-height: .95;
+    letter-spacing: -.045em;
+  }
+  #perfil-a .mobile-name span {
+    display: block;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  #perfil-a .mobile-role { font-size: clamp(.83rem, 3.5vw, 1rem); line-height: 1.45; }
+  #perfil-a .mobile-profile-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 43%) minmax(0, 57%);
+    min-height: clamp(22rem, 58svh, 30rem);
+    align-items: stretch;
+    overflow: hidden;
+  }
+  #perfil-a .mobile-profile-hero > picture,
+  #perfil-a .mobile-profile-hero > img {
+    grid-column: 2;
+    grid-row: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    align-self: end;
+    min-width: 0;
+    min-height: 0;
+  }
+  #perfil-a .mobile-profile-hero > picture > img,
+  #perfil-a .mobile-profile-hero > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: grayscale(1);
+  }
+  #perfil-a .mobile-profile-hero > div:not(.badge-360) {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    min-width: 0;
+    padding: .9rem .6rem 1.15rem var(--gutter);
+  }
+  #perfil-a .mobile-profile-hero strong {
+    font-size: clamp(2.7rem, 13vw, 4.35rem);
+    line-height: .86;
+    overflow-wrap: anywhere;
+  }
+  #perfil-a .mobile-profile-hero p { font-size: clamp(.82rem, 3.6vw, .96rem); }
+  #perfil-a .mobile-profile-hero .badge-360 {
+    left: var(--gutter);
+    top: 1rem;
+    width: clamp(4.5rem, 23vw, 6rem);
+    transform: none;
+  }
+  #perfil-a .mobile-intro {
+    min-height: 0;
+    padding: 1.1rem 0;
+    font-size: clamp(.85rem, 3.5vw, 1rem);
+    text-align: left;
+  }
+
+  /* About: let editorial content determine the height, instead of blank screens. */
+  #sobre .mobile-panel {
+    min-height: 0;
+    padding-top: calc(var(--header) + 1.35rem);
+    padding-bottom: clamp(1.5rem, 5vw, 2.25rem);
+  }
+  #sobre .panel-heading { margin-bottom: 1rem; }
+  #sobre .panel-heading .section-intro { font-size: clamp(1rem, 4vw, 1.2rem); line-height: 1.5; }
+  #sobre .mobile-items .content-item { min-width: 0; }
+  #sobre .mobile-items .content-item.has-image { grid-template-columns: 4.6rem minmax(0, 1fr); }
+  #sobre .mobile-items .content-item.has-image img { width: 4.6rem; height: 5.2rem; object-fit: contain; }
+
+  /* Two different groups, one section heading: no duplicate Formação/Ferramentas title. */
+  #formacao .mobile-panel,
+  #ferramentas .mobile-panel {
+    min-height: 0;
+    padding-top: calc(var(--header) + 1rem);
+    padding-bottom: 1.5rem;
+  }
+  #formacao .panel-b,
+  #ferramentas .panel-b { padding-top: 1.4rem; }
+  #formacao .mobile-items,
+  #ferramentas .mobile-items { gap: .45rem; }
+  #formacao .mobile-items .content-item { padding: .8rem 0; }
+  #ferramentas .mobile-items .content-item {
+    min-height: 0;
+    padding: .7rem 0;
+    grid-template-columns: minmax(4.75rem, 5.8rem) minmax(0, 1fr);
+  }
+  #ferramentas .tools-icon-cluster {
+    max-width: 5.8rem;
+    transform: scale(.76);
+    transform-origin: left center;
+  }
+  #ferramentas .mobile-items .content-item h3 {
+    font-size: clamp(1.1rem, 4.6vw, 1.5rem);
+  }
+
+  /* Quotes stay compact initially; tapping a card exposes the whole testimonial. */
+  #depoimentos .mobile-panel { min-height: 0; padding-bottom: 1.5rem; }
+  #depoimentos .panel-b { padding-top: 1rem; }
+  #depoimentos .panel-b .panel-heading { display: none; }
+  #depoimentos .testimonials-grid { gap: .7rem; }
+  #depoimentos .testimonial-card,
+  #depoimentos .testimonial-card.is-expanded {
+    min-height: 0;
+    height: auto;
+    padding: .8rem;
+    gap: .5rem;
+    grid-row: auto;
+  }
+  #depoimentos .testimonial-card .testimonial-quote {
+    font-size: clamp(.83rem, 3.6vw, .95rem);
+    line-height: 1.45;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+  #depoimentos .testimonial-card.is-expanded .testimonial-quote {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+  #depoimentos .testimonial-action { margin-top: .2rem; padding-top: .35rem; }
+  #depoimentos .testimonial-person h3 { font-size: clamp(1.25rem, 5.5vw, 1.7rem); }
+  #depoimentos .testimonial-person span { font-size: clamp(.73rem, 3vw, .85rem); }
+
+  /* Contact: title and approved portrait share one panel, subject touches bottom. */
+  #contato-a {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: min(90svh, 47rem);
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+  #contato-a .panel-heading { flex: none; }
+  #contato-a .contact-mobile-photo {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #contato-a .contact-mobile-photo img {
+    display: block;
+    width: min(100%, 29rem);
+    height: auto;
+    min-height: 0;
+    max-height: min(68svh, 38rem);
+    object-fit: contain;
+    object-position: bottom center;
+  }
+  #contato-b {
+    display: block;
+    min-height: 0;
+    padding-top: 1.4rem;
+  }
+  #contato-b .mobile-items { gap: .25rem; }
+  #contato-b .contact-link { min-height: 3rem; padding: .7rem 0; }
+}
+@media (max-width: 360px) {
+  #perfil-a .mobile-name { font-size: clamp(2.3rem, 10.3vw, 3rem); }
+  #perfil-a .mobile-profile-hero { grid-template-columns: minmax(0, 45%) minmax(0, 55%); }
+}
