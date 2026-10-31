@@ -1238,3 +1238,9 @@
   .admin-floating-save button { min-width: 44%; }
   .admin-main { padding-bottom: 8rem; }
 }
+
+.admin-image-target-switch { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem; padding-top: .4rem; }
+.admin-image-target-switch > span { font-weight: 750; font-size: .8rem; margin-right: .6rem; }
+.admin-image-target-switch button { padding: .55rem .85rem; border: 1px solid #d7d2ce; background: white; min-height: 44px; }
+.admin-image-target-switch button.active { background: #171617; color: white; border-color: #171617; }
+.admin-image-target-switch button:focus-visible { outline: 3px solid #ff5414; outline-offset: 2px; }

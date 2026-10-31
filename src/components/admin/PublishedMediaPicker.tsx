@@ -19,8 +19,8 @@ export function PublishedMediaPicker({
   onFramingChange,
   guidance = "Imagem responsiva: conferir desktop e mobile.",
   ratio = "16 / 9",
-  guidanceAsInfo = false,
-  iconOnlyActions = false,
+  guidanceAsInfo = true,
+  iconOnlyActions = true,
 }: {
   label: string
   value: string

@@ -320,6 +320,7 @@ export function ContentStudio({
   const [blocks, setBlocks] = useState<BlockRow[]>([])
   const [selectedId, setSelectedId] = useState("")
   const [expandedItemIndex, setExpandedItemIndex] = useState<number | null>(null)
+  const [aboutImageTarget, setAboutImageTarget] = useState<"mobile" | "desktop">("mobile")
   const [draft, setDraft] = useState<BlockRow | null>(null)
   const [message, setMessage] = useState("")
   const initialPlacement = {
@@ -376,6 +377,7 @@ export function ContentStudio({
 
   useEffect(() => {
     setExpandedItemIndex(null)
+    setAboutImageTarget("mobile")
   }, [selectedId, sectionId])
 
   useEffect(() => {
@@ -1554,97 +1556,94 @@ export function ContentStudio({
                               onChange={(toolIcons) => updateItem(index, { toolIcons })} />
                           </div>
                         )}
+                        {sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                          draft.mobile_panel === "a" && index === 0 && (
+                          <div className="field-wide admin-image-target-switch" role="group" aria-label="Destino da imagem">
+                            <span>Destino da imagem</span>
+                            <button type="button" className={aboutImageTarget === "mobile" ? "active" : ""}
+                              aria-pressed={aboutImageTarget === "mobile"} onClick={() => setAboutImageTarget("mobile")}>
+                              Mobile
+                            </button>
+                            <button type="button" className={aboutImageTarget === "desktop" ? "active" : ""}
+                              aria-pressed={aboutImageTarget === "desktop"} onClick={() => setAboutImageTarget("desktop")}>
+                              Desktop
+                            </button>
+                          </div>
+                        )}
                         <PublishedMediaPicker
                           label="Imagem do item"
                           guidanceAsInfo
                           iconOnlyActions
-                          guidance={
-                            ["perfil", "contato"].includes(
-                              sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
-                            )
-                              ? "Retrato vertical 3:4; sugestão 900 × 1200 px."
-                              : "Miniatura editorial 1:1; sugestão 600 × 600 px."
-                          }
-                          ratio={
-                            ["perfil", "contato"].includes(
-                              sections.find((entry) => entry.id === draft.section_id)?.slug ?? "",
-                            )
-                              ? "3 / 4"
-                              : "1 / 1"
-                          }
-                          framing={item.mediaFraming}
-                          onFramingChange={(mediaFraming) => updateItem(index, { mediaFraming })}
-                          value={item.image ?? ""}
-                          onChange={(image, alt) => updateItem(index, { image, alt })}
+                          guidance={["perfil", "contato", "sobre"].includes(
+                            sections.find((entry) => entry.id === draft.section_id)?.slug ?? ""
+                          ) ? "Retrato vertical 3:4; sugestão 900 × 1200 px." :
+                            "Miniatura editorial 1:1; sugestão 600 × 600 px."}
+                          ratio={["perfil", "contato", "sobre"].includes(
+                            sections.find((entry) => entry.id === draft.section_id)?.slug ?? ""
+                          ) ? "3 / 4" : "1 / 1"}
+                          framing={aboutImageTarget === "desktop" &&
+                            sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                            draft.mobile_panel === "a" && index === 0
+                            ? item.aboutDesktopFraming : item.mediaFraming}
+                          onFramingChange={(framing) => {
+                            if (aboutImageTarget === "desktop" &&
+                              sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                              draft.mobile_panel === "a" && index === 0) {
+                              updateItem(index, { aboutDesktopFraming: framing })
+                            } else updateItem(index, { mediaFraming: framing })
+                          }}
+                          value={aboutImageTarget === "desktop" &&
+                            sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                            draft.mobile_panel === "a" && index === 0
+                            ? item.aboutDesktopImage ?? "" : item.image ?? ""}
+                          onChange={(image, alt) => {
+                            if (aboutImageTarget === "desktop" &&
+                              sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                              draft.mobile_panel === "a" && index === 0) {
+                              updateItem(index, { aboutDesktopImage: image, aboutDesktopAlt: alt })
+                            } else updateItem(index, { image, alt })
+                          }}
                         />
                         <label className="item-alt-field">
-                          Texto alternativo
+                          Texto alternativo (opcional)
                           <input
-                            value={item.alt ?? ""}
-                            onChange={(event) => updateItem(index, { alt: event.target.value })}
+                            value={aboutImageTarget === "desktop" &&
+                              sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                              draft.mobile_panel === "a" && index === 0
+                              ? item.aboutDesktopAlt ?? "" : item.alt ?? ""}
+                            onChange={(event) => {
+                              if (aboutImageTarget === "desktop" &&
+                                sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                                draft.mobile_panel === "a" && index === 0) {
+                                updateItem(index, { aboutDesktopAlt: event.target.value })
+                              } else updateItem(index, { alt: event.target.value })
+                            }}
                           />
                         </label>
-                        {sections.find((entry) => entry.id === draft.section_id)?.slug ===
-                          "sobre" &&
-                          draft.mobile_panel === "a" &&
-                          index === 0 && (
-                            <>
-                              <div className="field-wide">
-                                <PublishedMediaPicker
-                                  label="Imagem central da seção 02 (desktop)"
-                                  guidance="Retrato vertical 3:4; sugestão 900 × 1200 px."
-                                  ratio="3 / 4"
-                                  framing={item.aboutDesktopFraming}
-                                  onFramingChange={(aboutDesktopFraming) =>
-                                    updateItem(index, { aboutDesktopFraming })
-                                  }
-                                  value={item.aboutDesktopImage ?? ""}
-                                  onChange={(aboutDesktopImage, alt) =>
-                                    updateItem(index, { aboutDesktopImage, aboutDesktopAlt: alt })
-                                  }
-                                />
-                                <small>
-                                  Se vazio, usa /media/tulius-contact.jpg. A imagem do painel mobile
-                                  continua no campo Imagem acima.
-                                </small>
-                              </div>
-                              <label className="field-wide">
-                                Descrição da imagem central (desktop)
-                                <input
-                                  value={item.aboutDesktopAlt ?? ""}
-                                  placeholder="Tulius Tsangaropulos segurando um tablet"
-                                  onChange={(event) =>
-                                    updateItem(index, { aboutDesktopAlt: event.target.value })
-                                  }
-                                />
-                              </label>
-                              <p className="field-wide">
-                                Este item guarda apenas as imagens da seção 02. Os cinco títulos e
-                                textos da direita são gerenciados juntos no painel B. A coluna
-                                esquerda usa título, subtítulo e introdução da seção.
-                              </p>
-                            </>
-                          )}
+                        {sections.find((entry) => entry.id === draft.section_id)?.slug === "sobre" &&
+                          draft.mobile_panel === "a" && index === 0 && (
+                          <small className="field-wide">
+                            As imagens mobile e desktop são preservadas separadamente. Se desktop estiver vazio,
+                            a seção utiliza /media/tulius-contact.jpg.
+                          </small>
+                        )}
                       </div>
                       <details className="visual-config">
                         <summary>Estilo, visibilidade e responsividade</summary>
                         <fieldset>
                           <legend>Compartilhado entre desktop e mobile</legend>
                           <div className="field-grid compact-grid">
-                            <label>
-                              Ícone
-                              <select
-                                value={item.icon ?? "none"}
-                                onChange={(event) =>
-                                  updateItem(index, {
-                                    icon: event.target.value as "arrow" | "none",
-                                  })
-                                }
-                              >
-                                <option value="none">Sem ícone</option>
-                                <option value="arrow">Seta diagonal</option>
-                              </select>
-                            </label>
+                            <fieldset className="visual-icon-library">
+                              <legend>Ícone do card</legend>
+                              <div className="visual-icon-grid">
+                                <button type="button" aria-label="Sem ícone" aria-pressed={item.icon !== "arrow"}
+                                  className={item.icon !== "arrow" ? "active" : ""}
+                                  onClick={() => updateItem(index, { icon: "none" })}>—</button>
+                                <button type="button" aria-label="Seta diagonal" aria-pressed={item.icon === "arrow"}
+                                  className={item.icon === "arrow" ? "active" : ""}
+                                  onClick={() => updateItem(index, { icon: "arrow" })}><Icon name="arrow" size={24}/></button>
+                              </div>
+                            </fieldset>
                             <ColorField
                               label="Cor do título"
                               value={item.titleColor}
