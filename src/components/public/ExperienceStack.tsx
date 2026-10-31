@@ -266,7 +266,6 @@ export function ExperienceStack({
     }
   }, [])
 
-
   useEffect(() => {
     const onScroll = () => {
       let selected = sections[0]?.slug ?? ""
