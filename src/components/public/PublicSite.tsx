@@ -1003,8 +1003,16 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
       "#perfil-a .mobile-profile-hero img, .profile-portrait img",
     )
     if (!portrait) return
-    performance.mark("p3:profile-dom-committed")
-    const loaded = () => performance.mark("p3:profile-image-loaded")
+    // Preserve the first DOM/image timestamp. The complete CMS graph can
+    // update visible sections later and must not overwrite the initial mark.
+    if (performance.getEntriesByName("p3:profile-dom-committed").length === 0) {
+      performance.mark("p3:profile-dom-committed")
+    }
+    const loaded = () => {
+      if (performance.getEntriesByName("p3:profile-image-loaded").length === 0) {
+        performance.mark("p3:profile-image-loaded")
+      }
+    }
     if (portrait.complete && portrait.naturalWidth > 0) loaded()
     else portrait.addEventListener("load", loaded, { once: true })
     const frame = requestAnimationFrame(() => performance.mark("p3:profile-next-frame"))
