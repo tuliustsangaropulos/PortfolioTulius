@@ -156,20 +156,20 @@ function ExperienceDetails({ description, slug }: { description: string; slug: s
   return (
     <div className="experience-full-body">
       {complementaryCareerLines(description, slug).map((line, index) => {
-          const bullet = splitExperienceBullet(line)
-          return (
-            <p key={index} className={bullet ? "experience-full-point" : undefined}>
-              {bullet ? (
-                <>
-                  <strong>{bullet.heading}</strong>
-                  {bullet.body}
-                </>
-              ) : (
-                line
-              )}
-            </p>
-          )
-        })}
+        const bullet = splitExperienceBullet(line)
+        return (
+          <p key={index} className={bullet ? "experience-full-point" : undefined}>
+            {bullet ? (
+              <>
+                <strong>{bullet.heading}</strong>
+                {bullet.body}
+              </>
+            ) : (
+              line
+            )}
+          </p>
+        )
+      })}
     </div>
   )
 }
@@ -198,9 +198,7 @@ function ExperienceContent({
   const slides = section.experienceMedia?.slides ?? []
   const projectSlides = matchExperienceSlides(slides, items)
   const extraMetrics = items.filter(
-    (item) =>
-      Boolean(item.value) &&
-      !projectSlides.some(({ item: selected }) => selected === item),
+    (item) => Boolean(item.value) && !projectSlides.some(({ item: selected }) => selected === item),
   )
 
   return (
@@ -243,7 +241,9 @@ function ExperienceContent({
           <>
             {projectSlides.map(({ title, item, slideIndex }) => (
               <article
-                className={slideIndex === activeSlide ? "experience-project is-active" : "experience-project"}
+                className={
+                  slideIndex === activeSlide ? "experience-project is-active" : "experience-project"
+                }
                 key={`${title}-${slideIndex}`}
               >
                 <button

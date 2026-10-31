@@ -288,10 +288,11 @@ try {
         composition.portraitBottom !== null &&
         composition.portraitBottom >= composition.aboutBottom + 16 &&
         // The former fourth item (Competências aplicadas) is now five header badges.
-        composition.count === 3 &&
+        composition.count === 4 &&
         composition.competenceBadges === 5 &&
         composition.trajectoryButton &&
-        composition.listScrollHeight <= composition.listHeight + 3 &&
+        // The four published projects may scroll inside their existing bounded column.
+        composition.listHeight > 0 && composition.listScrollHeight >= composition.listHeight &&
         composition.headingLogoBorder === "0px" &&
         composition.indexLogoBorder !== null &&
         composition.indexLogoBorder === "0px"
@@ -319,13 +320,42 @@ try {
         trajectoryState.projects !== 0 ||
         trajectoryState.bulletLabels < 1 ||
         trajectoryState.selected !== "true" ||
-        projectsRestored.projects !== 3 ||
+        projectsRestored.projects !== 4 ||
         projectsRestored.selected !== "true"
       ) {
         failures++
         console.log("P3_EXPERIENCE_SWITCH_REGRESSION " + JSON.stringify({ trajectoryState, projectsRestored }))
       } else {
         console.log("P3_EXPERIENCE_SWITCH " + JSON.stringify({ result: "PASS", trajectoryState, projectsRestored }))
+      }
+      const secondProject = "#invest-rs .desktop-panel .experience-project-choice[aria-label='Exibir imagem de Organização de eventos']"
+      await page.click(secondProject)
+      const projectToGallery = await page.evaluate(() => ({
+        activeProject: document.querySelector("#invest-rs .desktop-panel .experience-project.is-active h4")?.textContent?.trim(),
+        galleryTitle: document.querySelector("#invest-rs .desktop-panel .experience-gallery-footer h3")?.textContent?.trim(),
+        count: document.querySelector("#invest-rs .desktop-panel .experience-gallery-controls [aria-live]")?.textContent?.trim(),
+      }))
+      await page.click("#invest-rs .desktop-panel .experience-gallery-controls button[aria-label^='Próxima foto']")
+      const galleryToProject = await page.evaluate(() => ({
+        activeProject: document.querySelector("#invest-rs .desktop-panel .experience-project.is-active h4")?.textContent?.trim(),
+        galleryTitle: document.querySelector("#invest-rs .desktop-panel .experience-gallery-footer h3")?.textContent?.trim(),
+      }))
+      if (
+        projectToGallery.activeProject !== "ORGANIZAÇÃO DE EVENTOS" &&
+        projectToGallery.activeProject !== "Organização de eventos"
+      ) {
+        failures++
+        console.log("P3_PROJECT_GALLERY_REGRESSION " + JSON.stringify({ projectToGallery, galleryToProject }))
+      } else if (
+        projectToGallery.galleryTitle?.toLocaleLowerCase("pt-BR") !== "organização de eventos" ||
+        projectToGallery.count !== "2 / 4" ||
+        galleryToProject.activeProject?.toLocaleLowerCase("pt-BR") !== "plataforma de eventos e relacionamento" ||
+        galleryToProject.galleryTitle?.toLocaleLowerCase("pt-BR") !== "plataforma de eventos e relacionamento"
+      ) {
+        failures++
+        console.log("P3_PROJECT_GALLERY_REGRESSION " + JSON.stringify({ projectToGallery, galleryToProject }))
+      } else {
+        console.log("P3_PROJECT_GALLERY_LINK " + JSON.stringify({ result: "PASS", projectToGallery, galleryToProject }))
       }
       const refinements = await page.evaluate(() => {
         const photo = document.querySelector("#contato .contact-portrait")
