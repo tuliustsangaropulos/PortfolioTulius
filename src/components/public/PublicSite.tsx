@@ -337,7 +337,6 @@ function ProfileDesktop({
   )
 }
 
-
 function ProfileMobilePresentation({
   section,
   profile,
