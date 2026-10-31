@@ -150,6 +150,70 @@ try {
       if (firstFold.fullSupabaseSdkRequested || !firstFold.publicPostgrestRequested) {
         throw new Error("Full Supabase SDK requested on the public first fold")
       }
+
+      stage = "profile mobile responsive screens"
+      const profileViewports = [
+        { width: 320, height: 568 },
+        { width: 360, height: 740 },
+        { width: 375, height: 667 },
+        { width: 390, height: 844 },
+        { width: 414, height: 896 },
+        { width: 430, height: 932 },
+      ]
+      for (const viewport of profileViewports) {
+        await page.setViewport({ ...viewport, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+        const result = await page.evaluate(() => {
+          const panelA = document.querySelector("#perfil-a")
+          const panelB = document.querySelector("#perfil-b")
+          const portrait = panelA?.querySelector(".mobile-profile-hero img")
+          const badge = panelA?.querySelector(".badge-360")
+          const years = panelA?.querySelector(".profile-mobile-years")
+          const name = panelA?.querySelector(".mobile-name")
+          const arrow = panelA?.querySelector('a[href="#perfil-b"]')
+          const areas = panelB?.querySelectorAll(".profile-mobile-area-list > li")
+          const careers = panelB?.querySelectorAll(".profile-mobile-career-list > li")
+          const lastCareer = careers?.[careers.length - 1]
+          const fitsWidth = (element) => {
+            const rect = element?.getBoundingClientRect()
+            return Boolean(rect && rect.left >= -2 && rect.right <= innerWidth + 2)
+          }
+          const badgeRect = badge?.getBoundingClientRect()
+          const yearsRect = years?.getBoundingClientRect()
+          const overlap = badgeRect && yearsRect &&
+            badgeRect.left < yearsRect.right && badgeRect.right > yearsRect.left &&
+            badgeRect.top < yearsRect.bottom && badgeRect.bottom > yearsRect.top
+          return {
+            areas: areas?.length ?? 0,
+            careers: careers?.length ?? 0,
+            portraitLoaded: Boolean(portrait?.complete && portrait.naturalWidth > 0),
+            badgePresent: Boolean(badge),
+            arrowAccessible: Boolean(arrow?.getAttribute("aria-label")),
+            nameFits: fitsWidth(name),
+            panelsFit: fitsWidth(panelA) && fitsWidth(panelB),
+            noOverlap: !overlap,
+            careerVisible: Boolean(lastCareer && panelB &&
+              lastCareer.getBoundingClientRect().bottom <= panelB.getBoundingClientRect().bottom + 2),
+            noOldActions: !panelA?.textContent?.includes("EXPLORAR MINHA ATUAÇÃO") &&
+              !panelB?.textContent?.includes("VER AS 6 EXPERIÊNCIAS"),
+            nextSection: document.querySelector("#perfil")?.nextElementSibling?.id,
+          }
+        })
+        console.log("P3_PROFILE_MOBILE " + JSON.stringify({ viewport, ...result }))
+        if (result.areas !== 5 || result.careers !== 6 || !result.portraitLoaded ||
+            !result.badgePresent || !result.arrowAccessible || !result.nameFits ||
+            !result.panelsFit || !result.noOverlap || !result.careerVisible ||
+            !result.noOldActions || result.nextSection !== "sobre") {
+          throw new Error("Responsive profile failed at " + viewport.width + "px")
+        }
+      }
+      await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+      await page.click('#perfil-a a[href="#perfil-b"]')
+      await page.waitForFunction(() =>
+        location.hash === "#perfil-b" &&
+        Math.abs(document.getElementById("perfil-b")?.getBoundingClientRect().top ?? 9999) < 10,
+        { timeout: 10000 },
+      )
+      console.log("P3_PROFILE_ANCHOR " + JSON.stringify({ result: "PASS", target: "#perfil-b" }))
       await page.click(".menu-button")
       await page.waitForSelector(".nav-backdrop.is-open", { timeout: 10000 })
       stage = "menu initial focus"
