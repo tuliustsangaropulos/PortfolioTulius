@@ -950,7 +950,9 @@ export function PublicSite({ preview = false }: { preview?: boolean }) {
   // Timing markers only: neither alter the portrait nor gate the first paint.
   useEffect(() => {
     if (loading || error || preview || !visible.length) return
-    const portrait = document.querySelector<HTMLImageElement>("#perfil-a .mobile-profile-hero img, .profile-portrait img")
+    const portrait = document.querySelector<HTMLImageElement>(
+      "#perfil-a .mobile-profile-hero img, .profile-portrait img",
+    )
     if (!portrait) return
     performance.mark("p3:profile-dom-committed")
     const loaded = () => performance.mark("p3:profile-image-loaded")
