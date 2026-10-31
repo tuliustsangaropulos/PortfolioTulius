@@ -138,11 +138,15 @@ export function Icon({ name, size = 22 }: IconProps) {
     ),
     message: <path d="M4 5h16v12H9l-5 4V5ZM8 9h8M8 13h6" />,
     mail: <path d="M3 6h18v12H3zM3 7l9 7 9-7" />,
-    phone: <path d="M6 3h5l1 5-3 2a15 15 0 0 0 5 5l2-3 5 1v5c0 2-2 3-4 3A17 17 0 0 1 3 7c0-2 1-4 3-4" />,
+    phone: (
+      <path d="M6 3h5l1 5-3 2a15 15 0 0 0 5 5l2-3 5 1v5c0 2-2 3-4 3A17 17 0 0 1 3 7c0-2 1-4 3-4" />
+    ),
     microphone: <path d="M9 3a3 3 0 0 1 6 0v9a3 3 0 0 1-6 0V3ZM5 11a7 7 0 0 0 14 0M12 18v4" />,
     camera: <path d="M3 7h5l2-3h4l2 3h5v13H3V7ZM12 10a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" />,
     radio: <path d="M4 9h16v11H4V9ZM7 5l10-3M8 13h8M8 16h5" />,
-    globe: <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20ZM2 12h20M12 2c5 5 5 15 0 20M12 2c-5 5-5 15 0 20" />,
+    globe: (
+      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20ZM2 12h20M12 2c5 5 5 15 0 20M12 2c-5 5-5 15 0 20" />
+    ),
     pen: <path d="m4 20 4-1 12-12-3-3L5 16l-1 4ZM14 7l3 3" />,
     share: <path d="M12 16V3M7 8l5-5 5 5M5 14H3v7h18v-7h-2" />,
     building: <path d="M4 21V5l8-3 8 3v16M4 21h16M9 8h1M14 8h1M9 12h1M14 12h1M9 16h6" />,
@@ -160,7 +164,9 @@ export function Icon({ name, size = 22 }: IconProps) {
     database: <path d="M4 6c0-4 16-4 16 0s-16 4-16 0ZM4 6v12c0 4 16 4 16 0V6M4 12c0 4 16 4 16 0" />,
     wifi: <path d="M2 9a16 16 0 0 1 20 0M5 13a11 11 0 0 1 14 0M9 17a5 5 0 0 1 6 0M12 21h.01" />,
     smartphone: <path d="M7 2h10v20H7V2ZM10 18h4" />,
-    link: <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2" />,
+    link: (
+      <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2" />
+    ),
     sparkles: <path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z" />,
     logout: (
       <>
@@ -180,7 +186,10 @@ export function Icon({ name, size = 22 }: IconProps) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {paths[name] ?? (toolIconOptions.some((tool) => tool.value === name) ? <ToolSymbol name={name as ToolIconName} /> : null)}
+      {paths[name] ??
+        (toolIconOptions.some((tool) => tool.value === name) ? (
+          <ToolSymbol name={name as ToolIconName} />
+        ) : null)}
     </svg>
   )
 }

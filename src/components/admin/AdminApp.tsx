@@ -340,7 +340,9 @@ function SectionsEditor({
   const selected = sections.find((s) => s.id === selectedId)
   const [draft, setDraft] = useState<SectionRow | null>(selected ?? null)
   const [message, setMessage] = useState("")
-  const sectionDirty = Boolean(draft && selected && JSON.stringify(draft) !== JSON.stringify(selected))
+  const sectionDirty = Boolean(
+    draft && selected && JSON.stringify(draft) !== JSON.stringify(selected),
+  )
   const fixedLayouts: Record<string, string> = {
     perfil: "hero",
     sobre: "editorial",
@@ -356,9 +358,7 @@ function SectionsEditor({
   }
   useEffect(() => setDraft(selected ?? null), [selectedId, selected])
   useEffect(() => {
-    onDirtyChange?.(
-      sectionDirty,
-    )
+    onDirtyChange?.(sectionDirty)
   }, [sectionDirty, onDirtyChange])
   useEffect(() => {
     if (!selectedId && sections[0]) setSelectedId(sections[0].id)
@@ -1014,7 +1014,9 @@ function DesignEditor({ onDirtyChange }: { onDirtyChange?: (dirty: boolean) => v
   })
   const [message, setMessage] = useState("")
   const [savedDesign, setSavedDesign] = useState("")
-  const designDirty = Boolean(savedDesign && JSON.stringify({ tokens, extraTokens }) !== savedDesign)
+  const designDirty = Boolean(
+    savedDesign && JSON.stringify({ tokens, extraTokens }) !== savedDesign,
+  )
   useEffect(() => onDirtyChange?.(designDirty), [designDirty, onDirtyChange])
   useEffect(() => {
     supabase

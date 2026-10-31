@@ -1,4 +1,8 @@
-export function FloatingSaveButton({ enabled, onClick, label = "Salvar alterações" }: {
+export function FloatingSaveButton({
+  enabled,
+  onClick,
+  label = "Salvar alterações",
+}: {
   enabled: boolean
   onClick: () => void | Promise<void>
   label?: string
@@ -6,8 +10,14 @@ export function FloatingSaveButton({ enabled, onClick, label = "Salvar alteraç�
   return (
     <div className="admin-floating-save" role="region" aria-label="Salvar edições">
       <span role="status">{enabled ? "Alterações não salvas" : "Nenhuma alteração pendente"}</span>
-      <button type="button" className="primary-button" onClick={() => void onClick()}
-        disabled={!enabled}>{label}</button>
+      <button
+        type="button"
+        className="primary-button"
+        onClick={() => void onClick()}
+        disabled={!enabled}
+      >
+        {label}
+      </button>
     </div>
   )
 }
