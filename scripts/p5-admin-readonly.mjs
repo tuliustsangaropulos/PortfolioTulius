@@ -45,7 +45,7 @@ try {
   passed++
   console.log("P5_ADMIN_LOGIN " + JSON.stringify({ result: "PASS", authenticated: true }))
 
-  const expectedModules = ["Seções", "Blocos", "Coleções", "Identidade", "Mídia", "Navegação", "SEO", "Revisões"]
+  const expectedModules = ["Editor do site", "Identidade", "Mídia", "Navegação", "SEO", "Revisões", "Prévia", "Visão geral"]
   for (const label of expectedModules) {
     const clicked = await page.$$eval(".admin-sidebar nav button", (nodes, target) => {
       const button = nodes.find(node => node.textContent?.trim() === target)
@@ -68,7 +68,7 @@ try {
   // request that mutates the database. Input changes are ephemeral drafts.
   await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 })
   const openEditor = await page.$$eval(".admin-sidebar nav button", (nodes) => {
-    const button = nodes.find((node) => node.textContent?.trim() === "Seções")
+    const button = nodes.find((node) => node.textContent?.trim() === "Editor do site")
     if (!button) return false
     button.click()
     return true
@@ -162,6 +162,8 @@ try {
     throw new Error("Botão Sair fora da viewport desktop; falha de layout de navegador.")
   }
   await page.click(".logout-button")
+  await page.waitForSelector(".admin-confirm-dialog[role=alertdialog]", { timeout: 10000 })
+  await page.click(".admin-confirm-dialog .primary-button")
   await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
   await page.goto(new URL("/admin/preview", base).href, { waitUntil: "domcontentloaded", timeout: 30000 })
   await page.waitForFunction(() => location.pathname === "/admin/login", { timeout: 15000 })
