@@ -19,6 +19,7 @@ import {
 import { AdminNotice, statusPt } from "./AdminNotice"
 import { adminConfirm } from "./AdminConfirmationHost"
 import { mediaFileName } from "../../lib/media-framing"
+import { experienceTitleKey } from "../../lib/experience-text"
 import { withOpenGraphImage } from "../../lib/media-selection"
 import { COLLECTION_SOURCES, isCollectionSource } from "../../lib/collections"
 import {
@@ -984,6 +985,41 @@ export function ContentStudio({
               draft.mobile_panel === "a" && (
                 <fieldset className="admin-card">
                   <legend>Identidade da empresa e galeria de projetos</legend>
+                  <div className="experience-admin-competencies">
+                    <label className="field-wide">
+                      <span className="admin-field-with-info">
+                        Competências aplicadas — tags abaixo do período
+                        <AdminInfoTip
+                          label="Competências aplicadas nas experiências"
+                          description="Uma competência por linha. As tags aparecem abaixo do cargo e período no site. São editadas no bloco A desta empresa e só publicadas ao clicar em Salvar bloco."
+                        />
+                      </span>
+                      <textarea
+                        rows={5}
+                        value={
+                          (draft.content_json.items ?? [])
+                            .find((item) => experienceTitleKey(item.title) === "competencias aplicadas")
+                            ?.tags?.join("\n") ?? ""
+                        }
+                        onChange={(event) => {
+                          const tags = [...new Set(
+                            event.target.value.split("\n").map((entry) => entry.trim()).filter(Boolean),
+                          )]
+                          const items = [...(draft.content_json.items ?? [])]
+                          const index = items.findIndex(
+                            (item) => experienceTitleKey(item.title) === "competencias aplicadas",
+                          )
+                          if (index >= 0) {
+                            items[index] = { ...items[index], tags }
+                          } else {
+                            items.unshift({ title: "Competências aplicadas", tags })
+                          }
+                          setDraft({ ...draft, content_json: { ...draft.content_json, items } })
+                        }}
+                      />
+                    </label>
+                    <small>As tags não criam slides, não substituem projetos e não alteram a descrição completa da carreira.</small>
+                  </div>
                   <p>
                     Use arquivos próprios/autorizados. Sem imagens aprovadas, o site mostra um
                     espaço reservado identificado, não uma fotografia fictícia.
@@ -1041,6 +1077,27 @@ export function ContentStudio({
                     </label>
                   </div>
                   <h3>Slides relacionados aos projetos</h3>
+                  <p className="experience-admin-relationship-note">
+                    Cada título de slide é um projeto clicável na página pública. Se existir um item
+                    visível com o mesmo título nos blocos A ou B, seu texto será exibido junto ao
+                    projeto; caso contrário, aparece apenas o título do slide. Alterar a ordem dos
+                    slides também altera a ordem dos projetos. Indicadores permanecem independentes.
+                  </p>
+                  {onEditCollection && (
+                    <div className="experience-admin-career-link">
+                      <button
+                        type="button"
+                        className="secondary-button"
+                        onClick={() => onEditCollection("career_experiences")}
+                      >
+                        Editar trajetória completa (Coleções)
+                      </button>
+                      <small>
+                        O site evita exibir trechos já resumidos em Projetos e realizações;
+                        o texto integral continua preservado na coleção.
+                      </small>
+                    </div>
+                  )}
                   {(draft.content_json.experienceMedia?.slides ?? []).map((slide, slideIndex) => (
                     <div className="block-item-editor" key={slideIndex}>
                       <div className="block-item-head">

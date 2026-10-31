@@ -617,17 +617,16 @@
   background: var(--paper);
 }
 .experience-view-switch button {
-  border: 0; background: transparent; color: inherit;
-  padding: .2rem 0; text-align: left; transition: color .2s ease;
+  border: 0; background: transparent; color: inherit; font-family: var(--font-display);
+  font-size: clamp(.78rem, .9vw, 1rem); line-height: 1.1; font-weight: 600;
+  text-transform: uppercase; padding: .2rem 0; text-align: left;
+  transition: color .2s ease, font-size .2s ease;
 }
 .experience-view-switch button:hover { color: var(--orange-dark); }
 .experience-view-switch button:disabled { opacity: .4; cursor: not-allowed; }
-.experience-view-switch button.is-active { color: var(--orange-dark); }
-.experience-view-projects {
-  font: 600 clamp(1.25rem, 1.6vw, 1.9rem)/1.1 var(--font-display);
-  text-transform: uppercase;
+.experience-view-switch button.is-active {
+  color: var(--orange-dark); font-size: clamp(1.25rem, 1.6vw, 1.9rem);
 }
-.experience-view-trajectory { font: 600 clamp(.74rem, .85vw, .88rem)/1.4 var(--font-body); }
 .experience-project { border-top: 1px solid #17161733; padding: .7rem 0; }
 .experience-view-body > .experience-project:first-child { border-top: 0; }
 .experience-project h4 { font-family: var(--font-display); font-size: clamp(1.1rem, 1.3vw, 1.5rem);
@@ -1371,3 +1370,12 @@
 .experience-card.theme-ink .experience-project-choice:hover h4,
 .experience-card.theme-ink .experience-project-choice:focus-visible h4,
 .experience-card.theme-ink .experience-project.is-active h4 { color: var(--orange); }
+
+/* Unified competencies and slide/trajectory mapping editor for every experience. */
+.experience-admin-competencies { display: grid; gap: .4rem; margin: .75rem 0 1.15rem; }
+.experience-admin-competencies textarea { width: 100%; min-height: 7.5rem; }
+.experience-admin-competencies small,
+.experience-admin-career-link small,
+.experience-admin-relationship-note { color: #625b55; font-size: .78rem; line-height: 1.5; }
+.experience-admin-career-link { display: flex; align-items: start; flex-wrap: wrap; gap: .55rem; margin: .7rem 0 1rem; }
+.experience-admin-career-link small { flex: 1 1 15rem; }
