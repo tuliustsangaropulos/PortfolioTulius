@@ -593,6 +593,90 @@ try {
       await page.close()
     }
   }
+
+  // Mobile owner screenshots: verify parity, no repeated titles or oversized boxes.
+  for (const width of [360, 390, 430]) {
+    const page = await browser.newPage()
+    try {
+      await page.setViewport({ width, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true })
+      await page.goto(base + "/", { waitUntil: "networkidle2", timeout: 45000 })
+      await page.waitForSelector("#contato-a .contact-mobile-photo img", { timeout: 15000 })
+      const details = await page.evaluate(() => {
+        const getRect = (selector) => {
+          const r = document.querySelector(selector)?.getBoundingClientRect()
+          return r ? { left: r.left, right: r.right, top: r.top, bottom: r.bottom, height: r.height } : null
+        }
+        const name = document.querySelector("#perfil-a .mobile-name")
+        const spans = [...(name?.querySelectorAll("span") ?? [])].map((el) => {
+          const r = el.getBoundingClientRect()
+          return { left: r.left, right: r.right }
+        })
+        const firstCard = document.querySelector("#depoimentos .testimonial-card")
+        const portrait = getRect("#contato-a .contact-mobile-photo img")
+        const contact = getRect("#contato-a")
+        const headingFonts = ["#formacao-a .panel-heading h2", "#ferramentas-a .panel-heading h2", "#depoimentos-a .panel-heading h2"]
+          .map((sel) => {
+            const el = document.querySelector(sel)
+            return el ? parseFloat(getComputedStyle(el).fontSize) : null
+          })
+        return {
+          viewportWidth: innerWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          name: getRect("#perfil-a .mobile-name"),
+          nameWords: spans,
+          aboutHeight: getRect("#sobre-a")?.height,
+          formationHeadings: document.querySelectorAll("#formacao .panel-heading h2").length,
+          toolsHeadings: document.querySelectorAll("#ferramentas .panel-heading h2").length,
+          formationCounts: [document.querySelectorAll("#formacao-a .mobile-items .content-item").length, document.querySelectorAll("#formacao-b .mobile-items .content-item").length],
+          toolsCounts: [document.querySelectorAll("#ferramentas-a .mobile-items .content-item").length, document.querySelectorAll("#ferramentas-b .mobile-items .content-item").length],
+          testimonialCount: document.querySelectorAll("#depoimentos .testimonial-card").length,
+          firstTestimonialHeight: firstCard?.getBoundingClientRect().height,
+          headingFonts,
+          portrait,
+          contact,
+        }
+      })
+      const { name, nameWords, portrait, contact, headingFonts } = details
+      const valid =
+        details.scrollWidth <= width + 2 &&
+        !!name && name.left >= -2 && name.right <= width + 2 &&
+        nameWords.length === 2 && nameWords.every(({ left, right }) => left >= -2 && right <= width + 2) &&
+        details.formationHeadings === 1 && details.toolsHeadings === 1 &&
+        details.formationCounts.join(",") === "3,2" &&
+        details.toolsCounts.join(",") === "3,3" &&
+        details.testimonialCount === 3 &&
+        details.firstTestimonialHeight > 0 && details.firstTestimonialHeight < 290 &&
+        !!portrait && !!contact && Math.abs(portrait.bottom - contact.bottom) < 4 &&
+        headingFonts.every((n) => n !== null && Math.abs(n - headingFonts[0]) < 1)
+      if (!valid) {
+        failures++
+        console.log("P3_MOBILE_EDITORIAL_PARITY_REGRESSION " + JSON.stringify({ width, details }))
+      } else {
+        console.log("P3_MOBILE_EDITORIAL_PARITY " + JSON.stringify({ width, result: "PASS", details }))
+      }
+      if (width === 390) {
+        await page.$eval("#depoimentos .testimonial-card", (node) => node.scrollIntoView({ block: "center", behavior: "instant" }))
+        const before = await page.$eval("#depoimentos .testimonial-card", (node) => node.getBoundingClientRect().height)
+        await page.click("#depoimentos .testimonial-card")
+        const expanded = await page.$eval("#depoimentos .testimonial-card", (node) => ({
+          expanded: node.getAttribute("aria-expanded"),
+          height: node.getBoundingClientRect().height,
+        }))
+        if (expanded.expanded !== "true" || expanded.height < before) {
+          failures++
+          console.log("P3_MOBILE_TESTIMONIAL_EXPAND_REGRESSION " + JSON.stringify({ before, expanded }))
+        } else {
+          console.log("P3_MOBILE_TESTIMONIAL_EXPAND " + JSON.stringify({ result: "PASS", before, expanded }))
+        }
+      }
+    } catch (error) {
+      failures++
+      console.log("P3_MOBILE_EDITORIAL_PARITY_ERROR " + JSON.stringify({ width, error: String(error).slice(0, 400) }))
+    } finally {
+      await page.close()
+    }
+  }
+
 } finally {
   await browser.close()
 }
