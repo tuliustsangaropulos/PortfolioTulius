@@ -66,23 +66,7 @@ export function isSafeEditorialImage(value: string) {
 export function validateContentItems(items: ContentItem[]) {
   const errors: string[] = []
   const metricIcons: readonly string[] = allowedVisualIcons
-  const allowedToolIcons = [
-    "analytics",
-    "search",
-    "meta",
-    "growth",
-    "salesforce",
-    "hubspot",
-    "sprinklr",
-    "asana",
-    "notion",
-    "adobe",
-    "figma",
-    "wordpress",
-    "social",
-    "video",
-    "megaphone",
-  ]
+  const allowedToolIcons: readonly string[] = allowedVisualIcons
   const usedThemeKeys = new Set<string>()
   items.forEach((item, index) => {
     if (item.toolIcons) {

@@ -1,4 +1,5 @@
 import type { ToolIconName } from "../../types/content"
+import { Icon } from "../ui/Icons"
 
 export const toolIconOptions: { value: ToolIconName; label: string }[] = [
   { value: "analytics", label: "Google Analytics" },
@@ -203,6 +204,8 @@ export function ToolSymbol({ name }: { name: ToolIconName }) {
           strokeLinejoin="round"
         />
       )
+    default:
+      return <Icon name={name} size={20} />
   }
 }
 
