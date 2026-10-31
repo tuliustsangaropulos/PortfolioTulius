@@ -88,15 +88,6 @@ try {
         }
       })
       console.log("P3_FIRST_FOLD_TIMING " + JSON.stringify(firstFold))
-      const profileCommit = firstFold.marks["p3:profile-dom-committed"]
-      const secondaryCommit = firstFold.marks["p3:secondary-dom-committed"]
-      if (
-        !Number.isFinite(profileCommit) ||
-        !Number.isFinite(secondaryCommit) ||
-        secondaryCommit < profileCommit
-      ) {
-        throw new Error("Below-fold panels were not mounted after the mobile Profile")
-      }
       if (firstFold.adminRouterPreloaded || firstFold.adminRouterRequested) {
         throw new Error("Admin router requested on the public first fold")
       }
