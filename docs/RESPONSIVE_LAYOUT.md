@@ -1,5 +1,13 @@
 # Layout responsivo
 
+## Paridade mobile e critérios de aceite — revisão 31/10/2026
+
+Breakpoints mobile nativos ≤767 px, sem `zoom`/`transform:scale()` no contêiner. O renderizador monta só a árvore mobile (25 painéis) ou desktop (13 seções). Em mobile, a seção 01 utiliza nome que quebra de linha conforme a largura, retrato à direita e selo/experiência separados. A seção Olá! deixa de forçar uma tela vazia; os dois painéis preservam todos os itens. Formação e Ferramentas deixam de repetir o `h2` no painel B, recebendo subtítulo semântico `h3` com conteúdo próprio, preservando 3+2 e 3+3 itens respectivamente.
+
+A escala visual de `h2` mobile usa `--mobile-heading-size`; os cards de depoimentos aplicam três linhas recolhidas e expansão nativa por botão, mantendo o texto completo. Contato usa título no primeiro painel, retrato de proporção preservada alinhado à base e subtítulo `Canais de contato` no segundo. A foto e o Storage são originais.
+
+**Evidência:** [P3 #41180490449](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490449): largura documental idêntica à viewport nos 360/390/430 px; fontes dos títulos alinhadas, 1 `h2` por Formação/Ferramentas, cartões fechados 166/171/180 px, foto de Contato 573,9 px, nenhum erro de navegador; 38 capturas responsivas sem falhas. Lighthouse mobile continua com LCP 7,704 s e precisa de melhoria independente.
+
 ## Navegação sincronizada dos projetos em desktop e mobile — 31/10/2026
 
 A galeria e a lista `Projetos e realizações` usam um único estado React para o slide ativo, por empresa. Selecionar um item altera a imagem e o título em destaque; avançar/retroceder nas setas ou indicadores atualiza a borda/cor laranja do item. No mobile, a lista e a galeria ocupam painéis distintos, mas permanecem sincronizados; não é criada nova árvore React nem rolagem de página forçada. O conteúdo clicável usa botões e indicadores acessíveis; `Trajetória` preserva a troca de abas. [CI funcional](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735173).

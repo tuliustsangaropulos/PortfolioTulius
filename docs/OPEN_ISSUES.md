@@ -1,5 +1,11 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## Revisão mobile concluída; desempenho P3 ainda pendente — 31/10/2026
+
+A [revisão mobile #41180490449](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490449) passou os testes de navegador e responsividade em 360/390/430 px, a expansão dos três depoimentos e 38 capturas de 13 seções/25 painéis, sem erros funcionais. O [CI #41180490364](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490364) passou. O retrato de Contato, inicialmente com altura zero, foi corrigido e agora mede 574 px, ancorado à base. A Formação/Ferramentas não apresentavam dados duplicados: os cabeçalhos do segundo painel foram diferenciados e todos os registros mantidos. Seção 01, Olá!, escala dos títulos e altura dos depoimentos foram adaptadas por CSS mobile. Alt inválido da imagem de Contato foi corrigido no JSONB do bloco aprovado, sem alteração de mídia.
+
+**P3-PERF-01 permanece aberta:** mediana de LCP mobile **7,704 s** (meta ≤2,5 s), Performance 69; desktop 1,738 s PASS. A falha do workflow P3 é causada pelo gate de desempenho mobile, não pela auditoria funcional. P2 transacional permanece suspensa; não introduzir alterações de banco ou infraestrutura adicionais sem escopo.
+
 ## Auditoria P3 — aceite dos badges/CDI/alternância em navegador (31/10/2026)
 
 [Audit P3 #41179623669](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41179623669) no código [`fb0caebd`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/fb0caebd98a32568355b4e3069958d664972ae7f): **P3_CMS_COMPETENCIES_MEDIA PASS** (Invest RS, Prefeitura SP, Vale, TV Globo/SporTV, Grupo InPress e CDI: cinco badges cada; slides da CDI apontando para arquivos sem texto; mesma fonte e caixa alta nos botões; "Projetos" maior inicialmente). **P3_EXPERIENCE_SWITCH PASS** (ao selecionar "Trajetória": 24,192 px versus "Projetos" 13,608 px, com retorno ao estado anterior), **P3_PROJECT_GALLERY_LINK PASS**, **P3_BROWSER_AUDIT failures=0**, **P4 38 capturas, 13 seções desktop e 25 painéis mobile, failures=0**, **P5 público 3/3 sem mutações**.

@@ -1,5 +1,17 @@
 # PortfolioTulius — estado operacional vigente
 
+## Revisão e homologação responsiva mobile — 31/10/2026
+
+**Implementado na `main`** em [`494aba3`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/494aba3fa98d061c52fed4897e28349773534920), [CI #41180490364](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490364) PASS e Vercel Production READY. A [auditoria P3 #41180490449](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490449) confirmou: **P3_MOBILE_EDITORIAL_PARITY PASS** em 360/390/430 px, **P3_MOBILE_TESTIMONIAL_EXPAND PASS**, **P3_BROWSER_AUDIT failures=0**, **P4 38 capturas sem falhas** (13 seções desktop, 25 painéis mobile), **P5 público 3/3, mutations=0**.
+
+- **Seção 01:** nome completo cabe em telas estreitas; foto, selo circular, contagem de experiência e chamada usam composição própria mobile, sem escala global do aplicativo.
+- **Olá!:** altura determinada pelo conteúdo (painel A cerca de 447 px em 390 px), sem tela laranja vazia; foto autorizada e texto editorial mantidos.
+- **Formação e Ferramentas:** inspeção SQL confirmou que os painéis A/B possuem itens distintos, não duplicados; apenas os cabeçalhos iguais eram repetidos. Painel B agora usa subtítulos específicos **Idiomas e formação complementar** e **Outras ferramentas**, sem apagar dados ou mudar placements.
+- **Tipografia:** escala principal de títulos mobile padronizada em regras escopadas; continua respeitando valores editoriais específicos salvos via CMS quando aplicáveis.
+- **Depoimentos:** cartões inicialmente compactos, texto truncado visualmente para três linhas e expansão por clique com `aria-expanded`. A 390 px, cartão recolhido **171 px**, expandido **253 px**. Conteúdo integral e três depoimentos reais preservados.
+- **Contato:** título e foto no mesmo painel, retrato ancorado à base com altura real de **574 px** verificada em 360/390/430 px; corrigida uma descrição alternativa sem sentido em `content_blocks.content_json` do bloco A, sem substituir a imagem ou reescrever outros textos.
+- **Performance independente (ainda aberta):** [P3 #41180490449](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490449) termina `failure` somente pelo orçamento Lighthouse mobile: **LCP mediano 7,704 s**, Performance 69, CLS 0,00063; desktop LCP **1,738 s**, Performance 93, PASS. Manter `P3-PERF-01` aberta. Não executar staging transacional P2 sem autorização.
+
 ## Auditoria P3 — aceite dos badges/CDI/alternância em navegador (31/10/2026)
 
 [Audit P3 #41179623669](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41179623669) no código [`fb0caebd`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/fb0caebd98a32568355b4e3069958d664972ae7f): **P3_CMS_COMPETENCIES_MEDIA PASS** (Invest RS, Prefeitura SP, Vale, TV Globo/SporTV, Grupo InPress e CDI: cinco badges cada; slides da CDI apontando para arquivos sem texto; mesma fonte e caixa alta nos botões; "Projetos" maior inicialmente). **P3_EXPERIENCE_SWITCH PASS** (ao selecionar "Trajetória": 24,192 px versus "Projetos" 13,608 px, com retorno ao estado anterior), **P3_PROJECT_GALLERY_LINK PASS**, **P3_BROWSER_AUDIT failures=0**, **P4 38 capturas, 13 seções desktop e 25 painéis mobile, failures=0**, **P5 público 3/3 sem mutações**.

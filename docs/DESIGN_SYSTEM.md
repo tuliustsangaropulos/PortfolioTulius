@@ -1,5 +1,11 @@
 # Design system
 
+## Mobile — composição revisada em 31/10/2026
+
+Contratos visuais publicados [`494aba3`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/494aba3fa98d061c52fed4897e28349773534920): nome de abertura sem corte horizontal; retrato/selo/anos sem sobreposição prevista; painel Olá! dimensionado pelo conteúdo; tipografia principal mobile com escala comum; Formação e Ferramentas continuam com dois grupos editorialmente diferentes, sem cabeçalho principal duplicado; depoimentos compactos com expansão por toque; Contato com foto em alinhamento inferior. Nenhuma regra altera a composição desktop.
+
+Medidas reais e testes [P3 #41180490449](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41180490449): 360, 390, 430 px PASS; 13 seções desktop, 25 painéis mobile, 38 capturas sem falhas; 0 horizontal overflow. Permanecem as mídias originais e todo conteúdo editorial. O LCP mobile segue aberto (7,704 s).
+
 ## Revisão de experiências: badges, alternância tipográfica e CDI sem texto — 31/10/2026
 
 - **Dados revisados no Supabase:** seis empresas com cinco tags editoriais cada. A Invest RS mantém as cinco competências já aceitas. Foram adicionados registros do tipo `{title: "Competências aplicadas", tags: [...]}` ao início de `content_blocks.content_json.items` do painel A da Prefeitura de São Paulo, Vale, TV Globo/SporTV, Grupo InPress e CDI Comunicação, preservando todos os demais itens, slides, métricas, status e coleções. Verificação SQL posterior confirmou **6/6 empresas com 5 tags**, sem alteração de schema, RLS, tabelas ou `career_experiences`.
