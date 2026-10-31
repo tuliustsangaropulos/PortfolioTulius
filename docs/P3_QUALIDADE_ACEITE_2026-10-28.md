@@ -1,5 +1,11 @@
 # PortfolioTulius — P3: auditoria de qualidade e aceite
 
+## Nova medição P3 durante correções administrativas — 31/10/2026
+
+A [Audit P3 Lighthouse #41173406644](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173406644), no SHA de código CMS [`c043375`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/c04337579f50d07d8437db4e8f02a89c6e17279c), confirmou **P3_BROWSER_AUDIT failures=0**, **P4 13 desktop / 25 mobile / 38 capturas, failures=0**, **P5 público 3/3, mutations=0** e retrato correto como elemento LCP em mobile/desktop. O Lighthouse de três amostras marcou **desktop LCP mediano 1,655 s PASS** e **mobile LCP mediano 7,824 s FAIL**, Performance mobile 70; teto sintético 6,5 s e meta real ≤2,5 s permanecem violados. O workflow terminou `failure` somente pelo orçamento de performance mobile.
+
+Essa é uma medição do SHA `c043375`, anterior apenas ao ajuste de formatação e à documentação subsequente; não há nova auditoria P3 específica do último SHA documental. **Não inferir mudança causal no LCP pela interface do CMS, nem encerrar P3-PERF-01.** O CI do SHA funcional `6913d91` passou integralmente e a Vercel publicou o mesmo código; os commits seguintes são documentais. Nenhuma mutação de Supabase ou alteração de conteúdo público foi realizada nesta rodada.
+
 ## Atualização P3/P6 — 29/10/2026: gate corrigido; performance mobile aberta
 
 **SHA funcional:** [`4a8412e`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/4a8412e93c99db4fae15e57d1e19785581daaf51). [CI #40824692978](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824692978) **success**, deployment Vercel Production **READY** no mesmo SHA, [P3 #40824693037](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/40824693037): **failure exclusivamente no orçamento sintético P6 mobile**.

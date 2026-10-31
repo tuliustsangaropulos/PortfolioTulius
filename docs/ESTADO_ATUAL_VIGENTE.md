@@ -1,5 +1,11 @@
 # PortfolioTulius — estado operacional vigente
 
+## Nova medição P3 durante correções administrativas — 31/10/2026
+
+A [Audit P3 Lighthouse #41173406644](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173406644), no SHA de código CMS [`c043375`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/c04337579f50d07d8437db4e8f02a89c6e17279c), confirmou **P3_BROWSER_AUDIT failures=0**, **P4 13 desktop / 25 mobile / 38 capturas, failures=0**, **P5 público 3/3, mutations=0** e retrato correto como elemento LCP em mobile/desktop. O Lighthouse de três amostras marcou **desktop LCP mediano 1,655 s PASS** e **mobile LCP mediano 7,824 s FAIL**, Performance mobile 70; teto sintético 6,5 s e meta real ≤2,5 s permanecem violados. O workflow terminou `failure` somente pelo orçamento de performance mobile.
+
+Essa é uma medição do SHA `c043375`, anterior apenas ao ajuste de formatação e à documentação subsequente; não há nova auditoria P3 específica do último SHA documental. **Não inferir mudança causal no LCP pela interface do CMS, nem encerrar P3-PERF-01.** O CI do SHA funcional `6913d91` passou integralmente e a Vercel publicou o mesmo código; os commits seguintes são documentais. Nenhuma mutação de Supabase ou alteração de conteúdo público foi realizada nesta rodada.
+
 ## Implementação CMS-UX de 31/10/2026 — código publicado, aceite transacional separado
 
 **Versão funcional:** [`6913d91`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/6913d91c71041457d3425836ee2e96f93677bc59). [CI Validate #41173453310](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173453310) **success** (formatação, TypeScript, testes, build, smoke offline e sintaxe das suítes); Vercel Production **READY** no mesmo SHA (deployment `dpl_D4CHCyqou3H6vkVFh1xWTXSj6GRi`). Esta verificação **não é** homologação P2 de gravações.

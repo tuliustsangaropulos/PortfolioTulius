@@ -1,5 +1,9 @@
 # Pendências operacionais vigentes — PortfolioTulius
 
+## P3-PERF-01 — evidência atualizada em 31/10/2026
+
+[Audit P3 #41173406644](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173406644) no SHA de código `c043375`: integridade **13 seções desktop / 25 painéis mobile / 38 capturas, 0 falhas**, P5 público **3/3 sem mutações**, imagem correta como LCP; **mobile LCP mediano 7,824 s FAIL**, desktop **1,655 s PASS**. Ainda ultrapassa orçamento mobile sintético de 6,5 s e meta ≤2,5 s. Os commits posteriores são formatação/documentação, sem mudanças na renderização pública. Não reabrir arquitetura ou alterar o gate sem experimento controlado; diagnóstico de critical path permanece aberto.
+
 ## Situação após implementação CMS-UX — 31/10/2026
 
 **Resolvido em código (não fechar aceite transacional):** CMS-UX-01 (dropdown de ícones), CMS-UX-02 (alinhamento de logo/slide) e CMS-UX-03 (modal de mídia com envio privado/publicação explícita). CMS-UX-04 preservado e coberto por verificações existentes e testes estáticos. Código [`6913d91`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/6913d91c71041457d3425836ee2e96f93677bc59), [CI Validate #41173453310](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173453310) **success**, Vercel Production **READY** no mesmo SHA. P5 read-only da biblioteca de ícones: [#41173340958](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173340958) **success**, sem gravações.
