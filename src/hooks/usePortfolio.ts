@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { PostgrestClient } from "@supabase/postgrest-js"
-import { defaultTokens, sections as fallbackSections } from "../content/fallback"
+import { defaultTokens } from "../content/defaultTokens"
 import { publicReadClient } from "../lib/public-read"
 import {
   buildPublicNavigation,
@@ -72,17 +72,35 @@ function toSection(
 }
 
 export function usePortfolio(includeDrafts = false) {
-  const [data, setData] = useState<PortfolioSection[]>(publicReadClient ? [] : fallbackSections)
+  const [data, setData] = useState<PortfolioSection[]>([])
   const [tokens, setTokens] = useState(defaultTokens)
   const [navigation, setNavigation] = useState<PublicNavigationItem[]>([])
   const [source, setSource] = useState<"supabase" | "fallback">(
     publicReadClient ? "supabase" : "fallback",
   )
-  const [loading, setLoading] = useState(Boolean(publicReadClient))
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!publicReadClient) return
+    if (!publicReadClient) {
+      // The editorial seed belongs to offline development only. Do not ship
+      // its large static content graph in the CMS-backed production entry.
+      let cancelledFallback = false
+      void import("../content/fallback")
+        .then(({ sections }) => {
+          if (cancelledFallback) return
+          setData(sections)
+          setLoading(false)
+        })
+        .catch(() => {
+          if (cancelledFallback) return
+          setError("Não foi possível carregar o conteúdo local.")
+          setLoading(false)
+        })
+      return () => {
+        cancelledFallback = true
+      }
+    }
     let cancelled = false
     let seoFirstFrame = 0
     let seoSecondFrame = 0
