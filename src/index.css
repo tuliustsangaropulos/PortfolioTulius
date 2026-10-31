@@ -1354,3 +1354,20 @@
 .media-frame-zoom input[type="range"] { min-width: 0; }
 .site-editor-collection-action { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
 .block-item-help { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
+
+/* Linked projects and gallery share the active slide, while other metrics stay informational. */
+.experience-project { transition: border-color .15s, color .15s; border-left: 3px solid transparent; }
+.experience-project.is-active { border-left-color: var(--orange); padding-left: .55rem; }
+.experience-project-choice { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+.experience-project-choice:hover h4,
+.experience-project-choice:focus-visible h4,
+.experience-project.is-active h4 { color: var(--orange-dark); }
+.experience-project-choice:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+.experience-project.is-active .experience-project-choice { color: inherit; }
+.experience-extra-metrics { display: flex; flex-wrap: wrap; gap: .65rem; border-top: 1px solid #17161733; padding: .7rem 0 0; }
+.experience-extra-metrics > div { display: grid; gap: .2rem; min-width: 7rem; flex: 1 1 7rem; }
+.experience-extra-metrics span { font-size: .68rem; line-height: 1.4; }
+.experience-extra-metrics strong { font-size: .9rem; color: var(--orange-dark); }
+.experience-card.theme-ink .experience-project-choice:hover h4,
+.experience-card.theme-ink .experience-project-choice:focus-visible h4,
+.experience-card.theme-ink .experience-project.is-active h4 { color: var(--orange); }

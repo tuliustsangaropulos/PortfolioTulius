@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import type { ExperienceSlide, PortfolioSection } from "../../types/content"
 import { imageFramingStyle } from "../../lib/media-framing"
-import { splitExperienceBullet } from "../../lib/experience-text"
+import {
+  complementaryCareerLines,
+  matchExperienceSlides,
+  splitExperienceBullet,
+} from "../../lib/experience-text"
 import { supabase } from "../../lib/supabase"
 
 export const EXPERIENCE_SLUGS = [
@@ -46,9 +50,16 @@ function CompanyMark({ section, small = false }: { section: PortfolioSection; sm
   )
 }
 
-function PhotoGallery({ section }: { section: PortfolioSection }) {
+function PhotoGallery({
+  section,
+  active,
+  onSlideChange,
+}: {
+  section: PortfolioSection
+  active: number
+  onSlideChange: (index: number) => void
+}) {
   const slides = section.experienceMedia?.slides ?? []
-  const [active, setActive] = useState(0)
   const count = slides.length
   const index = count ? Math.min(active, count - 1) : 0
   const slide: ExperienceSlide | undefined = slides[index]
@@ -86,7 +97,7 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
             <button
               type="button"
               aria-label={`Foto anterior de ${section.title}`}
-              onClick={() => setActive((index + count - 1) % count)}
+              onClick={() => onSlideChange((index + count - 1) % count)}
             >
               <span aria-hidden="true">←</span>
             </button>
@@ -96,7 +107,7 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
             <button
               type="button"
               aria-label={`Próxima foto de ${section.title}`}
-              onClick={() => setActive((index + 1) % count)}
+              onClick={() => onSlideChange((index + 1) % count)}
             >
               <span aria-hidden="true">→</span>
             </button>
@@ -110,7 +121,7 @@ function PhotoGallery({ section }: { section: PortfolioSection }) {
               type="button"
               key={`${item.title}-${slideIndex}`}
               className={slideIndex === index ? "is-active" : ""}
-              onClick={() => setActive(slideIndex)}
+              onClick={() => onSlideChange(slideIndex)}
               aria-label={`Exibir projeto ${item.title}`}
               aria-current={slideIndex === index ? "true" : undefined}
             />
@@ -141,14 +152,10 @@ function ExperienceCompetencies({ tags }: { tags: string[] }) {
   )
 }
 
-function ExperienceDetails({ description }: { description: string }) {
+function ExperienceDetails({ description, slug }: { description: string; slug: string }) {
   return (
     <div className="experience-full-body">
-      {description
-        .split(/\n+/)
-        .map((line) => line.trim())
-        .filter(Boolean)
-        .map((line, index) => {
+      {complementaryCareerLines(description, slug).map((line, index) => {
           const bullet = splitExperienceBullet(line)
           return (
             <p key={index} className={bullet ? "experience-full-point" : undefined}>
@@ -171,10 +178,14 @@ function ExperienceContent({
   section,
   items,
   detail,
+  activeSlide,
+  onSlideChange,
 }: {
   section: PortfolioSection
   items: PortfolioSection["panelA"]
   detail?: string
+  activeSlide: number
+  onSlideChange: (index: number) => void
 }) {
   const [view, setView] = useState<"projects" | "trajectory">("projects")
   const containerRef = useRef<HTMLDivElement>(null)
@@ -184,6 +195,13 @@ function ExperienceContent({
     setView(next)
     if (containerRef.current) containerRef.current.scrollTop = 0
   }
+  const slides = section.experienceMedia?.slides ?? []
+  const projectSlides = matchExperienceSlides(slides, items)
+  const extraMetrics = items.filter(
+    (item) =>
+      Boolean(item.value) &&
+      !projectSlides.some(({ item: selected }) => selected === item),
+  )
 
   return (
     <div className="experience-projects" ref={containerRef}>
@@ -220,17 +238,40 @@ function ExperienceContent({
       </div>
       <div id={`${section.slug}-experience-content`} className="experience-view-body">
         {showingTrajectory ? (
-          <ExperienceDetails description={detail!} />
+          <ExperienceDetails description={detail!} slug={section.slug} />
         ) : (
-          items.map((item, index) => (
-            <article className="experience-project" key={`${item.title}-${index}`}>
-              {item.meta && <span className="experience-project-meta">{item.meta}</span>}
-              <h4>{item.title}</h4>
-              {item.value && <strong className="experience-value">{item.value}</strong>}
-              {item.text && <p>{item.text}</p>}
-              {item.tags && <p>{item.tags.join(" · ")}</p>}
-            </article>
-          ))
+          <>
+            {projectSlides.map(({ title, item, slideIndex }) => (
+              <article
+                className={slideIndex === activeSlide ? "experience-project is-active" : "experience-project"}
+                key={`${title}-${slideIndex}`}
+              >
+                <button
+                  type="button"
+                  className="experience-project-choice"
+                  aria-label={`Exibir imagem de ${title}`}
+                  aria-current={slideIndex === activeSlide ? "true" : undefined}
+                  onClick={() => onSlideChange(slideIndex)}
+                >
+                  {item?.meta && <span className="experience-project-meta">{item.meta}</span>}
+                  <h4>{title}</h4>
+                  {item?.value && <strong className="experience-value">{item.value}</strong>}
+                  {item?.text && <p>{item.text}</p>}
+                  {item?.tags && <p>{item.tags.join(" · ")}</p>}
+                </button>
+              </article>
+            ))}
+            {extraMetrics.length > 0 && (
+              <div className="experience-extra-metrics" aria-label="Indicadores complementares">
+                {extraMetrics.map((item, index) => (
+                  <div key={`${item.title}-${index}`}>
+                    <span>{item.title}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -255,6 +296,7 @@ function ExperienceCard({
   const competencies =
     items.find((item) => item.title.toLowerCase() === "competências aplicadas")?.tags ?? []
   const projectItems = items.filter((item) => item.title.toLowerCase() !== "competências aplicadas")
+  const [activeSlide, setActiveSlide] = useState(0)
   return (
     <section
       id={section.slug}
@@ -271,8 +313,14 @@ function ExperienceCard({
             {section.intro && <p>{section.intro}</p>}
             <ExperienceCompetencies tags={competencies} />
           </header>
-          <ExperienceContent section={section} items={projectItems} detail={detail} />
-          <PhotoGallery section={section} />
+          <ExperienceContent
+            section={section}
+            items={projectItems}
+            detail={detail}
+            activeSlide={activeSlide}
+            onSlideChange={setActiveSlide}
+          />
+          <PhotoGallery section={section} active={activeSlide} onSlideChange={setActiveSlide} />
         </div>
       )}
       {isMobile && (
@@ -289,14 +337,20 @@ function ExperienceCard({
               {section.intro && <p>{section.intro}</p>}
               <ExperienceCompetencies tags={competencies} />
             </header>
-            <ExperienceContent section={section} items={projectItems} detail={detail} />
+            <ExperienceContent
+              section={section}
+              items={projectItems}
+              detail={detail}
+              activeSlide={activeSlide}
+              onSlideChange={setActiveSlide}
+            />
           </div>
           <div
             id={`${section.slug}-b`}
             className="mobile-panel experience-mobile-gallery"
             data-panel="b"
           >
-            <PhotoGallery section={section} />
+            <PhotoGallery section={section} active={activeSlide} onSlideChange={setActiveSlide} />
           </div>
         </div>
       )}
