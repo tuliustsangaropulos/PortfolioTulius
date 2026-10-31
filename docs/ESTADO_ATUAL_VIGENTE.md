@@ -1,5 +1,11 @@
 # PortfolioTulius — estado operacional vigente
 
+## Auditoria P3 — aceite dos badges/CDI/alternância em navegador (31/10/2026)
+
+[Audit P3 #41179623669](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41179623669) no código [`fb0caebd`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/fb0caebd98a32568355b4e3069958d664972ae7f): **P3_CMS_COMPETENCIES_MEDIA PASS** (Invest RS, Prefeitura SP, Vale, TV Globo/SporTV, Grupo InPress e CDI: cinco badges cada; slides da CDI apontando para arquivos sem texto; mesma fonte e caixa alta nos botões; "Projetos" maior inicialmente). **P3_EXPERIENCE_SWITCH PASS** (ao selecionar "Trajetória": 24,192 px versus "Projetos" 13,608 px, com retorno ao estado anterior), **P3_PROJECT_GALLERY_LINK PASS**, **P3_BROWSER_AUDIT failures=0**, **P4 38 capturas, 13 seções desktop e 25 painéis mobile, failures=0**, **P5 público 3/3 sem mutações**.
+
+**P6 não aprovado:** LCP mobile mediano **7,725 s**, Performance 68, CLS 0,098, meta ≤2,5 s não cumprida; desktop LCP **1,700 s**, Performance 93 PASS. A workflow P3 termina `failure` apenas pelo gate conservador de performance mobile. Não interpretar a falha como regressão funcional dos badges/CMS/CDI. Preservar `P3-PERF-01` aberta. Versão documental posterior não altera código público.
+
 ## Revisão de experiências: badges, alternância tipográfica e CDI sem texto — 31/10/2026
 
 - **Dados revisados no Supabase:** seis empresas com cinco tags editoriais cada. A Invest RS mantém as cinco competências já aceitas. Foram adicionados registros do tipo `{title: "Competências aplicadas", tags: [...]}` ao início de `content_blocks.content_json.items` do painel A da Prefeitura de São Paulo, Vale, TV Globo/SporTV, Grupo InPress e CDI Comunicação, preservando todos os demais itens, slides, métricas, status e coleções. Verificação SQL posterior confirmou **6/6 empresas com 5 tags**, sem alteração de schema, RLS, tabelas ou `career_experiences`.

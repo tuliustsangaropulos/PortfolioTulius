@@ -1,5 +1,11 @@
 # PortfolioTulius — P3: auditoria de qualidade e aceite
 
+## Auditoria P3 — aceite dos badges/CDI/alternância em navegador (31/10/2026)
+
+[Audit P3 #41179623669](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41179623669) no código [`fb0caebd`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/fb0caebd98a32568355b4e3069958d664972ae7f): **P3_CMS_COMPETENCIES_MEDIA PASS** (Invest RS, Prefeitura SP, Vale, TV Globo/SporTV, Grupo InPress e CDI: cinco badges cada; slides da CDI apontando para arquivos sem texto; mesma fonte e caixa alta nos botões; "Projetos" maior inicialmente). **P3_EXPERIENCE_SWITCH PASS** (ao selecionar "Trajetória": 24,192 px versus "Projetos" 13,608 px, com retorno ao estado anterior), **P3_PROJECT_GALLERY_LINK PASS**, **P3_BROWSER_AUDIT failures=0**, **P4 38 capturas, 13 seções desktop e 25 painéis mobile, failures=0**, **P5 público 3/3 sem mutações**.
+
+**P6 não aprovado:** LCP mobile mediano **7,725 s**, Performance 68, CLS 0,098, meta ≤2,5 s não cumprida; desktop LCP **1,700 s**, Performance 93 PASS. A workflow P3 termina `failure` apenas pelo gate conservador de performance mobile. Não interpretar a falha como regressão funcional dos badges/CMS/CDI. Preservar `P3-PERF-01` aberta. Versão documental posterior não altera código público.
+
 ## Verificação P3 final — vínculo projetos / galeria — 31/10/2026
 
 A [auditoria P3 #41178735154](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41178735154) do código funcional [`41a96e37`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/41a96e3715cdc47ee73ab225374cf72b2e739205) confirmou: **P3_EXPERIENCE_SWITCH PASS** (trajetória e retorno aos quatro projetos; sete títulos de tópicos em negrito); **P3_PROJECT_GALLERY_LINK PASS** (clique em "Organização de eventos" seleciona slide 2/4 e avançar pela seta ativa "Plataforma de eventos e relacionamento" também na lista); **P3_BROWSER_AUDIT failures=0** (13 seções desktop/25 painéis mobile), **P4_EDITORIAL_SUMMARY 38 capturas, failures=0**, **P5_PUBLIC_RESULT 3/3 mutations=0**. Verificação do logo sem borda, cinco tags e rolagem interna contextual também passou.
