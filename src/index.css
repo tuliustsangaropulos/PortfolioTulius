@@ -919,13 +919,30 @@
   row-gap: 0;
   align-items: center;
   padding: calc(var(--header) + 1.5rem) var(--gutter) clamp(1.25rem, 3dvh, 2.5rem);
+  position: relative;
+  overflow: clip;
 }
-.contact-heading { min-width: 0; }
+.contact-heading { grid-column: 1; grid-row: 1; min-width: 0; }
 .contact-heading h2 { max-width: none; }
-.contact-portrait { align-self: stretch; min-width: 0; min-height: 18rem; display: flex; align-items: stretch; justify-content: center; overflow: hidden; }
+/* Span the footer row and bottom padding without moving the footer rule.
+ * Keep the CMS portrait above the rule and clip only at the section edge. */
+.contact-portrait {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 18rem;
+  margin-bottom: calc(-1 * clamp(1.25rem, 3dvh, 2.5rem));
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
 /* The published CMS PNG has transparent pixels below the silhouette.
- * Move the visible subject into the footer rule without altering/cropping
- * the original file or overriding the CMS zoom/position transform. */
+ * Preserve its framing and vertical offset while extending past the rule. */
 .contact-portrait img {
   display: block;
   height: 100%;
@@ -934,12 +951,12 @@
   object-position: center;
   translate: 0 clamp(2rem, 5.3svh, 4rem);
 }
-.contact-links { min-width: 0; display: grid; gap: .5rem; }
+.contact-links { grid-column: 3; grid-row: 1; min-width: 0; display: grid; gap: .5rem; }
 .contact-links .contact-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .6rem; min-width: 0; }
 .contact-links .contact-link .item-copy { grid-column: 1; min-width: 0; }
 .contact-links .contact-link .item-arrow { grid-column: 2; justify-self: end; align-self: center; }
 .contact-links .contact-link .item-value { display: block; max-width: 100%; overflow-wrap: anywhere; word-break: break-word; font-size: clamp(1.7rem, 2.8vw, 3rem); }
-.contact-footer { grid-column: 1 / -1; align-self: end; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; border-top: 1px solid color-mix(in srgb, currentColor 40%, transparent); padding-top: .85rem; font-size: clamp(.75rem, .8vw, .95rem); }
+.contact-footer { grid-column: 1 / -1; grid-row: 2; align-self: end; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; border-top: 1px solid color-mix(in srgb, currentColor 40%, transparent); padding-top: .85rem; font-size: clamp(.75rem, .8vw, .95rem); }
 .contact-mobile-photo { width: 100%; min-height: 65svh; display: flex; overflow: hidden; }
 .contact-mobile-photo img { width: 100%; height: 100%; min-height: 65svh; object-fit: cover; }
 .layout-contact .panel-b .contact-footer { margin-top: 2.5rem; }
@@ -1549,7 +1566,9 @@
     justify-content: flex-start;
     min-height: min(90svh, 47rem);
     padding-bottom: 0;
-    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    overflow: visible;
   }
   #contato-a .panel-heading { flex: none; }
   #contato-a .contact-mobile-photo {
@@ -1559,7 +1578,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
   }
   #contato-a .contact-mobile-photo img {
     display: block;
@@ -1569,6 +1588,7 @@
     max-height: min(68svh, 36rem);
     object-fit: contain;
     object-position: bottom center;
+    translate: 0 clamp(.75rem, 2svh, 1.25rem);
   }
   #contato-b {
     display: block;
