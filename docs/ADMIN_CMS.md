@@ -1,5 +1,15 @@
 # CMS administrativo
 
+## Estado atualizado em 31/10/2026 — revisão editorial e UX do CMS
+
+**Código:** [`01a3a287`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/01a3a28731817c510616408d85196d10dd206113), [Validate #41175411745](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41175411745) **success** e Vercel Production **READY** no mesmo SHA (`dpl_B64aMBXM9URAwppjwWcaxfjoTJJq`). A P3 do novo código é independente; não afirmar que LCP mobile foi corrigido.
+
+**UX administrativa:** removido o aviso repetitivo "Origem do conteúdo: Itens editados neste bloco" de todos os editores, sem retirar acesso a "Editar registros vinculados" quando há coleção. A orientação "Textos da seção 02 — coluna direita" foi movida para o ícone de informações, visível por mouse ou clique e acessível via teclado. A prévia de "Ajustar enquadramento" ganhou área geometricamente limitada, imagem isolada e controles de posição/zoom sem sobreposição. Testes estáticos `admin-editor-notices-framing.test.ts` e CI aprovados; inspeção visual específica em 1440px e 390px ainda requer validação humana.
+
+**Supabase — gravação editorial expressamente solicitada e conferida por leitura posterior:** **0** ocorrências `editorial_issues` abertas (oito desta rodada passaram a `resolved` e uma já estava resolvida), **3** depoimentos publicados e **2** exemplos fictícios arquivados reversivelmente. Permanecem Matheus Gomes, Ana Beatriz Neves e Fábio Seixas; nenhuma recomendação de Marcelo Ventura foi criada, pois não há texto autêntico disponível no acervo. Cargo Invest RS confirmado como "Assessor Executivo | Núcleo de Comunicação"; CDI alinhada à captura de LinkedIn fornecida, com texto detalhado na coleção e síntese nos quatro cards; Perfil e Vale exibem somente a articulação/atuação envolvendo 14 países; idiomas "inglês fluente / espanhol avançado" e cargo InPress foram confirmados. Imagens da Invest RS preservadas com aviso de caráter ilustrativo, alt provisórios corrigidos. Conteúdo original da mídia e Storage não foram modificados.
+
+**Limites:** o proprietário autorizou as gravações pontuais de conteúdo desta rodada. Isso **não** reabre a homologação transacional P2, não autoriza staging pago, alteração de RLS, testes destrutivos, exclusão permanente, nem altera a pendência P3 de LCP mobile. Os depoimentos de Marcelo Ventura poderão ser acrescentados futuramente **somente** mediante texto real e autorização. Os registros anteriores deste documento são históricos e devem ser interpretados à luz desta atualização.
+
 ## CMS UX entregue em 31/10/2026 — código e limites
 
 O commit funcional [`6913d91`](https://github.com/tuliustsangaropulos/PortfolioTulius/commit/6913d91c71041457d3425836ee2e96f93677bc59), [CI Validate #41173453310](https://github.com/tuliustsangaropulos/PortfolioTulius/actions/runs/41173453310) **success** e Vercel Production **READY** incorporou:
